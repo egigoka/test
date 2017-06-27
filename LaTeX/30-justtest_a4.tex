@@ -1,0 +1,128 @@
+\documentclass{article}
+%\documentclass[a4paper,landscape]{article}
+
+\usepackage{ifxetex}                      %% Для сборки документа и pdflatex'ом, и xelatex'ом
+\ifxetex
+    %% xelatex
+    \usepackage{polyglossia}                       %% загружает пакет многоязыковой вёрстки
+    \setdefaultlanguage[spelling=modern]{russian}  %% устанавливает главный язык документа
+    \setotherlanguage{english}                     %% объявляет второй язык документа
+    \defaultfontfeatures{Ligatures={TeX}}          %% свойства шрифтов по умолчанию
+    \setmainfont[Ligatures={TeX}]{CMU Serif}       %% задаёт основной шрифт документа
+    \setsansfont{CMU Sans Serif}                   %% задаёт шрифт без засечек
+    \setmonofont{CMU Typewriter Text}              %% задаёт моноширинный шрифт
+\else
+    %% pdflatex
+    \usepackage{cmap}                     %% Поиск русских  слов в pdf
+    \usepackage[T2A]{fontenc}             %% Внутренняя кодировка шрифта
+    \usepackage[utf8]{inputenc}           %% Кодировка исходного текста
+    \usepackage[english,russian]{babel}   %% Поддержка русского текста
+\fi
+\usepackage{soulutf8}  % select text
+
+\usepackage{mathptmx}  % package for big font size unneded i think
+\usepackage{anyfontsize}  % package for big font size unneded i think
+\usepackage{t1enc}  % package for big font size unneded i think
+
+\usepackage{lmodern}  % package for big font size
+
+\usepackage{geometry}
+    \geometry
+        {
+        %paper=a4paper,
+        %paperwidth=58mm,
+        paperwidth=297mm,  % 257
+        %paperheight=59mm,
+        paperheight=210mm,  % 170
+        %margin=0.5mm,
+        top=20mm,
+        bottom=20mm,
+        right=20mm,
+        left=20mm,}
+        %margin=0mm,
+        %heightrounded, % rounding height in some strange way
+        %showframe}
+
+%\usepackage{showframe} % показывает рамки?
+
+\usepackage[bottom]{footmisc}
+\usepackage{pst-barcode,pstricks-add} % пакеты для штрихкодов, использовать вместе с пакетом auto-pst-pdf!
+
+\begingroup  % disable auto rotation that ps2pdf doing
+\catcode`\#=11
+\gdef\noautorotate{-dAutoRotatePages#/None}
+\endgroup
+\usepackage[pspdf=\noautorotate]{auto-pst-pdf}  % alternative line for no auto-rotation pictures
+%\usepackage{auto-pst-pdf} % использовать с pdflatex только с аргументом --shell-escape!
+
+%\tolerance=1000 % увеличение разрешённых пробелов между словами
+\sloppy % максимальное увеличение пробелов. ИСПОЛЬЗОВАТЬ С КРАЙНЕЙ ОСТОРОЖНОСТЬЮ!
+
+%\setlength\parindent{1mm} % paragraph width
+\def\text{KAR}
+\def\textloader{Егор Летов грузчик}
+%\def\text{dummy text}
+%\def\widthvar{2.0553} floating doesn't work?
+
+\renewcommand{\familydefault}{\sfdefault} % изменение шрифта на шрифт без засечек
+
+\begin{document}
+    %\center % bad centering of all
+    %\psset{unit=1in} % change size of unit (idk what is that)
+        \noindent % выключение отступа
+        \begin{pspicture}%(0,0)(10,10) % idk what is that, size doesn't changing
+            \psbarcode{\text}{width=10.1181 height=5}{code128}% width=0.5 height=1.5}{code128} % здесь задаётся размер, yeah!% height=4mm=4/25.3    in=0.158in % includetext guardwhitespace
+        \end{pspicture} \\% \\ is newline
+        \\\\
+        \noindent % выключение отступа
+        \makebox[\textwidth][c]{{\fontsize{130}{156} \selectfont \textbf{\text}}}  % box with big text centered
+        \par
+
+     \def\text{PXRAN01-06-2017-True}
+        \noindent % выключение отступа
+        \begin{pspicture}%(0,0)(10,10) % idk what is that, size doesn't changing
+            \psbarcode{\text}{width=10.1181 height=5}{code128}% width=0.5 height=1.5}{code128} % здесь задаётся размер, yeah!% height=4mm=4/25.3    in=0.158in % includetext guardwhitespace
+        \end{pspicture} \\% \\ is newline
+        \\\\
+        \noindent % выключение отступа
+        \makebox[\textwidth][c]{{\fontsize{130}{156} \selectfont \textbf{\text}}}  % box with big text centered
+        \par
+        %{\fontsize{50}{60}\selectfont Foo}
+    %\makebox[\textwidth][s]{\text} \par  % box with text   s t r e t c h e d
+    %\begin{minipage}[c][3mm][c]{\textwidth}
+     %\makebox[\textwidth][c]{{\fontsize{50}{60}\selectfont \text}} \\  % box with text centered
+     %\centered\textloader
+     %\makebox[\textwidth][c]{\textbf{\textloader}} \par  % box with text centered
+    %\end{minipage}
+\end{document}
+
+% size https://tex.stackexchange.com/a/62832/133780
+% centering https://tex.stackexchange.com/questions/23650/when-should-we-use-begincenter-instead-of-centering
+% shange font https://stackoverflow.com/questions/877597/how-do-you-change-the-document-font-in-latex
+% bold font https://tex.stackexchange.com/questions/41681/correct-way-to-bold-italicize-text
+% output +
+% barcode +
+% change size of barcode +
+% change size of barcode in milimiters -
+% centering of all +
+% proper magrins of barcode +
+% geometry +
+% proper geometry +
+% no blank pages +
+% proper margins +
+% proper fonts -
+% variant of height for two lines of text -
+% proper size of font - some type of that+
+% a4 -
+% print -
+% codegen -
+% --- python warning when barcode text longer 14 symbols
+
+% один из вариантов задания размера
+% set page dimensions
+% \paperwidth  = 30cm
+% \paperheight = 30cm
+% use geometry pass option to pass dimensions to output driver (XeLaTeX)
+% \usepackage[pass]{geometry}
+
+%90

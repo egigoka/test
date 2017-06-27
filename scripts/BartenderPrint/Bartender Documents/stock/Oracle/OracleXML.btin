@@ -1,0 +1,62 @@
+﻿<IntegrationFile Name="OracleXML" ID="463fa7d1-b8f3-4979-9590-be064eb9ef8e">
+  <ActionGroup ID="f7f2283c-c94d-42dd-8426-5edb610fef8c" RunMethod="Sequential" MessagingEnabled="false">
+    <Actions>
+      <FileTriggerIntegration Name="Oracle XML (File)" ID="880e2016-02bc-4d87-8c00-a23f95753ee6" IgnoreErrors="true" StartupType="Automatic" Filter="*.xml" DetectionExtension="dat" LockedFileTimeout="30000" Encoding="UnicodeUTF8">
+        <ActionGroup Name="Actions" ID="d3cd9769-b670-4cd3-9dc9-9d50e9de7d66" RunMethod="Sequential" MessagingEnabled="false">
+          <Actions>
+            <XslTransformAction Name="Oracle WMS and MSCA Print Request to BTXML" ID="760b5fcc-9fe6-4a3e-9658-58849467e36b" IgnoreErrors="false" TransformType="OracleWMS_To_BTXML">
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+            </XslTransformAction>
+            <BarTenderBatchAction Name="Print Batch" ID="46937464-bda1-477f-80f5-3d288a5a907f" IgnoreErrors="false" BatchScriptTimeout="-1">
+              <BatchXml>
+                <Value>%EventData%</Value>
+              </BatchXml>
+            </BarTenderBatchAction>
+          </Actions>
+        </ActionGroup>
+        <ContentData />
+        <ScanFolder Path="%IntegrationFileFolder%Scan\" />
+        <MoveToFolder Path="C:\" />
+        <DetectedFileSortOrderItems />
+        <FailureMoveToFolder Path="C:\" />
+      </FileTriggerIntegration>
+      <SocketIntegration Name="Oracle XML (Socket)" ID="5a42ebe5-5c29-482a-b8c6-ceaa53f1d8ca" IgnoreErrors="true" StartupType="Automatic" ReadTimeout="60000" MaximumConnections="100">
+        <ActionGroup ID="027a9f85-de33-4037-96df-26e6ce116899" RunMethod="Sequential" MessagingEnabled="false">
+          <Actions>
+            <XslTransformAction Name="Oracle WMS and MSCA Print Request to BTXML" ID="b829a527-eabf-4ac6-aee0-737d16ecf932" IgnoreErrors="false" TransformType="OracleWMS_To_BTXML">
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+            </XslTransformAction>
+            <BarTenderBatchAction Name="Print Batch" ID="76ee1d01-a29a-401b-986a-c7f2301e3db3" IgnoreErrors="false" BatchScriptTimeout="-1">
+              <BatchXml>
+                <Value>%EventData%</Value>
+              </BatchXml>
+            </BarTenderBatchAction>
+          </Actions>
+        </ActionGroup>
+        <ContentData />
+        <TriggerEvent.Disconnected />
+      </SocketIntegration>
+    </Actions>
+  </ActionGroup>
+  <Metadata>
+    <Properties>
+      <Variable Name="BuilderName" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>TaskListToIntegrationFileConverter</Value>
+      </Variable>
+      <Variable Name="BuilderVersion" Type="System.Double">
+        <Value>1</Value>
+      </Variable>
+      <Variable Name="SelectedIntegration" Type="System.Int32">
+        <Value>0</Value>
+      </Variable>
+      <Variable Name="SelectedOptionsPage" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>0;0</Value>
+      </Variable>
+    </Properties>
+  </Metadata>
+  <SourcePath>C:\Users\Administrator\Desktop\v10_1examples\Oracle\OracleXML.tl</SourcePath>
+</IntegrationFile>

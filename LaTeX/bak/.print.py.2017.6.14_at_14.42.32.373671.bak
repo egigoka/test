@@ -1,0 +1,90 @@
+#! python3
+# -*- coding: utf-8 -*-
+__version__ = "1.0.0"
+# init release
+__version__ = "1.1.0"
+# many bugfixes
+__version__ = "1.1.1"
+# -noprint arg now opens PDF
+__version__ = "1.1.1"
+# -noprint arg now opens PDF in new window
+__version__ = "1.2.0"
+# -a4 arg now print on A4 printer
+
+from commands7 import *
+
+
+class State:
+
+    tex_exists = False
+    pdf_exists = False
+    pdf_file = ""
+    tex_file = ""
+    try:
+        sys.argv[1]
+        tex_file_name = sys.argv[1]
+        regen = False
+        if "-r" in sys.argv:
+            regen = True
+        noprint = False
+        if "-noprint" in sys.argv:
+            noprint = True
+
+    except IndexError:
+        tex_file_name = "It must be getted from command line"
+    tex_files_directory = Path.extend(Path.home(), "Dropbox", "LaTeX_31.05")
+    tex_files_directory = Path.current()
+    sumatra_pdf = Path.extend("C:", "Program Files", "SumatraPDF", "SumatraPDF.exe")
+    printer_name = Path.extend(backslash, "192.168.99.20", "Datamax_A-4212")
+    if "-a4" in sys.argv:
+        printer_name = "20"
+    latex_engine = "pdflatex"
+    latex_arguments = "--shell-escape"
+    except_files = ["commands7.py","print.py"]
+    dir_content = []
+
+    @classmethod
+    def reload_dir(cls):
+        cls.dir_content = Dir.list_of_files(cls.tex_files_directory)
+
+    @classmethod
+    def get_filenames(cls):
+        cls.reload_dir()
+        cls.tex_exists = False
+        cls.pdf_exists = False
+        for filename in cls.dir_content:
+            if (cls.tex_file_name in filename) and (filename not in cls.except_files):
+                if (".pdf" in filename) and cls.regen:
+                    cls.regen = False
+                    File.delete(filename)
+                elif (".pdf" in filename) and ("-pics" not in filename):
+                    debug_print("Wow! Such PDF!", filename)
+                    cls.pdf_exists = True
+                    cls.pdf_file = Path.full(filename)
+                elif ".tex" in filename:
+                    debug_print("Many TeX code here!", filename)
+                    cls.tex_exists = True
+                    cls.tex_file = Path.full(filename)
+                else:
+                    File.delete(path=Path.full(filename), quiet=False)
+
+
+class Pdf:
+    @staticmethod
+    def create_(self=None):
+        Process.start(State.latex_engine, State.tex_file, State.latex_arguments)
+        State.get_filenames()
+
+    @staticmethod
+    def print_():
+        if not State.noprint:
+            Process.start(State.sumatra_pdf, State.pdf_file, "-print-to", State.printer_name)
+        else:
+            Process.start(State.sumatra_pdf, State.pdf_file, new_window=True)
+
+State.get_filenames()
+if State.pdf_exists:
+    Pdf.print_()
+else:
+    Pdf.create_()
+    Pdf.print_()

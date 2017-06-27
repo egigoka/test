@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Command xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="Command.xsd">
+	<WriteTagData>
+		<Item>
+			<FieldList format="SGTIN-96.btw" jobName="SGTIN-96_SAMPLE"
+				quantity="1">
+				<Field name="BUSINESS_PARTNER">WALLMART</Field>
+				<Field name="BUSINESS_PARTNER_ADDRESS">72717</Field>
+				<Field name="EPC">30740242200C0D00000004B3</Field>
+				<Field name="EPC_TYPE">SGTIN-96</Field>
+				<Field name="GTIN">00037000123408</Field>
+				<Field name="PRODUCT">Bushel of Apples</Field>
+				<Field name="PRODUCT_DESCRIPTION">Fugi Apples</Field>
+			</FieldList>
+		</Item>
+	</WriteTagData>
+</Command>

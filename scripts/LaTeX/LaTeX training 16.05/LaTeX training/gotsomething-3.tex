@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\usepackage{pst-barcode,pstricks-add}
+\usepackage{auto-pst-pdf}
+
+\begin{document}
+    \begin{pspicture}(10mm,10mm)
+        \psbarcode{^10412345678}{includetext}{code128}
+    \end{pspicture}
+    Test. Just test
+%\documentclass{minimal}
+%\usepackage[pdf]{pstricks}
+%\usepackage{pst-barcode}
+%\begin{document}
+
+%\begin{pspicture}(0.7in,0.7in)
+%\psbarcode{ctan.org}{}{qrcode}
+%\end{pspicture}
+%%
+%\begin{pspicture}(0.7in,0.7in)
+%\psbarcode{tug.org}{}{qrcode}
+%\end{pspicture}
+%
+%\end{document}
+\end{document}

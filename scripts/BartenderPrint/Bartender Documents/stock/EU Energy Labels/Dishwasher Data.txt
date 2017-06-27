@@ -1,0 +1,9 @@
+Efficiency;Annual Power Consumption;Annual Water Consumption;Drying Efficiency;Capacity;Acoustical Noise
+40;100;2000;1.2;25;25
+50;150;3000;1.0;20;35
+60;300;4000;0.7;20;45
+65;600;5000;0.6;15;55
+75;666;2000;0.5;10;65
+85;777;1500;0.4;8;75
+95;999;750;0.3;4;85
+

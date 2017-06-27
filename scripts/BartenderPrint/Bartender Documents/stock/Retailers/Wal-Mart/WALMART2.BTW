@@ -1,0 +1,337 @@
+! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:29:49.036  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:29:49.036  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:29:49.036  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:29:49.036  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:29:49.036  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:29:58.115  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:29:58.115  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:29:58.115  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:29:58.115  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:29:58.115  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:29:58.115  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:30:07.085  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:30:07.085  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:07.085  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:07.085  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:07.085  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:07.085  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:30:16.055  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:30:16.055  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:16.055  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:16.055  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:16.055  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:16.055  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:30:25.025  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:30:25.025  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:25.025  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:25.025  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:25.025  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:25.025  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:30:34.105  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:30:34.105  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:34.105  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:34.105  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:34.105  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:34.105  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:30:43.075  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:30:43.075  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:43.075  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:43.075  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:43.075  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:43.075  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:30:52.045  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:30:52.045  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:52.045  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:52.045  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:30:52.045  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:30:52.045  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:01.124  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:01.124  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:01.124  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:01.124  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:01.124  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:01.124  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:10.094  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:10.094  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:10.094  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:10.094  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:10.094  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:10.094  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:19.064  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:19.064  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:19.064  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:19.064  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:19.064  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:19.064  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:28.034  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:28.034  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:28.034  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:28.034  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:28.034  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:28.034  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:37.113  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:37.113  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:37.113  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:37.113  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:37.113  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:37.113  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:46.083  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:46.083  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:46.083  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:46.083  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:46.083  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:46.083  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:31:55.053  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:31:55.053  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:55.053  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:55.053  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:31:55.053  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:31:55.053  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:04.023  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:04.023  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:04.023  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:04.023  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:04.023  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:04.023  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:13.102  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:13.102  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:13.102  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:13.102  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:13.102  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:13.102  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:22.072  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:22.072  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:22.072  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:22.072  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:22.072  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:22.072  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:31.042  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:31.042  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:31.042  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:31.042  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:31.042  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:31.042  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:40.122  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:40.122  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:40.122  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:40.122  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:40.122  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:40.122  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:49.092  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:49.092  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:49.092  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:49.092  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:49.092  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:49.092  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:32:58.062  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:32:58.062  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:58.062  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:58.062  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:32:58.062  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:32:58.062  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:33:07.032  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:33:07.032  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:07.032  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:07.032  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:07.032  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:07.032  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:33:16.111  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:33:16.111  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:16.111  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:16.111  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:16.111  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:16.111  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:33:25.085  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:33:25.085  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:25.085  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:25.085  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:25.085  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:25.085  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:33:34.087  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:33:34.118  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:34.118  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:34.118  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:34.118  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:34.133  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:33:43.088  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:33:43.088  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:43.088  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:43.088  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:43.088  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:43.088  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:33:52.042  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:33:52.042  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:52.042  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:52.042  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:33:52.042  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:33:52.042  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:01.028  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:01.028  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:01.028  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:01.028  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:01.028  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:01.028  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:10.107  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:10.107  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:10.107  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:10.107  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:10.107  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:10.107  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:19.077  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:19.077  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:19.077  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:19.077  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:19.077  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:19.077  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:28.047  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:28.047  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:28.047  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:28.047  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:28.047  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:28.047  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:37.017  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:37.017  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:37.017  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:37.017  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:37.017  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:37.017  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:46.096  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:46.096  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:46.096  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:46.096  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:46.096  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:46.096  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:34:55.051  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:34:55.051  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:55.051  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:55.051  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:34:55.051  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:34:55.051  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:04.021  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:04.021  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:04.021  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:04.021  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:04.021  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:04.021  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:13.100  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:13.100  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:13.100  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:13.100  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:13.100  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:13.100  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:22.180  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:22.320  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:22.320  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:22.414  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:22.414  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:22.414  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:31.025  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:31.025  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:31.025  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:31.025  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:31.025  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:31.025  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:40.104  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:40.104  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:40.104  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:40.104  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:40.104  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:40.104  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:49.074  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:49.074  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:49.074  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:49.074  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:49.074  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:49.074  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:35:58.044  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:35:58.044  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:58.044  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:58.044  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:35:58.044  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:35:58.044  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:36:07.123  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:36:07.123  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:07.123  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:07.123  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:07.123  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:07.123  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:36:16.093  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:36:16.093  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:16.093  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:16.109  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:16.109  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:16.109  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:36:25.062  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:36:25.062  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:25.062  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:25.062  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:25.062  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:25.062  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:36:34.079  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:36:34.079  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:34.079  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:34.079  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:34.079  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:34.079  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:36:43.049  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:36:43.049  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:43.049  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:43.049  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:43.049  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:43.049  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:36:52.091  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:36:52.091  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:52.091  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:52.091  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:36:52.091  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:36:52.091  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:37:01.061  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:37:01.061  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:01.061  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:01.061  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:01.061  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:01.061  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:37:10.031  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:37:10.031  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:10.031  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:10.031  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:10.031  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:10.031  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:37:19.016  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:37:19.016  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:19.016  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:19.016  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:19.016  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:19.016  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+2016/12/06 22:37:28.095  2712  1164 S0!! NetWatchdog: Port 443 proxy search failed! No working setting found.
+2016/12/06 22:37:28.111  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:28.127  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:28.127  2712  1164 S0!! HttpQueryInfoNum(19) failed with error 12019, Errorcode=12019
+2016/12/06 22:37:28.127  2712  1164 S0!! HttpQueryInfo(20) size failed with error 12019, Errorcode=12019
+2016/12/06 22:37:28.127  2712  1164 S0!! NetWatchdog: Port 80 proxy search failed! No working setting found.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   à¯*h∞aXWÄ!€Ti∫‰√ÄÈtT≥ò¿ˆÂ‡fàñä|.Ys)år˛«@Ä HΩìÊ@ëﬁ÷<b @TêI·8H87¬Ov∆ˆÓÖH<_¿°€¨wÃBé5sY»A‘I±çà"¡–íˇ¶˙œM!‚∑‰·M99ËÚRÎø„m¶DÀÑÏ-O:@5¸[~%g§ä{´}åπJC1lS,ª¿ÚÈÅ`Õ©	FÙ¶W}ØØà¯ú∫‚+i¢f]îwh™ÌAö»”qfú€SÉ]Ù∆b∂ ;+˘π.-]6˜¯F0˛ˆm*≤Xãtôˆ˛£ê^iüÕ‚M…M˘aŒmΩÄ≠>1∂8(ÑÆòƒ»¸ı0P "Œ/?O?¨π,síxˇJ°€…LBÒñ˜Å˝8ÆL±êb£™–•ÛwmÀÅrTÏªD¥ΩSÃ∞Ñ:¥íÓqÃY˝ºı4ÃL.{Cõ+Á´qì™ÙD=Øï`∆JPÆ!
+ªﬂ÷¬c)˙–˛Äæ—•9·Ìv\ﬂUL∂%îµL˘Ñı!ﬁ/ﬁl˝ûë rÚs	CGc&[Qo!3Õî?Í”*îdu>û7…jÕ*mi◊	jÊºè_/◊¯§ÔûΩºC2ﬁZ uÁ0N»π÷;∂z[¡e™r
+A`z.M[>◊˝ç–˝uI¬‹ìÒR∞ƒçÑú‘K=Q_p6Ÿ–¥â¥õé>—M\˘GP≠¨ÍT›ö≥‡õ£D∞Á¢Gc·øªÉ¡fgäˇ≈w˝t_w˙Õz3=Ùjç€ÃÌü¿˛3«˜˛‡¡Tó\…ÇûMõîÛ`Yú[˝∫	Çï¶#’x÷pEÉ’Ï'VùΩ,H∆¶/7ì—	˛∆ÂVÖÁ1ó@ˆ˚ iS¶ì%ns
+ÏëL9¶<j ‹jXq›ã_Ã•ZÒü«7êï∏|Tˇ„-¸Iòé≈πÍûÛ	(/2†!4äÿΩë„ÿöÿÇœ6E˝^s?-/XJÄ–÷Ë≤‰§Y≈ètZ≈î⁄¿Át\˚gFÕa}®Uá‚·Ô5ñáO≠\ãx6>Iá™‘…L¶LÍkÍö≥Èpò2ˇ8˝6ì‚në§ÇÊeKxÔS“DÖDê ZîU$†@óS≠<rNÙ}ïlƒµyhÅ^*í AıÌTt∂ªZˆ%BÍ“ı„`ÕügBÊ’Î¯iÅG6,F∫tA˚˝¥ØyÃ_=™ßâ59∂$¬∞gtUö™*˜ƒ9J∫≈ê§æsÌØÑßÒ≈g€ë/}∂òàÅWsé{ÆGâcØˆù?‘lÿW\¶<bCòäÍ(¢0á ëc≥õbû˘8Da„xü¯∆}Â/˘ﬁÅ§ÌÂ9“ØÚG Kh3¿¿I0ÚR*ç°2gù¥¿3®ãﬁySπ≥:∞:ä.6MÂﬁ7Áª6r4Ÿ¿d°ı∫œ<á¡:ÓW| ›H@[•˜¨óâƒî#Ä9";áæ—Å¥¬|íØ7SÈpÙ]≥|®"Nhªì£cbÀéŸ	èDÕ‘9•
+Ëw´U—∏S\LŒ(Ï(ÉÛêZ	æÁ•«ãÛŸöØY!¶ôÖ{	)¥˚õÀÈ£˝Qª{≈¨Å Æ}Û5Ö0r£∫']ˇ®Z-+Ì¡~F…j;.qI5≥ÔùÃY∫kà∑ˆj@cˆ5˝»d¢bˇÁœÓ˚∑ú
+3é$2,—uı å†òL≥∑h?¨îJ˚”Kä|‰ˇdH≥Gœ;∆ÕÍØ'‡·uô•ÙÿMûoúÌfÉ⁄~)˜4ìPJ-‡2,Óä6;…d¬u<>’8MMKîíuúi&[˝„æÄäœ÷=èé ‰Ç4æÊ:f9|Òå=^°ƒ‰W≤„EÉMqΩÄl‡€‡u Qòà∑ıg ùZﬁI˚œæﬂ6FJR€`Ó]⁄MÀ<‰pS$ÙπqrW`GAá∆3ı≥˝aØ‰xoZM0æö‘ﬂæÄW¬≤¯∂Gﬁ¶z÷5‡¥KE•√(8å#êéü~Ìû!Ïó(ñ+ÿYÓπﬂ5ygÌ∑Ùïî®aÚÂpx®ˆD¸v”T‘ê@ì8™@ÍT(M§È>Bù™Êâ]2:ò∫çö”ƒ´GÅh2r8ç$™¸Í$«:r<i'
+KnÅÈgùÄıw$ûU±í∏-”îM; âÈ6}^3˜Î∫6Ì7ÆAY©YêjˇH’XÕlÃﬂ}E,?\\îkß5:eÕ)?Ñ∫Ù≤å¶ÆÎ˝˛ˇ|≥+öäÚbD∆¯öC»É6»˚Ãä≠ó2∆àıS{≠Zö[ ∂9ı?¶[*xØ˘I~ã–ü°±∂ÿ~ﬂÃv“…&ùﬁZÈ´∆qÄˆªﬂæEyÓ†Ä.π>†>WÔw≥ŸøÍÑa§éˆWg’@∫ª¥—_◊jZU©ÏMK:^»™úWjœ¿&§æÑÃîñÖ*˚Çd.Âx≤Í~âö∞ÙÛœá◊˘˜Z⁄.ÚÛ"∂_
+§\D∞”ªÓy5R.Ä±÷§ÈgaÄ‘r√¸§‰HêpÊm≈˝Ì$tÅ⁄ÔŸ&,|sL=™ó M⁄iBƒ£aÊq†˙U∑„†„ñ—-ÔÛÒsÎa∂~CÕ±UΩâH>É\xíÚcìtÕªKêrÅî™8Ö=ˆü-ΩˆTOÑ}¡ÜLúºTÒbäÿ?’Z04©Äpè?≥"Bø2B‚¿tã√À«¯¶zÎT,ΩÂYpì`Ø˜¶ÄD¯¯—≤ñ‘`1Ò˛9©Áàr$¬FG_6»±Å£›ç ŒqÙ9œ[Û™n›ıÀU,-Ê·%¯™4A›ªµSï° d∆™bÿõ∫bqF∞®ô‰dÔö£⁄3_&≤Ù˛âÖíDúTV¡e˜±¯≠ë#ïÿ1wÚ…ÅX!Lv˛˚¬zü∞†2TµÄ†Õ!œLˇô˚ﬂÎñ◊∑øÉ e)ˆ4ø‡´Kî≥J+¸Í¥πë ÿ¢;AzcMe¨6Gw&Xk¡Íoú“LÉ"€ﬂ,º¸Ëi√Ø\¯£´4‡	ËLëØóø9ãD9ûûƒïbFˆÛyµõR√•÷4Ä=¿Ù¥¬ar∆Œûˇ™˝	¡5N
++oQ/`?:¸êƒÖ	<Ä¢Ù`GŒ96;+nÏ$>∑^;ïq?íˇôV+®çëuÈr*û,ˆ `o«4Ú¯)ihzè‹õBruW u%ìΩ'rÏeN8ëvtÁ≥&@N ?t
+T∑S>Æg\Ö{PÙˇ{>ö⁄¨ª|C@ıL,T≠≠Â˘w√;ÛË™QÎÏk	Ô=·=Û±ÒcWRﬁ]Ü’∆©Ùñh‡GDâ∑≈®êIØ‹£Á’F:Á∑U?Út2b∂Do–c
+6#(€æ9^C<IoLºó;Úz R+s ˚sÓÎ¯Œ‘|…¢Y»A¨
+»[ª•ùUoÄCâKÕDHü`§úemà{π û+PìZGåÒŸÉKì äßπ!‚F„à‡â>MäÁ'≈nKiæØfŸû»≤˚ mf„SBﬂ†3ÌÛB◊‹{À‚Bœôvn!6 08‹$QJ…+¸πˆ‰7ù≤èUhâñ†wî÷j›xwÅ‘AOåA <+å~≈}—Ê*§€∆ÊV∂Òåßº´Ù¬n =›¸MAq¥êÈ˜Â»œQ&6J|L©H]f…$íÂHÎcL[y`¥Ç†·À…›€6∏ã:Ùä	U8Í‡—¥4"WZ¢pGTp‹óÍ-Oâ|≈˘ƒÎ:ùı,(Nç—OˇALûá/ä Ã#¢dÅyT,0ø¯Æáì>ƒÇMƒµûI[ıæ!=ç?Ç5∆≥ã◊Qm«í ˘h—à1÷Eﬁ¡«á!ö–ßê›Úìõ-p¡ﬁC©»Jü‹Ùÿ0ÍWS9ÁŒ∂ˆÿiZ'ÿÉLJ†õ}fq¢ìoN]Œ,xïoÁïí©/À	’}øË§∆¡∂+£Èôc¸÷DO/ı∑ÊŸc$,¸'¸òo	¡zß°`n¥.Ç∏Ÿ›ç7◊À’˚”B∆P"t∏ß∞Y≤«„}¬Ò˘M¢—Ÿ™fΩ∂–‰Wn§˝õèÌ{™2d¡∞:∏A+7nLπ«ﬁp\Ó/•g QÀÖ∆î\ã^Ù£DuJR≤•U2?Ïhko∂h(¸ôKSÙ·ÔYjqZI?FÕñ)ko¶—pFzÙ=õcÑ∏&àEŒ≈†ûAÂöπÑ¢u‹áŸ/”£Tf ˙ƒ|Á»¬=\báãMIJ∆Ïß ≠h–z÷`\πíuëÑ°8—àCIèÆpEªòF«èú«ÁRŸW eTSñÈY6ØkwÉªV]Ít8	8–nÜQ;4?FBÕ©û∂=¿C®Uk`∞É“]¸Cú äı[ﬂ?øÙ3]èw÷˝ƒ[ªà‰e¶ÈÖ¸w$Ñ¢E÷ËÎOVe◊◊-©"e é/#'vEm"Õ hÒÏÓiıÔ~ùTÔ;`É¥u[2æ∂£YÔ–T€≈ÿXoGÊ›62¡=‰AöxÓì%'ÈÎçC0›ûé¡‰^æGà˛£zòã~
+Óˆ?d©1æ|%Ü*»ˆ—¸z C’ù∏Uö6%^’#⁄Xo¯W’‘˚L43•oM\owN.±i˘0∑Sk‡BN&•"l\ø0w´Ö≥GJÚæqImöWU·˜¶ôò¬G=Ωy0y¸7¸`Æç``ÙÖ…Ê¸T√JÁQ|_,éTãID«¡°{ŒñØsX@`^¡©Ï#1Œ,íÍs∫Ø¬∑)XÒ'ÇΩm¨ﬁ8*¢Ó™≤hf∑ß[ôÎîG˘Ô¯Ê%~gﬂ%∏¨—»TóY>π	[´ê ŒAç∞V[ıÍ§TM≈ƒeÄ9œÿ∏\e¢m† xîùrÜ’ò3d,RM˚Vá˙zAX÷$q}oŒÕPqÂ2—RBØä9PÏn$ÜF  œ%ƒﬂ?tÂÇ*w="€ z6∑ÍH∏/C4à⁄@ÛÏÜïG™+2ØÓQ≥,p}s˛A¶
+k†ç9ÚU-˜2`,Øìp”µªNÙô,ßØ
+`Åˇ·≈Q.;¡◊∑ì±î!D%â»U«;m¸ÙêôÎLùòEùGº¶ÍyúË`â]–B4Ã.3ıü€Ö3H
+™Œﬂaö¢ŒÒ˝[÷:˘f÷{wœ2±∏˜Cùg∆Ek˛˘∫~›˛5 w±öáœÉŒa —◊¬ZTü¨fM{${S†:?ñ"!}£_≤m^ö…D=wi∫}Åœ6»PH’jiÄ¶›@sÇò~ ®πÚ.Z¡ÃÓ-bôÂ*‚ΩÁP∫Ωø æﬁˆñJBy≥$≥P'û‘»Ò±∑Aèå4DÒ1`]9qÿi<^>º.Póì,éY™ ∆WÇ∫b:ùR;Œ¯À˚;b%˜NıkÔ[ó‘	Ñ¨ªaªFUk·ñô¿öª•ÓtVU!ı2Ÿ™ö{"{üÁ∞>S†LEΩˆùz≈Ï∂L+è¸á*ÍxåÒ8/¢,n„·ûmÇü[W»ñ8ùÉ3ˆ∑BJıÂ6äˇ∂≠OÖ^MN@%vCy?WÑƒ±¡*◊É9uV∂unﬂi–≈#üÖ∫îàA#NxÍï/“4\—â–YNXñhºÂìnpß9Cé^G0~%>}ÑÔc”HäÄ}^©Ïò@gŸ“ñı/ø“ìŸåÀÌi)ØØ’h:)öc◊"—°4›BLZI1º™æ1p@yó’ı¨ﬂT—®ÿ0Ò*”kâõí‚Ä'∏“¸e
+áœzÈD◊µ¶R<W?ˆs⁄”¡ø«ÈÄEñ¥ëV·Ü∞È*OY^>TÔ∫xˆI—SyàxˇÃëˇtìcI#Lo‰[b‡Å°iÜîﬂÀÏO¡é‚âƒ
+LHiNLeñ>â<Q”Ÿ‚”[FPY·r-ËA¥÷í8J°ı(QçùÀ„îë+ô»[`æ…•É:·ΩÌ8äùñ¿Ì†∫¢S¿4é™EC¡˛Ö"˘n±ZVÙ_WAˆbé≈ço®›úÔJ∫dí}m—◊ÛÎπ®Lì10ﬁ–B©1aWö~∆-ôÅØÂ5Ù∞j#J3öâNMQ%zL/G+¸ÅvO]ìËò\~’˘∂î9,dì∫k»œ´ÁπﬂD?ë»åWË≠z
+®¥ãíßñé€◊>I9« Gö5à—D'√Õ¢W<¯%—-.Îrmè)ßzÕ€Ì$)¬¡‹è€†©-ñﬁQæI¬π€ÎõåÊq$	Ïè=‡sã¥“…#|
+ÙÕıyﬁÉ5ˆmß”ˇˇ—∫±U¨0]OÂ4d!C≥OKÍÂΩp¯¬“˛aµº´èd.”3∆˜`îs6dÑ¬‹sdp_JZlY≈~Œ`Hª‡†˚lñÉÊëo2çÿ∏ßR•vhz’BÓtãë˛ôÅ;èV1 }¢$êWøF˝ñP|`YFr †∑˝“GrππÈƒ‰ =≠$â¨1˝ß„Æ‰AÃ6◊J,ÿZo[Õ\Z∆ËœW¶QœÃkp
+∏x}Õ†cl‹Ì*Ú˚°éÌ˙õÆ-$Œ4€3ûÜãœÒ†é≠*úqr
+*¥Äkuß˝W«`◊~<Ωï1±<;Â¡ñÆääHPF¶+R$Oçm¶ytaÑ(7Çìœí’∆XL8ﬁ˜nYÎ)6ÂÄÑ=g7Ìøoã®˜|Ú,©ÏŸv7„•ÄnÅÄ‘€∂œ Îí“Z‰D∂
+1q,me·Äß@a!(stç*Ö>r94KÕ!˘ ª∞1ˇ7Ó‚p N»wélèóW≈ë¬L¥ÊÈ*pi’w|ËéÃl≤˝‘=UÏ™Y »!*(º√Jà˚ãåéŸtQ‰Dól›⁄o≈îã‡¸S‡ll≠C·8~(ùÍæ++˘˛-∫hUû¨¸;†ëúì8^˛⁄<’'`ﬁJºyvGd‘ôN\<≤Ä™QÀ-àÁ¬“{£tªxU§i	k0\ﬁPHˇ[tM‰[ı^HTfn†/!ïº∞•»&ç-∏Ëˇ«eµfoÂ%ñø¬‘–õ	˝ùa?≥áÇ¬i
+6:¬m¶~ë6‡¡O∑{∂ŒüN6W.Ë_=´éº∆‚O˙—\÷ËXûÑÈˆ‡$◊>cüHüMÚ&»úS=ç∑›£bÔZn1 Pú ppêê0ÓÅ‚v;\∫∏∏V« W6“ù![©”Á‚„Mûó¨™ËA%ﬂ®K hèU¸ä∆b8¢GZç†]ﬁ$”Q≥íOk(
+Â´òN¨⁄Ä·¥Y·O´¥Ø˝—·à˛SΩu¥g»uΩGyJ®ﬂ‘ælÃCP¢Õ+—q†>Aô⁄Ú·ã–ﬂ‰óÆ· N„ÎºˇÔoóôﬂ˛lzwºx¥ItÍÇAm§Eó–åäÇå¨P*eÑÇäP‚˙‡‰»ÑXª˘˘5 ‚!°~0ÿ†øCsõÊÛ2¸ì∂ü §#œ£1GÊ˙’ÁŸC6À∆ÑÑ*oî;è∞óG¥€Í°Y@†@ü1E˝túéî_}⁄°ÕOvèÓ±Ï<Ÿ™`Ûlfüÿwj∆Ç°;é¨⁄Ÿdt&!ÜÎuZö¬¡ü·cl.CM)ºW7⁄öª}-G$oÎy±∫ŒCçl-Êˆˆ~ÑùcK?\ 0f0oÅ[á|}(tJ˜∫=‘§>´;R!ﬂK»◊2∑j˙,âÓ|◊º∆»¶Ú›‰ôlâÿ≥CkW|‰hø{Ñá∑ê\ª…∞€πÇ+IÍ·W“¯Í.îT}'ï"&ØΩ˚Ê5áï‘∏V∂˝‡~œ‹r˚,6Q|+“¬oVIô	÷ıÿÕ”ÓìΩ∑ÁøsØÀ_Wæ{(öáë˜¨]ÀI¢⁄Å ò-,†œ∞—Zã8°Û·d-ÙÎ÷ôÿó.]⁄n%«—`≥Ñ“IÙ“˚fST$HR’VÊ¥A_MÑW∫ ÁÍcõ˛(k@Yˆ5VRäπ8®◊ö@øsŸÑPBåÔKK˙ˆdùë¬Õ&ƒ˛˜ x]™ËP

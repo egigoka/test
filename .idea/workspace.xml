@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b77804b9-e1c4-4f0e-bd4f-dd011d53165b" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled/.idea/dictionaries/Sklad_solvo.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/untitled/utils.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/0AXcFu3sxGs.jpgnp_myp2t.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/0olSlXwuryg.jpgvrx84qj6.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/2l4QL9RIQxI.jpgaji9kvr2.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/74QE4MCylgI.jpgh_oml104.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/DWoqlOnBmUM.jpg39b5237e.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/DinMogrnEQE.jpg6shoc35z.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/Eom7uw03Vss.jpgw7ew90xo.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/LuEtF4C_bRo.jpg3gg6gumg.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/MwSTVrDkp48.jpgrgji_stz.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/czlJ5z6pBkA.jpgrqh9bybg.tmp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/test19bartender_b.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/untitled/test2todo — nw.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/untitled/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/.idea/misc.xml" afterPath="$PROJECT_DIR$/untitled/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/.idea/untitled.iml" afterPath="$PROJECT_DIR$/untitled/.idea/untitled.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/.idea/workspace.xml" afterPath="$PROJECT_DIR$/untitled/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/test.py" afterPath="$PROJECT_DIR$/untitled/test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/test4count.py" afterPath="$PROJECT_DIR$/untitled/test4count.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled/test4count.py.save.txt" afterPath="$PROJECT_DIR$/untitled/test4count.py.save.txt" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="commands7.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/commands7.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="628" column="21" lean-forward="false" selection-start-line="628" selection-start-column="21" selection-end-line="628" selection-end-column="21" />
+              <folding>
+                <marker date="1498153960000" expanded="true" signature="123:7971" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="28891:29364" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="29051:29294" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="29124:29237" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="29391:29525" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="29540:30118" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="29659:29708" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="29757:30118" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30137:30716" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30171:30256" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30291:30716" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30497:30558" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30735:33708" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30762:33708" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30803:33355" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="30824:31035" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="31056:31261" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="31282:31487" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="31510:31727" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="31749:31960" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="31982:32193" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="32214:32419" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="32442:32659" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="32682:32899" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="32921:33132" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="33456:33708" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="33544:33660" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="33737:34321" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="33742:34027" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="34043:34321" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="34056:34206" ph="..." />
+                <marker date="1498153960000" expanded="true" signature="34524:34872" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ping_.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ping_.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>cmdWi</find>
+      <find>plog</find>
+      <find>rus</find>
+      <find>ping</find>
+      <find>py_ex</find>
+      <find>number</find>
+      <find>secon</find>
+      <find>Current_page</find>
+      <find>debug_p</find>
+      <find>_arg</find>
+      <find>def text</find>
+      <find>#te</find>
+      <find>ifxete</find>
+      <find>#test</find>
+      <find>uncom</find>
+      <find>int</find>
+      <find>open</find>
+      <find>#</find>
+      <find>regen</find>
+      <find>begin{d</find>
+      <find>pdflatex</find>
+      <find>right</find>
+      <find>s Be</find>
+      <find>Timer</find>
+      <find>.reset</find>
+      <find>commands7 v</find>
+      <find>reset(</find>
+      <find>except:</find>
+      <find>int(</find>
+      <find>= int(</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/untitled" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/utils_dev.py" />
+        <option value="$PROJECT_DIR$/../LaTeX_31.05/utils.py" />
+        <option value="$PROJECT_DIR$/../LaTeX_31.05/26-prealpha.tex" />
+        <option value="$PROJECT_DIR$/../LaTeX_31.05/print.py" />
+        <option value="$PROJECT_DIR$/../LaTeX_31.05/28-prebeta.tex" />
+        <option value="$PROJECT_DIR$/../LaTeX_31.05/commands7.py" />
+        <option value="$PROJECT_DIR$/../LaTeX_31.05/generate.py" />
+        <option value="$PROJECT_DIR$/LaTeX/28-prebeta.tex" />
+        <option value="$PROJECT_DIR$/LaTeX/codegened.tex" />
+        <option value="$PROJECT_DIR$/LaTeX/29-justtest_ean13.tex" />
+        <option value="$PROJECT_DIR$/LaTeX/generate.tex" />
+        <option value="$PROJECT_DIR$/LaTeX/commands7.py" />
+        <option value="$PROJECT_DIR$/pycharm.py" />
+        <option value="$PROJECT_DIR$/untitled/fuck.py" />
+        <option value="$PROJECT_DIR$/LaTeX/generate.py" />
+        <option value="$PROJECT_DIR$/LaTeX/print.py" />
+        <option value="//192.168.99.91/shares/scripts/BartenderPrint/bartendernogui.py" />
+        <option value="$PROJECT_DIR$/wmstempdir.py" />
+        <option value="S:/scripts/BartenderPrint/log/generate_l.txt" />
+        <option value="$PROJECT_DIR$/untitled/test27hookmouseclicks.py" />
+        <option value="S:/scripts/BartenderPrint/g.bak.py" />
+        <option value="//192.168.99.91/shares/scripts/BartenderPrint/bartendergui.py" />
+        <option value="S:/scripts/BartenderPrint/testxela_stack.tex" />
+        <option value="S:/scripts/BartenderPrint/generate_l.py" />
+        <option value="S:/scripts/BartenderPrint/testxela.tex" />
+        <option value="S:/scripts/BartenderPrint/generate_l.tex" />
+        <option value="S:/scripts/BartenderPrint/print_l.py" />
+        <option value="$PROJECT_DIR$/tripleclick.py" />
+        <option value="S:/scripts/UtilsUpdate/UtilsUpdate.py" />
+        <option value="$PROJECT_DIR$/testtripleclick.py" />
+        <option value="$PROJECT_DIR$/pngwork.py" />
+        <option value="$PROJECT_DIR$/commands7.py" />
+        <option value="$PROJECT_DIR$/ping_.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="676" />
+    <option name="width" value="697" />
+    <option name="height" value="735" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="term" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="term" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../LaTeX_31.05/print.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Sklad_solvo\Dropbox\LaTeX_31.05" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.print.py latex code">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="print.py latex code" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Python36\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../LaTeX_31.05" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="term" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../LaTeX_31.05/print.py" />
+      <option name="PARAMETERS" value="26 -r" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Python.print.py latex code" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b77804b9-e1c4-4f0e-bd4f-dd011d53165b" name="Default" comment="" />
+      <created>1495291575612</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1495291575612</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="676" y="0" width="697" height="735" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24550898" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.50292826" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.49707174" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="75" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/generate.py" />
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/28-prebeta.tex" />
+    <entry file="file://$PROJECT_DIR$/untitled/fuck.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="7" lean-forward="true" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/print.py" />
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/26-prealpha.tex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7565">
+          <caret line="445" column="15" lean-forward="true" selection-start-line="445" selection-start-column="15" selection-end-line="445" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils_dev.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils_dev_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils_dev.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils_dev_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils_dev.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="541" column="70" lean-forward="false" selection-start-line="541" selection-start-column="70" selection-end-line="541" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils_dev_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7429">
+          <caret line="445" column="15" lean-forward="false" selection-start-line="445" selection-start-column="15" selection-end-line="445" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/print.py" />
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/26-prealpha.tex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="51" column="13" lean-forward="false" selection-start-line="51" selection-start-column="13" selection-end-line="51" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/27-beta.tex" />
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/28-prebeta.tex" />
+    <entry file="file://$PROJECT_DIR$/LaTeX/.log" />
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/commands7.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="655" column="0" lean-forward="false" selection-start-line="655" selection-start-column="0" selection-end-line="675" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LaTeX/codegened.tex" />
+    <entry file="file://$PROJECT_DIR$/LaTeX/28-prebeta.tex" />
+    <entry file="file://$PROJECT_DIR$/LaTeX/29-justtest_ean13.tex" />
+    <entry file="file://$PROJECT_DIR$/LaTeX/commands7.py" />
+    <entry file="file://$PROJECT_DIR$/untitled/fuck.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="20" lean-forward="false" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LaTeX/print.py" />
+    <entry file="file://$PROJECT_DIR$/pycharm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" column="24" lean-forward="false" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///192.168.99.91/shares/scripts/BartenderPrint/bartendernogui.py" />
+    <entry file="file://S:/scripts/BartenderPrint/generate.py" />
+    <entry file="file://$PROJECT_DIR$/wmstempdir.py" />
+    <entry file="file://C:/Python36/Lib/site-packages/win32/test/testall.py" />
+    <entry file="file://$PROJECT_DIR$/LaTeX/generate.tex" />
+    <entry file="file://$PROJECT_DIR$/untitled/test27.2hookmouseclicks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="29" column="22" lean-forward="false" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://S:/scripts/BartenderPrint/g.bak.py" />
+    <entry file="file://S:/scripts/BartenderPrint/testxela_stack.tex" />
+    <entry file="file://S:/scripts/BartenderPrint/log/generate_l.txt" />
+    <entry file="file://S:/scripts/BartenderPrint/testxela.tex" />
+    <entry file="file://$PROJECT_DIR$/LaTeX/generate.py" />
+    <entry file="file://$PROJECT_DIR$/../LaTeX_31.05/generate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///192.168.99.91/shares/scripts/BartenderPrint/bartendergui.py" />
+    <entry file="file://S:/scripts/BartenderPrint/generate_l.tex" />
+    <entry file="file://S:/scripts/BartenderPrint/generate_l.py" />
+    <entry file="file://S:/scripts/BartenderPrint/print_l.py" />
+    <entry file="file://S:/scripts/UtilsUpdate/UtilsUpdate.py" />
+    <entry file="file://$PROJECT_DIR$/tripleclick.py" />
+    <entry file="file://$PROJECT_DIR$/testtripleclick.py" />
+    <entry file="file://$PROJECT_DIR$/untitled/test23copypasteyeah.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/untitled/test28mousedrag.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="16" lean-forward="false" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/untitled/test27hookmouseclicks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="81" column="16" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pngwork.py" />
+    <entry file="file://$PROJECT_DIR$/commands7.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="628" column="21" lean-forward="false" selection-start-line="628" selection-start-column="21" selection-end-line="628" selection-end-column="21" />
+          <folding>
+            <marker date="1498153960000" expanded="true" signature="123:7971" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="28891:29364" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="29051:29294" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="29124:29237" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="29391:29525" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="29540:30118" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="29659:29708" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="29757:30118" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30137:30716" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30171:30256" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30291:30716" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30497:30558" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30735:33708" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30762:33708" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30803:33355" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="30824:31035" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="31056:31261" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="31282:31487" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="31510:31727" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="31749:31960" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="31982:32193" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="32214:32419" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="32442:32659" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="32682:32899" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="32921:33132" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="33456:33708" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="33544:33660" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="33737:34321" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="33742:34027" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="34043:34321" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="34056:34206" ph="..." />
+            <marker date="1498153960000" expanded="true" signature="34524:34872" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ping_.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

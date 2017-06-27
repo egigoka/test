@@ -1,0 +1,203 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit)
+entering extended mode
+(C:/Users/Sklad_solvo/Dropbox/term/LaTeX/generate.tex
+LaTeX2e <2016/03/31> patch level 3
+Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
+
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\extsizes\extreport.c
+ls
+Document Class: extreport 1996/10/08 v1.0 Non Standard LaTeX document class
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\extsizes\size14.clo)
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\exscale.sty"))
+("C:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty")
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty")
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty")
+("C:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty")
+("C:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.cfg"))
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\cmap\cmap.sty)
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\cyrillic\t2aenc.def")
+("C:\Program Files\MiKTeX 2.9\tex\latex\cyrillic\t2acmr.fd")<<t2a.cmap>>)
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\utf8.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\t1enc.dfu")
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\ot1enc.dfu")
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\omsenc.dfu")
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\t2aenc.dfu")))
+("C:\Program Files\MiKTeX 2.9\tex\generic\babel\babel.sty"
+*************************************
+* Local config file bblopts.cfg used
+*
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\arabi\bblopts.cfg)
+("C:\Program Files\MiKTeX 2.9\tex\latex\babel-english\english.ldf"
+("C:\Program Files\MiKTeX 2.9\tex\generic\babel\babel.def"))
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\babel-russian\russia
+nb.ldf)) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\soulutf8.sty"
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\soul\soul.sty)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty")
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty")))
+(C:\Users\Sklad_solvo\AppData\Roaming\MiKTeX\2.9\tex\latex\footmisc\footmisc.st
+y) ("C:\Program Files\MiKTeX 2.9\tex\latex\pst-barcode\pst-barcode.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\pstricks\pstricks.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg")
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\pdftex.def"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty")))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pstricks\pstricks.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\pst-xkey.tex"
+("C:\Program Files\MiKTeX 2.9\tex\latex\xkeyval\xkeyval.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkeyval.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkvutils.tex"))))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pstricks\pst-fp.tex"
+`pst-fp' v0.05, 2010/01/17 (hv))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-common.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfutil-common-lists.te
+x")) ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfkeys.code.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgfkeysfiltered.code.te
+x")) ("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\utilities\pgffor.code.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmath.code.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathcalc.code.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathutil.code.tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathparser.code.tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.code.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.basic.code.
+tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.trigonometr
+ic.code.tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.random.code
+.tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.comparison.
+code.tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.base.code.t
+ex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.round.code.
+tex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.misc.code.t
+ex")
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfunctions.integerarit
+hmetics.code.tex")))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pgf\math\pgfmathfloat.code.tex")))
+`PSTricks' v2.71  <2016/12/23> (tvz)
+("C:\Program Files\MiKTeX 2.9\tex\generic\pstricks\pstricks.con"))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pstricks\pst-fp.tex"))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-barcode\pst-barcode.tex"
+`PST-barcode' v0.16a, 2017/04/18 (tb,hv)
+("C:\Program Files\MiKTeX 2.9\tex\latex\marginnote\marginnote.sty")))
+("C:\Program Files\MiKTeX 2.9\tex\latex\pstricks-add\pstricks-add.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\pst-plot\pst-plot.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\xkeyval\pst-xkey.sty")
+("C:\Program Files\MiKTeX 2.9\tex\latex\multido\multido.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\multido\multido.tex"
+ v1.42, 2010/05/14 <tvz>))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-plot\pst-plot.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-tools\pst-tools.tex"
+`PST-tools' v0.06, 2017/05/12 (hv))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pstricks-add\pstricks-add.tex"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-node\pst-node.tex"
+ v1.39, 2017/01/20)
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-arrow\pst-arrow.tex"
+`pst-arrow' v0.01, 2016/09/01 (dr,hv))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-3d\pst-3d.tex"
+`PST-3d' v1.11, 2010/02/14 (tvz))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-math\pst-math.tex"
+`pst-math' v0.63 , (CJ,hv)) `pstricks-add' v3.83, 2017/05/10 (dr,hv))
+ v1.78, 2017/04/16 (tvz,hv)))
+("C:\Program Files\MiKTeX 2.9\tex\latex\pst-node\pst-node.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-node\pst-node.tex"))
+("C:\Program Files\MiKTeX 2.9\tex\latex\pst-3d\pst-3d.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-3d\pst-3d.tex"))
+("C:\Program Files\MiKTeX 2.9\tex\latex\pst-math\pst-math.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\pst-math\pst-math.tex"))
+("C:\Program Files\MiKTeX 2.9\tex\generic\pstricks-add\pstricks-add.tex")
+("C:\Program Files\MiKTeX 2.9\tex\latex\pstricks-add\pstricks-add.cfg"))
+("C:\Program Files\MiKTeX 2.9\tex\latex\auto-pst-pdf\auto-pst-pdf.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\ifplatform\ifplatform.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty")
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\catchfile.sty"))" "
+"-------------------------------------------------"
+"auto-pst-pdf: Auxiliary LaTeX compilation"
+"-------------------------------------------------"
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit)
+entering extended mode
+PDFCROP 1.38, 2012/11/02 - Copyright (c) 2002-2012 by Heiko Oberdiek.
+==> 1 page written on `generate-pics.pdf'.
+"-------------------------------------------------"
+"auto-pst-pdf: End auxiliary LaTeX compilation"
+"-------------------------------------------------"
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\pst-pdf\pst-pdf.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\luatex85\luatex85.sty")
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty")
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\graphics.cfg")))
+("C:\Program Files\MiKTeX 2.9\tex\latex\preview\preview.sty")
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\dvips.def")
+("C:\Program Files\MiKTeX 2.9\tex\latex\environ\environ.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\trimspaces\trimspaces.sty"))))
+No file generate.aux.
+("C:\Program Files\MiKTeX 2.9\tex\latex\cyrillic\t2acmss.fd")
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+)
+Preview: Fontsize 14.4pt
+Preview: PDFoutput 1
+<generate-pics.pdf, id=3, page=1, 148.555pt x 132.495pt>
+<use generate-pics.pdf, page 1>
+Overfull \hbox (0.60028pt too wide) in paragraph at lines 37--43
+[] 
+[1
+Non-PDF special ignored!
+Non-PDF special ignored!
+Non-PDF special ignored!
+Non-PDF special ignored!{C:/Users/Sklad_solvo/AppData/Local/MiKTeX/2.9/pdftex/c
+onfig/pdftex.map} <./generate-pics.pdf>] (generate.aux<<ot1.cmap>>) )
+(see the transcript file for additional information) <C:\Users\Sklad_solvo\AppD
+ata\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lass1440.pk> <C:\Users\Sk
+lad_solvo\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\lh\lh-t2a\dpi600\lasx1440.pk
+>
+Output written on generate.pdf (1 page, 7603 bytes).
+Transcript written on generate.log.
+file generate.pdf is deleted
+Debug sheet:
+----------------------------------------------------------------------------------Excite! So Python!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.py
+----------------------------------------------------------------------------------
+Debug sheet:
+----------------------------------------------------------------------------------Many TeX code here!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.tex
+----------------------------------------------------------------------------------
+Debug sheet:
+----------------------------------------------------------------------------------Excite! So Python!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.py
+----------------------------------------------------------------------------------
+Debug sheet:
+----------------------------------------------------------------------------------Many TeX code here!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.tex
+----------------------------------------------------------------------------------
+file C:\Users\Sklad_solvo\Dropbox\term\LaTeX\generate-pics.pdf is deleted
+file C:\Users\Sklad_solvo\Dropbox\term\LaTeX\generate.aux is deleted
+file C:\Users\Sklad_solvo\Dropbox\term\LaTeX\generate.log is deleted
+Debug sheet:
+----------------------------------------------------------------------------------Wow! Such PDF!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.pdf
+----------------------------------------------------------------------------------
+Debug sheet:
+----------------------------------------------------------------------------------Excite! So Python!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.py
+----------------------------------------------------------------------------------
+Debug sheet:
+----------------------------------------------------------------------------------Many TeX code here!
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------generate.tex
+----------------------------------------------------------------------------------

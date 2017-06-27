@@ -1,0 +1,7 @@
+"Product ID","Ingredients"
+"Rye Bread","Water, Canola oil, Molasses, Wheat flour, Rye flour, Milk powder, Caraway, Yeast, Salt"
+"Baguette","Water, Wheat flour, Yeast, Salt"
+"Challah","Water, Canola oil, Egg, Sugar, Yeast, Salt"
+"Chocolate Cupcake","Wheat flour, Sugar, Sunflower oil, Cocoa powder, Vanilla, Baking soda, Salt"
+"Blueberry Muffin","Wheat flour, Blueberries, Sugar, Yogurt (with Milk), Butter, Egg, Baking powder, Baking soda, Salt"
+"Dark Chocolate","Chocolate liquor, Sugar, Cocoa butter, Lecitine, Vanilla, Milk"

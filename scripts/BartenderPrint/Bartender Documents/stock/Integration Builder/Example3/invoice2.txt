@@ -1,0 +1,3 @@
+%BTW% /AF=c:\command\SoftwareInvoice.btw /D=<Trigger File Name> /PRN="Datamax 4400" /R=3 /P /DD
+%END%
+“Far Fetched Imports”,”Jerry Bom”,”manager”,”3320 Happy St.”,”Incident”,”Washington”,”98887”,”USA”,”(444) 555-7788”,”(444) 555-6750”

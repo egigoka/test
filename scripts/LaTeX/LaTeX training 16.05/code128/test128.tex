@@ -1,0 +1,110 @@
+% test128.tex -- A file for testing code128 macro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% April 1996                     Petr Ol\v{s}\'ak
+
+% The information about using the macro code128.tex is included here.
+% You can try to TeX all examples presented here with plain TeX format.
+%
+% The Code 128 standard serves encoding (and decoding) the input string into
+% barcode. The input string can be arbitrary long and it can contain 128
+% different characters:
+%
+% - Digits: 0123456789
+% - Uppercase and lowercase letters
+% - Other ASCII characters: ! ' ( ) * + , - . / : ; < = > ? @ [ ] ` |
+% - TeX special characters (must be escaped): \# \$ \% \& \\ \^ \_ \{ \} \~
+% - Special control characters from ASCII table are implemented as control
+%   sequences: \NUL \SOH \STX \ETX \EOT \ENQ \ACK \BEL \BS \HT \LF \VT \FF
+%   \CR \SO \SI \DLE \DCone \DCtwo \DCthree \DCfour \NAK \SYN \ETB \CAN \EM
+%   \SUB \ESC \FS \GS \RS \US \DEL
+%
+% After you \input the macro code128.tex by:
+
+\input code128
+
+% you can use the macro "\code". This macro encodes string as parameter
+% enclosed in braces and produces the \hbox with barcode. For example:
+
+\code{text}              \bigskip % (for vertical space from next example)
+
+% produces the barcode of string "text". The spaces in input string are not
+% significant. That is, the \code{t e x t} produces the same result.
+% There is an exeption: Before closing brace the space is prohibited.
+% For instance: \code{text } produces an error.
+% If you want to encode the spaces too, you have to express the spaces by
+% control sequence "\ " or "\SP". For example:
+
+\code{text\ with\ spaces}         \bigskip
+
+% Remember, you must escape all TeX special characters:
+
+\code{\{ \% \# \^}                \bigskip
+
+% The special ASCII characters can be encoded by control sequnces:
+
+\code{abc\ESC ABC\\\CR}          \bigskip
+
+% If you wish to add the printed version of string bellow barcode, you can use
+% the "\codetext" alternative. It works in the same way as "\code", exept the
+% output box is \vbox contained the \hbox with barcode and \tt version of
+% input text (centered). For example
+
+\codetext{text}                   \bigskip
+
+% produces the same as in  previous example plus {\tt text}.
+% If you use the control characters in input string and use the \codetext,
+% you have to define the control sequences before using them. For example:
+
+\def\\{\char`\\ }
+\def\ESC{$\langle${\rm ESC}$\rangle$}
+\def\CR{$\langle${\rm CR}$\rangle$}
+
+\codetext{abc\ESC ABC\\\CR}                       \bigskip
+
+% If you don't define them, an error "undefined control sequence" may be
+% occured.
+%
+% If you wish to label the code by another string, then coded string, you
+% can use the "\codeothertext" macro with two parameters. First parameter is
+% the same as in \code command and second parameter will be printed by \tt.
+% For example:
+
+\codeothertext{01 70 08 39 90 31 99 62 07 69 36 20 10}%
+              {0170-0839(199602)36:2;1-A}                   \bigskip
+
+% You can change three dimension parameters for your special purposes:
+% The implicit values follows:
+% \X=.33mm         % The X module (all width dimensions are multiples of \X)
+% \barheight=1.5cm % The code height.
+% \bcorr=.020mm    % reduction (bars are thinner by \bcorr and spaces taller)
+% Don't change the \bcorr parameter unless you know the tolerances of
+% barcode and ink behavior of your output device. The \bcorr=.020mm is good
+% value for offset printing.
+
+% For example, we change:
+
+\X=.5mm        % The width of code will be greater
+\barheight=1cm % the height will be smaller.
+
+\codetext{01 70 08 39 90 31 99 62 07 69 36 20 10}        \bigskip
+
+% Notice1: The algorithm for encoding is not explicit. The results from
+% different softare may be differ. You cannot debug the software only by
+% comparing the results with other software. It is necessary to try the
+% decoder for debugging the soft. If the output from decoder is the same as
+% input string, all is OK. For more information about algorithm of Code 128
+% standard see the end of file code128.tex.
+
+% Notice2: You can use the macro on your own risk. There is no warranty
+% that the macro works OK because author has no possibility to try any
+% decoder. If you find out any bug, please report this (including the
+% *.log file and the desription of the problem) to author's address:
+% <olsak@math.feld.cvut.cz>.
+
+% Some other examples (for testing).
+
+\codetext{0170012233abc80911} \bigskip
+
+\codetext{\CR\ESC ab\ESC de\#fgABC}
+
+\end

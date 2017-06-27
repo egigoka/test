@@ -1,0 +1,9 @@
+Efficiency;Annual Power Consumption;Annual Water Consumption;Capacity;Spin Efficiency;Acoustical Noise Wash;Acoustical Noise Spin
+40;100;2000;8,7;40;20;25
+50;150;3000;8,1;50;30;35
+55;300;4000;7,5;60;40;45
+65;600;10000;7,0;70;50;55
+75;999;22222;6,0;80;60;65
+80;1001;23456;5,0;85;70;75
+90;2222;99999;2,5;95;80;85
+

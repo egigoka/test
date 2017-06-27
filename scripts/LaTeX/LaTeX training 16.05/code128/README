@@ -1,0 +1,21 @@
+This directory contains the TeX macro code128 for making barcodes in Code
+128 standard. (ASCII text on input and kern-rule queue on output).
+
+The usage of the macro is commented in the file test128.tex.
+The simple test is presented in this file too (for plain).
+Macro works in plain and LateX and other standard macro packages.
+
+Files:
+code128.tex .... The macro, programmer documentation and standard description. 
+test128.tex .... test and user documentation.
+springer.tex ... Another test.
+
+See also the ean directory for implementation of EAN 13 and EAN 8 standard
+in TeX.
+
+Petr Olsak (Ol\v{s}\'ak)
+Department of Mathematics
+Czech Techical University in Prague, 
+Czech Republic
+e-mail: olsak@math.feld.cvut.cz
+ 

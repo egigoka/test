@@ -1,0 +1,11 @@
+\documentclass{article}
+
+\usepackage{pst-barcode,pstricks-add}
+\usepackage{auto-pst-pdf}
+
+\begin{document}
+    \psset{unit=1in}
+    \begin{pspicture}(3.5,1.2)
+        \psbarcode{^10412345678}{includetext}{code128}
+    \end{pspicture}
+\end{document}

@@ -1,0 +1,114 @@
+﻿<IntegrationFile Name="IBMWebSphereSensorEvents _WithPrintStatus" ID="d58a141d-a916-4232-8edd-4746f22055b7">
+  <ActionGroup ID="5c7de6fd-6420-4a78-a210-c5998ca53477" RunMethod="Sequential" MessagingEnabled="false">
+    <Actions>
+      <SocketIntegration Name="Sensor Events / Premises Server (Socket)" ID="5845c1f8-1ab3-49c4-af78-f7d12394c03f" IgnoreErrors="true" StartupType="Automatic" ReadTimeout="60000" MaximumConnections="2048">
+        <ActionGroup Name="Actions" ID="ad82f047-d55a-44a4-a875-b00879c0ea4c" RunMethod="Sequential" MessagingEnabled="false">
+          <Actions>
+            <StringTransformAction Name="Replace, Insert, or Delete Text" ID="e372daba-468c-4416-8502-46976e461534" IgnoreErrors="false" SearchSyntax="Literal">
+              <Description>RemoveFilePrefix</Description>
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+              <SearchText>&lt;label _FORMAT="file://IBMWebSphereSensorEvents/</SearchText>
+              <NewText>&lt;label _FORMAT="%IntegrationFileFolder%</NewText>
+              <OutputVariableName>EventData</OutputVariableName>
+            </StringTransformAction>
+            <XslTransformAction Name="IBM WebSphere Sensor Events to BTXML with Print Status" ID="91ff9aa2-6855-4cef-9772-7f73ccc254d3" IgnoreErrors="false" TransformType="IBMWebSphere_To_BTXMLWithPrintStatus">
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+            </XslTransformAction>
+            <BarTenderBatchAction Name="Print BTXML Script" ID="0c84a08b-37e8-44d2-80dc-15cda8b06579" IgnoreErrors="false" BatchScriptTimeout="-1">
+              <BatchXml>
+                <Value>%EventData%</Value>
+              </BatchXml>
+            </BarTenderBatchAction>
+            <XslTransformAction Name="BTXML Print Response to IBM WebSphere Sensor Events" ID="7db84f8e-abe4-4fed-825d-6319e58db6cf" IgnoreErrors="false" TransformType="BTXML_To_IBMWebSphere">
+              <Source>
+                <Value>%Response%</Value>
+              </Source>
+            </XslTransformAction>
+            <SendWebRequestAction Name="Send Web Service Request" ID="984e02b4-b39e-4c75-9395-a641602d37bd" IgnoreErrors="false" SuccessfulStatusCodes="200-206,300-307">
+              <Source>
+                <Value>eventtype=%EventData%</Value>
+              </Source>
+              <URL>http://ibmws:9080/ibmse/eventpublish</URL>
+              <Password Encrypted="true"></Password>
+              <Headers />
+            </SendWebRequestAction>
+          </Actions>
+        </ActionGroup>
+        <ContentData />
+        <TriggerEvent.Disconnected />
+      </SocketIntegration>
+      <FileTriggerIntegration Name="Sensor Events / Premises Server (File)" ID="53485015-7c75-4a65-abaf-65da66c59046" IgnoreErrors="true" StartupType="Automatic" Filter="*.xml" DetectionExtension="dat" LockedFileTimeout="30000">
+        <ActionGroup ID="d46fbcab-3e1a-4cf1-8c0f-9a26e81b7a4c" RunMethod="Sequential" MessagingEnabled="false">
+          <Actions>
+            <StringTransformAction Name="Replace, Insert, or Delete Text" ID="7997093c-104d-4724-bbbd-335827563d99" IgnoreErrors="false" SearchSyntax="Literal">
+              <Description>RemoveFilePrefix</Description>
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+              <SearchText>&lt;label _FORMAT="file://IBMWebSphereSensorEvents/</SearchText>
+              <NewText>&lt;label _FORMAT="%IntegrationFileFolder%</NewText>
+              <OutputVariableName>EventData</OutputVariableName>
+            </StringTransformAction>
+            <XslTransformAction Name="IBM WebSphere Sensor Events to BTXML with Print Status" ID="d5a814ae-079a-4aac-91e7-65edaad5e5f4" IgnoreErrors="false" TransformType="IBMWebSphere_To_BTXMLWithPrintStatus">
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+            </XslTransformAction>
+            <BarTenderBatchAction Name="Print BTXML Script" ID="9ff216d6-0a07-425d-bde5-42304d15eaa8" IgnoreErrors="false" BatchScriptTimeout="-1">
+              <BatchXml>
+                <Value>%EventData%</Value>
+              </BatchXml>
+            </BarTenderBatchAction>
+            <XslTransformAction Name="BTXML Print Response to IBM WebSphere Sensor Events" ID="1dc65c0d-6695-4a28-98be-8b134d972e7b" IgnoreErrors="false" TransformType="BTXML_To_IBMWebSphere">
+              <Source>
+                <Value>%Response%</Value>
+              </Source>
+            </XslTransformAction>
+            <SendWebRequestAction Name="Send Web Service Request" ID="95cd596c-3ea1-4252-b26e-3d35b94f9712" IgnoreErrors="false" SuccessfulStatusCodes="200-206,300-307">
+              <Source>
+                <Value>eventtype=%EventData%</Value>
+              </Source>
+              <URL>http://ibmws:9080/ibmse/eventpublish</URL>
+              <Password Encrypted="true"></Password>
+              <Headers />
+            </SendWebRequestAction>
+          </Actions>
+        </ActionGroup>
+        <ContentData />
+        <ScanFolder Path="%IntegrationFileFolder%Scan\" />
+        <MoveToFolder Path="C:\" />
+        <DetectedFileSortOrderItems />
+        <FailureMoveToFolder Path="C:\" />
+      </FileTriggerIntegration>
+    </Actions>
+    <Variables>
+      <Variable Name="PrintJobTimeOut" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>60000</Value>
+      </Variable>
+    </Variables>
+  </ActionGroup>
+  <Metadata>
+    <Properties>
+      <Variable Name="BuilderName" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>TaskListToIntegrationFileConverter</Value>
+      </Variable>
+      <Variable Name="BuilderVersion" Type="System.Double">
+        <Value>1</Value>
+      </Variable>
+      <Variable Name="PopupCommentDialog" Type="System.Boolean">
+        <Value>false</Value>
+      </Variable>
+      <Variable Name="SelectedIntegration" Type="System.Int32">
+        <Value>0</Value>
+      </Variable>
+      <Variable Name="SelectedOptionsPage" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>0;0</Value>
+      </Variable>
+    </Properties>
+  </Metadata>
+  <SourcePath>C:\Users\Administrator\Desktop\v10_1examples\IBMWebSphereSensorEvents\IBMWebSphereSensorEvents _WithPrintStatus.tl</SourcePath>
+</IntegrationFile>

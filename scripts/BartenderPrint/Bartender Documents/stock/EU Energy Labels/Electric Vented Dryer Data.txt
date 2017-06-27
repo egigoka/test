@@ -1,0 +1,9 @@
+Efficiency;Annual Power Consumption;Cycle Time;Capacity;Acoustical Noise
+20;100;60;8,7;40
+30;150;80;8,1;50
+40;300;90;7,5;60
+60;600;100;7,0;70
+70;999;110;6,0;80
+80;1001;115;5,0;85
+90;2222;120;2,5;95
+

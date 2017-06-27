@@ -1,0 +1,8 @@
+Efficiency;Annual Power Consumption;Power Consumption;Power Switch;Diagonal Inches;Diagonal Centimeters
+0.28;10000;80;1;32;81
+0.40;22222;120;0;32;81
+0.50;23456;140;0;27;69
+0.70;90009;160;0;27;69
+0.85;90809;30;1;42;107
+0.95;90909;40;1;42;107
+1.10;99999;50;0;20;51
