@@ -1,3 +1,6 @@
+# mine sheet
+*.bak
+
 # macOS sheet
 .DS_Store
 
