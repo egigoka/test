@@ -1,6 +1,9 @@
 # mine sheet
 *.bak
 
+# IntelliJ sheet
+.idea/
+
 # macOS sheet
 .DS_Store
 
