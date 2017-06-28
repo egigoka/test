@@ -24,7 +24,7 @@ __scriptname__ = "bartendernogui"
 ifDebug = False
 # win_unicode_console.enable()
 scriptsSubFolder = Path.extend("T:", "scripts", "BartenderPrint")
-bartenderDocumentsFolder = Path.extend("T:", "scripts", "BartenderPrint", "Bartender Documents"
+bartenderDocumentsFolder = Path.extend("T:", "scripts", "BartenderPrint", "Bartender Documents")
 bartenderMineDockumentsSubFolder = bartenderDocumentsFolder + "\ "[:1] + "Егоров"
 bartenderFolder = "C:\Program Files (x86)\Seagull\Bartender Suite"
 bartenderExecName = "bartend.exe"
@@ -41,7 +41,6 @@ outputFile = bartenderDocumentsFolder + "\ "[:1] + outputFileName
 # "C:\Users\Sklad_solvo\Documents\BarTender\BarTender Documents\Бирки_output.txt"
 logfileName = "bartender.log"
 logfile = path_extend(scriptsSubFolder, logfileName)
-dir_create(scriptsFolder)
 dir_create(scriptsSubFolder)
 file_create(settingsJsonFile)
 file_backup(settingsJsonFile, quiet = True)
