@@ -273,6 +273,8 @@ if True:
     # more like PEP8
     __version__ = "7.2.0alpha1"
     # f Windows.lock
+    __version__ = "7.3.0alpha1"
+    # f Random.integer
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -968,6 +970,12 @@ class Windows:
     @staticmethod
     def lock():
         ctypes.windll.LockWorkStation()
+
+
+class Random:
+    @staticmethod
+    def integer(min=0, max=100):
+        return random.randrange(min, max+1)
 
 
 class Learning():
