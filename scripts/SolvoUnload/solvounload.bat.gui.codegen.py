@@ -60,7 +60,7 @@ if True: # code stamps
 
 
     # init_groups_list = 'global groups' + newline
-    init_groups_list = 'groups = [{"number": "1", "ko": "158", "lo": "305 %269"},' + newline
+    init_groups_list = 'groups = [{"number": "1", "ko": "158", "lo": "329 %305 %269"},' + newline
     init_groups_list += '          {"number": "2", "ko": "156", "lo": "268 %327"},' + newline
     init_groups_list += '          {"number": "3", "ko": "73", "lo":"336 %337 %339"},' + newline
     init_groups_list += '          {"number": "4", "ko": "125", "lo":"321 %322"},' + newline

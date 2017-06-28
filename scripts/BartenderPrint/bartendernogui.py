@@ -6,19 +6,25 @@ import os
 import subprocess
 import time
 from utils import *
+from commands7 import *
 
 # init
 
+class State:
+    print_from_gui = False
+    if "--print-from-gui" in sys.argv:
+        print_from_gui = True
+    xelatex = False
+    if "-xelatex" in sys.argv:
+        xelatex = True
 
 __scriptname__ = "bartendernogui"
 
 
 ifDebug = False
 # win_unicode_console.enable()
-scriptsFolder = r"\\192.168.99.91\shares\scripts"
-scriptsSubFolderName = "BartenderPrint"
-scriptsSubFolder = scriptsFolder + "\ "[:1] + scriptsSubFolderName  # "\\192.168.99.91\shares\scripts\BartenderPrint"
-bartenderDocumentsFolder = r"\\192.168.99.91\shares\scripts\BartenderPrint\Bartender Documents"
+scriptsSubFolder = Path.extend("T:", "scripts", "BartenderPrint")
+bartenderDocumentsFolder = Path.extend("T:", "scripts", "BartenderPrint", "Bartender Documents"
 bartenderMineDockumentsSubFolder = bartenderDocumentsFolder + "\ "[:1] + "Егоров"
 bartenderFolder = "C:\Program Files (x86)\Seagull\Bartender Suite"
 bartenderExecName = "bartend.exe"
@@ -26,11 +32,10 @@ bartenderExec = bartenderFolder + "\ "[:1] + bartenderExecName
 # "C:\Program Files (x86)\Seagull\Bartender Suite\bartend.exe"
 notepadPlusPlusExecName = "notepad++.exe"
 notepadPlusPlusFolder = r"C:\Program Files (x86)\Notepad++"
-notepadPlusPlusExec = path_extend(notepadPlusPlusFolder, notepadPlusPlusExecName)
+notepadPlusPlusExec = Path.extend(notepadPlusPlusFolder, notepadPlusPlusExecName)
 notepadExec = "notepad"
 settingsJsonName = "settings.json"
 settingsJsonFile = scriptsSubFolder + "\ "[:1] + settingsJsonName
-# "\\192.168.99.91\shares\scripts\BartenderPrint\settings.json"
 outputFileName = "Бирки_output.txt"
 outputFile = bartenderDocumentsFolder + "\ "[:1] + outputFileName
 # "C:\Users\Sklad_solvo\Documents\BarTender\BarTender Documents\Бирки_output.txt"
@@ -94,8 +99,18 @@ def runBartender(database=outputFile, type="kompl", size="58*60"):
     # todo isprint check from json
     time.sleep(1)
     if type == "kompl" and size == "58*60":
-        bartenderFile = bartenderMineDocument("Бирки 58x60")
-        subprocess.call([bartenderExec, bartenderFile, "/P", "/X"])
+        plog(Path.extend(Path.home(), "temp", "barnogui.log"), "State.print_from_gui " + str(State.print_from_gui) + ", sys.argv " + str(sys.argv))
+        if State.print_from_gui:
+            py = Path.extend("C:", "Windows", "py.exe")
+            Path.set_current(Path.extend("S:", "scripts", "BartenderPrint"))
+            py_file = Path.extend("S:", "scripts", "BartenderPrint", "print_l.py")
+            if State.xelatex:
+                Process.start(py, py_file, "gen", "-r", "--print-from-gui", "-xelatex")
+            else:
+                Process.start(py, py_file, "gen", "-r", "--print-from-gui")
+        else:
+            bartenderFile = bartenderMineDocument("Бирки 58x60")
+            subprocess.call([bartenderExec, bartenderFile, "/P", "/X"])
     if type == "cell" and size == "58*60":
         bartenderFile = bartenderMineDocument("Бирки 58x60 9 симв")
         subprocess.call([bartenderExec, bartenderFile, "/P", "/X"])

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE labels SYSTEM "label.dtd">
+<labels _FORMAT ="Seeded Label Default for LPN Content" _QUANTITY="1" _PRINTERNAME="" _JOBNAME="LPNCont">
+<label>
+<variable name= "lpn">12345</variable>
+<variable name= "item">Brass pipe</variable>
+<variable name= "quantity">2</variable>
+<variable name= "lot">123</variable>
+<variable name= "uom">Ea</variable>
+<variable name= "gross_weight">10</variable>
+<variable name= "gross_weight_uom">100</variable>
+<variable name= "volume">10</variable>
+<variable name= "volume_uom">100</variable>
+<variable name= "organization">A1</variable>
+</label>
+</labels>

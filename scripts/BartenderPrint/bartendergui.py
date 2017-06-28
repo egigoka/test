@@ -1,58 +1,61 @@
-#! python3
+﻿#! python3
 # -*- coding: utf-8 -*-
 
-# old version, new in share
 
 from tkinter import *
-from utils import *
+from commands7 import *
 
-isDebug = False
-basicLogicScript = path_extend(backslash, "192.168.99.91", "shares", "scripts",
-                                       "bartenderprint", "bartendernogui.py")
-
+basicLogicScript = Path.extend("T:", "scripts", "bartenderprint", "bartendernogui.py")
+class Debug:
+    enable_one_bar = True
+    latex_broken = True
+    
+class State:
+    loaders = False
+    xelatex = False
 
 # todo база грузчиков
 # todo несколько потоков программы
 # todo доделать гуи для всех вариантов
 
-# def варианты запуска основного скрипта
-#     openInNewWindow(basicLogicScript, v.get(), count.get()) работает в несколько потоков, но пока потоки не нужны
-#     openInCurrentWindow(basicLogicScript, v.get(), count.get()) # работает
-#     os.system(basicLogicScript + " " + str(v.get()) + " " + str(count.get())) # работает в один поток
-#     subprocess.call(["py", basicLogicScript, str(v.get()), str(count.get())]) # работает
 
 
 def open_legacy(event):
-    openInNewWindow("py", basicLogicScript)
+    Process.start("py", basicLogicScript, new_window=True)
 
 
 def open_log(event):
-    openInNewWindow("pyw", basicLogicScript, "ol")
+    Process.start("pyw", basicLogicScript, "ol", new_window=True)
 
 
 def runLogicScript(*arguments):
-    openInCurrentWindow(*arguments, commands=["py", basicLogicScript])
+    Process.start("py", basicLogicScript, *arguments)
+
 
 def open_bartender(event):
-    bartenderFolder = "C:\Program Files (x86)\Seagull\Bartender Suite"
-    bartenderExecName = "bartend.exe"
-    bartenderExec = bartenderFolder + "\ "[:1] + bartenderExecName
-    subprocess.call(bartenderExec)
+    bartender = Path.extend("C:", "Program Files (x86)", "Seagull", "Bartender Suite", "bartend.exe")
+    Process.start(bartender, new_window=True)
 
 def printBars(event):
     if v.get() == "":
         pass
     else:
-        runLogicScript(v.get(), count.get())
+        if Debug.latex_broken:
+            runLogicScript(v.get(), count.get())
+        else:
+            if State.xelatex:
+                runLogicScript(v.get(), count.get(), "--print-from-gui", "-xelatex")
+            else:
+                runLogicScript(v.get(), count.get(), "--print-from-gui")
         v.set("")
 
 
-
 def print_bars_multitext(event = None):
-    openInNewWindow("pyw", basicLogicScript, "mt")
+    Process.start("pyw", basicLogicScript, "mt", new_window=True)
+
 
 def print_bars_loaders(login, name, count, event=None):
-    openInNewWindow("py", basicLogicScript, "g", login, name, count)
+    Process.start("py", basicLogicScript, "g", login, name, count, new_window=True)
     loaders_var_login.set("")
     loaders_var_name.set("")
 
@@ -81,6 +84,9 @@ groups = \
     ]
 
 
+def doNothing():
+    pass
+
 for group, value in groups:
     row += 1
     Radiobutton(root, text=group, variable=v, command=doNothing, value=value).grid(row=row, column=0, sticky=W)
@@ -99,13 +105,15 @@ for group, value in groups:
 # radioBtn_15000 = Radiobutton(root, text="15000 бирок", variable=count, value=15000).grid(row=row, column = 0)
 
 counts = [1500, 3000, 4000, 5000, 15000]
-if isDebug:
-    count += [1]
+if Debug.enable_one_bar:
+    counts += [1]
 
 row_count = 0
 for count_ in counts:
     row_count += 1
     Radiobutton(root, text=str(count_) + " бирок", variable=count, command=doNothing, value=count_).grid(row=row_count, column=1, sticky=W)
+
+
 
 row += 1
 ### Старый вариант
@@ -136,42 +144,44 @@ btn_OpenBartender.grid(row=row, column = 0, sticky=W+E, columnspan = 2)
 
 
 def add_loaders(event=None):
-    global row
-    row += 1
-    loaders_label_login = Label(root, text='Логин:')
-    loaders_label_login.grid(row=row, column=0,  rowspan=2)#, sticky=E)
-    row += 1
-    loaders_var_login = StringVar()
-    loaders_var_login.set("")
-    loaders_entry_login = Entry(root, textvariable=loaders_var_login)
-    loaders_entry_login.grid(row=row, column=1, sticky=W+E+S+N, columnspan=1)
+    if not State.loaders:
+        State.loaders = True
+        global row
+        row += 1
+        loaders_label_login = Label(root, text='Логин:')
+        loaders_label_login.grid(row=row, column=0,  rowspan=2)#, sticky=E)
+        row += 1
+        loaders_var_login = StringVar()
+        loaders_var_login.set("")
+        loaders_entry_login = Entry(root, textvariable=loaders_var_login)
+        loaders_entry_login.grid(row=row, column=1, sticky=W+E+S+N, columnspan=1)
 
-    row += 1
-    loaders_label_name = Label(root, text='Имя и фамилия:')
-    loaders_label_name.grid(row=row, column=0, rowspan=2)  # , sticky=E)
-    row += 1
-    loaders_var_name = StringVar()
-    loaders_var_name.set("")
-    loaders_entry_name = Entry(root, textvariable=loaders_var_name)
-    loaders_entry_name.grid(row=row, column=1, sticky=W + E + S + N, columnspan=1)
+        row += 1
+        loaders_label_name = Label(root, text='Имя и фамилия:')
+        loaders_label_name.grid(row=row, column=0, rowspan=2)  # , sticky=E)
+        row += 1
+        loaders_var_name = StringVar()
+        loaders_var_name.set("")
+        loaders_entry_name = Entry(root, textvariable=loaders_var_name)
+        loaders_entry_name.grid(row=row, column=1, sticky=W + E + S + N, columnspan=1)
 
-    row += 1
-    loaders_label_count = Label(root, text='Количество:')
-    loaders_label_count.grid(row=row, column=0, rowspan=2)  # , sticky=E)
-    row += 1
-    loaders_var_count = StringVar()
-    loaders_var_count.set("10")
-    loaders_entry_count = Entry(root, textvariable=loaders_var_count)
-    loaders_entry_count.grid(row=row, column=1, sticky=W + E + S + N, columnspan=1)
+        row += 1
+        loaders_label_count = Label(root, text='Количество:')
+        loaders_label_count.grid(row=row, column=0, rowspan=2)  # , sticky=E)
+        row += 1
+        loaders_var_count = StringVar()
+        loaders_var_count.set("10")
+        loaders_entry_count = Entry(root, textvariable=loaders_var_count)
+        loaders_entry_count.grid(row=row, column=1, sticky=W + E + S + N, columnspan=1)
 
-    row += 1
-    loaders_print_btn = Button(root, text="Печать")
-    loaders_print_btn.bind("<Button-1>", lambda x: print_bars_loaders(loaders_var_login.get(),
+        row += 1
+        loaders_print_btn = Button(root, text="Печать")
+        loaders_print_btn.bind("<Button-1>", lambda x: print_bars_loaders(loaders_var_login.get(),
                                                                           loaders_var_name.get(),
                                                                           loaders_var_count.get()
                                                                          )
-                           )
-    loaders_print_btn.grid(row=row, column=0, sticky=W + E, columnspan=2)
+                               )
+        loaders_print_btn.grid(row=row, column=0, sticky=W + E, columnspan=2)
 row += 1
 loaders_btn = Button(root, text = "Грузчики")
 loaders_btn.bind("<Button-1>", add_loaders)

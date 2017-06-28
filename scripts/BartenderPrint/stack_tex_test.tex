@@ -1,0 +1,8 @@
+\documentclass{article}
+\usepackage[dvipsnames,x11names]{pstricks}% Options for xcolor
+\usepackage{pst-barcode}
+\begin{document}
+\begin{pspicture}(3.5,1.2in)
+\psbarcode[linecolor=red]{1234567}{includetext inkspread=0.5}{ean8}
+\end{pspicture}
+\end{document}
