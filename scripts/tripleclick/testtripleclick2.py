@@ -23,7 +23,7 @@ class State:
     sleep_before_click = 0.1
     sleep_before_locate = 0.1
     ctrl_a_sleep = 3
-    buttons_pics_folder = Path.extend("C:", "shares", "scripts", "tripleclick", "buttonpics")
+    buttons_pics_folder = Path.extend("T:", "scripts", "tripleclick", "buttonpics")
     quiet = False
     get_img_name_quiet = True
 
