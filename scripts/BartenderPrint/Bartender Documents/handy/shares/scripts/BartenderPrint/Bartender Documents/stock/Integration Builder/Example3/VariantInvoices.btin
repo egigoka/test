@@ -1,0 +1,40 @@
+﻿<IntegrationFile Name="VariantInvoices" ID="bd4b2271-6433-41f9-a7a8-4c712b62cd7f">
+  <ActionGroup ID="3c945142-22c4-4b3b-b2e6-444c67073da1" RunMethod="Sequential" MessagingEnabled="false">
+    <Actions>
+      <FileTriggerIntegration Name="Invoices" ID="82fd2467-caa5-4910-85d4-52a88cb2e19f" IgnoreErrors="true" StartupType="Automatic" MultipleScanning="false" Filter="*.txt" DetectionExtension="old" LockedFileTimeout="30000">
+        <ActionGroup Name="Actions" ID="324b4b97-4f7d-4caf-8c42-79744ff989d5" RunMethod="Sequential" MessagingEnabled="false">
+          <Actions>
+            <IntegrationCommandScriptAction Name="Print Command Script" ID="94f4ff68-5fcc-4f83-b4fd-c4c17ff4bc7e" IgnoreErrors="false">
+              <Script>
+                <Value>%EventData%</Value>
+              </Script>
+              <BTCommandLineCredentials />
+            </IntegrationCommandScriptAction>
+          </Actions>
+        </ActionGroup>
+        <ContentData />
+        <ScanFolder Path="\\InvoiceServer\CommanderWatch\" />
+        <MoveToFolder Path="C:\" />
+        <DetectedFileSortOrderItems />
+        <FailureMoveToFolder Path="C:\" />
+      </FileTriggerIntegration>
+    </Actions>
+  </ActionGroup>
+  <Metadata>
+    <Properties>
+      <Variable Name="BuilderName" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>TaskListToIntegrationFileConverter</Value>
+      </Variable>
+      <Variable Name="BuilderVersion" Type="System.Double">
+        <Value>1</Value>
+      </Variable>
+      <Variable Name="SelectedIntegration" Type="System.Int32">
+        <Value>0</Value>
+      </Variable>
+      <Variable Name="SelectedOptionsPage" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>0;0</Value>
+      </Variable>
+    </Properties>
+  </Metadata>
+  <SourcePath>C:\Users\Administrator\Desktop\v10_1examples\Example3\VariantInvoices.tl</SourcePath>
+</IntegrationFile>

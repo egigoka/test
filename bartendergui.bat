@@ -1,1 +1,1 @@
-pyw S:\scripts\BartenderPrint\bartendergui.py
+pyw T:\scripts\BartenderPrint\bartendergui.py

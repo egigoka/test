@@ -1,0 +1,12 @@
+Field Numbers and Names,Lines 3-7 is sample data,for use with UPS Domestic.btw,Lines 8-12 is sample data,for UPS International.btw
+1-Ship_To_Name,2-Ship_To_Phone_Number,3-Ship_To_Company,4-Ship_To_Attention,5-Ship_To_Address_1,6-Ship_To_Address_2,7-Ship_To_City,8-Ship_To_State\Province,9-Ship_To_Postal_Code,10-Ship_To_Country,11-Country_Code,12-Class_Of_Service,13-Reference_Number,14-Package_Count,15-Package_Total,16-Package_Weight,17-Packages_Total_Weight,18-Address_Validation,19-Earliest_Delivery_Time,20-VCD,21-COD,22-COD_Cash,23-Hazardous_Materials,24-International_Billing_Options,25-UPS_Account_Number,26-Third_Party_Billing_Account_Number,27-Description,28-EDI_EDI-DOC_INV_or_KEY,29-POA_Power_Of_Attorney,30-SED_Shipper's_Export_Decloration,31-CO_Certificate_of_Origin
+David Lau,5558355000,Consolidated Communications,Office of the President,28 Calvert Street,North Wing,Harrison,NY,105871234,United States,840,13,2075486,1,1,6,6,Y,11:00,Y,107.95,,,,,,,,,,
+Eddie Money,5554234565,Top Hits,CD Production,100 Wilshire Blvd,5th Floor,Los Angeles,CA,902611234,United States,840,58,2026771,1,1,17,17,N,,Y,,,Y,,,,,,,,
+Steven Moondog,5556171188,Moon Images,Head Photographer,1 Commenwealth Ave,,Boston,MA,010221234,United States,840,42,1927410,1,2,6,18,N,14:00,N,,,,,,,,,,,
+Steven Moondog,5556171188,Moon Images,Head Photographer,1 Commenwealth Ave,,Boston,MA,010221234,United States,840,42,1927410,2,2,12,18,N,14:00,N,,,,,,,,,,,
+Tom Zarnow,5556335447,Mack Attack,Operations,7162 Douglas Place,Suite C,Seattle,WA,981121234,United States,840,41,2288437,1,1,5,5,Y,,Y,,34.00,,,,,,,,,
+Jorge Uraldo,555554516579,Homeproduce.com Inc.,MIS Director,#3 West Abby,,Paris,,203412,France,250,68,2934453,1,1,2,2,N,,,,,,P/P,,,Documents,EDI-DOC,,SED,CO
+Bjarne Nilssen,475555668,Gardemor,Production,1 King Olav Street,Suite 107,Oslo,,137045,Norway,578,67,2613773,1,1,15,15,Y,,,,,,F/C,2222222222,,Machine Parts,INV,POA,,CO
+John Reinhardt,492241491424,ABC Company,Customer Relations,2nd Floor,Freighthall 4,Cologne,,511478,Germany,276,69,2533119,1,2,17,39,Y,,,,,,FOB,3333333333,999999999,Training Supplies,EDI,POA,SED,CO
+John Reinhardt,492241491424,ABC Company,Customer Relations,2nd Floor,Freighthall 4,Cologne,,511478,Germany,276,69,2533119,2,2,22,39,Y,,,,,,FOB,3333333333,999999999,Training Supplies,EDI,POA,SED,CO
+Sue Laclaire,4035558008,Computer Support Inc,Tech Room,3rd Floor,729 24th Street,Calgary,AB,T2G1Z1,Canada,124,54,2468329,1,1,31,31,N,,,,,,SDV,,,Software Packages,KEY,,,CO

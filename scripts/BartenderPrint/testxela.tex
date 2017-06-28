@@ -1,0 +1,45 @@
+\documentclass[20pt]{extreport}
+\usepackage{geometry}
+    \geometry
+        {
+        paperwidth=58mm,
+        paperheight=59mm,
+        showframe,
+        top=3mm,
+        bottom=3mm,
+        right=3mm,
+        left=3mm}
+\usepackage{ifxetex}  % For work both with pdflatex and xelatex
+\ifxetex
+    %% xelatex
+    \usepackage{polyglossia}  % Multi-language support
+    \setdefaultlanguage[spelling=modern]{russian}  % Main language of document
+    \setotherlanguage{english}  % Second language of document
+    \defaultfontfeatures{Ligatures={TeX}}  % Fonts properties
+    \setmainfont[Ligatures={TeX}]{Arial}  % Default font of document
+    \usepackage{pst-barcode}  % barcodes
+%    \setsansfont{CMU Sans Serif}  % Font without serifs
+%    \setmonofont{CMU Typewriter Text}  % Mono font
+\else
+    %% pdflatex
+    \usepackage{cmap}  % Search russian words thrue pdf
+    \usepackage[T2A]{fontenc}  % Inner font coding
+    \usepackage[utf8]{inputenc}  % Coding of source
+    \usepackage[english,russian]{babel}  % Russian words support for babel
+    \usepackage{mathptmx}
+    \usepackage{anyfontsize}
+    \usepackage{t1enc}
+    \usepackage[bottom]{footmisc}  % Footnotes?
+    \usepackage{pst-barcode,pstricks-add} % package for barcodes, use with auto-pst-pdf!
+    \usepackage{auto-pst-pdf} % use with pdflatex only with arg --shell-escape!
+\fi
+    \usepackage{soulutf8}
+
+\sloppy % maximum extending spaces between words. USE VERY CAREFULLY!
+\begin{document}
+    \def\bartext{test}
+    \begin{pspicture}%(0,0)(10,10) % idk what is that, size doesn't changing
+        \psbarcode{\bartext}{width=2 height=1}{code128}
+    \end{pspicture}
+    \huge test тест \bartext
+\end{document}

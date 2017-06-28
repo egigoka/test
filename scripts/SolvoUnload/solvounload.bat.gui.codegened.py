@@ -7,7 +7,7 @@ from solvounload import settingsJsonFile as json_on_disk
 from tkinter import *
 root = Tk()
 
-groups = [{"number": "1", "ko": "158", "lo": "305 %269"},
+groups = [{"number": "1", "ko": "158", "lo": "329 %305 %269"},
           {"number": "2", "ko": "156", "lo": "268 %327"},
           {"number": "3", "ko": "73", "lo":"336 %337 %339"},
           {"number": "4", "ko": "125", "lo":"321 %322"},
@@ -64,7 +64,7 @@ def update_ko_1():
     ko_1_var.set(json_in_memory["kan_otb_time_1"])
     saveJSON()
 
-ko_1_label = Label(root, text='1ГР %158 К.О. / %305 %269 Л.О.')
+ko_1_label = Label(root, text='1ГР %158 К.О. / %329 %305 %269 Л.О.')
 ko_1_label.grid(row=0, column=0, sticky=E, rowspan=2)
 ko_1_label.bind('<Enter>', lambda x: check_buttons_and_colors())
 ko_1_label.bind('<Leave>', lambda x: check_buttons_and_colors())

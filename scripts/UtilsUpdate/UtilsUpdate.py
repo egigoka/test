@@ -19,7 +19,7 @@ def check_version(utils_py_file):
         file_delete(path=utils_py_file, quiet=True)
         check_update(name=utils_py_file, path=path)
     for string in file:
-        if "__version__" in string:
+        if ("__version__" in string) and ("=" in string):
             version = substring(string, "=")
             if "\n" in version:
                 version = version.rstrip("\n")
@@ -49,13 +49,87 @@ def check_update(user_path, dev_path, package_name, user_package_name): # todo a
         os.system(utils_devPath)
         sys.exit()
     # todo WARNING UPPER VERSION
-    #return
+    # return
 
 paths = {}
-paths["UtilsUpdate"] = \
-    {"user_path": path_extend("S:", "scripts", "UtilsUpdate", "utils_dev.py"),
-    "dev_path": path_extend(home_path(), "Dropbox", "term", "utils_dev.py"),
-    "package_name": "utils_dev.py"}
+paths["UtilsUpdate"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "commands7.py"),
+        "user_path": path_extend("S:", "scripts", "UtilsUpdate", "commands7.py"),
+        "package_name": "commands7.py"}
+
+paths["LaTeX_DrBx"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "commands7.py"),
+        "user_path": path_extend(home_path(), "Dropbox", "term", "LaTeX", "commands7.py"),
+        "package_name": "commands7.py"}
+paths["LaTeX_DrBx_pycharm"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "pycharm.py"),
+        "user_path": path_extend(home_path(), "Dropbox", "term", "LaTeX", "pycharm.py"),
+        "package_name": "pycharm.py"}
+paths["LaTeX_DrBx_fck"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "fuck.bat"),
+        "user_path": path_extend(home_path(), "Dropbox", "term", "LaTeX", "fuck.bat"),
+        "package_name": "fuck.bat"}
+paths["LaTeX_DrBx_utilsupdate"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "utilsupdate.bat"),
+        "user_path": path_extend(home_path(), "Dropbox", "term", "LaTeX", "utilsupdate.bat"),
+        "package_name": "utilsupdate.bat"}
+
+paths["BartenderPrint_c7"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "commands7.py"),
+        "user_path": path_extend("S:", "scripts", "BartenderPrint", "commands7.py"),
+        "package_name": "commands7.py"}
+paths["BartenderPrint_pycharm"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "pycharm.py"),
+        "user_path": path_extend("S:", "scripts", "BartenderPrint", "pycharm.py"),
+        "package_name": "pycharm.py"}
+paths["BartenderPrint_fck"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "fuck.bat"),
+        "user_path": path_extend("S:", "scripts", "BartenderPrint", "fuck.bat"),
+        "package_name": "fuck.bat"}
+paths["BartenderPrint_utilsupdate"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "utilsupdate.bat"),
+        "user_path": path_extend("S:", "scripts", "BartenderPrint", "utilsupdate.bat"),
+        "package_name": "utilsupdate.bat"}
+
+paths["Scripts in share"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "commands7.py"),
+        "user_path": path_extend("S:", "scripts", "commands7.py"),
+        "package_name": "commands7.py"}
+paths["Scripts in share mouse check"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "untitled", "test27hookmouseclicks.py"),
+        "user_path": path_extend("S:", "scripts", "test27hookmouseclicks.py"),
+        "package_name": "test27hookmouseclicks.py"}
+
+paths["Untitled PyCharm Project"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "commands7.py"),
+        "user_path": path_extend(home_path(), "Dropbox", "term", "untitled", "commands7.py"),
+        "package_name": "commands7.py"}
+
+paths["Latex drb"] = {
+        "dev_path": path_extend("S:", "scripts", "BartenderPrint", "print_l.py"),
+        "user_path": path_extend(home_path(), "Dropbox", "term", "LaTeX", "print.py"),
+        "package_name": "print_l.py"}
+
+
+paths["tripleclick in scripts"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "tripleclick.py"),
+        "user_path": path_extend("S:", "scripts", "tripleclick", "tripleclick.py"),
+        "package_name": "tripleclick.py"}
+paths["tripleclick in scripts c7"] = {
+        "dev_path": path_extend(home_path(), "Dropbox", "term", "commands7.py"),
+        "user_path": path_extend("S:", "scripts", "tripleclick", "commands7.py"),
+        "package_name": "commands7.py"}
+
+
+
+
+
+
+
+paths["LaTeX_DrBx"] = \
+    {"user_path": path_extend(home_path(), "", "utils.py"),
+    "dev_path": utils_devPath,
+    "package_name": "utils.py"}
 paths["SolvoUnload"] = \
     {"user_path": path_extend(scriptsFolder, "SolvoUnload", "utils.py"),
     "dev_path": utils_devPath,

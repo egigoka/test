@@ -1,0 +1,3 @@
+%BTW% /AF=c:\command\command.btw /D=<Trigger File Name> /PRN="EasyCoder F4 (203 dpi)" /R=3 /P /DD
+%END%
+Around the Town,Jerome Davis,Buyer,1220 Governor Sq.,Hadden,Alberta,WA1 1DP,Canada,(171) 555-7788,(171) 555-6750

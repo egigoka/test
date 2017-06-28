@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE labels SYSTEM "label.dtd">
+<labels _FORMAT ="Seeded Label Default for LPN" _QUANTITY="1" _PRINTERNAME="" _JOBNAME="LPN">
+<label>
+<variable name= "lpn">12345</variable>
+<variable name= "organization">A1</variable>
+</label>
+</labels>

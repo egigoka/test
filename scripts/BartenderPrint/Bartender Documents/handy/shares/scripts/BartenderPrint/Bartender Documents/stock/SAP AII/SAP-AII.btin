@@ -1,0 +1,68 @@
+﻿<IntegrationFile Name="SAP-AII" ID="7f80b5ef-2093-4e6e-a87e-c354b46da95b">
+  <ActionGroup ID="4b7ec1ef-3962-4a7c-aee3-492251f8a97d" RunMethod="Sequential" MessagingEnabled="false">
+    <Actions>
+      <SocketIntegration Name="SAP AII (Socket, port 5171)" ID="a985b72a-fc45-4828-9ca9-e24dc2063e12" IgnoreErrors="true" StartupType="Automatic" Port="5171" ReadTimeout="60000" MaximumConnections="100">
+        <ActionGroup Name="Actions" ID="56c6ebfa-79ba-419e-b450-daf53b4e6fea" RunMethod="Sequential" MessagingEnabled="false">
+          <Actions>
+            <SaveFileAction Name="Write File" ID="b4449239-5505-49ef-90aa-6cb974b3ff62" IgnoreErrors="false">
+              <Variables>
+                <Variable Name="%__internal_save_trigger_event_file_info__%" Type="System.Boolean">
+                  <Value>true</Value>
+                </Variable>
+              </Variables>
+              <Source>
+                <Value>%InitialEventData%</Value>
+              </Source>
+              <File Path="C:\Commander\SAPTrigger.txt">
+                <FileSystem.System />
+              </File>
+            </SaveFileAction>
+            <XslTransformAction Name="SAP AII To BTXML" ID="eb6da3ed-3309-4024-a227-f3d22a555735" IgnoreErrors="false" TransformType="SAP_To_BTXML">
+              <Source>
+                <Value>%EventData%</Value>
+              </Source>
+            </XslTransformAction>
+            <BarTenderBatchAction Name="Print BTXML Script" ID="99219f5c-d186-426f-84a2-1c2fb351b7cd" IgnoreErrors="false" BatchScriptTimeout="-1">
+              <BatchXml>
+                <Value>%EventData%</Value>
+              </BatchXml>
+            </BarTenderBatchAction>
+          </Actions>
+        </ActionGroup>
+        <ContentData />
+        <WelcomeMessage>HTTP/1.1 200 OK&#xD;
+Content-Length: 0&#xD;
+Date&#xD;
+Server: Seagull/1.0&#xD;
+&#xD;
+</WelcomeMessage>
+        <ResponseMessage>HTTP/1.1 200 OK&#xD;
+Content-Length: 0&#xD;
+Date:&#xD;
+Server: Seagull/1.0&#xD;
+&#xD;
+</ResponseMessage>
+        <TriggerEvent.CharacterSequence IncludeInStreamData="true">
+          <CharacterSequence>/Command&gt;</CharacterSequence>
+        </TriggerEvent.CharacterSequence>
+      </SocketIntegration>
+    </Actions>
+  </ActionGroup>
+  <Metadata>
+    <Properties>
+      <Variable Name="BuilderName" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>TaskListToIntegrationFileConverter</Value>
+      </Variable>
+      <Variable Name="BuilderVersion" Type="System.Double">
+        <Value>1</Value>
+      </Variable>
+      <Variable Name="SelectedIntegration" Type="System.Int32">
+        <Value>0</Value>
+      </Variable>
+      <Variable Name="SelectedOptionsPage" Type="Seagull.Framework.Serialization.SerializableString">
+        <Value>0;0</Value>
+      </Variable>
+    </Properties>
+  </Metadata>
+  <SourcePath>C:\Users\Administrator\Desktop\v10_1examples\SAPAII\SAP-AII.tl</SourcePath>
+</IntegrationFile>
