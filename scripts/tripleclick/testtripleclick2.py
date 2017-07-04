@@ -157,6 +157,27 @@ class Scroll:
         cls.scroll(value, up=False)
 
 
+class Actions:
+    def wait_for_done():
+        ok_position = None
+        while not ok_position:
+            try:
+                ok_position = locate("окбелая")
+            except IndexError as err:
+                print (err)
+                try:
+                    time.sleep(2)
+                    ok_position = locate("progressbarstillw7", "progressbarstillw10")
+                    if ok_position:
+                        ok_position_2 = wait_locate("окбелая", timeout=10, safe=True)
+                        if ok_position_2:
+                            ok_position = ok_position_2
+                except IndexError as err:
+                    print(err)
+        move(ok_position)
+        Click.left()        
+
+
 class Open:
 
     class Solvo:
@@ -164,20 +185,17 @@ class Open:
             class Documents:
                 @staticmethod
                 def documents():
-                    try:
-                        Click.left(move(locate("документы", "бел", "w7")))
-                    except IndexError:
-                        Click.left(move(locate("документы", "бел", "w10")))
+                    Click.left(move(locate("документыбелаяw7", "документыбелаяw10")))
                 @classmethod
                 def orders(cls):
                     cls.documents()
-                    Click.left(move(wait_locate("заказы", "бел", timeout=10)))
-                    wait_locate("progressbarstill", every=0.1, timeout=60)
+                    Click.left(move(wait_locate("заказыбел", timeout=10)))
+                    Actions.wait_for_done()
                 @classmethod
                 def shipments(cls):
                     cls.documents()
                     Click.left(move(wait_locate("отправкибелая", timeout=10)))
-                    wait_locate("progressbarstill", every=0.1, timeout=60)
+                    Actions.wait_for_done()
 
     @staticmethod
     def solvo():
@@ -191,25 +209,7 @@ class Open:
             sleep(0.3)
             Click.left(move(opened))
 
-class Actions:
-    def wait_for_done():
-        ok_position = None
-        while not ok_position:
-            try:
-                ok_position = locate("окбелая")
-            except IndexError as err:
-                print (err)
-                try:
-                    time.sleep(2)
-                    ok_position = locate("progressbarstill")
-                    if ok_position:
-                        ok_position_2 = wait_locate("окбелая", timeout=10, safe=True)
-                        if ok_position_2:
-                            ok_position = ok_position_2
-                except IndexError as err:
-                    print(err)
-        move(ok_position)
-        Click.left()
+
 
 try:
     
@@ -231,7 +231,7 @@ try:
                     dropdown = None                                                             # меню не выпало
                     while not dropdown:                                                         # пока не выпадет меню:
                         Click.right(move(workarea))                                                 # нажать правой кнопкой по рабочей области
-                        dropdown = wait_locate("команды", "бел", every=0.1, timeout=10, safe=True)  # найти Команды...
+                        dropdown = wait_locate("командыбел", every=0.1, timeout=10, safe=True)  # найти Команды...
                     Click.left(move(dropdown))                                                  # нажать на Команды...
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))      # нажать на Отгрузить
                     
@@ -248,18 +248,14 @@ try:
                 position = None
                 while not position:
                     try:
-                        position = locate("готов", "к", "отгрузке", "син")
+                        position = locate("готовкотгрузкесин", "готовкотгрузкебел")
                     except IndexError as err:
                         print (err)
-                        try:
-                            position = locate("готов", "к", "отгрузке", "бел")
-                        except IndexError as err:
-                            print (err)
-                            move(locate("готовкотгрузкевыделенная"))
-                            Scroll.up()
+                        move(locate("готовкотгрузкевыделенная"))
+                        Scroll.up()
                 move(position)
                 Click.right()
-                move(wait_locate("команды", "бел", every=0.1, timeout=10))
+                move(wait_locate("командыбел", every=0.1, timeout=10))
                 move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
                 Click.left()
                 Actions.wait_for_done()
@@ -270,16 +266,12 @@ try:
             while True:
                 Open.solvo()
                 Open.Solvo.Menu.Documents.orders()
-                wait_locate("progressbarempty", every=1, timeout=60)
+                Actions.wait_for_done()
                 position = None
                 debug_print("position", position)
                 while not position:
                     try:
-                        try:
-                            position = locate("собран", "син")
-                        except IndexError as err:
-                            print(err)
-                            position = locate("собран", "зел")
+                        position = locate("собрансин", "собранзел")
                     except IndexError as err:
                         print(err)
                         move(wait_locate("светлозел", every=1, timeout=30))
@@ -292,21 +284,13 @@ try:
                 Click.left()
                 Actions.wait_for_done()
                 position_in_work = None
-                try:  # проверка на собранность
-                    position_in_work = locate("вработе", "син")
-                except IndexError as err:
-                    print(err)
-                    position_in_work = locate("вработе", "бел", safe=True)
+                position_in_work = locate("вработесин", "вработебел", safe=True)  # проверка рейса на собранность
                 if position_in_work:
                     message('batch in work')
                     raise RuntimeError('batch in work')
                 position = None
                 while not position:
-                    try:  # уже в отправках
-                        position = locate("собран", "син")
-                    except IndexError as err:
-                        print(err)
-                        position = locate("собран", "бел")
+                    position = locate("собрансин", "собранбел")  # уже в отправках
                 Click.right(move(position))
                 move(wait_locate("команды...бел", every=0.5, timeout=20))
                 move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))

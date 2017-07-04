@@ -265,6 +265,18 @@ if True:
     # bench while loading
     __version__ = "7.1.0alpha3"
     # alias Dir.contain to Dir.contents
+    __version__ = "7.1.0alpha4"
+    # input_int bugfix
+    __version__ = "7.1.0alpha5"
+    # Str.rightpad bugfix
+    __version__ = "7.1.0alpha6"
+    # more like PEP8
+    __version__ = "7.2.0alpha1"
+    # f Windows.lock
+    __version__ = "7.3.0alpha1"
+    # f Random.integer
+    __version__ = "7.3.0alpha2"
+    # f Bench.get
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -278,7 +290,8 @@ import os, \
        random, \
        subprocess, \
        datetime, \
-       re
+       re, \
+	   ctypes
 from tkinter import *
 
 
@@ -299,47 +312,48 @@ if get_os() == "windows":
            win32api, \
            win32con
 
-#from path import path
-#win_unicode_console.enable()
+# win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
-from termcolor import colored, cprint #print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+from termcolor import colored, cprint # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 
 newline = '\n'
-ruble = u"\u20bd" # \u20bd is ₽
+ruble = u"\u20bd"  # \u20bd is ₽
 backslash = "\ "[:1]
 newline2 = "\r\n"
 
 
 def is_python3():
-    PY3K = sys.version_info >= (3, 0)
-    return PY3K
+    is_true = sys.version_info >= (3, 0)
+    return is_true
 
 
 class Str:
+    @staticmethod
     def to_quotes(some_string):
         return '"' + str(some_string) + '"'
 
-    def get_integers(string):
+    @staticmethod
+    def get_integers(string): # todo support for -
         string = str(string)
-        integerFinded = False
+        integer_found = False
         integers = []
         # cnt = 0
-        currentinteger = 0
+        current_integer = 0
         for symbol in string:
             try:
                 int(symbol)
-                currentinteger = currentinteger*10 + int(symbol)
-                integerFinded = True
-            except:
-                if integerFinded:
-                    integers = integers + [currentinteger]
-                    currentinteger = 0
-                    integerFinded = False
-        if integerFinded:
-            integers = integers + [currentinteger]
-            currentinteger = 0
-            integerFinded = False
+                current_integer = current_integer*10 + int(symbol)
+                integer_found = True
+            except ValueError:
+                if integer_found:
+                    integers = integers + [current_integer]
+                    current_integer = 0
+                    integer_found = False
+        if integer_found:
+            integers = integers + [current_integer]
+            current_integer = 0
+            integer_found = False
         return integers
 
     def newlines_to_strings(string):
@@ -363,6 +377,7 @@ class Str:
             output_lines += [line]
         return output_lines
 
+    @staticmethod
     def leftpad(string, leng, ch="0", rightpad=False):
         if len(string) >= leng:
             return string
@@ -372,8 +387,9 @@ class Str:
             string_output = string + strOfCh[len(string):leng]
         return string_output
 
-    def rightpad(string, leng, ch="0"):
-        return leftpad(string, leng, ch=ch, rightpad=True)
+    @classmethod
+    def rightpad(cls, string, leng, ch="0"):
+        return cls.leftpad(string, leng, ch=ch, rightpad=True)
 
 
 class Console():
@@ -428,7 +444,7 @@ class Console():
                 time.sleep(sleep)
             except KeyboardInterrupt as err:
                 if get_os() == "windows":
-                    print (termcolor.colored("OK", "white", "on_grey"))
+                    print(termcolor.colored("OK", "white", "on_grey"))
                 colorama.deinit()
                 cls.clean()
                 break
@@ -441,7 +457,8 @@ class Console():
             output = Str.nl(output)
         return output
 
-class Path():
+
+class Path:
     def full(path):
         return os.path.abspath(path)
 
@@ -452,8 +469,8 @@ class Path():
         for path_ in paths:
             try:
                 path = os.path.join(str(path), str(path_))
-            except:
-                if (get_os() == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pcname\dir\
+            except NameError:
+                if (get_os() == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
                     path = backslash * 2
                 elif (get_os() == "windows") and (len(path_) <= 3):
                     path = os.path.join(path_, os.sep)
@@ -476,9 +493,10 @@ class Path():
     @staticmethod
     def set_current(path):
         os.chdir(path)
-        debug_print("os.getcwd()", os.getcwd())
+        debug_print("os.getcwd()  # current directory is", os.getcwd())
 
-class Locations():
+
+class Locations:
     if get_os() == "windows":
         share = Path.extend("S:")
         shares = share
@@ -521,7 +539,8 @@ class Locations():
         py = "python3"
         pyw = "python3"
 
-class Dir():
+
+class Dir:
     @staticmethod
     def create(filename):
         if os.path.isfile(filename):
@@ -559,7 +578,9 @@ class Dir():
                 print("Path", path, "isn't found")
             return None
 
-class File():
+
+class File:
+    @staticmethod
     def create(filename):
         filename = Path.full(filename)
         Dir.create(os.path.split(filename)[0])  # todo change it to just dir_create(filename)
@@ -567,14 +588,14 @@ class File():
             with open(filename, 'a'):  # open file and close after
                 os.utime(filename, None)  # changes time of file modification
         if not os.path.exists(filename):
-            raise FileNotFoundError("error while creating file " + filename + \
-                                    "try to repair script at " + path_full(sys.argv[0]))
+            raise FileNotFoundError("error while creating file " + filename +
+                                    "try to repair script at " + Path.full(sys.argv[0]))
 
+    @staticmethod
     def delete(path, quiet = False):
-        #try:
+        # try:
         if os.path.isdir(path):
-            raise IsADirectoryError(path + \
-                                    " is directory, use Dir.delete to delete")
+            raise IsADirectoryError(path + " is directory, use Dir.delete to delete")
         try:
             os.remove(path)
         except FileNotFoundError:
@@ -582,24 +603,27 @@ class File():
                 print("file", path, "is not exist")
         if not quiet:
             print("file", path, "is deleted")
-        #except PermissionError:
-        #    try:
-        #        if get_os() == "windows"
-        #            delete_command = "del"
-        #        else:
-        #            delete_command = "rm"
-        #        subprocess.call([delete_command, path])
-        #    except:
+        # except PermissionError:
+        #     try:
+        #         if get_os() == "windows"
+        #             delete_command = "del"
+        #         else:
+        #             delete_command = "rm"
+        #         subprocess.call([delete_command, path])
+        #     except:
         if os.path.exists(path):
             time.sleep(0.05)
             raise FileExistsError(path + " is not deleted")
 
+    @staticmethod
     def move(input_file, output_file):
         shutil.move(input_file, output_file)
 
+    @staticmethod
     def rename(input_file, output_file):
         File.move(input_file, output_file)
 
+    @staticmethod
     def hide(filename, quiet=True):
         filename = Path.full(filename)  #
         if get_os() == "windows":
@@ -611,6 +635,7 @@ class File():
             print ("file", filename, "is hidden now")
         return dotted_file
 
+    @staticmethod
     def backup(filename, subfolder="bak", quiet = False):
         filename = Path.full(filename) # normalize filename
         backupfilename = str(filename) + "." + Time.dotted() + ".bak"  # add dottedtime to backup filename
@@ -619,7 +644,7 @@ class File():
             if len(subfolder) < 1:  # if subfolder has non-zero len
                 subfolder = "bak"  # set subfolder to default
                 print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
-        except:  # if subfolder has no len
+        except TypeError:  # if subfolder has no len
             subfolder = "bak"  # set subfolder to default
             print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
         subfolder = Path.extend(backupfilename[0], subfolder)  # append subfolder name
@@ -637,7 +662,8 @@ class File():
         file = open(path, 'w')
         file.close()
 
-class Time():
+
+class Time:
     @staticmethod
     def stamp():
         return time.time()
@@ -650,11 +676,12 @@ class Time():
                       Time.get("microsecond", 6)
         return dateandtime
 
-    def get(size, zfill = 0):
+    @staticmethod
+    def get(size, zfill=0):
         return Str.leftpad(eval("str(datetime.datetime.now()." + size + ")"), leng=zfill, ch=0)
 
     @staticmethod
-    def rustime(customtime = None):
+    def rustime(customtime=None):
         if customtime:
             day = datetime.datetime.fromtimestamp(customtime).strftime('%d')
             month = datetime.datetime.fromtimestamp(customtime).strftime('%m')
@@ -675,15 +702,15 @@ class Time():
         return rustime
 
 
-
-
 class Json():
     @classmethod
     def check(cls, filename):
         try:
             cls.load(filename)
-        except:
+            return True
+        except:  # any exception is False
             print("JSON is bad")
+            return False
 
     @classmethod
     def save(cls, filename, jsonstring, quiet=False, debug=False):
@@ -697,11 +724,11 @@ class Json():
                 print("sys.argv[0] =",sys.argv[0])
                 print(jsonstring)
         except:
-            raise IOError("error while saving JSON, try to repair script at path "+\
+            raise IOError("error while saving JSON, try to repair script at path " +
                           Path.full(sys.argv[0]))
         json_test_string = cls.load(filename, quiet=True)
         if jsonstring != json_test_string:
-            raise IOError("error while saving JSON, try to repair script at path "+\
+            raise IOError("error while saving JSON, try to repair script at path " +
                           Path.full(sys.argv[0]))
 
     @classmethod
@@ -720,7 +747,7 @@ class Json():
                 print(jsonStringInMemory)
             return jsonStringInMemory
         except:
-            raise IOError("error while loading JSON, try to repair script at path "+\
+            raise IOError("error while loading JSON, try to repair script at path " +
                           Path.full(sys.argv[0]))
 
 
@@ -748,7 +775,7 @@ class Process():
                     argument_ = Str.to_quotes(argument_)
                 try:
                     command = command + " " + argument_
-                except:
+                except NameError:
                     command = 'start "" ' + argument_
             os.system(command)
         else:
@@ -793,14 +820,14 @@ def plog(logfile, logstring="some shit happened", customtime=None, quiet=False, 
     file.close()
 
 
-def ping(domain ="127.0.0.1", count = 1, quiet = False, logfile = None, timeout = 10000):
+def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000):
     # с таким эксепшном можно сделать куда проще это всё
     domain = getDomainOfUrl(domain)
     if not quiet:
         colorama.reinit()
         print("Pinging", domain, count, "times...")
-        upmessage = domain + " is up!"
-        downmessage = domain + " is down."
+        up_message = domain + " is up!"
+        down_message = domain + " is down."
     try:
         if get_os() == "windows":
             count_arg = "n"
@@ -810,76 +837,67 @@ def ping(domain ="127.0.0.1", count = 1, quiet = False, logfile = None, timeout 
             timeout_arg = "W"
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
                   " -" + timeout_arg + " " + str(timeout)
-        pingoutput = Console.get_output(command)
+        ping_output = Console.get_output(command)
     except KeyboardInterrupt:
         sys.exit()
-    except:
-        pingoutput = ""
-    if ("TTL" in pingoutput) or ("ttl" in pingoutput):
+    except:  # any exception is not good ping
+        ping_output = ""
+    if ("TTL" in ping_output) or ("ttl" in ping_output):
         up = True
     else:
         up = False
     if logfile:
         if up:
             plog(logfile, domain + " is up!", quiet=True)
-            cprint(upmessage, "white", "on_green")
+            cprint(up_message, "white", "on_green")
         else:
-            plog(logfile, downmessage, quiet=True)
-            cprint(downmessage, "white", "on_red")
+            plog(logfile, down_message, quiet=True)
+            cprint(down_message, "white", "on_red")
     elif not quiet:
         if up:
-            cprint(upmessage, "white", "on_green")
+            cprint(up_message, "white", "on_green")
         else:
-            cprint(downmessage, "white", "on_red")
+            cprint(down_message, "white", "on_red")
         colorama.deinit()
     return up
 
 
-def winRepair_UnicodeEncodeError(quiet = ""):
-    if quiet == True:
+def winRepair_UnicodeEncodeError(quiet=""):
+    if quiet:
         quiet = " > null"
     os.system("chcp 65001" + quiet)
     os.system("set PYTHONIOENCODING = utf - 8")
 
 
-
-
-def input_int(message = "Введите число: ", minimum = None, maximum = None, default = None, quiet = False):
+def input_int(message="Введите число: ", minimum=None, maximum=None, default=None, quiet=False):
     output_int = "jabla fitta"
     if default:
         message = "(Enter = " + str(default) + ")"
-    while output_int == "jabla fitta": # цикл, пока не получит итоговое число
-        try:
-            integer = input(message)
-            if integer != "":
-                try:
-                    integer = Str.get_integers(integer)[0]
-                except:
-                    print("Это не число")
-                    raise ValueError
-            elif default and integer != "":
-                output_int = default
-            elif integer == "":
+    while output_int == "jabla fitta":  # цикл, пока не получит итоговое число
+        integer = input(message)
+        if integer != "":
+            try:
+                integer = Str.get_integers(integer)[0]
+            except TypeError:
                 print("Это не число")
+        elif default and integer != "":
+            output_int = default
+        elif integer == "":
+            print("Это не число")
+            raise ValueError
+        if minimum:
+            if int < minimum:
+                print("Число должно быть больше", minimum)
                 raise ValueError
-            if minimum:
-                if int < minimum:
-                    print("Число должно быть больше", minimum)
-                    raise ValueError
-            if maximum:
-                if int > maximum:
-                    print("Число должно быть меньше", maximum)
-                    raise ValueError
-            output_int = integer
-            break
-        except:
-            pass
+        if maximum:
+            if int > maximum:
+                print("Число должно быть меньше", maximum)
+                raise ValueError
+        output_int = integer
+        break
     if not quiet:
         print("Итоговое число:", output_int)
     return output_int
-
-
-
 
 
 def substring(string, before, after=None):
@@ -915,12 +933,17 @@ class Bench:
     @classmethod
     def start(cls):
         cls.time_start = datetime.datetime.now()
-
+        
     @classmethod
-    def end(cls, quiet=False):
+    def get(cls):
         cls.time_end = datetime.datetime.now()
         delta = cls.time_end - cls.time_start
         delta_combined = delta.seconds + delta.microseconds / 1E6
+        return delta_combined
+
+    @classmethod
+    def end(cls, quiet=False):
+        delta_combined = cls.get()
         cls.previous = delta_combined
         if not quiet:
             cprint("Bench runned in " + str(delta_combined) + " seconds", "grey", "on_white")
@@ -948,6 +971,19 @@ class Tkinter():
         btn_close = Button(root, bg="red", text="...", padx=1000, pady=1000, command=close_window)
         btn_close.grid(row=0, column=0)
         mainloop()
+
+
+class Windows:
+    @staticmethod
+    def lock():
+        ctypes.windll.LockWorkStation()
+
+
+class Random:
+    @staticmethod
+    def integer(min=0, max=100):
+        return random.randrange(min, max+1)
+
 
 class Learning():
     def bigdigits(digits):
