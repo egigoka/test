@@ -6,24 +6,22 @@ import win_unicode_console
 import subprocess
 import time
 import colorama
-from utils import *
+#from utils import *
+from commands7 import *
 
 # init
 # win_unicode_console.enable()
 # colorama.init()
-scriptsFolder = r"\\192.168.99.91\shares\scripts"
-scriptsSubFolderName = "SolvoUnload"
-scriptsSubFolder = scriptsFolder + "\ "[:1] + scriptsSubFolderName  # "\\192.168.99.91\shares\scripts\SolvoUnload"
+scriptsSubFolder = Path.extend("T:", "scripts", "SolvoUnload")
 settingsJsonName = "settings.json"
 settingsJsonFile = scriptsSubFolder + "\ "[:1] + settingsJsonName
 # "\\192.168.99.91\shares\scripts\SolvoUnload\settings.json"
-dir_create(scriptsFolder)
-dir_create(scriptsSubFolder)
-file_create(settingsJsonFile)
+Dir.create(scriptsSubFolder)
+File.create(settingsJsonFile)
 if __name__ == '__main__':
-    jsonStringInMemory = loadjson(settingsJsonFile)
-    savejson(settingsJsonFile, jsonStringInMemory)
-file_backup(settingsJsonFile, quiet = True)
+    jsonStringInMemory = Json.load(settingsJsonFile)
+    Json.save(settingsJsonFile, jsonStringInMemory)
+File.backup(settingsJsonFile, quiet = True)
 
 
 def get_safe_time():  # конец позапрошлой смены
@@ -56,7 +54,7 @@ if isDebug == True:
 def main():
     # print("Введите кол-во накладных или выберите пункт меню:")
     # конец позапрошлой смены
-    cls()
+    Console.clean()
     print("      Безопасное время                                    -", get_safe_time(), newline)
     print("[l] - Последнее время подтверждённых листов отбора        -", jsonStringInMemory["last_lo"])
     print("[b] - Последнее время отгруженных рейсов                  -", jsonStringInMemory["last_batch"])
@@ -69,24 +67,24 @@ def main():
     print("[e] - Exit", newline)
     inputMenuItem = input("Введите что-нибудь: ")
     if "b" in inputMenuItem:
-        last_batch = leftpad(input("Новое последнее время отгруженных непривязанных накладных: "), 2, 0)
+        last_batch = Str.leftpad(input("Новое последнее время отгруженных непривязанных накладных: "), 2, 0)
         jsonStringInMemory["last_batch"] = last_batch + jsonStringInMemory["last_batch"][len(last_batch):]
-        savejson(settingsJsonFile, jsonStringInMemory)
+        Json.save(settingsJsonFile, jsonStringInMemory)
     elif "o" in inputMenuItem:
-        last_onebyone = leftpad(input("Новое последнее время отгруженных непривязанных накладных: "), 2, 0)
+        last_onebyone = Str.leftpad(input("Новое последнее время отгруженных непривязанных накладных: "), 2, 0)
         jsonStringInMemory["last_onebyone"] = last_onebyone + jsonStringInMemory["last_onebyone"][len(last_onebyone):]
-        savejson(settingsJsonFile, jsonStringInMemory)
+        Json.save(settingsJsonFile, jsonStringInMemory)
         cnt = 0
     elif "s" in inputMenuItem:
         try:
             jsonStringInMemory["nakl_per_sec"] = float(input("Новая скорость отгрузки накладных: "))
-            savejson(settingsJsonFile, jsonStringInMemory)
+            Json.save(settingsJsonFile, jsonStringInMemory)
         except ValueError:
             print("Это не число")
     elif "l" in inputMenuItem:
-        last_lo = leftpad(input("Новое последнее время подтверждённых листов отбора: "), 2, 0)
+        last_lo = Str.leftpad(input("Новое последнее время подтверждённых листов отбора: "), 2, 0)
         jsonStringInMemory["last_lo"] = last_lo + jsonStringInMemory["last_lo"][len(last_lo):]
-        savejson(settingsJsonFile, jsonStringInMemory)
+        Json.save(settingsJsonFile, jsonStringInMemory)
     elif "d" in inputMenuItem:
         subprocess.call([notepadExec, settingsJsonFile])
     elif "e" in inputMenuItem:
@@ -95,10 +93,10 @@ def main():
         jsonStringInMemory["kan_otb_time"] = get_current_time()
         komment_kan_otb = input("Коммент: ")
         jsonStringInMemory["kan_otb_last"] = komment_kan_otb
-        savejson(settingsJsonFile, jsonStringInMemory)
+        Json.save(settingsJsonFile, jsonStringInMemory)
     elif "n" in inputMenuItem:
         jsonStringInMemory["note"] = input("Заметка: ")
-        savejson(settingsJsonFile, jsonStringInMemory)
+        Json.save(settingsJsonFile, jsonStringInMemory)
     else:
         try:
             inputMenuItem = int(inputMenuItem)

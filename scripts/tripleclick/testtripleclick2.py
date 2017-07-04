@@ -14,12 +14,18 @@ class Arguments:
         if arg == "test":
             test = True
         single_unload = False
-        if arg in ["o","one","onebyone","obo"]:
+        if arg in ["o","one","onebyone","obo"]:  # накладные
             single_unload = True
+        single_unload_batch_support = False
+        if arg in ["obozero", "onezero", "onebatch", "obobatch"]:  # накладные, привя
+            single_unload_batch_support = True
+        ctrl_v = False
+        if arg in ["ctrlv"]:  # накладные, привя
+            ctrl_v = True
 
 
 class State:
-    move_duration = 0.1
+    move_duration = 0.5
     sleep_before_click = 0.1
     sleep_before_locate = 0.1
     ctrl_a_sleep = 3
@@ -87,7 +93,7 @@ def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyauto
         print("moved mouse to", x, y)
     pyautogui.moveTo(x, y, duration=duration, tween=tween)
 
-def locate(*name_shards, safe=False, timer=False):  # seconds  # todo multiple locate
+def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
     time.sleep(State.sleep_before_locate)
     name = get_img_name(*name_shards)
     filename = os.path.split(name)[1]
@@ -100,25 +106,42 @@ def locate(*name_shards, safe=False, timer=False):  # seconds  # todo multiple l
         if position:
             message = substring(message, before="not ") + " on " + str(position)
         elif timer:
-            message += " timer " + str(Timer.end(quiet=True))
+            message += " timer " + str(Timer.get())
         print(message)
     return position           
 
 
-def wait_locate(*name_shards, every=1, timeout=60, safe=False):
+def locate(*names, safe=False, timer=False):
+    output_position = None
+    for name in names:
+        output_position = locate_by_shards(name, safe=True, timer=timer)
+        if output_position:
+            return output_position
+    if not safe:
+        raise IndexError("none finded from " + str(names) + " names")
+    
+
+def wait_locate(*names, every=1, timeout=60, safe=False):
     timeout_reached = False
     position = None
     Timer.start()
     while not timeout_reached and not position:
         time.sleep(every)
-        position = locate(*name_shards, safe=True, timer=True)
-        timeout_reached = Timer.end(quiet=True) > timeout
+        position = locate(*names, safe=True, timer=True)
+        timeout_reached = Timer.get() > timeout
     if timeout_reached and not position and not safe:
-        raise RuntimeError("timeout " + str(timeout) + " reached while searching for " + str(name_shards))
+        raise RuntimeError("timeout " + str(timeout) + " reached while searching for " + str(names))
     return position
 
 def hotkey(*args):
     pyautogui.hotkey(*args)
+    print("pressed", str(args))
+
+def sleep(seconds):
+    time.sleep(seconds)
+
+def message(text, title='some window', button='oh no'):
+    pyautogui.alert(text=text, title=title, button=button)
 
 class Scroll:     
 
@@ -138,6 +161,27 @@ class Scroll:
         cls.scroll(value, up=False)
 
 
+class Actions:
+    def wait_for_done():
+        ok_position = None
+        while not ok_position:
+            try:
+                ok_position = locate("окбелая")
+            except IndexError as err:
+                print (err)
+                try:
+                    time.sleep(2)
+                    ok_position = locate("progressbaremptyw7", "progressbaremptyw10")
+                    if ok_position:
+                        ok_position_2 = wait_locate("окбелая", timeout=10, safe=True)
+                        if ok_position_2:
+                            ok_position = ok_position_2
+                except IndexError as err:
+                    print(err)
+        move(ok_position)
+        Click.left()        
+
+
 class Open:
 
     class Solvo:
@@ -145,17 +189,17 @@ class Open:
             class Documents:
                 @staticmethod
                 def documents():
-                    Click.left(move(locate("документы", "бел")))
+                    Click.left(move(locate("документыбелаяw7", "документыбелаяw10")))
                 @classmethod
                 def orders(cls):
                     cls.documents()
-                    Click.left(move(wait_locate("заказы", "бел", timeout=10)))
-                    wait_locate("progressbarstill", every=0.1, timeout=60)
+                    Click.left(move(wait_locate("заказыбел", timeout=10)))
+                    Actions.wait_for_done()
                 @classmethod
                 def shipments(cls):
                     cls.documents()
-                    Click.left(move(wait_locate("отправки", "бел", timeout=10)))
-                    wait_locate("progressbarstill", every=0.1, timeout=60)
+                    Click.left(move(wait_locate("отправкибелая", timeout=10)))
+                    Actions.wait_for_done()
 
     @staticmethod
     def solvo():
@@ -163,6 +207,13 @@ class Open:
         opened = locate("solvomini", safe=True)
         if not opened:
             Click.left(move(locate("SOLVO")))
+        else:
+            move(opened)
+            Click.left(move(opened))
+            sleep(0.3)
+            Click.left(move(opened))
+
+
 
 try:
     
@@ -170,6 +221,10 @@ try:
         def main():
             pass
             # Open.solvo()
+    
+    if Arguments.ctrl_v:
+        def main():
+            hotkey('ctrl', 'v')
 
     if Arguments.single_unload:
         def main():
@@ -184,10 +239,11 @@ try:
                     dropdown = None                                                             # меню не выпало
                     while not dropdown:                                                         # пока не выпадет меню:
                         Click.right(move(workarea))                                                 # нажать правой кнопкой по рабочей области
-                        dropdown = wait_locate("команды", "бел", every=0.1, timeout=10, safe=True)  # найти Команды...
+                        dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)  # найти Команды...
                     Click.left(move(dropdown))                                                  # нажать на Команды...
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))      # нажать на Отгрузить
-                    wait_locate("progressbarempty", every=15, timeout=600)                      # подождать, пока отгрузится
+                    
+                    wait_locate("progressbaremptyw7", "progressbaremptyw10", every=15, timeout=600)                      # подождать, пока отгрузится
             except RuntimeError:
                 Windows.lock()
     
@@ -196,41 +252,63 @@ try:
             Open.solvo()
             Open.Solvo.Menu.Documents.shipments()
             while True:
+                Bench.start()
                 position = None
                 while not position:
                     try:
-                        position = locate("готов", "к", "отгрузке", "син")
+                        position = locate("готовкотгрузкесин", "готовкотгрузкебел")
                     except IndexError as err:
                         print (err)
-                        try:
-                            position = locate("готов", "к", "отгрузке", "бел")
-                        except IndexError as err:
-                            print (err)
-                            move(locate("готовкотгрузкевыделенная"))
-                            Scroll.up()
+                        move(locate("готовкотгрузкевыделенная"))
+                        Scroll.up()
                 move(position)
                 Click.right()
-                move(wait_locate("команды", "бел", every=0.1, timeout=10))
-                move(wait_locate("отгрузитьбелая", every=0.1, timeout=20))
+                move(wait_locate("команды...бел", every=0.1, timeout=10))
+                move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
                 Click.left()
-                
-                ok_position = None
-                while not ok_position:
+                Actions.wait_for_done()
+                Bench.end()
+            
+    if Arguments.single_unload_batch_support:
+        def main():
+            while True:
+                Open.solvo()
+                Open.Solvo.Menu.Documents.orders()
+                Actions.wait_for_done()
+                position = None
+                debug_print("position", position)
+                while not position:
                     try:
-                        ok_position = locate("окбелая")
+                        position = locate("собрансин", "собранзел")
                     except IndexError as err:
-                        print (err)
-                        try:
-                            time.sleep(2)
-                            ok_position = locate("progressbarstill")
-                            if ok_position:
-                                ok_position_2 = wait_locate("окбелая", timeout=10, safe=True)
-                                if ok_position_2:
-                                    ok_position = ok_position_2
-                        except IndexError as err:
-                            print(err)
-                move(ok_position)
+                        print(err)
+                        move(wait_locate("светлозел", every=1, timeout=30))
+                        Click.left()
+                        Scroll.down(300)
+                move(position)
+                Click.right()
+                move(wait_locate("перейтикэкранубелая", every=0, timeout=20))
+                move(wait_locate("'отправки'белая", every=0, timeout=20))
                 Click.left()
+                Actions.wait_for_done()
+                position_in_work = None
+                position_in_work = locate("вработесин", "вработебел", safe=True)  # проверка рейса на собранность
+                if position_in_work:
+                    message('batch in work')
+                    raise RuntimeError('batch in work')
+                position = None
+                while not position:
+                    position = locate("собрансин", "собранбел")  # уже в отправках
+                Click.right(move(position))
+                move(wait_locate("команды...бел", every=0.5, timeout=20))
+                move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
+                Click.left()
+                Actions.wait_for_done()
+                
+
+                
+                
+                
 except KeyboardInterrupt:
     print("^C")
 

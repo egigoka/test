@@ -1,1 +1,2 @@
-start "" pyw \\192.168.99.91\shares\scripts\SolvoUnload\solvounload.bat.gui.py
+start "" pyw 
+T:\scripts\SolvoUnload\solvounload.bat.gui.py

@@ -275,8 +275,6 @@ if True:
     # f Windows.lock
     __version__ = "7.3.0alpha1"
     # f Random.integer
-    __version__ = "7.3.0alpha2"
-    # f Bench.get
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -933,17 +931,12 @@ class Bench:
     @classmethod
     def start(cls):
         cls.time_start = datetime.datetime.now()
-        
-    @classmethod
-    def get(cls):
-        cls.time_end = datetime.datetime.now()
-        delta = cls.time_end - cls.time_start
-        delta_combined = delta.seconds + delta.microseconds / 1E6
-        return delta_combined
 
     @classmethod
     def end(cls, quiet=False):
-        delta_combined = cls.get()
+        cls.time_end = datetime.datetime.now()
+        delta = cls.time_end - cls.time_start
+        delta_combined = delta.seconds + delta.microseconds / 1E6
         cls.previous = delta_combined
         if not quiet:
             cprint("Bench runned in " + str(delta_combined) + " seconds", "grey", "on_white")

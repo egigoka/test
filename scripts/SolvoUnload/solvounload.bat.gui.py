@@ -1,4 +1,5 @@
-from utils import openInCurrentWindow
+#from utils import openInCurrentWindow
+from commands7 import *
 from current_paths import *
 
-openInCurrentWindow("py" ,path_extend(share, "scripts", "solvounload", "solvounload.bat.gui.codegen.py"))
+Process.start(py, Path.extend("T:", "scripts", "solvounload", "solvounload.bat.gui.codegen.py"), new_window=True)
