@@ -275,6 +275,8 @@ if True:
     # f Windows.lock
     __version__ = "7.3.0alpha1"
     # f Random.integer
+    __version__ = "7.3.0alpha3"
+    # Process.kill() now support macOS
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -764,6 +766,9 @@ class Process():
     def kill(process):
         if get_os() == "windows":
             command_ = "taskkill /f /im " + str(process) + ".exe"
+            os.system(command_)
+        if get_os() == "macos":
+            command_ = "killall " + str(process)
             os.system(command_)
     @staticmethod
     def start(*arguments, new_window=False):
