@@ -154,7 +154,10 @@ class Open:
             class Documents:
                 @staticmethod
                 def documents():
-                    Click.left(move(locate("документы", "бел")))
+                    try:
+                        Click.left(move(locate("документы", "бел", "w7")))
+                    except IndexError:
+                        Click.left(move(locate("документы", "бел", "w10")))
                 @classmethod
                 def orders(cls):
                     cls.documents()
