@@ -76,11 +76,11 @@ def main():
             else:
                 cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end='')
                 plog(__logfile__, hostname + " is down", quiet=True)
-            if get_os() == "windows":
-                folders = [{"name":"wms2host", "location":Locations.wms2host},
-                           {"name":"host2wms", "location":Locations.host2wms}]
-                for folder in folders:
-                    checkfolder(folder["location"], folder["name"])
+        if get_os() == "windows":
+            folders = [{"name":"wms2host", "location":Locations.wms2host},
+                       {"name":"host2wms", "location":Locations.host2wms}]
+            for folder in folders:
+                checkfolder(folder["location"], folder["name"])
         print(Time.rustime())
         print("Sleep...")
         time.sleep(time_sleep)  # задержка перед новым проходом
