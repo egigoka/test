@@ -90,7 +90,7 @@ def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyauto
         print("moved mouse to", x, y)
     pyautogui.moveTo(x, y, duration=duration, tween=tween)
 
-def locate(*name_shards, safe=False, timer=False):  # seconds  # todo multiple locate
+def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
     time.sleep(State.sleep_before_locate)
     name = get_img_name(*name_shards)
     filename = os.path.split(name)[1]
@@ -103,19 +103,29 @@ def locate(*name_shards, safe=False, timer=False):  # seconds  # todo multiple l
         if position:
             message = substring(message, before="not ") + " on " + str(position)
         elif timer:
-            message += " timer " + str(Timer.end(quiet=True))
+            message += " timer " + str(Timer.get(quiet=True))
         print(message)
     return position           
 
 
-def wait_locate(*name_shards, every=1, timeout=60, safe=False):
+def locate(*names, safe=False, timer=False):
+    output_position = None
+    for name in names:
+        output_position = locate_by_shards(name, safe=True, timer=timer)
+        if output_position:
+            return output_position
+    if not safe:
+        raise IndexError("none finded from ", str(names), " names")
+    
+
+def wait_locate(*names, every=1, timeout=60, safe=False):
     timeout_reached = False
     position = None
     Timer.start()
     while not timeout_reached and not position:
         time.sleep(every)
-        position = locate(*name_shards, safe=True, timer=True)
-        timeout_reached = Timer.end(quiet=True) > timeout
+        position = locate(*names, safe=True, timer=True)
+        timeout_reached = Timer.get(quiet=True) > timeout
     if timeout_reached and not position and not safe:
         raise RuntimeError("timeout " + str(timeout) + " reached while searching for " + str(name_shards))
     return position
@@ -224,6 +234,7 @@ try:
                         dropdown = wait_locate("команды", "бел", every=0.1, timeout=10, safe=True)  # найти Команды...
                     Click.left(move(dropdown))                                                  # нажать на Команды...
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))      # нажать на Отгрузить
+                    
                     wait_locate("progressbarempty", every=15, timeout=600)                      # подождать, пока отгрузится
             except RuntimeError:
                 Windows.lock()

@@ -275,7 +275,7 @@ if True:
     # f Windows.lock
     __version__ = "7.3.0alpha1"
     # f Random.integer
-    __version__ = "7.3.0alpha1"
+    __version__ = "7.3.0alpha2"
     # f Bench.get
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
