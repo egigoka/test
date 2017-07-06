@@ -1,0 +1,11 @@
+--2017-07-06 21:45:12--  https://www.avito.ru/rossiya/telefony?p=1
+Resolving www.avito.ru... 185.89.12.132
+Connecting to www.avito.ru|185.89.12.132|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘telefony?p=1’
+
+telefony?p=1                                      [<=>                                                                                            ]       0  --.-KB/s               telefony?p=1                                      [ <=>                                                                                           ] 119.04K   581KB/s               telefony?p=1                                      [  <=>                                                                                          ] 201.09K   602KB/s    in 0.3s    
+
+2017-07-06 21:45:13 (602 KB/s) - ‘telefony?p=1’ saved [205920]
+
