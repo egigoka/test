@@ -287,6 +287,18 @@ if True:
     # bugfix Path.extend
     __version__ = "7.4.0alpha4"
     # bugfix Path.extend
+    __version__ = "7.4.0alpha5"
+    # bugfix Wget.download
+    __version__ = "7.4.0alpha6"
+    # bugfix Path.extend
+    __version__ = "7.4.0alpha7"
+    # bugfix Wget.download
+    __version__ = "7.4.0alpha8"
+    # bugfix Wget.download
+    # f Str.to_quotes_2
+    # Process.start now more crossplatfowm
+    # debug option to Process.start
+    # pureshell option to Process.start
 
 
 
@@ -343,6 +355,10 @@ def is_python3():
 class Str:
     @staticmethod
     def to_quotes(some_string):
+        return '"' + str(some_string) + '"'
+
+    @staticmethod
+    def to_quotes_2(some_string):
         return '"' + str(some_string) + '"'
 
     @staticmethod
@@ -491,6 +507,8 @@ class Path:
                 elif (get_os() == "macos") or (get_os() == "linux"):
                     if path_ == "..":
                         path = path_
+                    elif path_ == ".":
+                        path = path_
                     else:
                         path = os.path.join(os.sep, path_)
                 else:
@@ -636,6 +654,10 @@ class File:
     @staticmethod
     def move(input_file, output_file):
         shutil.move(input_file, output_file)
+
+    @staticmethod
+    def copy(input_file, output_file):
+        shutil.copy2(input_file, output_file)
 
     @staticmethod
     def rename(input_file, output_file):
@@ -789,15 +811,23 @@ class Process():
             command_ = "killall " + str(process)
             os.system(command_)
     @staticmethod
-    def start(*arguments, new_window=False):
-        if new_window is True:
+    def start(*arguments, new_window=False, debug=False, pureshell=False):
+        if debug:
+            debug_print("Process.start arguments", arguments)
+        if new_window or pureshell:
             for argument_ in arguments:
                 if " " in argument_:
-                    argument_ = Str.to_quotes(argument_)
+                    if get_os() == "windows":
+                        argument_ = Str.to_quotes(argument_)
+                    else:
+                        argument_ = Str.to_quotes_2(argument_)
                 try:
                     command = command + " " + argument_
                 except NameError:
-                    command = 'start "" ' + argument_
+                    if new_window:
+                        command = 'start "" ' + argument_
+                    else:
+                        command = argument_
             os.system(command)
         else:
             commands = []
@@ -1009,7 +1039,9 @@ class Random:
 class Wget:
     @staticmethod
     def download(url, output):
-        Process.start("wget", "url", "-O", "url")
+        url = url.replace("&", backslash + "&")
+        onestring = "wget " + url + " -O " + output
+        Process.start("wget", url, "-O", output, pureshell=True)
 
 
 class Learning():

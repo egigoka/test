@@ -287,6 +287,20 @@ if True:
     # bugfix Path.extend
     __version__ = "7.4.0alpha4"
     # bugfix Path.extend
+    __version__ = "7.4.0alpha5"
+    # bugfix Wget.download
+    __version__ = "7.4.0alpha6"
+    # bugfix Path.extend
+    __version__ = "7.4.0alpha7"
+    # bugfix Wget.download
+    __version__ = "7.4.0alpha8"
+    # bugfix Wget.download
+    # f Str.to_quotes_2
+    # Process.start now more crossplatfowm
+    # debug option to Process.start
+    # pureshell option to Process.start
+    __version__ = "7.5.0alpha1"
+    # substring is now warning and moved to Str.substring
 
 
 
@@ -303,7 +317,8 @@ import os, \
        subprocess, \
        datetime, \
        re, \
-	   ctypes
+	   ctypes, \
+       pyautogui
 from tkinter import *
 
 
@@ -346,6 +361,10 @@ class Str:
         return '"' + str(some_string) + '"'
 
     @staticmethod
+    def to_quotes_2(some_string):
+        return '"' + str(some_string) + '"'
+
+    @staticmethod
     def get_integers(string): # todo support for -
         string = str(string)
         integer_found = False
@@ -368,6 +387,7 @@ class Str:
             integer_found = False
         return integers
 
+    @staticmethod
     def newlines_to_strings(string):
         if get_os() == "windows":
             strings = string.split(newline2)
@@ -379,6 +399,7 @@ class Str:
     def nl(cls,string):
         return cls.newlines_to_strings(string=string)
 
+    @staticmethod
     def split_every(string, chars):
         chars = int(chars)
         output_lines = []
@@ -402,6 +423,23 @@ class Str:
     @classmethod
     def rightpad(cls, string, leng, ch="0"):
         return cls.leftpad(string, leng, ch=ch, rightpad=True)
+
+    def substring(string, before, after=None):
+        startfrom = string.find(before)
+        if startfrom != -1:
+            startfrom = string.find(before) + len(before)
+        else:
+            startfrom = 0
+        if after:
+            end_at = string[startfrom:].find(after)
+            if end_at != -1:
+                end_at = startfrom + string[startfrom:].find(after)
+                substring = string[startfrom:end_at]
+            else:
+                substring = string[startfrom:]
+        else:
+            substring = string[startfrom:]
+        return substring
 
 
 class Console():
@@ -490,6 +528,8 @@ class Path:
                     path = path_
                 elif (get_os() == "macos") or (get_os() == "linux"):
                     if path_ == "..":
+                        path = path_
+                    elif path_ == ".":
                         path = path_
                     else:
                         path = os.path.join(os.sep, path_)
@@ -636,6 +676,10 @@ class File:
     @staticmethod
     def move(input_file, output_file):
         shutil.move(input_file, output_file)
+
+    @staticmethod
+    def copy(input_file, output_file):
+        shutil.copy2(input_file, output_file)
 
     @staticmethod
     def rename(input_file, output_file):
@@ -789,15 +833,23 @@ class Process():
             command_ = "killall " + str(process)
             os.system(command_)
     @staticmethod
-    def start(*arguments, new_window=False):
-        if new_window is True:
+    def start(*arguments, new_window=False, debug=False, pureshell=False):
+        if debug:
+            debug_print("Process.start arguments", arguments)
+        if new_window or pureshell:
             for argument_ in arguments:
                 if " " in argument_:
-                    argument_ = Str.to_quotes(argument_)
+                    if get_os() == "windows":
+                        argument_ = Str.to_quotes(argument_)
+                    else:
+                        argument_ = Str.to_quotes_2(argument_)
                 try:
                     command = command + " " + argument_
                 except NameError:
-                    command = 'start "" ' + argument_
+                    if new_window:
+                        command = 'start "" ' + argument_
+                    else:
+                        command = argument_
             os.system(command)
         else:
             commands = []
@@ -921,22 +973,14 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
     return output_int
 
 
-def substring(string, before, after=None):
-    startfrom = string.find(before)
-    if startfrom != -1:
-        startfrom = string.find(before) + len(before)
-    else:
-        startfrom = 0
-    if after:
-        end_at = string[startfrom:].find(after)
-        if end_at != -1:
-            end_at = startfrom + string[startfrom:].find(after)
-            substring = string[startfrom:end_at]
-        else:
-            substring = string[startfrom:]
-    else:
-        substring = string[startfrom:]
-    return substring
+
+
+def warning(message):
+    pyautogui.alert('This displays some text with an OK button.')
+
+def substring(string, before, after=None)
+    warning("substring now in Str.substring!!!!!")
+    return Srt.substring(string, before, after=after)
 
 
 def getDomainOfUrl(url):
@@ -1009,7 +1053,9 @@ class Random:
 class Wget:
     @staticmethod
     def download(url, output):
-        Process.start("wget", "url", "-O", "url")
+        url = url.replace("&", backslash + "&")
+        onestring = "wget " + url + " -O " + output
+        Process.start("wget", url, "-O", output, pureshell=True)
 
 
 class Learning():
