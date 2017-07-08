@@ -1,7 +1,13 @@
 #! python3
 # -*- coding: utf-8 -*-
 
+try:  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
+    from BeautifulSoup import BeautifulSoup
+except ImportError:
+    from bs4 import BeautifulSoup
+
 from commands7 import *
+import myhtmlsheetyparser
 
 File.copy(Path.extend("..","..","commands7.py"), "commands7.py")
 
@@ -50,9 +56,9 @@ class Url:
 class Page():
     pages = []
     @classmethod
-    def get(cls):
+    def get(cls, debug=False):
         # define ouput file name
-        filename = State.product + 'in' + State.region + str(Url.page+1) + ".html"
+        filename = State.product + '_in_' + State.region + str(Url.page+1) + ".html"
         # define path to output file
         output = Path.extend(".", State.subfolder, filename)
         # download file
@@ -64,15 +70,23 @@ class Page():
         page_info = Str.substring(page_info,
                                   before = '<div class="catalog-list clearfix">',
                                   after='<div class="avito-ads-container">')
+        if debug:
+            Process.start("atom", output)
         return page_info
 
 
+page = Page.get()
+#debug_print("page", page)
+page_lines = Str.newlines_to_strings(page)
+#debug_print("page_lines", page_lines)
 
-debug_print("Page.get()", Page.get())
-
-
-
-
-
-
-Process.start("atom", output)
+parsed = BeautifulSoup(page, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
+#debug_print("parsed", parsed)
+parsed = parsed.prettify()
+print(parsed)
+sys.exit()
+parsed_lines = Str.newlines_to_strings(parsed)
+for line in parsed_lines:
+    line = line.lstrip(" ")
+    myhtmlsheetyparser.s_print(line)
+#print (parsed_html.body.find('div', attrs={'class':'container'}).text)

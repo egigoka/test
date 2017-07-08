@@ -301,6 +301,7 @@ if True:
     # pureshell option to Process.start
     __version__ = "7.5.0alpha1"
     # substring is now warning and moved to Str.substring
+    # Str.strings_to_newlines arg quiet
 
 
 
@@ -355,6 +356,16 @@ def is_python3():
     return is_true
 
 
+def debug_print(*arguments):
+    con_w = Console.width()
+    print("Debug sheet:")
+    for arg in arguments:
+        line = "-" * con_w
+        print(line, end="")
+        print(arg)
+        print(line)
+
+
 class Str:
     @staticmethod
     def to_quotes(some_string):
@@ -388,12 +399,17 @@ class Str:
         return integers
 
     @staticmethod
-    def newlines_to_strings(string):
-        if get_os() == "windows":
-            strings = string.split(newline2)
-        elif get_os() in ["macos", "linux"]:
-            strings = string.split(newline)
-        return strings
+    def newlines_to_strings(string, quiet=False):
+        if string:
+            string = str(string)
+            if get_os() == "windows":
+                strings = string.split(newline2)
+            elif get_os() in ["macos", "linux"]:
+                strings = string.split(newline)
+            return strings
+        else:
+            if not quiet:
+                print("None can't be splitted")
 
     @classmethod
     def nl(cls,string):
@@ -813,14 +829,7 @@ class Json():
                           Path.full(sys.argv[0]))
 
 
-def debug_print(*arguments):
-    con_w = Console.width()
-    print("Debug sheet:")
-    for arg in arguments:
-        line = "-" * con_w
-        print(line, end="")
-        print(arg)
-        print(line)
+
 
 
 class Process():
@@ -978,7 +987,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
 def warning(message):
     pyautogui.alert('This displays some text with an OK button.')
 
-def substring(string, before, after=None)
+def substring(string, before, after=None):
     warning("substring now in Str.substring!!!!!")
     return Srt.substring(string, before, after=after)
 

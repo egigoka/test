@@ -299,6 +299,9 @@ if True:
     # Process.start now more crossplatfowm
     # debug option to Process.start
     # pureshell option to Process.start
+    __version__ = "7.5.0alpha1"
+    # substring is now warning and moved to Str.substring
+    # Str.strings_to_newlines arg quiet
 
 
 
@@ -315,7 +318,8 @@ import os, \
        subprocess, \
        datetime, \
        re, \
-	   ctypes
+	   ctypes, \
+       pyautogui
 from tkinter import *
 
 
@@ -352,6 +356,16 @@ def is_python3():
     return is_true
 
 
+def debug_print(*arguments):
+    con_w = Console.width()
+    print("Debug sheet:")
+    for arg in arguments:
+        line = "-" * con_w
+        print(line, end="")
+        print(arg)
+        print(line)
+
+
 class Str:
     @staticmethod
     def to_quotes(some_string):
@@ -384,17 +398,24 @@ class Str:
             integer_found = False
         return integers
 
-    def newlines_to_strings(string):
-        if get_os() == "windows":
-            strings = string.split(newline2)
-        elif get_os() in ["macos", "linux"]:
-            strings = string.split(newline)
-        return strings
+    @staticmethod
+    def newlines_to_strings(string, quiet=False):
+        if string:
+            string = str(string)
+            if get_os() == "windows":
+                strings = string.split(newline2)
+            elif get_os() in ["macos", "linux"]:
+                strings = string.split(newline)
+            return strings
+        else:
+            if not quiet:
+                print("None can't be splitted")
 
     @classmethod
     def nl(cls,string):
         return cls.newlines_to_strings(string=string)
 
+    @staticmethod
     def split_every(string, chars):
         chars = int(chars)
         output_lines = []
@@ -418,6 +439,23 @@ class Str:
     @classmethod
     def rightpad(cls, string, leng, ch="0"):
         return cls.leftpad(string, leng, ch=ch, rightpad=True)
+
+    def substring(string, before, after=None):
+        startfrom = string.find(before)
+        if startfrom != -1:
+            startfrom = string.find(before) + len(before)
+        else:
+            startfrom = 0
+        if after:
+            end_at = string[startfrom:].find(after)
+            if end_at != -1:
+                end_at = startfrom + string[startfrom:].find(after)
+                substring = string[startfrom:end_at]
+            else:
+                substring = string[startfrom:]
+        else:
+            substring = string[startfrom:]
+        return substring
 
 
 class Console():
@@ -791,14 +829,7 @@ class Json():
                           Path.full(sys.argv[0]))
 
 
-def debug_print(*arguments):
-    con_w = Console.width()
-    print("Debug sheet:")
-    for arg in arguments:
-        line = "-" * con_w
-        print(line, end="")
-        print(arg)
-        print(line)
+
 
 
 class Process():
@@ -951,22 +982,14 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
     return output_int
 
 
+
+
+def warning(message):
+    pyautogui.alert('This displays some text with an OK button.')
+
 def substring(string, before, after=None):
-    startfrom = string.find(before)
-    if startfrom != -1:
-        startfrom = string.find(before) + len(before)
-    else:
-        startfrom = 0
-    if after:
-        end_at = string[startfrom:].find(after)
-        if end_at != -1:
-            end_at = startfrom + string[startfrom:].find(after)
-            substring = string[startfrom:end_at]
-        else:
-            substring = string[startfrom:]
-    else:
-        substring = string[startfrom:]
-    return substring
+    warning("substring now in Str.substring!!!!!")
+    return Srt.substring(string, before, after=after)
 
 
 def getDomainOfUrl(url):
