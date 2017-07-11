@@ -133,7 +133,6 @@ class Page():
                     ptexts = str(p.text).split(" | ")
                     for ptext in ptexts:
                         cnt_p += 1
-                        print(cnt_p, output, ptext)
                         if cnt_p == 1:
                             output[cnt]["group"] = stripify(ptext)
                         elif (len(ptexts) == 2) and (cnt_p == 2):
@@ -141,7 +140,7 @@ class Page():
                         elif (len(ptexts) == 1) and (cnt_p == 2):
                             output[cnt]["city"] = stripify(ptext)
                         else:
-                            print('output['+str(cnt)+']["city"] = stripify('+ptext+')')
+                            output[cnt]["store"] = "__--__"
                             output[cnt]["city"] = stripify(ptext)
             for timedate in item.find_all('div', attrs={'class':['date', 'c-2']}):
                 output[cnt]["time"] = stripify(timedate.text)
