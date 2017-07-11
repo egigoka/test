@@ -302,7 +302,13 @@ if True:
     __version__ = "7.5.0alpha1"
     # substring is now warning and moved to Str.substring
     # Str.strings_to_newlines arg quiet
-
+    __version__ = "7.6.0alpha1"
+    # f File.read
+    # class Repl
+    # f Repl.loop()
+    __version__ = "7.6.0alpha2"
+    # bugfix File.read
+    # Repl.loop safe arg
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -736,9 +742,15 @@ class File:
             print("backup of file", filename, "created as", backupfilename) # all is ok, print that
         return backupfilename
 
+    @staticmethod
     def wipe(path):
         file = open(path, 'w')
         file.close()
+
+    @staticmethod
+    def read(path):
+        with open(path, "r") as f:
+            return f.read()
 
 
 class Time:
@@ -1159,7 +1171,29 @@ class Learning():
             column += 1
 
 
+class Repl:
+    def loop(safe=False):
+        def main():
+            while True:
+                try:
+                    command = input(">>")
+                    exec (command)
+                    exec("print(" + substring(command, before = '', after=' ') + ")", globals())
+                except KeyboardInterrupt:
+                    break
+                except SyntaxError as err:
+                    print(err)
+        if safe:
+            try:
+                main()
+            except:
+                pass
+        else:
+            main()
+
+
 if __name__ == "__main__":
+    Repl.loop()
     #File.backup(r"\\192.168.99.91\shares\scripts\utilsupdate\utils_dev.py")
     #print(rustime(1487646452.7141206))
     #ping(ip="192.168.99.91")
@@ -1168,15 +1202,7 @@ if __name__ == "__main__":
     #print(checkWidthOfConsole())
     #print(checkHeightOfConsole())
     #import UtilsUpdate
-    while True:
-        try:
-            command = input(">>")
-            exec (command)
-            exec("print(" + substring(command, before = '', after=' ') + ")", globals())
-        except KeyboardInterrupt:
-            sys.exit()
-        except SyntaxError as err:
-            print(err)
+
 
 colorama.reinit()
 Bench.time_start = start_bench_no_bench

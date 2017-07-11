@@ -1,20 +1,25 @@
 #! python3
 # -*- coding: utf-8 -*-
 
+import pymongo
 try:  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
     from BeautifulSoup import BeautifulSoup
 except ImportError:
     from bs4 import BeautifulSoup
-
 from commands7 import *
-import myhtmlsheetyparser
 
-File.copy(Path.extend("..","..","commands7.py"), "commands7.py")
+File.copy(Path.extend("..","..","commands7.py"), "commands7.py")  # update c7
 
 
 def urlish(string):
+    # приведение имени в строку, поддерживаемую в url
     string = string.lower()
     string = string.replace(' ', '+')
+    # восстановление полной ссылки из обрезка в html
+    if string[:2] == "//":
+        string = "https:" + string
+    elif string[:1] == "/":
+        string = "https://avito.ru" + string
     return string
 
 
@@ -25,7 +30,22 @@ def avitish(string):
     else:
         raise IndexError("this script doesn't know how avito calls" + string)
 
+def stripify(obj):
+    output = str(obj)
+    #if "|" in output:
+    #    output = output[:output.find("|")]
+    output = output.strip(newline)
+    output = output.strip(" ")
+    return output
 
+
+def dirify(object):
+    print("-"*Console.width())
+    print(object.__class__.__name__)
+    print("-"*Console.width())
+    for subobject in dir(object):
+        if subobject[:1] != "_":
+            print("==>  " + subobject)
 
 
 class State:
@@ -39,7 +59,8 @@ class State:
 
 
 class Url:
-    page = 0
+    page = 1
+    page -= 1
 
     @classmethod
     def get_page(cls):
@@ -63,30 +84,85 @@ class Page():
         output = Path.extend(".", State.subfolder, filename)
         # download file
         Wget.download(Url.get(), output=output)
-        # create blank string to parse
-        onestring = ""
-        with open(output, "r") as f:
-            page_info = f.read()
-        page_info = Str.substring(page_info,
-                                  before = '<div class="catalog-list clearfix">',
-                                  after='<div class="avito-ads-container">')
+        #page_info = Str.substring(File.read(output),
+        #                          before = '<div class="catalog-list clearfix">',
+        #                          after='<div class="avito-ads-container">')
+        page_info = str(File.read(output))
         if debug:
             Process.start("atom", output)
         return page_info
 
+    @classmethod
+    def parse(cls, filename, debug=False, printprettify=False):
+        output = {}
+        parsed = BeautifulSoup(filename, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
+        cnt = 0
+        items = (parsed.find_all('div', attrs={'class':['item','item_table']}))#.text)
+        if debug:
+            cprint("loaded " + str(parsed.head.title.text), "white", "on_grey")
+            cprint("Count of items: " + str(len(items)), "white", "on_grey")
+        for item in items:
+            if printprettify:
+                print(item.prettify())
+                print()
+            cnt += 1
+            output[cnt] = {}
+            try:
+                output[cnt]['mini_photo'] = urlish(item.div.a.img.get('src'))
+            except AttributeError as err:
+                print(err)
+                output[cnt]['mini_photo'] = None
+            try:
+                output[cnt]['name'] = item.div.a.img.get('alt')
+            except AttributeError as err:
+                print(err)
+                output[cnt]['name'] = None
+            try:
+                output[cnt]['url'] = urlish(item.div.a.get('href'))
+            except AttributeError as err:
+                print(err)
+                output[cnt]['url'] = None
+            for price in item.find_all('div', attrs={'class':['about']}):
+                price = stripify(price.text)
+                if "руб." in price:
+                    output[cnt]['name'] = price
+            for dataset in item.find_all('div', attrs={'class':['data']}):
+                cnt = 0
+                for p in dataset.find_all('p'):
+                    cnt += 1
+                    ptexts = str(p.text).split(" | ")
+                    for ptext in ptexts:
+                        if cnt == 1:
+                            output[cnt]["group"] = stripify(ptext)
+                        elif (len(ptexts) == 2) and (cnt == 2):
+                            output[cnt]["store"] = stripify(ptext)
+                        elif (len(ptexts) == 1) and (cnt == 2):
+                            output[cnt]["city"] = stripify(ptext)
+                        else:
+                            output[cnt]["city"] = stripify(ptext)
+            for timedate in item.find_all('div', attrs={'class':['date', 'c-2']}):
+                output[cnt]["time"] = stripify(timedate.text)
+        return output
 
-page = Page.get()
-#debug_print("page", page)
-page_lines = Str.newlines_to_strings(page)
-#debug_print("page_lines", page_lines)
 
-parsed = BeautifulSoup(page, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
-#debug_print("parsed", parsed)
-parsed = parsed.prettify()
-print(parsed)
-sys.exit()
-parsed_lines = Str.newlines_to_strings(parsed)
-for line in parsed_lines:
-    line = line.lstrip(" ")
-    myhtmlsheetyparser.s_print(line)
-#print (parsed_html.body.find('div', attrs={'class':'container'}).text)
+
+
+
+
+
+json_in_memory = {}
+
+
+for i in range(10):
+    filename = Page.get()
+    json_in_memory['page'+Url.get_page()+'_of_'+State.product] = Page.parse(filename, debug=True, printprettify=True)
+
+for page, contents in json_in_memory.items():
+    print(newline + page)
+    for cnt, contents in contents.items():
+        print()
+        print(cnt)
+        for key, value in contents.items():
+            print(key + ":", value)
+
+#print(json_in_memory)
