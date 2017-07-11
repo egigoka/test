@@ -126,7 +126,7 @@ class Page():
             for price in item.find_all('div', attrs={'class':['about']}):
                 price = stripify(price.text)
                 if "руб." in price:
-                    output[cnt]['name'] = price
+                    output[cnt]['price'] = price
             for dataset in item.find_all('div', attrs={'class':['data']}):
                 cnt_p = 0
                 for p in dataset.find_all('p'):
