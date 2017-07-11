@@ -31,7 +31,7 @@ Codegen.start("output.txt")
 count = 0
 for root in roots:
     for suffix in suffixes:
-        Codegen.add_line(prefix + str(root) + suffix)
+        Codegen.add_line(prefix + str(root) + suffix + newline)
         print(prefix, root, suffix, sep='')
         count += 1
 Codegen.end()
