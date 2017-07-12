@@ -27,6 +27,10 @@ domains += ['192.168.99.9']  # solvo_BD ??????
 domains += ['192.168.99.11']  # solvo win print
 domains += ['192.168.99.18']  # keto
 domains += ['192.168.99.91']  # notebook1
+domains += ['192.168.98.81']  # fingerprint
+domains += ['192.168.98.82']  # fingerprint
+domains += ['192.168.98.83']  # fingerprint
+domains += ['192.168.98.84']  # fingerprint
 
 if State.online:
     domains += ['ya.ru']

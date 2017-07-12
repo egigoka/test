@@ -20,11 +20,11 @@ def check_version(utils_py_file):
         check_update(name=utils_py_file, path=path)
     for string in file:
         if ("__version__" in string) and ("=" in string):
-            version = substring(string, "=")
+            version = Str.substring(string, "=")
             if "\n" in version:
                 version = version.rstrip("\n")
-            version = substring(version, "'", "'")
-            version = substring(version, '"', '"')
+            version = Str.substring(version, "'", "'")
+            version = Str.substring(version, '"', '"')
             isDevVersion = False
             if "d" in version:
                isDevVersion = True
@@ -57,23 +57,6 @@ paths["UtilsUpdate"] = {
         "user_path": path_extend("T:", "scripts", "UtilsUpdate", "commands7.py"),
         "package_name": "commands7.py"}
 
-paths["LaTeX_DrBx"] = {
-        "dev_path": path_extend(home_path(), "term", "commands7.py"),
-        "user_path": path_extend(home_path(), "term", "LaTeX", "commands7.py"),
-        "package_name": "commands7.py"}
-paths["LaTeX_DrBx_pycharm"] = {
-        "dev_path": path_extend(home_path(), "term", "pycharm.py"),
-        "user_path": path_extend(home_path(), "term", "LaTeX", "pycharm.py"),
-        "package_name": "pycharm.py"}
-paths["LaTeX_DrBx_fck"] = {
-        "dev_path": path_extend(home_path(), "term", "fuck.bat"),
-        "user_path": path_extend(home_path(), "term", "LaTeX", "fuck.bat"),
-        "package_name": "fuck.bat"}
-paths["LaTeX_DrBx_utilsupdate"] = {
-        "dev_path": path_extend(home_path(), "term", "utilsupdate.bat"),
-        "user_path": path_extend(home_path(), "term", "LaTeX", "utilsupdate.bat"),
-        "package_name": "utilsupdate.bat"}
-
 paths["BartenderPrint_c7"] = {
         "dev_path": path_extend(home_path(), "term", "commands7.py"),
         "user_path": path_extend("T:", "scripts", "BartenderPrint", "commands7.py"),
@@ -104,11 +87,6 @@ paths["Untitled PyCharm Project"] = {
         "dev_path": path_extend(home_path(), "term", "commands7.py"),
         "user_path": path_extend(home_path(), "term", "untitled", "commands7.py"),
         "package_name": "commands7.py"}
-
-paths["Latex drb"] = {
-        "dev_path": path_extend("T:", "scripts", "BartenderPrint", "print_l.py"),
-        "user_path": path_extend(home_path(), "term", "LaTeX", "print.py"),
-        "package_name": "print_l.py"}
 
 
 paths["tripleclick in scripts"] = {
@@ -152,10 +130,6 @@ paths["PyCharm project untitled"] = \
     "package_name": "utils.py"}
 paths["autoshutdown"] = \
     {"user_path": path_extend(scriptsFolder, "autoshutdown", "utils.py"),
-    "dev_path": utils_devPath,
-    "package_name": "utils.py"}
-paths["BarsPrint"] = \
-    {"user_path": path_extend(scriptsFolder, "BarsPrint", "utils.py"),
     "dev_path": utils_devPath,
     "package_name": "utils.py"}
 paths["EQueue"] = \

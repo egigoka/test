@@ -22,6 +22,9 @@ class Arguments:
         ctrl_v = False
         if arg in ["ctrlv"]:  # накладные, привя
             ctrl_v = True
+        lo = False
+        if arg in ["lo"]:  # накладные, привя
+            lo = True
 
 
 class State:
@@ -37,7 +40,7 @@ class State:
 class Click:
     @staticmethod
     def click(button, position):
-        time.sleep(State.sleep_before_click)
+        sleep(State.sleep_before_click)
         if position:
             pyautogui.click(x=position[0],y=position[1],button=button)
         else:
@@ -94,7 +97,7 @@ def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyauto
     pyautogui.moveTo(x, y, duration=duration, tween=tween)
 
 def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
-    time.sleep(State.sleep_before_locate)
+    sleep(State.sleep_before_locate)
     name = get_img_name(*name_shards)
     filename = os.path.split(name)[1]
     position = pyautogui.locateOnScreen(name)
@@ -104,7 +107,7 @@ def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
     if not State.quiet:
         message = "not located " + filename
         if position:
-            message = substring(message, before="not ") + " on " + str(position)
+            message = Str.substring(message, before="not ") + " on " + str(position)
         elif timer:
             message += " timer " + str(Timer.get())
         print(message)
@@ -126,7 +129,7 @@ def wait_locate(*names, every=1, timeout=60, safe=False):
     position = None
     Timer.start()
     while not timeout_reached and not position:
-        time.sleep(every)
+        sleep(every)
         position = locate(*names, safe=True, timer=True)
         timeout_reached = Timer.get() > timeout
     if timeout_reached and not position and not safe:
@@ -162,20 +165,21 @@ class Scroll:
 
 
 class Actions:
-    def wait_for_done():
+    def wait_for_done(fast=False):
         ok_position = None
         while not ok_position:
             try:
-                ok_position = locate("окбелая")
+                ok_position = locate("окбелаяw7", "окбелаяw10")
             except IndexError as err:
                 print (err)
                 try:
-                    time.sleep(2)
+                    sleep(2)
                     ok_position = locate("progressbaremptyw7", "progressbaremptyw10")
-                    if ok_position:
-                        ok_position_2 = wait_locate("окбелая", timeout=10, safe=True)
-                        if ok_position_2:
-                            ok_position = ok_position_2
+                    if not fast:
+                        if ok_position:
+                            ok_position_2 = wait_locate("окбелаяw7", "окбелаяw10", timeout=10, safe=True)
+                            if ok_position_2:
+                                ok_position = ok_position_2
                 except IndexError as err:
                     print(err)
         move(ok_position)
@@ -194,12 +198,17 @@ class Open:
                 def orders(cls):
                     cls.documents()
                     Click.left(move(wait_locate("заказыбел", timeout=10)))
-                    Actions.wait_for_done()
+                    Actions.wait_for_done(fast=True)
                 @classmethod
                 def shipments(cls):
                     cls.documents()
                     Click.left(move(wait_locate("отправкибелая", timeout=10)))
-                    Actions.wait_for_done()
+                    Actions.wait_for_done(fast=True)
+                @classmethod
+                def lo(cls):
+                    cls.documents()
+                    Click.left(move(wait_locate("листыотбораw10", timeout=10)))
+                    Actions.wait_for_done(fast=True)
 
     @staticmethod
     def solvo():
@@ -226,6 +235,26 @@ try:
         def main():
             hotkey('ctrl', 'v')
 
+    if Arguments.lo:
+        def main():
+            try:
+                while True:
+                    Open.solvo()                                                                # открыть солво
+                    Open.Solvo.Menu.Documents.lo()                                              # открыть окно листов отбора
+                    workarea = wait_locate("светлозел", every=1, timeout=30)                    # найти зелёную рабочую область
+                    Click.left(move(workarea))                                                  # нажать левой кнопкой по рабочей области
+                    sleep(1)                                                                    # подождать, пока всё выделится
+                    dropdown = None                                                             # меню не выпало
+                    while not dropdown:                                                         # пока не выпадет меню:
+                        Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
+                        dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
+                    Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
+                    Click.left(move(wait_locate("окмаленькаяw10", every=1, timeout=60)))        # нажать ОК
+                    Actions.wait_for_done()
+            except RuntimeError:
+                Windows.lock()
+    
+            
     if Arguments.single_unload:
         def main():
             try:
@@ -235,7 +264,7 @@ try:
                     workarea = wait_locate("светлозел", every=1, timeout=30)                    # найти зелёную рабочую область
                     Click.left(move(workarea))                                                  # нажать левой кнопкой по рабочей области
                     hotkey('ctrl', 'a')                                                         # выделить всё
-                    time.sleep(State.ctrl_a_sleep)                                              # подождать, пока всё выделится
+                    sleep(State.ctrl_a_sleep)                                              # подождать, пока всё выделится
                     dropdown = None                                                             # меню не выпало
                     while not dropdown:                                                         # пока не выпадет меню:
                         Click.right(move(workarea))                                                 # нажать правой кнопкой по рабочей области
@@ -274,7 +303,6 @@ try:
             while True:
                 Open.solvo()
                 Open.Solvo.Menu.Documents.orders()
-                Actions.wait_for_done()
                 position = None
                 debug_print("position", position)
                 while not position:
