@@ -155,10 +155,12 @@ class Page():
 json_in_memory = {}
 
 
-for i in range(10):
+#for i in range(10):
+while True:
     filename = Page.get()
+    reply = Page.preparse()
+    if reply = 429
     json_in_memory['page'+Url.get_page()+'_of_'+State.product] = Page.parse(filename, debug=True)#, printprettify=True)
-
 for page, contents in json_in_memory.items():
     print(newline + page)
     for cnt, contents in contents.items():
