@@ -307,7 +307,7 @@ try:
                 debug_print("position", position)
                 while not position:
                     try:
-                        position = locate("собрансин", "собранзел")
+                        position = locate("собрансиняяw7", "собрансиняяw10", "собранзел")
                     except IndexError as err:
                         print(err)
                         move(wait_locate("светлозел", every=1, timeout=30))
@@ -326,7 +326,7 @@ try:
                     raise RuntimeError('batch in work')
                 position = None
                 while not position:
-                    position = locate("собрансин", "собранбел")  # уже в отправках
+                    position = locate("собрансиняяw7", "собрансиняяw10", "собранбел")  # уже в отправках
                 Click.right(move(position))
                 move(wait_locate("команды...бел", every=0.5, timeout=20))
                 move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
