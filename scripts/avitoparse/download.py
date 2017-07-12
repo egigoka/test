@@ -1,14 +1,15 @@
 #! python3
 # -*- coding: utf-8 -*-
 
-import pymongo
+#import pymongo
 try:  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
     from BeautifulSoup import BeautifulSoup
 except ImportError:
     from bs4 import BeautifulSoup
 from commands7 import *
 
-File.copy(Path.extend("..","..","commands7.py"), "commands7.py")  # update c7
+if get_os() == "macos":
+    File.copy(Path.extend("..","..","commands7.py"), "commands7.py")  # update c7
 
 
 def urlish(string):
@@ -125,20 +126,21 @@ class Page():
             for price in item.find_all('div', attrs={'class':['about']}):
                 price = stripify(price.text)
                 if "руб." in price:
-                    output[cnt]['name'] = price
+                    output[cnt]['price'] = price
             for dataset in item.find_all('div', attrs={'class':['data']}):
-                cnt = 0
+                cnt_p = 0
                 for p in dataset.find_all('p'):
-                    cnt += 1
                     ptexts = str(p.text).split(" | ")
                     for ptext in ptexts:
-                        if cnt == 1:
+                        cnt_p += 1
+                        if cnt_p == 1:
                             output[cnt]["group"] = stripify(ptext)
-                        elif (len(ptexts) == 2) and (cnt == 2):
+                        elif (len(ptexts) == 2) and (cnt_p == 2):
                             output[cnt]["store"] = stripify(ptext)
-                        elif (len(ptexts) == 1) and (cnt == 2):
+                        elif (len(ptexts) == 1) and (cnt_p == 2):
                             output[cnt]["city"] = stripify(ptext)
                         else:
+                            output[cnt]["store"] = "__--__"
                             output[cnt]["city"] = stripify(ptext)
             for timedate in item.find_all('div', attrs={'class':['date', 'c-2']}):
                 output[cnt]["time"] = stripify(timedate.text)
@@ -155,7 +157,7 @@ json_in_memory = {}
 
 for i in range(10):
     filename = Page.get()
-    json_in_memory['page'+Url.get_page()+'_of_'+State.product] = Page.parse(filename, debug=True, printprettify=True)
+    json_in_memory['page'+Url.get_page()+'_of_'+State.product] = Page.parse(filename, debug=True)#, printprettify=True)
 
 for page, contents in json_in_memory.items():
     print(newline + page)
