@@ -285,10 +285,10 @@ try:
                 position = None
                 while not position:
                     try:
-                        position = locate("готовкотгрузкесин", "готовкотгрузкебел")
+                        position = locate("готовкотгрузкесинw7", "готовкотгрузкесинw10", "готовкотгрузкебелw7", "готовкотгрузкесинw10")
                     except IndexError as err:
                         print (err)
-                        move(locate("готовкотгрузкевыделенная"))
+                        move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
                         Scroll.up()
                 move(position)
                 Click.right()

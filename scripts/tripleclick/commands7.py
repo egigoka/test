@@ -277,6 +277,39 @@ if True:
     # f Random.integer
     __version__ = "7.3.0alpha2"
     # f Bench.get
+    __version__ = "7.3.0alpha3"
+    # Process.kill() now support macOS
+    __version__ = "7.4.0alpha1"
+    # f Wget.download()
+    __version__ = "7.4.0alpha2"
+    # bugfix Path.extend
+    __version__ = "7.4.0alpha3"
+    # bugfix Path.extend
+    __version__ = "7.4.0alpha4"
+    # bugfix Path.extend
+    __version__ = "7.4.0alpha5"
+    # bugfix Wget.download
+    __version__ = "7.4.0alpha6"
+    # bugfix Path.extend
+    __version__ = "7.4.0alpha7"
+    # bugfix Wget.download
+    __version__ = "7.4.0alpha8"
+    # bugfix Wget.download
+    # f Str.to_quotes_2
+    # Process.start now more crossplatfowm
+    # debug option to Process.start
+    # pureshell option to Process.start
+    __version__ = "7.5.0alpha1"
+    # substring is now warning and moved to Str.substring
+    # Str.strings_to_newlines arg quiet
+    __version__ = "7.6.0alpha1"
+    # f File.read
+    # class Repl
+    # f Repl.loop()
+    __version__ = "7.6.0alpha2"
+    # bugfix File.read
+    # Repl.loop safe arg
+
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -291,7 +324,8 @@ import os, \
        subprocess, \
        datetime, \
        re, \
-	   ctypes
+	   ctypes, \
+       pyautogui
 from tkinter import *
 
 
@@ -328,9 +362,23 @@ def is_python3():
     return is_true
 
 
+def debug_print(*arguments):
+    con_w = Console.width()
+    print("Debug sheet:")
+    for arg in arguments:
+        line = "-" * con_w
+        print(line, end="")
+        print(arg)
+        print(line)
+
+
 class Str:
     @staticmethod
     def to_quotes(some_string):
+        return '"' + str(some_string) + '"'
+
+    @staticmethod
+    def to_quotes_2(some_string):
         return '"' + str(some_string) + '"'
 
     @staticmethod
@@ -356,17 +404,24 @@ class Str:
             integer_found = False
         return integers
 
-    def newlines_to_strings(string):
-        if get_os() == "windows":
-            strings = string.split(newline2)
-        elif get_os() in ["macos", "linux"]:
-            strings = string.split(newline)
-        return strings
+    @staticmethod
+    def newlines_to_strings(string, quiet=False):
+        if string:
+            string = str(string)
+            if get_os() == "windows":
+                strings = string.split(newline2)
+            elif get_os() in ["macos", "linux"]:
+                strings = string.split(newline)
+            return strings
+        else:
+            if not quiet:
+                print("None can't be splitted")
 
     @classmethod
     def nl(cls,string):
         return cls.newlines_to_strings(string=string)
 
+    @staticmethod
     def split_every(string, chars):
         chars = int(chars)
         output_lines = []
@@ -390,6 +445,24 @@ class Str:
     @classmethod
     def rightpad(cls, string, leng, ch="0"):
         return cls.leftpad(string, leng, ch=ch, rightpad=True)
+
+    @staticmethod
+    def substring(string, before, after=None):
+        startfrom = string.find(before)
+        if startfrom != -1:
+            startfrom = string.find(before) + len(before)
+        else:
+            startfrom = 0
+        if after:
+            end_at = string[startfrom:].find(after)
+            if end_at != -1:
+                end_at = startfrom + string[startfrom:].find(after)
+                substring = string[startfrom:end_at]
+            else:
+                substring = string[startfrom:]
+        else:
+            substring = string[startfrom:]
+        return substring
 
 
 class Console():
@@ -477,7 +550,15 @@ class Path:
                 elif get_os() == "windows":
                     path = path_
                 elif (get_os() == "macos") or (get_os() == "linux"):
-                    path = os.path.join(os.sep, path_)
+                    if path_ == "..":
+                        path = path_
+                    elif path_ == ".":
+                        path = path_
+                    else:
+                        path = os.path.join(os.sep, path_)
+                else:
+                    raise FileNotFoundError("path_" + str(path_) + "is not expected")
+
         return path
 
     @staticmethod
@@ -620,6 +701,10 @@ class File:
         shutil.move(input_file, output_file)
 
     @staticmethod
+    def copy(input_file, output_file):
+        shutil.copy2(input_file, output_file)
+
+    @staticmethod
     def rename(input_file, output_file):
         File.move(input_file, output_file)
 
@@ -658,9 +743,15 @@ class File:
             print("backup of file", filename, "created as", backupfilename) # all is ok, print that
         return backupfilename
 
+    @staticmethod
     def wipe(path):
         file = open(path, 'w')
         file.close()
+
+    @staticmethod
+    def read(path):
+        with open(path, "r") as f:
+            return f.read()
 
 
 class Time:
@@ -751,14 +842,7 @@ class Json():
                           Path.full(sys.argv[0]))
 
 
-def debug_print(*arguments):
-    con_w = Console.width()
-    print("Debug sheet:")
-    for arg in arguments:
-        line = "-" * con_w
-        print(line, end="")
-        print(arg)
-        print(line)
+
 
 
 class Process():
@@ -767,16 +851,27 @@ class Process():
         if get_os() == "windows":
             command_ = "taskkill /f /im " + str(process) + ".exe"
             os.system(command_)
+        if get_os() == "macos":
+            command_ = "killall " + str(process)
+            os.system(command_)
     @staticmethod
-    def start(*arguments, new_window=False):
-        if new_window is True:
+    def start(*arguments, new_window=False, debug=False, pureshell=False):
+        if debug:
+            debug_print("Process.start arguments", arguments)
+        if new_window or pureshell:
             for argument_ in arguments:
                 if " " in argument_:
-                    argument_ = Str.to_quotes(argument_)
+                    if get_os() == "windows":
+                        argument_ = Str.to_quotes(argument_)
+                    else:
+                        argument_ = Str.to_quotes_2(argument_)
                 try:
                     command = command + " " + argument_
                 except NameError:
-                    command = 'start "" ' + argument_
+                    if new_window:
+                        command = 'start "" ' + argument_
+                    else:
+                        command = argument_
             os.system(command)
         else:
             commands = []
@@ -900,28 +995,20 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
     return output_int
 
 
+
+
+def warning(message):
+    pyautogui.alert('This displays some text with an OK button.')
+
 def substring(string, before, after=None):
-    startfrom = string.find(before)
-    if startfrom != -1:
-        startfrom = string.find(before) + len(before)
-    else:
-        startfrom = 0
-    if after:
-        end_at = string[startfrom:].find(after)
-        if end_at != -1:
-            end_at = startfrom + string[startfrom:].find(after)
-            substring = string[startfrom:end_at]
-        else:
-            substring = string[startfrom:]
-    else:
-        substring = string[startfrom:]
-    return substring
+    warning(message="substring now in Str.substring!!!!!")
+    return Str.substring(string, before, after=after)
 
 
 def getDomainOfUrl(url):
-    url_output = substring(url, "://", "/")
+    url_output = Str.substring(url, "://", "/")
     if url_output == "":
-        url_output = substring(url, "://")
+        url_output = Str.substring(url, "://")
     return url_output
 
 
@@ -933,7 +1020,7 @@ class Bench:
     @classmethod
     def start(cls):
         cls.time_start = datetime.datetime.now()
-        
+
     @classmethod
     def get(cls):
         cls.time_end = datetime.datetime.now()
@@ -976,13 +1063,21 @@ class Tkinter():
 class Windows:
     @staticmethod
     def lock():
-        ctypes.windll.LockWorkStation()
+        ctypes.windll.LockWorkStation()  # todo fix Windows 10
 
 
 class Random:
     @staticmethod
     def integer(min=0, max=100):
         return random.randrange(min, max+1)
+
+
+class Wget:
+    @staticmethod
+    def download(url, output):
+        url = url.replace("&", backslash + "&")
+        onestring = "wget " + url + " -O " + output
+        Process.start("wget", url, "-O", output, pureshell=True)
 
 
 class Learning():
@@ -1077,7 +1172,29 @@ class Learning():
             column += 1
 
 
+class Repl:
+    def loop(safe=False):
+        def main():
+            while True:
+                try:
+                    command = input(">>")
+                    exec (command)
+                    exec("print(" + Str.substring(command, before = '', after=' ') + ")", globals())
+                except KeyboardInterrupt:
+                    break
+                except SyntaxError as err:
+                    print(err)
+        if safe:
+            try:
+                main()
+            except:
+                pass
+        else:
+            main()
+
+
 if __name__ == "__main__":
+    Repl.loop()
     #File.backup(r"\\192.168.99.91\shares\scripts\utilsupdate\utils_dev.py")
     #print(rustime(1487646452.7141206))
     #ping(ip="192.168.99.91")
@@ -1086,15 +1203,7 @@ if __name__ == "__main__":
     #print(checkWidthOfConsole())
     #print(checkHeightOfConsole())
     #import UtilsUpdate
-    while True:
-        try:
-            command = input(">>")
-            exec (command)
-            exec("print(" + substring(command, before = '', after=' ') + ")", globals())
-        except KeyboardInterrupt:
-            sys.exit()
-        except SyntaxError as err:
-            print(err)
+
 
 colorama.reinit()
 Bench.time_start = start_bench_no_bench
