@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from commands7 import *
-File.copy(Path.extend("..", "..", "commands7.py"), "commands7.py")
+if get_os() == "macos":
+    File.copy(Path.extend("..", "..", "commands7.py"), "commands7.py")
 
 
 prefix = "S41-"
-cnt_start = 25
-cnt_end = 33
+cnt_start = 1
+cnt_end = 36
 roots = range(cnt_start, cnt_end+1)
 suffixes = []
 #suffixes.append("-0A")
