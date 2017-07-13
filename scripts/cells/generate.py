@@ -6,19 +6,19 @@ File.copy(Path.extend("..", "..", "commands7.py"), "commands7.py")
 
 
 prefix = "S41-"
-cnt_start = 25
-cnt_end = 33
+cnt_start = 1
+cnt_end = 9
 roots = range(cnt_start, cnt_end+1)
 suffixes = []
 #suffixes.append("-0A")
 #suffixes.append("-0B")
 #suffixes.append("-0C")
 suffixes.append("-1A")
-#suffixes.append("-1B")
-#suffixes.append("-1C")
+suffixes.append("-1B")
+suffixes.append("-1C")
 suffixes.append("-2A")
-#suffixes.append("-2B")
-#suffixes.append("-2C")
+suffixes.append("-2B")
+suffixes.append("-2C")
 #suffixes.append("-3")
 #suffixes.append("-4")
 #suffixes.append("-5")
@@ -30,6 +30,7 @@ for prefix in [prefix, "S10-", "S11-", "S12-", "S13-", "S14-", "S48-"]:
     Codegen.start("output.txt")
     for root in roots:
         for suffix in suffixes:
+            root = Str.leftpad(root, 2, 0)
             Codegen.add_line(prefix + str(root) + suffix + newline)
             print(prefix, root, suffix, sep='')
             count += 1
