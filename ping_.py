@@ -19,6 +19,9 @@ class State:
     online = False
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
+    no81 = False
+    if ("-no81" in sys.argv):
+        no81 = True
 
 domains = ['192.168.99.3']  # solvo
 domains += ['192.168.99.7']  # solvo1
@@ -27,7 +30,8 @@ domains += ['192.168.99.9']  # solvo_BD ??????
 domains += ['192.168.99.11']  # solvo win print
 domains += ['192.168.99.18']  # keto
 domains += ['192.168.99.91']  # notebook1
-domains += ['192.168.98.81']  # fingerprint
+if not State.no81:
+    domains += ['192.168.98.81']  # fingerprint
 domains += ['192.168.98.82']  # fingerprint
 domains += ['192.168.98.83']  # fingerprint
 domains += ['192.168.98.84']  # fingerprint

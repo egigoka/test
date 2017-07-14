@@ -53,6 +53,7 @@ class State:
     product = urlish("iPhone SE")
     region = avitish("Russia")
     subfolder = "test"
+    usual_number_of_ads = 53
 
 
 
@@ -76,7 +77,26 @@ class Url:
 
 
 class Page():
-    pages = []
+
+    class Last(cls):
+        html = ""
+        parsed = {}
+        filename = ""
+        title = ""
+        ads = 0
+        status = 204
+
+
+    class Get(cls):
+        print("!!!", cls.Last.html, "!!!")
+        @classmethod
+        def status(cls):
+            if cls.Last.title = "Доступ временно заблокирован":
+                cls.Last.status = 429  # too many requests
+            elif cls.Last.ads != State.usual_number_of_ads:
+                cls.Last.status = 206  # partial content
+
+
     @classmethod
     def get(cls, debug=False):
         # define ouput file name
@@ -146,7 +166,9 @@ class Page():
                 output[cnt]["time"] = stripify(timedate.text)
         return output
 
-
+    @classmethod
+    def reload(cls):
+        
 
 
 
