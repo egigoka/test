@@ -249,7 +249,7 @@ try:
                         Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
                         dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
                     Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
-                    Click.left(move(wait_locate("окмаленькаяw10", every=1, timeout=60)))        # нажать ОК
+                    Click.left(move(wait_locate("окмаленькаяw10", "окмаленькаяw7", every=1, timeout=60)))        # нажать ОК
                     Actions.wait_for_done()
             except RuntimeError:
                 Windows.lock()
