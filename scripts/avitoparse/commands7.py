@@ -309,6 +309,11 @@ if True:
     __version__ = "7.6.0alpha2"
     # bugfix File.read
     # Repl.loop safe arg
+    __version__ = "7.6.0alpha3"
+    # Str.leftpad bugfix
+    __version__ = "7.7.0aplha1"
+    # class Int
+    # f Int.from_to
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -434,6 +439,7 @@ class Str:
 
     @staticmethod
     def leftpad(string, leng, ch="0", rightpad=False):
+        string = str(string)
         if len(string) >= leng:
             return string
         strOfCh = str(ch) * leng
@@ -847,12 +853,12 @@ class Json():
 
 class Process():
     @staticmethod
-    def kill(name):
+    def kill(process):
         if get_os() == "windows":
-            command_ = "taskkill /f /im " + str(name) + ".exe"
+            command_ = "taskkill /f /im " + str(process) + ".exe"
             os.system(command_)
         if get_os() == "macos":
-            command_ = "killall " + str(name)
+            command_ = "killall " + str(process)
             os.system(command_)
     @staticmethod
     def start(*arguments, new_window=False, debug=False, pureshell=False):
@@ -1078,6 +1084,19 @@ class Wget:
         url = url.replace("&", backslash + "&")
         onestring = "wget " + url + " -O " + output
         Process.start("wget", url, "-O", output, pureshell=True)
+
+class Int:
+    @staticmethod
+    def from_to(start, end, str=False):
+        roots = range(start, end + 1)
+        if str:
+            output = []
+            max_len = max(len(str(start)), len(str(end)))
+            for root in roots:
+                output.append(Str.leftpad(), max_len, 0)
+            return output
+        else:
+            return roots
 
 
 class Learning():

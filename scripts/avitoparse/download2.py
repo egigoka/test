@@ -63,7 +63,9 @@ class State:
 
 class Page:
 
+    number = None
     html = ""
+    soup = None
     parsed = {}
     filename = ""
     title = ""
@@ -71,29 +73,55 @@ class Page:
     status = 204  # No Content
 
     @classmethod
+    def get_url(cls):
+        url = "https://www.avito.ru/" + State.region + "?p=" + str(cls.number) + \
+              "&s=2&q=" + State.product
+        return url
+
+    @classmethod
     def get_status(cls):
         status = 204  # No Content
         if "Чтобы продолжить пользоваться сайтом, пожалуйста, введите символы с картинки" in cls.html:
             status = 429  # Too Many Requests
+        elif cls.title == "":
+            status = 100  # Continue
+        elif cls.parsed == {}:
+            status = 102  # Processing
         elif cls.ads != State.usual_number_of_ads:
             status = 206  # Partial Content
         elif cls.ads == State.usual_number_of_ads:
-            staus = 200  # OK
+            if cls.title == "":
+                staus = 200  # OK
+
         else:
             raise Exception("not realised")
         return status
 
     @classmethod
     def load(cls, nubmer):
-        
-        raise Exception("not realised")
+        filename = State.product + '_in_' + State.region + "_" + str(cls.number) + ".html"  # define ouput file name
+        output = Path.extend(".", State.subfolder, filename)  # define path to output file
+        Wget.download(cls.get_url(), output=output)  # download file
+        cls.html = str(File.read(output))
         cls.status = cls.get_status()
 
+    @classmethod
+    def preparse(cls):
+        cls.soup = BeautifulSoup(cls.html, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
+        cls.title = str(cls.soup.head.title.text)
+        cls.status = cls.get_status()
+        raise Exception("not realised")
+
+    @classmethod
+    def parse(cls):
+        raise Exception("not realised")
+
 pages = {}
-def load_pages(product, region, subfolder=State.subfolder, usual_number_of_ads=State.usual_number_of_ads):
 
-    pages[cnt] = Page
+# def load_pages(product, region, subfolder=State.subfolder, usual_number_of_ads=State.usual_number_of_ads):
 
-    raise Exception("not realised")
+#    pages[cnt] = Page
 
-load_pages(product=State.product, region=State.region)
+#    raise Exception("not realised")
+
+# load_pages(product=State.product, region=State.region)

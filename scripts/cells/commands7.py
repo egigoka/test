@@ -311,6 +311,9 @@ if True:
     # Repl.loop safe arg
     __version__ = "7.6.0alpha3"
     # Str.leftpad bugfix
+    __version__ = "7.7.0aplha1"
+    # class Int
+    # f Int.from_to
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -1081,6 +1084,19 @@ class Wget:
         url = url.replace("&", backslash + "&")
         onestring = "wget " + url + " -O " + output
         Process.start("wget", url, "-O", output, pureshell=True)
+
+class Int:
+    @staticmethod
+    def from_to(start, end, to_str=False):
+        roots = range(start, end + 1)
+        if to_str:
+            output = []
+            max_len = max(len(str(start)), len(str(end)))
+            for root in roots:
+                output.append(Str.leftpad(root, max_len, 0))
+            return output
+        else:
+            return roots
 
 
 class Learning():

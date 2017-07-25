@@ -7,9 +7,7 @@ if get_os() == "macos":
 
 
 prefix = "S47-"
-cnt_start = 28
-cnt_end = 33
-roots = range(cnt_start, cnt_end+1)
+roots = Int.from_to(1, 33, to_str=True)
 suffixes = []
 #suffixes.append("-0A")
 #suffixes.append("-0B")
@@ -33,7 +31,7 @@ if True:
     for root in roots:
         for suffix in suffixes:
             root = Str.leftpad(root, 2, 0)
-            Codegen.add_line(prefix + str(root) + suffix + newline)
+            Codegen.add_line(prefix + root + suffix + newline)
             print(prefix, root, suffix, sep='')
             count += 1
     Codegen.end()
