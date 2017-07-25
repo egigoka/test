@@ -164,6 +164,16 @@ class Scroll:
         cls.scroll(value, up=False)
 
 
+class Exceptions:
+    class Check:
+        @staticmethod
+        def must_be_in_work():
+            sleep(2)
+            position = locate("mustbeinwork", safe=True)
+            if position:
+                message("LO must be in work!")
+        
+
 class Actions:
     def wait_for_done(fast=False):
         ok_position = None
@@ -250,6 +260,7 @@ try:
                         dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
                     Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
                     Click.left(move(wait_locate("окмаленькаяw10", "окмаленькаяw7", every=1, timeout=60)))        # нажать ОК
+                    Exceptions.Check.must_be_in_work()
                     Actions.wait_for_done()
             except RuntimeError:
                 Windows.lock()

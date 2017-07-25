@@ -6,8 +6,8 @@ if get_os() == "macos":
     File.copy(Path.extend("..", "..", "commands7.py"), "commands7.py")
 
 
-prefix = "B34-"
-cnt_start = 1
+prefix = "S47-"
+cnt_start = 28
 cnt_end = 33
 roots = range(cnt_start, cnt_end+1)
 suffixes = []
@@ -17,13 +17,13 @@ suffixes = []
 suffixes.append("-1A")
 suffixes.append("-1B")
 suffixes.append("-1C")
-suffixes.append("-2A")
-suffixes.append("-2B")
-suffixes.append("-2C")
-suffixes.append("-3")
-suffixes.append("-4")
-suffixes.append("-5")
-suffixes.append("-6")
+#suffixes.append("-2A")
+#suffixes.append("-2B")
+#suffixes.append("-2C")
+#suffixes.append("-3")
+#suffixes.append("-4")
+#suffixes.append("-5")
+#suffixes.append("-6")
 #suffixes.append("-7")
 
 count = 0
