@@ -28,8 +28,10 @@ def avitish(string):
     string = urlish(string)
     if string == "russia":
         return "rossiya"
+    elif string == "kurgan+obl":
+        return "kurganskaya_oblast"
     else:
-        raise IndexError("this script doesn't know how avito calls" + string)
+        raise IndexError("this script doesn't know how avito calls " + string)
 
 def stripify(obj):
     output = str(obj)
@@ -51,9 +53,11 @@ def dirify(object):
 
 class State:
     product = urlish("iPhone SE")
+    product = urlish("сим")
     region = avitish("Russia")
+    region = avitish("Kurgan obl")
     subfolder = "test"
-    usual_number_of_ads = 53
+    usual_number_of_ads = 50
 
 
 
@@ -78,7 +82,7 @@ class Url:
 
 class Page():
 
-    class Last(cls):
+    class Last(self):
         html = ""
         parsed = {}
         filename = ""
@@ -87,24 +91,21 @@ class Page():
         status = 204
 
 
-    class Get(cls):
-        print("!!!", cls.Last.html, "!!!")
-        @classmethod
-        def status(cls):
-            if cls.Last.title = "Доступ временно заблокирован":
-                cls.Last.status = 429  # too many requests
-            elif cls.Last.ads != State.usual_number_of_ads:
-                cls.Last.status = 206  # partial content
+    #class Get(self):
+    #    print("!!!", self.Last.html, "!!!")
+    #    @classmethod
+    #    def status(cls):
+    #        if cls.Last.title == "Доступ временно заблокирован":
+    #            cls.Last.status = 429  # too many requests
+    #        elif cls.Last.ads != State.usual_number_of_ads:
+    #            cls.Last.status = 206  # partial content
 
 
     @classmethod
     def get(cls, debug=False):
-        # define ouput file name
-        filename = State.product + '_in_' + State.region + str(Url.page+1) + ".html"
-        # define path to output file
-        output = Path.extend(".", State.subfolder, filename)
-        # download file
-        Wget.download(Url.get(), output=output)
+        filename = State.product + '_in_' + State.region + str(Url.page+1) + ".html"  # define ouput file name
+        output = Path.extend(".", State.subfolder, filename)  # define path to output file
+        Wget.download(Url.get(), output=output)  # download file
         #page_info = Str.substring(File.read(output),
         #                          before = '<div class="catalog-list clearfix">',
         #                          after='<div class="avito-ads-container">')
@@ -168,7 +169,8 @@ class Page():
 
     @classmethod
     def reload(cls):
-        
+        pass
+
 
 
 
@@ -180,9 +182,10 @@ json_in_memory = {}
 #for i in range(10):
 while True:
     filename = Page.get()
-    reply = Page.preparse()
-    if reply = 429
-    json_in_memory['page'+Url.get_page()+'_of_'+State.product] = Page.parse(filename, debug=True)#, printprettify=True)
+    #reply = Page.preparse()
+    #if reply == 429:
+    #    pass
+    json_in_memory['page'+Url.get_page()+'_of_'+State.product] = Page.parse(filename)#, debug=True)#, printprettify=True)
 for page, contents in json_in_memory.items():
     print(newline + page)
     for cnt, contents in contents.items():

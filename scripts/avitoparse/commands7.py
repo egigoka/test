@@ -446,6 +446,7 @@ class Str:
     def rightpad(cls, string, leng, ch="0"):
         return cls.leftpad(string, leng, ch=ch, rightpad=True)
 
+    @staticmethod
     def substring(string, before, after=None):
         startfrom = string.find(before)
         if startfrom != -1:
@@ -846,12 +847,12 @@ class Json():
 
 class Process():
     @staticmethod
-    def kill(process):
+    def kill(name):
         if get_os() == "windows":
-            command_ = "taskkill /f /im " + str(process) + ".exe"
+            command_ = "taskkill /f /im " + str(name) + ".exe"
             os.system(command_)
         if get_os() == "macos":
-            command_ = "killall " + str(process)
+            command_ = "killall " + str(name)
             os.system(command_)
     @staticmethod
     def start(*arguments, new_window=False, debug=False, pureshell=False):
@@ -1000,14 +1001,14 @@ def warning(message):
     pyautogui.alert('This displays some text with an OK button.')
 
 def substring(string, before, after=None):
-    warning("substring now in Str.substring!!!!!")
-    return Srt.substring(string, before, after=after)
+    warning(message="substring now in Str.substring!!!!!")
+    return Str.substring(string, before, after=after)
 
 
 def getDomainOfUrl(url):
-    url_output = substring(url, "://", "/")
+    url_output = Str.substring(url, "://", "/")
     if url_output == "":
-        url_output = substring(url, "://")
+        url_output = Str.substring(url, "://")
     return url_output
 
 
@@ -1178,7 +1179,7 @@ class Repl:
                 try:
                     command = input(">>")
                     exec (command)
-                    exec("print(" + substring(command, before = '', after=' ') + ")", globals())
+                    exec("print(" + Str.substring(command, before = '', after=' ') + ")", globals())
                 except KeyboardInterrupt:
                     break
                 except SyntaxError as err:
