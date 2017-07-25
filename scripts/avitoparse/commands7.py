@@ -314,6 +314,8 @@ if True:
     __version__ = "7.7.0aplha1"
     # class Int
     # f Int.from_to
+    __version__ = "7.7.0aplha2"
+    # Int.from_to bugfix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -1087,13 +1089,13 @@ class Wget:
 
 class Int:
     @staticmethod
-    def from_to(start, end, str=False):
+    def from_to(start, end, to_str=False):
         roots = range(start, end + 1)
-        if str:
+        if to_str:
             output = []
             max_len = max(len(str(start)), len(str(end)))
             for root in roots:
-                output.append(Str.leftpad(), max_len, 0)
+                output.append(Str.leftpad(root, max_len, 0))
             return output
         else:
             return roots

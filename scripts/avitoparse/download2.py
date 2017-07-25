@@ -90,15 +90,16 @@ class Page:
         elif cls.ads != State.usual_number_of_ads:
             status = 206  # Partial Content
         elif cls.ads == State.usual_number_of_ads:
-            if cls.title == "":
-                staus = 200  # OK
+            # if cls.title == "":
+            status = 200  # OK
 
         else:
             raise Exception("not realised")
         return status
 
     @classmethod
-    def load(cls, nubmer):
+    def load(cls, number):
+        cls.number = number
         filename = State.product + '_in_' + State.region + "_" + str(cls.number) + ".html"  # define ouput file name
         output = Path.extend(".", State.subfolder, filename)  # define path to output file
         Wget.download(cls.get_url(), output=output)  # download file
@@ -110,13 +111,67 @@ class Page:
         cls.soup = BeautifulSoup(cls.html, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
         cls.title = str(cls.soup.head.title.text)
         cls.status = cls.get_status()
-        raise Exception("not realised")
 
     @classmethod
-    def parse(cls):
-        raise Exception("not realised")
+    def parse(cls, printprettify=False):
+
+        pass
+        items = (cls.soup.find_all('div', attrs={'class': ['item', 'item_table']}))
+        cls.ads = 0
+        for item in items:
+            cls.ads += 1
+            if printprettify:
+                print(item.prettify())
+                print()
+            cls.parsed[cls.ads] = {}
+            try:
+                cls.parsed[cls.ads]['mini_photo'] = urlish(item.div.a.img.get('src'))
+            except AttributeError as err:
+                print(err)
+                cls.parsed[cls.ads]['mini_photo'] = None
+            try:
+                cls.parsed[cls.ads]['name'] = item.div.a.img.get('alt')
+            except AttributeError as err:
+                print(err)
+                cls.parsed[cls.ads]['name'] = None
+            try:
+                cls.parsed[cls.ads]['url'] = urlish(item.div.a.get('href'))
+            except AttributeError as err:
+                print(err)
+                cls.parsed[cls.ads]['url'] = None
+            for price in item.find_all('div', attrs={'class':['about']}):
+                price = stripify(price.text)
+                if "руб." in price:
+                    cls.parsed[cls.ads]['price'] = price
+            for dataset in item.find_all('div', attrs={'class':['data']}):
+                cnt_p = 0
+                for p in dataset.find_all('p'):
+                    ptexts = str(p.text).split(" | ")
+                    for ptext in ptexts:
+                        cnt_p += 1
+                        if cnt_p == 1:
+                            cls.parsed[cls.ads]["group"] = stripify(ptext)
+                        elif (len(ptexts) == 2) and (cnt_p == 2):
+                            cls.parsed[cls.ads]["store"] = stripify(ptext)
+                        elif (len(ptexts) == 1) and (cnt_p == 2):
+                            cls.parsed[cls.ads]["city"] = stripify(ptext)
+                        else:
+                            # cls.parsed[cls.ads]["store"] = "__--__"
+                            cls.parsed[cls.ads]["city"] = stripify(ptext)
+            for timedate in item.find_all('div', attrs={'class': ['date', 'c-2']}):
+                cls.parsed[cls.ads]["time"] = stripify(timedate.text)
+        cls.status = cls.get_status()
 
 pages = {}
+
+Page.load(101)
+Page.preparse()
+#debug_print("Page.title", Page.title)
+cprint("Page.title " + str(Page.title), "grey", "on_white")
+Page.parse()
+cprint("Page.ads " + str(Page.ads), "green", "on_white")
+cprint("Page.get_status() " + str(Page.get_status()), "red", "on_white")
+cprint(json.dumps(Page.parsed, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
 
 # def load_pages(product, region, subfolder=State.subfolder, usual_number_of_ads=State.usual_number_of_ads):
 
