@@ -1,6 +1,8 @@
 # mine sheet
 *.bak
 untitled/test11vk_test_usuless_login.py
+scripts/cells/output.txt
+scripts/avitoparse/test/*.html
 
 # IntelliJ sheet
 .idea/
