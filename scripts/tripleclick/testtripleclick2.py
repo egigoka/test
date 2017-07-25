@@ -249,7 +249,7 @@ try:
                         Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
                         dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
                     Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
-                    Click.left(move(wait_locate("окмаленькаяw10", every=1, timeout=60)))        # нажать ОК
+                    Click.left(move(wait_locate("окмаленькаяw10", "окмаленькаяw7", every=1, timeout=60)))        # нажать ОК
                     Actions.wait_for_done()
             except RuntimeError:
                 Windows.lock()
@@ -257,7 +257,7 @@ try:
             
     if Arguments.single_unload:
         def main():
-            try:
+            #try:
                 while True:
                     Open.solvo()                                                                # открыть солво
                     Open.Solvo.Menu.Documents.orders()                                          # открыть окно заказы
@@ -268,13 +268,13 @@ try:
                     dropdown = None                                                             # меню не выпало
                     while not dropdown:                                                         # пока не выпадет меню:
                         Click.right(move(workarea))                                                 # нажать правой кнопкой по рабочей области
-                        dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)  # найти Команды...
+                        dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)   # найти Команды...
                     Click.left(move(dropdown))                                                  # нажать на Команды...
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))      # нажать на Отгрузить
                     
                     wait_locate("progressbaremptyw7", "progressbaremptyw10", every=15, timeout=600)                      # подождать, пока отгрузится
-            except RuntimeError:
-                Windows.lock()
+            #except RuntimeError:
+            #    Windows.lock()
     
     if Arguments.batch_unload:    # рейсы
         def main():

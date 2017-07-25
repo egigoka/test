@@ -309,6 +309,8 @@ if True:
     __version__ = "7.6.0alpha2"
     # bugfix File.read
     # Repl.loop safe arg
+    __version__ = "7.6.0alpha3"
+    # Str.leftpad bugfix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -434,6 +436,7 @@ class Str:
 
     @staticmethod
     def leftpad(string, leng, ch="0", rightpad=False):
+        string = str(string)
         if len(string) >= leng:
             return string
         strOfCh = str(ch) * leng
