@@ -320,6 +320,8 @@ if True:
     # Path.extend support for ~ path
     __version__ = "7.7.0aplha4"
     # Path.extend bugfix for ~ path
+    __version__ = "7.8.0alpha1"
+    # f Dir.batch_rename
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -676,6 +678,14 @@ class Dir:
                 print("Path", path, "isn't found")
             return None
 
+    @classmethod
+    def batch_rename(cls, directory, input_str, output_str, quiet=False):
+        for filename in cls.contain(directory):
+            if input_str in filename:
+                final_name = filename.replace(input_str, output_str)
+                File.rename(filename, final_name)
+                if not quiet:
+                    print(filename, "renamed to", final_name)
 
 class File:
     @staticmethod
