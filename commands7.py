@@ -318,6 +318,8 @@ if True:
     # Int.from_to bugfix
     __version__ = "7.7.0aplha3"
     # Path.extend support for ~ path
+    __version__ = "7.7.0aplha4"
+    # Path.extend bugfix for ~ path
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -542,13 +544,16 @@ class Console():
 
 
 class Path:
+    @staticmethod
     def full(path):
         return os.path.abspath(path)
 
+    @staticmethod
     def current(self=None):
         return os.path.dirname(os.path.realpath(__file__))
 
-    def extend(*paths):
+    @classmethod
+    def extend(cls, *paths):
         for path_ in paths:
             try:
                 path = os.path.join(str(path), str(path_))
@@ -565,7 +570,7 @@ class Path:
                     elif path_ == ".":
                         path = path_
                     elif path_ == "~":
-                        path = path_
+                        path = cls.home()
                     else:
                         path = os.path.join(os.sep, path_)
                 else:
