@@ -316,6 +316,8 @@ if True:
     # f Int.from_to
     __version__ = "7.7.0aplha2"
     # Int.from_to bugfix
+    __version__ = "7.7.0aplha3"
+    # Path.extend support for ~ path
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -561,6 +563,8 @@ class Path:
                     if path_ == "..":
                         path = path_
                     elif path_ == ".":
+                        path = path_
+                    elif path_ == "~":
                         path = path_
                     else:
                         path = os.path.join(os.sep, path_)
