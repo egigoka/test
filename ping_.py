@@ -24,12 +24,14 @@ class State:
         no81 = True
 
 domains = ['192.168.99.3']  # solvo
+domains += ['192.168.99.5']  # zabbix
 domains += ['192.168.99.7']  # solvo1
 domains += ['192.168.99.8']  # solvo2 ??????
 domains += ['192.168.99.9']  # solvo_BD ??????
 domains += ['192.168.99.11']  # solvo win print
 domains += ['192.168.99.18']  # keto
 domains += ['192.168.99.91']  # notebook1
+domains += ['192.168.99.253']  # share
 if not State.no81:
     domains += ['192.168.98.81']  # fingerprint
 domains += ['192.168.98.82']  # fingerprint
