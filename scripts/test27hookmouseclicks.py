@@ -1,6 +1,10 @@
 #! python3
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.insert(0, "..")
+from commands7 import *
+
 __version__ = "2.0.0"
 # totally redesigned
 __version__ = "2.0.1"
@@ -25,7 +29,7 @@ __version__ = "2.1.1"
 # hm.UnhookMouse()
 
 # Code to check if left or right mouse buttons were pressed
-from commands7 import *
+
 
 state_left = win32api.GetKeyState(0x01)  # Left button down = 0 or 1. Button up = -127 or -128
 # state_right = win32api.GetKeyState(0x02)  # Right button down = 0 or 1. Button up = -127 or -128

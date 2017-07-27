@@ -322,6 +322,10 @@ if True:
     # Path.extend bugfix for ~ path
     __version__ = "7.8.0alpha1"
     # f Dir.batch_rename
+    __version__ = "7.8.0alpha2"
+    # Wget.download fix for blocking by wget user_agent
+    __version__ = "7.8.0alpha3"
+    # Process.start bugfix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -337,9 +341,16 @@ import os, \
        subprocess, \
        datetime, \
        re, \
-	   ctypes, \
-       pyautogui
+       ctypes, \
+       pyautogui, \
+       termcolor, \
+       colorama
 from tkinter import *
+
+# ###############################################!!! HOW TO IMPORT !!!##################################################
+# import sys
+# sys.path.insert(0, "../term")
+# from commands7 import *  # mine commands
 
 
 def get_os():
@@ -350,10 +361,6 @@ def get_os():
     elif sys.platform == "darwin":
         return "macos"
 
-
-import termcolor, \
-       colorama
-
 if get_os() == "windows":
     import win_unicode_console, \
            win32api, \
@@ -362,7 +369,7 @@ if get_os() == "windows":
 # win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
-from termcolor import colored, cprint # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+from termcolor import colored, cprint  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 
 newline = '\n'
 ruble = u"\u20bd"  # \u20bd is ₽
@@ -819,6 +826,24 @@ class Time:
         + str(hour) + ":" + str(minute) + ":" + str(second)
         return rustime
 
+    @staticmethod
+    def sleep(seconds):
+        print("Sleep", seconds, "seconds...")
+        time.sleep(seconds)
+
+    @staticmethod
+    def timer(seconds, print_every=1, check_per_sec=100):
+        Countdown = Bench
+        Countdown.start()
+        print("Timer for", seconds, "sec started")
+        secs_second_var = int(seconds)
+        while Countdown.get() < seconds:
+            time.sleep(1/check_per_sec)
+            secs_left_int = int(seconds - Countdown.get())
+            if secs_left_int != secs_second_var:
+                secs_second_var = secs_left_int
+                print(secs_left_int)
+
 
 class Json():
     @classmethod
@@ -887,7 +912,7 @@ class Process():
             debug_print("Process.start arguments", arguments)
         if new_window or pureshell:
             for argument_ in arguments:
-                if " " in argument_:
+                if " " in argument_ and argument_[:1] != "-":
                     if get_os() == "windows":
                         argument_ = Str.to_quotes(argument_)
                     else:
@@ -1103,8 +1128,13 @@ class Wget:
     @staticmethod
     def download(url, output):
         url = url.replace("&", backslash + "&")
-        onestring = "wget " + url + " -O " + output
-        Process.start("wget", url, "-O", output, pureshell=True)
+        # onestring = "wget " + url + " -O " + output
+        arguments = '--header="Accept: text/html" ' + \
+                    '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) ' + \
+                    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3167.0 Safari/537.36"'
+        Process.start("wget", url, "-O", output, arguments, pureshell=True)
+
+        # Another way to fix blocks by creating ~/.wgetrc file https://stackoverflow.com/a/34166756
 
 class Int:
     @staticmethod

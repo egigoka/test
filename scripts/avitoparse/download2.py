@@ -6,10 +6,9 @@ try:  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
     from BeautifulSoup import BeautifulSoup
 except ImportError:
     from bs4 import BeautifulSoup
-from commands7 import *
-
-if get_os() == "macos":
-    File.copy(Path.extend("..", "..", "commands7.py"), "commands7.py")  # update c7
+import sys
+sys.path.insert(0, "../..")
+from commands7 import *  # mine commands
 
 
 def urlish(string):
@@ -158,21 +157,34 @@ class Page:
                         else:
                             # cls.parsed[cls.ads]["store"] = "__--__"
                             cls.parsed[cls.ads]["city"] = stripify(ptext)
-            for timedate in item.find_all('div', attrs={'class': ['date', 'c-2']}):
-                cls.parsed[cls.ads]["time"] = stripify(timedate.text)
+            for timeanddate in item.find_all('div', attrs={'class': ['date', 'c-2']}):
+                cls.parsed[cls.ads]["time"] = stripify(timeanddate.text)
         cls.status = cls.get_status()
 
+
+#print(Page.get_url())
+#sys.exit()
+
 pages = {}
-
-Page.load(101)
-Page.preparse()
-#debug_print("Page.title", Page.title)
-cprint("Page.title " + str(Page.title), "grey", "on_white")
-Page.parse()
-cprint("Page.ads " + str(Page.ads), "green", "on_white")
-cprint("Page.get_status() " + str(Page.get_status()), "red", "on_white")
-cprint(json.dumps(Page.parsed, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
-
+for cnt in Int.from_to(1,100):
+    def main():
+        Page.load(cnt)
+        Page.preparse()
+        # debug_print("Page.title", Page.title)
+        cprint("Page.title " + str(Page.title), "grey", "on_white")
+        Page.parse()
+        cprint("Page.ads " + str(Page.ads), "green", "on_white")
+        cprint("Page.get_status() " + str(Page.get_status()), "red", "on_white")
+        # cprint(json.dumps(Page.parsed, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
+    while Page.get_status() != 200:
+        main()
+        if Page.status == 429:
+            cprint("Too many requests", "red")
+            time.sleep(60)
+        elif Page.status == 200:
+            pass
+        else:
+            raise Exception("What status is" + str(Page.get_status()))
 # def load_pages(product, region, subfolder=State.subfolder, usual_number_of_ads=State.usual_number_of_ads):
 
 #    pages[cnt] = Page
