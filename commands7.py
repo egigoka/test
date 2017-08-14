@@ -348,8 +348,11 @@ import os, \
 from tkinter import *
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
+# http://python.su/forum/topic/15531/?page=1#post-93316
 # import sys
-# sys.path.insert(0, "../term")
+# sys.path.append("..\..")
+# sys.path.append("../..")
+# sys.path.append(".")
 # from commands7 import *  # mine commands
 
 

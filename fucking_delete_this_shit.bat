@@ -1,2 +1,0 @@
-start Downloads/McSkill 
-exit 

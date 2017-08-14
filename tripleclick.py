@@ -58,10 +58,11 @@ __version__ = "2.2.0"
 
 
 class State:
-    try:
-        time_warn = float(sys.argv[1])
-    except IndexError:
-        time_warn = False
+    #try:
+    #    time_warn = float(sys.argv[1])
+    #except IndexError:
+    #    time_warn = False
+    time_warn = 400.0
     timeout = 1
 
 
