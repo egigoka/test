@@ -4,6 +4,7 @@ untitled/test11vk_test_usuless_login.py
 scripts/cells/output.txt
 scripts/avitoparse/test/*.html
 *.icloud
+Thumbs.db
 
 # IntelliJ sheet
 .idea/
