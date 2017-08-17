@@ -330,13 +330,13 @@ if True:
     # cls OS
     # var OS.name
     # now get_os() is OS.name
-    # var OS.version todo
     # var OS.family
     # warning bugfix
     __version__ = "7.10.0-alpha"
     # new versioning
     # new arg for debug_print - raw
-
+    __version__ = "7.11.0-alpha"
+    # var OS.version todo
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -368,10 +368,12 @@ from tkinter import *
 
 
 class OS:
+    windows_version = None
     if sys.platform == "linux" or sys.platform == "linux2":
         name = "linux"
     elif sys.platform == "win32" or sys.platform == "cygwin":
         name = "windows"
+        windows_version = sys.getwindowsversion()["major"]
     elif sys.platform == "darwin":
         name = "macos"
 
@@ -379,6 +381,8 @@ class OS:
         family = "nt"
     elif name in ["macos", "linux"]:
         family = "unix"
+
+    
 
 
 def get_os():
