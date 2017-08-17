@@ -1,1 +1,1 @@
-start "" "S:\!Проверка лицензий\Support.exe"
+start "" "E:\shares\!Проверка лицензий\Support.exe"

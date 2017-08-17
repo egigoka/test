@@ -121,7 +121,7 @@ def locate(*names, safe=False, timer=False):
         if output_position:
             return output_position
     if not safe:
-        raise IndexError("none finded from " + str(names) + " names")
+        raise IndexError("nothing found from " + str(names) + " names")
 
 
 def wait_locate(*names, every=1, timeout=60, safe=False):
@@ -141,6 +141,8 @@ def hotkey(*args):
     print("pressed", str(args))
 
 def sleep(seconds):
+    if seconds >= 1:
+        print("sleeping", seconds, "seconds")
     time.sleep(seconds)
 
 def message(text, title='some window', button='oh no'):
@@ -270,20 +272,39 @@ try:
         def main():
             #try:
                 while True:
-                    Open.solvo()                                                                # открыть солво
-                    Open.Solvo.Menu.Documents.orders()                                          # открыть окно заказы
-                    workarea = wait_locate("светлозел", every=1, timeout=30)                    # найти зелёную рабочую область
-                    Click.left(move(workarea))                                                  # нажать левой кнопкой по рабочей области
-                    hotkey('ctrl', 'a')                                                         # выделить всё
-                    sleep(State.ctrl_a_sleep)                                              # подождать, пока всё выделится
-                    dropdown = None                                                             # меню не выпало
-                    while not dropdown:                                                         # пока не выпадет меню:
-                        Click.right(move(workarea))                                                 # нажать правой кнопкой по рабочей области
-                        dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)   # найти Команды...
-                    Click.left(move(dropdown))                                                  # нажать на Команды...
-                    Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))      # нажать на Отгрузить
+                    Bench.start()
+                    Open.solvo()                                                                    # открыть солво
+                    Open.Solvo.Menu.Documents.orders()                                              # открыть окно заказы
+                    workarea = wait_locate("светлозел", every=1, timeout=30)                        # найти зелёную рабочую область
+                    Click.left(move(workarea))                                                      # нажать левой кнопкой по рабочей области
+                    hotkey('ctrl', 'a')                                                             # выделить всё
+                    #if OS.windows_version == 10:                                                    # в десятой винде проблема у Солво с хоткеями, зависящими от ctrl, так что городим велосипед
+                    #    Click.left()
+                    #    sleep(10)
+                    #    hotkey('home')
+                    #    sleep(10)
+                    #    #hotkey('shift', 'end')
+                    #    pyautogui.keyDown('shift')
+                    #    pyautogui.press('down')
+                    #    pyautogui.press('down')
+                    #    pyautogui.press('down')
+                    #    sleep(2)
+                    #    pyautogui.keyDown('end')
+                    #    sleep(2)
+                    #    pyautogui.keyUp('end')
+                    #    sleep(2)
+                    #    pyautogui.keyUp('shift')
+                    #    sleep(10)
+                    sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
+                    dropdown = None                                                                 # меню не выпало
+                    while not dropdown:                                                             # пока не выпадет меню:
+                        Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
+                        dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)       # найти Команды...
+                    Click.left(move(dropdown))                                                      # нажать на Команды...
+                    Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))          # нажать на Отгрузить
 
-                    wait_locate("progressbaremptyw7", "progressbaremptyw10", every=15, timeout=600)                      # подождать, пока отгрузится
+                    wait_locate("progressbaremptyw7", "progressbaremptyw10", every=15, timeout=600) # подождать, пока отгрузится
+                    Bench.end()
             #except RuntimeError:
             #    Windows.lock()
 
