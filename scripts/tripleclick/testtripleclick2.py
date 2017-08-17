@@ -32,7 +32,7 @@ class State:
     sleep_before_click = 0.1
     sleep_before_locate = 0.1
     ctrl_a_sleep = 3
-    buttons_pics_folder = Path.extend("T:", "buttonpics")
+    buttons_pics_folder = Path.extend("T:", "scripts", "tripleclick", "buttonpics")
     quiet = False
     get_img_name_quiet = True
 
@@ -47,7 +47,7 @@ class Click:
             pyautogui.click(button=button)
         if not State.quiet:
             print("click mouse " + button)
-
+    
     @classmethod
     def right(cls,position=None):
         cls.click(button='right',position=position)
@@ -111,7 +111,7 @@ def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
         elif timer:
             message += " timer " + str(Timer.get())
         print(message)
-    return position
+    return position           
 
 
 def locate(*names, safe=False, timer=False):
@@ -122,7 +122,7 @@ def locate(*names, safe=False, timer=False):
             return output_position
     if not safe:
         raise IndexError("none finded from " + str(names) + " names")
-
+    
 
 def wait_locate(*names, every=1, timeout=60, safe=False):
     timeout_reached = False
@@ -146,7 +146,7 @@ def sleep(seconds):
 def message(text, title='some window', button='oh no'):
     pyautogui.alert(text=text, title=title, button=button)
 
-class Scroll:
+class Scroll:     
 
     def scroll(value, up):
         value = int(value)
@@ -158,7 +158,7 @@ class Scroll:
     @classmethod
     def up(cls, value=100):
         cls.scroll(value, up=True)
-
+    
     @classmethod
     def down(cls, value=100):
         cls.scroll(value, up=False)
@@ -172,7 +172,7 @@ class Exceptions:
             position = locate("mustbeinwork", safe=True)
             if position:
                 message("LO must be in work!")
-
+        
 
 class Actions:
     def wait_for_done(fast=False):
@@ -193,7 +193,7 @@ class Actions:
                 except IndexError as err:
                     print(err)
         move(ok_position)
-        Click.left()
+        Click.left()        
 
 
 class Open:
@@ -235,12 +235,12 @@ class Open:
 
 
 try:
-
+    
     if Arguments.test:
         def main():
             pass
             # Open.solvo()
-
+    
     if Arguments.ctrl_v:
         def main():
             hotkey('ctrl', 'v')
@@ -264,8 +264,8 @@ try:
                     Actions.wait_for_done()
             except RuntimeError:
                 Windows.lock()
-
-
+    
+            
     if Arguments.single_unload:
         def main():
             #try:
@@ -282,11 +282,11 @@ try:
                         dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)   # найти Команды...
                     Click.left(move(dropdown))                                                  # нажать на Команды...
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))      # нажать на Отгрузить
-
+                    
                     wait_locate("progressbaremptyw7", "progressbaremptyw10", every=15, timeout=600)                      # подождать, пока отгрузится
             #except RuntimeError:
             #    Windows.lock()
-
+    
     if Arguments.batch_unload:    # рейсы
         def main():
             Open.solvo()
@@ -300,10 +300,6 @@ try:
                     except IndexError as err:
                         print (err)
                         move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
-                        if OS.windows_version == 10:
-                            for i in Int.from_to(1,3):
-                                sleep(0.1)
-                                Click.left(move(wait_locate("buttonup", every=0.1, timeout=30)))
                         Scroll.up()
                 move(position)
                 Click.right()
@@ -312,7 +308,7 @@ try:
                 Click.left()
                 Actions.wait_for_done()
                 Bench.end()
-
+            
     if Arguments.single_unload_batch_support:
         def main():
             while True:
@@ -347,11 +343,11 @@ try:
                 move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
                 Click.left()
                 Actions.wait_for_done()
+                
 
-
-
-
-
+                
+                
+                
 except KeyboardInterrupt:
     print("^C")
 

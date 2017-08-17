@@ -336,7 +336,9 @@ if True:
     # new versioning
     # new arg for debug_print - raw
     __version__ = "7.11.0-alpha"
-    # var OS.version todo
+    # var OS.windows_version
+    __version__ = "7.11.1-alpha"
+    # var OS.windows_version bugfix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -373,7 +375,7 @@ class OS:
         name = "linux"
     elif sys.platform == "win32" or sys.platform == "cygwin":
         name = "windows"
-        windows_version = sys.getwindowsversion()["major"]
+        windows_version = sys.getwindowsversion().major
     elif sys.platform == "darwin":
         name = "macos"
 
