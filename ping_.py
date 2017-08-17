@@ -1,4 +1,4 @@
-п»ї#! python3
+#! python3
 __version__ = "2.0.0"
 # going to commands7
 __version__ = "2.0.1"
@@ -40,10 +40,10 @@ domains += ['192.168.98.84']  # fingerprint
 
 if State.online:
     domains += ['ya.ru']
-errDomains = 0  # РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РІРµРґРѕРјРѕ РїР»РѕС…РёС… РґРѕРјРµРЅРѕРІ
-timeout = "5000"  # С‚Р°Р№РјР°СѓС‚ РїРёРЅРіР° РІ РјСЃ
-time_sleep = 60  # Р·Р°РґРµСЂР¶РєР° РїРµСЂРµРґ РЅРѕРІС‹Рј РїСЂРѕС…РѕРґРѕРј РІ СЃ
-count_ping = 2  # РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРїС‹С‚РѕРє
+errDomains = 0  # количество заведомо плохих доменов
+timeout = "5000"  # таймаут пинга в мс
+time_sleep = 60  # задержка перед новым проходом в с
+count_ping = 2  # количество попыток
 
 # debug_print(dir())
 
@@ -66,19 +66,19 @@ def checkfolder(folder, name):
 def main():
     # cnt_workin = 2
     while True:
-        # os.system('cls') # РѕС‡РёСЃС‚РєР° СЌРєСЂР°РЅР°
-        # if cnt_workin <= 1:  # РѕРїСЂРµРґРµР»РµРЅРёРµ С†РІРµС‚Р° РІРµСЂС…РЅРµРіРѕ РїСѓСЃС‚РѕРіРѕ Р±Р»РѕРєР°
+        # os.system('cls') # очистка экрана
+        # if cnt_workin <= 1:  # определение цвета верхнего пустого блока
         #     color_upordown = 'on_red'
         # elif cnt_workin < len(domains)-errDomains:
         #     color_upordown = 'on_yellow'
         # else:
         #     color_upordown = 'on_green'
         cnt_workin = 0
-        cnt_space_h = Console.height() - len(domains)  # Р·Р°РїРѕР»РЅРµРЅРёРµ Р±Р»РѕРєР° С†РІРµС‚РЅС‹РјРё РїСЂРѕР±Р°Р»Р°РјРё
+        cnt_space_h = Console.height() - len(domains)  # заполнение блока цветными пробалами
         while cnt_space_h > 0:
             # cprint(" " * Console.width() *5, 'white', color_upordown, end = '')
             cnt_space_h += -1
-        for hostname in domains:  # СЃРѕРїСЃРЅР°, РїРёРЅРіРѕРІРєР°
+        for hostname in domains:  # сопсна, пинговка
             response = ping(hostname, quiet=True, count=count_ping)
             if response:  # and then check the response...
                 cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end='')
@@ -93,5 +93,5 @@ def main():
                 checkfolder(folder["location"], folder["name"])
         print(Time.rustime())
         print("Sleep...")
-        time.sleep(time_sleep)  # Р·Р°РґРµСЂР¶РєР° РїРµСЂРµРґ РЅРѕРІС‹Рј РїСЂРѕС…РѕРґРѕРј
+        time.sleep(time_sleep)  # задержка перед новым проходом
 main()
