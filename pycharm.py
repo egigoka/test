@@ -1,7 +1,5 @@
 ﻿#! python3
-import sys
-import os
-#from utils import *
+# from utils import *
 from commands7 import *
 __version__ = "1.0.0"
 # init release
@@ -13,10 +11,15 @@ __version__ = "1.0.3"
 # commands7 more support
 __version__ = "1.0.4"
 # bugfix
+__version__ = "1.1.0"
+# macOS support
 
-pycharmName = "pycharm.exe"
-pycharmFolder = r"C:\Program Files (x86)\JetBrains\PyCharm Community Edition 2016.3.2\bin"
-pycharmExec = Path.extend(pycharmFolder, pycharmName)
+if OS.name == "macos":
+    pycharmExec = Path.extend("Applications", "Pycharm CE.app", "Contents", "MacOS", "pycharm")
+elif OS.name == "windows":
+    pycharmName = "pycharm.exe"
+    pycharmFolder = r"C:\Program Files (x86)\JetBrains\PyCharm Community Edition 2016.3.2\bin"
+    pycharmExec = Path.extend(pycharmFolder, pycharmName)
 
 
 # todo menu with items and its settings.json: solvounload, pycharm.py, utilsupdate, utils_dev, bartendernogui,

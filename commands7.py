@@ -101,7 +101,7 @@ if True:
     __version__ = "1.19.0"
     # f isPython3
     __version__ = "1.20.0"
-    # openInNewWindow todo debug
+    # openInNewWindow
     # f getDomainOfUrl
     # enabled getDomainOfUrl in ping
     # const backslash
@@ -312,7 +312,7 @@ if True:
     __version__ = "7.6.0alpha3"
     # Str.leftpad bugfix
     __version__ = "7.7.0aplha1"
-    # class Int
+    # cls Int
     # f Int.from_to
     __version__ = "7.7.0aplha2"
     # Int.from_to bugfix
@@ -326,6 +326,17 @@ if True:
     # Wget.download fix for blocking by wget user_agent
     __version__ = "7.8.0alpha3"
     # Process.start bugfix
+    __version__ = "7.9.0alpha1"
+    # cls OS
+    # var OS.name
+    # now get_os() is OS.name
+    # var OS.version todo
+    # var OS.family
+    # warning bugfix
+    __version__ = "7.10.0-alpha"
+    # new versioning
+    # new arg for debug_print - raw
+
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -356,15 +367,25 @@ from tkinter import *
 # from commands7 import *  # mine commands
 
 
-def get_os():
+class OS:
     if sys.platform == "linux" or sys.platform == "linux2":
-        return "linux"
+        name = "linux"
     elif sys.platform == "win32" or sys.platform == "cygwin":
-        return "windows"
+        name = "windows"
     elif sys.platform == "darwin":
-        return "macos"
+        name = "macos"
 
-if get_os() == "windows":
+    if name == "windows":
+        family = "nt"
+    elif name in ["macos", "linux"]:
+        family = "unix"
+
+
+def get_os():
+    warning("get_os now OS.name")
+    return OS.name
+
+if OS.name == "windows":
     import win_unicode_console, \
            win32api, \
            win32con
@@ -385,13 +406,16 @@ def is_python3():
     return is_true
 
 
-def debug_print(*arguments):
+def debug_print(*arguments, raw=False):
     con_w = Console.width()
     print("Debug sheet:")
     for arg in arguments:
         line = "-" * con_w
         print(line, end="")
-        print(arg)
+        if raw:
+            print(repr(arg))
+        else:
+            print(arg)
         print(line)
 
 
@@ -431,9 +455,9 @@ class Str:
     def newlines_to_strings(string, quiet=False):
         if string:
             string = str(string)
-            if get_os() == "windows":
+            if OS.name == "windows":
                 strings = string.split(newline2)
-            elif get_os() in ["macos", "linux"]:
+            elif OS.name in ["macos", "linux"]:
                 strings = string.split(newline)
             return strings
         else:
@@ -441,7 +465,7 @@ class Str:
                 print("None can't be splitted")
 
     @classmethod
-    def nl(cls,string):
+    def nl(cls, string):
         return cls.newlines_to_strings(string=string)
 
     @staticmethod
@@ -488,31 +512,48 @@ class Str:
             substring = string[startfrom:]
         return substring
 
+    @staticmethod
+    def diff_simple(string_a, string_b):
+        import difflib
+
+        strings = [(string_a, string_b)]  # for furthurer support for unlimited srtings
+
+        for a, b in strings:
+            print('{} => {}'.format(a, b))
+            for i, s in enumerate(difflib.ndiff(a, b)):
+                if s[0] == ' ':
+                    continue
+                elif s[0] == '-':
+                    print(u'Delete "{}" from position {}'.format(s[-1], i))
+                elif s[0] == '+':
+                    print(u'Add "{}" to position {}'.format(s[-1], i))
+            print()
+
 
 class Console():
     @staticmethod
     def clean():
-        if get_os() == "windows":
+        if OS.name == "windows":
             os.system("cls")
-        elif get_os() in ["linux", "macos"]:
+        elif OS.name in ["linux", "macos"]:
             print(newline * shutil.get_terminal_size().lines)
 
     @staticmethod
     def width():
-        if get_os() == "windows":
+        if OS.name == "windows":
             io = Console.get_output("mode con")
             width_ = Str.get_integers(io)[1]
-        elif get_os() == "macos" or get_os() == "linux":
+        elif OS.name in ["linux", "macos"]:
             io = Console.get_output("stty size")
             width_ = Str.get_integers(io)[1]
         return int(width_)
 
     @staticmethod
     def height():
-        if get_os() == "windows":
+        if OS.name == "windows":
             modecon = Console.get_output("mode con")
             height = Str.get_integers(modecon)[0]
-        elif get_os() == "macos" or get_os() == "linux":
+        elif OS.name in ["linux", "macos"]:
             sttysize = Console.get_output("stty size")
             height = Str.get_integers(sttysize)[0]
         if height > 100:
@@ -540,7 +581,7 @@ class Console():
                 print(termcolor.colored(string, color, highlight))
                 time.sleep(sleep)
             except KeyboardInterrupt as err:
-                if get_os() == "windows":
+                if OS.name == "windows":
                     print(termcolor.colored("OK", "white", "on_grey"))
                 colorama.deinit()
                 cls.clean()
@@ -570,13 +611,13 @@ class Path:
             try:
                 path = os.path.join(str(path), str(path_))
             except NameError:
-                if (get_os() == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
+                if (OS.name == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
                     path = backslash * 2
-                elif (get_os() == "windows") and (len(path_) <= 3):
+                elif (OS.name == "windows") and (len(path_) <= 3):
                     path = os.path.join(path_, os.sep)
-                elif get_os() == "windows":
+                elif OS.name == "windows":
                     path = path_
-                elif (get_os() == "macos") or (get_os() == "linux"):
+                elif OS.family == "unix":
                     if path_ == "..":
                         path = path_
                     elif path_ == ".":
@@ -592,7 +633,7 @@ class Path:
 
     @staticmethod
     def home():
-        if get_os() == "windows":
+        if OS.name == "windows":
             path = Console.get_output(r"echo %userprofile%")
             path = path.rstrip(newline2)
         else:
@@ -607,7 +648,7 @@ class Path:
 
 
 class Locations:
-    if get_os() == "windows":
+    if OS.name == "windows":
         share = Path.extend("S:")
         shares = share
 
@@ -723,7 +764,7 @@ class File:
             print("file", path, "is deleted")
         # except PermissionError:
         #     try:
-        #         if get_os() == "windows"
+        #         if OS.name == "windows"
         #             delete_command = "del"
         #         else:
         #             delete_command = "rm"
@@ -748,7 +789,7 @@ class File:
     @staticmethod
     def hide(filename, quiet=True):
         filename = Path.full(filename)  #
-        if get_os() == "windows":
+        if OS.name == "windows":
             win32api.SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)  # hiding file like windows do
         dotted_file = os.path.split(filename)  # split path to dir and path
         dotted_file = Path.extend(dotted_file[0], "." + dotted_file[1])  # merging it back and add dot
@@ -903,10 +944,10 @@ class Json():
 class Process():
     @staticmethod
     def kill(process):
-        if get_os() == "windows":
+        if OS.name == "windows":
             command_ = "taskkill /f /im " + str(process) + ".exe"
             os.system(command_)
-        if get_os() == "macos":
+        if OS.name == "macos":
             command_ = "killall " + str(process)
             os.system(command_)
     @staticmethod
@@ -916,7 +957,7 @@ class Process():
         if new_window or pureshell:
             for argument_ in arguments:
                 if " " in argument_ and argument_[:1] != "-":
-                    if get_os() == "windows":
+                    if OS.name == "windows":
                         argument_ = Str.to_quotes(argument_)
                     else:
                         argument_ = Str.to_quotes_2(argument_)
@@ -924,7 +965,11 @@ class Process():
                     command = command + " " + argument_
                 except NameError:
                     if new_window:
-                        command = 'start "" ' + argument_
+                        if OS.name == "windows":
+                            command = 'start "" ' + argument_
+                        elif OS.name == "macos":
+                            pass
+                            #command = "" +
                     else:
                         command = argument_
             os.system(command)
@@ -979,10 +1024,10 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
         up_message = domain + " is up!"
         down_message = domain + " is down."
     try:
-        if get_os() == "windows":
+        if OS.name == "windows":
             count_arg = "n"
             timeout_arg = "w"
-        if (get_os() == "macos") or (get_os() == "linux"):
+        if OS.name in ["macos", "linux"]:
             count_arg = "c"
             timeout_arg = "W"
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
@@ -1053,7 +1098,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
 
 
 def warning(message):
-    pyautogui.alert('This displays some text with an OK button.')
+    pyautogui.alert(message)
 
 def substring(string, before, after=None):
     warning(message="substring now in Str.substring!!!!!")
