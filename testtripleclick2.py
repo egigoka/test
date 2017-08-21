@@ -312,6 +312,8 @@ try:
         def main():
             Open.solvo()
             Open.Solvo.Menu.Documents.shipments()
+            Click.left(move(wait_locate("светлозел", every=0.1, timeout=30)))
+            hotkey('end')
             while True:
                 Bench.start()
                 position = None

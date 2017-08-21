@@ -1,10 +1,14 @@
 #! python3
+# -*- coding: utf-8 -*-
 __version__ = "2.0.0"
 # going to commands7
 __version__ = "2.0.1"
 # PEP 8 (not full)
 __version__ = "2.0.2"
 # checkfolder bugfix
+__version__ = "2.0.3"
+# refactor for new commands7
+# add coding in shebang
 from colorama import init
 from commands7 import *
 # from termcolor import colored, cprint #print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
@@ -86,7 +90,7 @@ def main():
             else:
                 cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end='')
                 plog(__logfile__, hostname + " is down", quiet=True)
-        if get_os() == "windows":
+        if OS.name == "windows":
             folders = [{"name":"wms2host", "location":Locations.wms2host},
                        {"name":"host2wms", "location":Locations.host2wms}]
             for folder in folders:
