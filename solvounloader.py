@@ -330,7 +330,7 @@ try:
                         Scroll.up()
                 move(position)
                 Click.right()
-                move(wait_locate("команды...бел", every=0.1, timeout=10))
+                move(wait_locate("команды...белая", every=0.1, timeout=10))
                 move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
                 Click.left()
                 Actions.wait_for_done()
