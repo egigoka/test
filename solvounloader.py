@@ -31,6 +31,7 @@ class State:
     move_duration = 0.5
     sleep_before_click = 0.1
     sleep_before_locate = 0.1
+    before_ctrl_a_sleep = 0.5
     ctrl_a_sleep = 3
     buttons_pics_folder = Path.extend("T:", "buttonpics")
     quiet = False
@@ -277,24 +278,8 @@ try:
                     Open.Solvo.Menu.Documents.orders()                                              # открыть окно заказы
                     workarea = wait_locate("светлозел", every=1, timeout=30)                        # найти зелёную рабочую область
                     Click.left(move(workarea))                                                      # нажать левой кнопкой по рабочей области
+                    sleep(State.before_ctrl_a_sleep)
                     hotkey('ctrl', 'a')                                                             # выделить всё
-                    #if OS.windows_version == 10:                                                    # в десятой винде проблема у Солво с хоткеями, зависящими от ctrl, так что городим велосипед
-                    #    Click.left()
-                    #    sleep(10)
-                    #    hotkey('home')
-                    #    sleep(10)
-                    #    #hotkey('shift', 'end')
-                    #    pyautogui.keyDown('shift')
-                    #    pyautogui.press('down')
-                    #    pyautogui.press('down')
-                    #    pyautogui.press('down')
-                    #    sleep(2)
-                    #    pyautogui.keyDown('end')
-                    #    sleep(2)
-                    #    pyautogui.keyUp('end')
-                    #    sleep(2)
-                    #    pyautogui.keyUp('shift')
-                    #    sleep(10)
                     sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
                     dropdown = None                                                                 # меню не выпало
                     while not dropdown:                                                             # пока не выпадет меню:
@@ -324,9 +309,10 @@ try:
                         print (err)
                         move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
                         if OS.windows_version == 10:
-                            for i in Int.from_to(1,3):
+                            for i in Int.from_to(1,5):
                                 sleep(0.1)
-                                Click.left(move(wait_locate("buttonup", every=0.1, timeout=30)))
+                                position_of_button = wait_locate("buttonup", every=0.1, timeout=30)
+                                Click.left(move(position_of_button))
                         Scroll.up()
                 move(position)
                 Click.right()
