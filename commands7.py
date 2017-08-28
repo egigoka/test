@@ -339,6 +339,14 @@ if True:
     # var OS.windows_version
     __version__ = "7.11.1-alpha"
     # var OS.windows_version bugfix
+    __version__ = "7.12.0-alpha"
+    # screenblink is back, meh
+    __version__ = "7.12.1-alpha"
+    # Codegen.start bugfix
+    __version__ = "7.12.2-alpha"
+    # Locations.share bugfix
+    __version__ = "7.13.0-alpha"
+    # Process.
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -680,7 +688,7 @@ class Locations:
         host2wms = Path.extend(backslash, "192.168.99.7", "temp", "host2wms")
 
     else:
-        share = Path.extend(Path.home(), "Dropbox","term", "shares")
+        share = Path.extend(Path.home(), "Desktop", "term")
         shares = share
 
         scripts_folder = Path.extend(share, "scripts")
@@ -974,16 +982,23 @@ class Process():
                         if OS.name == "windows":
                             command = 'start "" ' + argument_
                         elif OS.name == "macos":
-                            pass
+                            warning("macOS doesn't support creating new window now")
                             #command = "" +
                     else:
                         command = argument_
             os.system(command)
         else:
-            commands = []
-            for argument_ in arguments:
-                commands.append(str(argument_))
-            subprocess.call(commands)
+            if OS.name == "windows":
+                commands = []
+                for argument_ in arguments:
+                    commands.append(str(argument_))
+                subprocess.call(commands)
+            elif OS.name == "macos":
+                commands = ""
+                for argument_ in arguments:
+                    commands += argument_ + " "
+                os.system(commands)
+
 
 
 class Codegen:
@@ -991,6 +1006,7 @@ class Codegen:
 
     @classmethod
     def start(cls, file_path):
+        File.wipe(file_path)
         cls.file = open(file_path, "wb")
 
     @classmethod
@@ -1315,6 +1331,33 @@ class Repl:
                 pass
         else:
             main()
+
+
+def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
+    if width != None and height != None:
+        os.system("mode con cols=" + str(width) + " lines=" + str(height))
+    if width == None:
+        width = Console.width()
+    if height == None:
+        height = Console.height()
+    colorama.reinit()
+    while True:
+        colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+        highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
+        string = symbol * width
+        color = random.choice(colors)
+        colors.pop(colors.index(color))
+        highlight = random.choice(highlights)
+        try: # New version with one long line. Works perfect, as I see.
+            string = string * height
+            print(termcolor.colored(string, color, highlight))
+            time.sleep(sleep)
+        except KeyboardInterrupt as err:
+            if get_os() == "windows":
+                print (termcolor.colored("OK", "white", "on_grey"))
+            colorama.deinit()
+            Console.clean()
+            break
 
 
 if __name__ == "__main__":

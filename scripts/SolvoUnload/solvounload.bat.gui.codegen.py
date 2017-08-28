@@ -1,18 +1,26 @@
 #! python3
 # -*- coding: utf-8 -*-
-from utils import openInNewWindow, path_extend, newline, openInCurrentWindow, file_backup, substring
-from codegen import start_gen, add_line, shebang, end_gen
-from current_paths import *
+#from utils import openInNewWindow, path_extend, newline, openInCurrentWindow, file_backup, substring
+#from codegen import start_gen, add_line, shebang, end_gen
+#from current_paths import *
 from sys import argv
+import sys
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands
 
 
 isDebug = False
+if OS.name == "macos":
+    warning("debug mode on macOS")
+    isDebug = True
 #isDebug = True
-iterpreter_of_codegened_script = pyw
+iterpreter_of_codegened_script = 'pyw'
 if isDebug:
-    iterpreter_of_codegened_script = py
-path_of_codegened_script = path_extend(share, "scripts", "solvounload", "solvounload.bat.gui.codegened.py")
-file_backup(argv[0], quiet = not isDebug)
+    iterpreter_of_codegened_script = 'py'
+path_of_codegened_script = Path.extend(Locations.share, "scripts", "SolvoUnload", "solvounload.bat.gui.codegened.py")
+File.backup(argv[0], quiet = not isDebug)
 
 try:
     arg1 = argv[1]
@@ -47,14 +55,18 @@ if True: # code stamps
         free_row += 1
         return free_row
 
-    init_utils = "from utils import newline, file_backup, loadjson, savejson, tkinter_color, getIntegers"
+    init_commands = """import sys
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands"""
 
-    init_current_paths = "from current_paths import *"
 
-    init_legacy = 'from solvounload import get_safe_time, get_current_time' + newline
-    init_legacy += 'from solvounload import settingsJsonFile as json_on_disk'
+    init_legacy = 'from solvounload import get_safe_time, get_current_time, settingsJsonFile as json_on_disk'
 
     init_tk = "from tkinter import *" + newline
+
+
     init_tk += "root = Tk()" + newline
 
 
@@ -141,7 +153,7 @@ if True: # code stamps
             func_check_buttons += "        " + entry + "_entry.grid(columnspan=2)" + newline
             func_check_buttons += "    else:"  + newline
             func_check_buttons += "        if " + entry + "_btn.winfo_exists() == 0:" + newline
-            func_check_buttons += "            " + substring(all_buttons[entry + "_btn"], newline).replace(newline, newline + " "*12)[:-12]
+            func_check_buttons += "            " + Str.substring(all_buttons[entry + "_btn"], newline).replace(newline, newline + " "*12)[:-12]
         return func_check_buttons
 
 
@@ -240,45 +252,44 @@ if True: # code stamps
 
 
 # order of code
-start_gen(path_of_codegened_script)
+Codegen.start(path_of_codegened_script)
 
-add_line(shebang)
-add_line(init_utils)
-add_line(init_current_paths)
-add_line(init_legacy)
-add_line(init_tk)
-add_line(init_groups_list)
-add_line(func_load_json)
-add_line(func_save_json)
-add_line(func_inc_day)
+Codegen.add_line(Codegen.shebang)
+Codegen.add_line(init_commands)
+Codegen.add_line(init_legacy)
+Codegen.add_line(init_tk)
+Codegen.add_line(init_groups_list)
+Codegen.add_line(func_load_json)
+Codegen.add_line(func_save_json)
+Codegen.add_line(func_inc_day)
 
 for group in groups:
-    add_line(ko_update_func(group["number"]))
-    add_line(ko_line(group["number"], ko = group["ko"], lo = group["lo"]))
+    Codegen.add_line(ko_update_func(group["number"]))
+    Codegen.add_line(ko_line(group["number"], ko = group["ko"], lo = group["lo"]))
 
 #add_line(safe_time_row(row=get_free_row()))
-add_line(universal_row("last_lo", "Последнее время подтверждённх ЛО:", "json_in_memory['last_lo']", "+Day", "inc_day('last_lo')", get_free_row()))
-add_line(universal_row("last_batch", "Последнее время отгруженных рейсов:", "json_in_memory['last_batch']", "+Day", "inc_day('last_batch')", get_free_row()))
-add_line(universal_row("last_onebyone", "Последнее время отгруженных непр. накл.:", "json_in_memory['last_onebyone']", "+Day", "inc_day('last_onebyone')", get_free_row()))
+Codegen.add_line(universal_row("last_lo", "Последнее время подтверждённх ЛО:", "json_in_memory['last_lo']", "+Day", "inc_day('last_lo')", get_free_row()))
+Codegen.add_line(universal_row("last_batch", "Последнее время отгруженных рейсов:", "json_in_memory['last_batch']", "+Day", "inc_day('last_batch')", get_free_row()))
+Codegen.add_line(universal_row("last_onebyone", "Последнее время отгруженных непр. накл.:", "json_in_memory['last_onebyone']", "+Day", "inc_day('last_onebyone')", get_free_row()))
 
-add_line(func_check_colors)
-add_line(func_check_note_length)
-add_line(func_check_buttons_and_colors())
+Codegen.add_line(func_check_colors)
+Codegen.add_line(func_check_note_length)
+Codegen.add_line(func_check_buttons_and_colors())
 
 
-add_line(note_row(get_free_row()))
+Codegen.add_line(note_row(get_free_row()))
 
-add_line(button_code(name="save", text="Save all! and update", lambdax="saveJSON()", row=get_free_row(), column=0, columnspan=3))
+Codegen.add_line(button_code(name="save", text="Save all! and update", lambdax="saveJSON()", row=get_free_row(), column=0, columnspan=3))
 
 
 major_v = 3
 minor_v = 42
 patch_v = 2
-add_line("json_in_memory['version'] = {'major':" + str(major_v) + ", 'minor':"
+Codegen.add_line("json_in_memory['version'] = {'major':" + str(major_v) + ", 'minor':"
          + str(minor_v) + ", 'patch':" + str(patch_v) + "}" + newline + "saveJSON()")
-add_line(tkinter_title("SolvoUnload " + str(major_v) + "." + str(minor_v) + "." + str(patch_v) + " beta"))
-add_line(run_mainloop)
-end_gen()
+Codegen.add_line(tkinter_title("SolvoUnload " + str(major_v) + "." + str(minor_v) + "." + str(patch_v) + " beta"))
+Codegen.add_line(run_mainloop)
+Codegen.end()
 
 
 if isDebug:
@@ -290,9 +301,9 @@ if isDebug:
     print(all_entries)
     print('generated buttons:')
     print(all_buttons, newline * 3)
-    openInCurrentWindow(iterpreter_of_codegened_script, path_of_codegened_script)
+    Process.start(iterpreter_of_codegened_script, path_of_codegened_script)
 else:
-    openInNewWindow(iterpreter_of_codegened_script, path_of_codegened_script)
+    Process.start(iterpreter_of_codegened_script, path_of_codegened_script, new_window=True)
 
 # todo change пмммо
 

@@ -1,7 +1,10 @@
 #! python3
 # -*- coding: utf-8 -*-
-import re
-from commands7 import *
+import sys
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands
 
 __codegened_latex__ = Path.extend(Path.current(), "generate_l.tex")
 __logfile__ = Path.extend(Path.current(), "log", "generate_l.txt")

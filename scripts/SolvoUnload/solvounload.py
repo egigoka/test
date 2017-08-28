@@ -1,13 +1,10 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
 import sys
-import os
-import win_unicode_console
-import subprocess
-import time
-import colorama
-#from utils import *
-from commands7 import *
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands
 
 # init
 # win_unicode_console.enable()

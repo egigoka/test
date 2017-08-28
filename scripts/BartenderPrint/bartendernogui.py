@@ -1,12 +1,10 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
 import sys
-import os
-# import win_unicode_console
-import subprocess
-import time
-from utils import *
-from commands7 import *
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands
 
 # init
 
@@ -40,16 +38,16 @@ outputFileName = "Бирки_output.txt"
 outputFile = bartenderDocumentsFolder + "\ "[:1] + outputFileName
 # "C:\Users\Sklad_solvo\Documents\BarTender\BarTender Documents\Бирки_output.txt"
 logfileName = "bartender.log"
-logfile = path_extend(scriptsSubFolder, logfileName)
-dir_create(scriptsSubFolder)
-file_create(settingsJsonFile)
-file_backup(settingsJsonFile, quiet = True)
+logfile = Path.extend(scriptsSubFolder, logfileName)
+Dir.create(scriptsSubFolder)
+File.create(settingsJsonFile)
+File.backup(settingsJsonFile, quiet = True)
 if ifDebug is True:
-    file_backup(path_extend(scriptsSubFolder, "bartendernogui.py"))
+    File.backup(Path.extend(scriptsSubFolder, "bartendernogui.py"))
     print("settingsJsonFile:", end="")
     print(settingsJsonFile)
-jsonStringInMemory = loadjson(settingsJsonFile, quiet = True)
-savejson(settingsJsonFile, jsonStringInMemory, quiet = True)
+jsonStringInMemory = Json.load(settingsJsonFile, quiet = True)
+Json.save(settingsJsonFile, jsonStringInMemory, quiet = True)
 
 
 def bartenderDocument(name):
@@ -70,14 +68,14 @@ def bartenderMineDocument(name):
 
 
 def newPrintBars(cnt_bars, group_name, file_save_name = outputFile):
-    jsonStringInMemory = loadjson(settingsJsonFile)
+    jsonStringInMemory = Json.load(settingsJsonFile)
     prefix = jsonStringInMemory[group_name]["prefix"]
     startCnt = jsonStringInMemory[group_name]["lastnum"]
     cnt = startCnt + 1
     file = open(file_save_name, 'w')
     endCnt = startCnt + cnt_bars
     jsonStringInMemory[group_name]["lastnum"] = endCnt
-    savejson(settingsJsonFile, jsonStringInMemory)
+    Json.save(settingsJsonFile, jsonStringInMemory)
     while cnt <= endCnt:
         if len(str(cnt)) > 6:
             print("!Переполнение бирок для", group_name)
@@ -206,7 +204,7 @@ def main(arg1=None, arg2=None, arg3=None, arg4 = None):  # todo печать п�
         file.close()
         runBartender(type="gruzch")
     elif "mt" in inputGroupAndCount:
-        file_wipe(outputFile)
+        File.wipe(outputFile)
         subprocess.call([notepadExec, outputFile])
         runBartender(type="cell")
     elif ("jt" in inputGroupAndCount) or ("ое" in inputGroupAndCount):
@@ -252,7 +250,7 @@ def main(arg1=None, arg2=None, arg3=None, arg4 = None):  # todo печать п�
         print("Killing bartend*")
         os.system("taskkill /f /im bartend*")
     elif "ol" in inputGroupAndCount:
-        openInNewWindow(notepadExec, logfile)
+        Process.start(notepadExec, logfile, new_window=True)
     elif "l" in inputGroupAndCount:
         string = input("Что занести в лог? ")
         plog(logfile, string)

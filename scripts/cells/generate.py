@@ -1,9 +1,11 @@
 #! python3
 # -*- coding: utf-8 -*-
 
-from commands7 import *
-if get_os() == "macos":
-    File.copy(Path.extend("..", "..", "commands7.py"), "commands7.py")
+import sys
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands
 
 
 prefix = "N22-"

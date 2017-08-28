@@ -3,7 +3,11 @@
 
 
 from tkinter import *
-from commands7 import *
+import sys
+sys.path.insert(0, "..")
+sys.path.insert(0, "../..")
+sys.path.insert(0, "..\..")
+from commands7 import *  # mine commands
 
 basicLogicScript = Path.extend("T:", "scripts", "bartenderprint", "bartendernogui.py")
 class Debug:
