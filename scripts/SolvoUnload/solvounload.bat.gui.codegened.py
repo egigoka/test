@@ -434,5 +434,7 @@ save_btn.bind('<Button-1>', lambda x: saveJSON())
 save_btn.bind('<Enter>', lambda x: check_buttons_and_colors())
 save_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 save_btn.grid(row=save_btn_r, column=0, sticky=W+E+S+N, rowspan=1, columnspan=3)
-json_in_memory['version'] = {'major':3, 'minor':42, 'patch':2}
-saveJSON()root.title("SolvoUnload 3.42.2 beta")mainloop()
+json_in_memory['version'] = {'major':3, 'minor':43, 'patch':0}
+saveJSON()
+root.title("SolvoUnload 3.43.0 beta")
+mainloop()

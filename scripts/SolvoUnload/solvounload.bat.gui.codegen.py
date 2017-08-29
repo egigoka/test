@@ -1,9 +1,5 @@
 #! python3
 # -*- coding: utf-8 -*-
-#from utils import openInNewWindow, path_extend, newline, openInCurrentWindow, file_backup, substring
-#from codegen import start_gen, add_line, shebang, end_gen
-#from current_paths import *
-from sys import argv
 import sys
 sys.path.insert(0, "..")
 sys.path.insert(0, ".")
@@ -13,6 +9,7 @@ from commands7 import *  # mine commands
 
 
 isDebug = False
+isDebug=True
 if OS.name == "macos":
     warning("debug mode on macOS")
     isDebug = True
@@ -21,10 +18,10 @@ iterpreter_of_codegened_script = 'pyw'
 if isDebug:
     iterpreter_of_codegened_script = 'py'
 path_of_codegened_script = Path.extend(Locations.scripts_folder, "SolvoUnload", "solvounload.bat.gui.codegened.py")
-File.backup(argv[0], quiet = not isDebug)
+File.backup(sys.argv[0], quiet = not isDebug)
 
 try:
-    arg1 = argv[1]
+    arg1 = sys.argv[1]
 except:
     arg1 = False
 
@@ -244,12 +241,12 @@ from commands7 import *  # mine commands"""
         return code
 
     def tkinter_title(title):
-        return 'root.title("' + title + '")'
+        return 'root.title("' + title + '")' + newline
 
     def tkinter_icon(icon_path):
-        return 'root.iconbitmap("' + icon_path + '")'
+        return 'root.iconbitmap("' + icon_path + '")' + newline
 
-    run_mainloop = "mainloop()"
+    run_mainloop = "mainloop()" + newline
 
 
 # order of code
@@ -284,10 +281,11 @@ Codegen.add_line(button_code(name="save", text="Save all! and update", lambdax="
 
 
 major_v = 3
-minor_v = 42
-patch_v = 2
+minor_v = 43
+patch_v = 0
 Codegen.add_line("json_in_memory['version'] = {'major':" + str(major_v) + ", 'minor':"
-         + str(minor_v) + ", 'patch':" + str(patch_v) + "}" + newline + "saveJSON()")
+         + str(minor_v) + ", 'patch':" + str(patch_v) + "}" + newline
+         + "saveJSON()" + newline)
 Codegen.add_line(tkinter_title("SolvoUnload " + str(major_v) + "." + str(minor_v) + "." + str(patch_v) + " beta"))
 Codegen.add_line(run_mainloop)
 Codegen.end()

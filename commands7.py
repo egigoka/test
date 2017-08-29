@@ -666,7 +666,7 @@ class Locations:
         share = Path.extend("S:")
         shares = share
 
-        scripts_folder = Path.extend(share, "scripts")
+        scripts_folder = Path.extend("T:", "scripts")
         scripts_dir = scripts_folder
 
         documents_dir = Path.extend("C:", "Users", "Sklad_solvo")
@@ -1020,7 +1020,7 @@ class Codegen:
         cls.file.close()
 
     shebang = "#! python3" + newline + \
-              "# -*- coding: utf-8 -*-"
+              "# -*- coding: utf-8 -*-" + newline
 
 
 def plog(logfile, logstring="some shit happened", customtime=None, quiet=False, backup=True):
