@@ -349,6 +349,8 @@ if True:
     # Process.start warning on macOS
     __version__ = "7.13.1-alpha"
     # fix in import how-to
+    __version__ = "7.13.2-alpha"
+    # Locations.scripts_folder
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
