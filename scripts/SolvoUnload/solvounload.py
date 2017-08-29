@@ -1,19 +1,18 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
 import sys
-sys.path.insert(0, "..")
-sys.path.insert(0, "../..")
-sys.path.insert(0, "..\..")
-from commands7 import *  # mine commands
+sys.path.append("..\..")
+sys.path.append("../..")
+sys.path.append("..")
+sys.path.append(".")
+# from commands7 import *  # mine commands ###it didn't work with comment todo why?
+from commands7 import *
 
 # init
 # win_unicode_console.enable()
 # colorama.init()
-scriptsSubFolder = Path.extend("T:", "scripts", "SolvoUnload")
-settingsJsonName = "settings.json"
-settingsJsonFile = scriptsSubFolder + "\ "[:1] + settingsJsonName
+settingsJsonFile = Path.extend("T:", "scripts", "SolvoUnload", "settings.json")
 # "\\192.168.99.91\shares\scripts\SolvoUnload\settings.json"
-Dir.create(scriptsSubFolder)
 File.create(settingsJsonFile)
 if __name__ == '__main__':
     jsonStringInMemory = Json.load(settingsJsonFile)
