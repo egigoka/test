@@ -346,7 +346,9 @@ if True:
     __version__ = "7.12.2-alpha"
     # Locations.share bugfix
     __version__ = "7.13.0-alpha"
-    # Process.
+    # Process.start warning on macOS
+    __version__ = "7.13.1-alpha"
+    # fix in import how-to
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -373,8 +375,10 @@ from tkinter import *
 # import sys
 # sys.path.append("..\..")
 # sys.path.append("../..")
+# sys.path.append("..")
 # sys.path.append(".")
-# from commands7 import *  # mine commands
+# from commands7 import *  # mine commands ###it didn't work with comment todo why?
+# from commands7 import *
 
 
 class OS:

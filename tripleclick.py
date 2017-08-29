@@ -14,6 +14,8 @@ __version__ = "2.1.1"
 # some improvement in countdown
 __version__ = "2.2.0"
 # some new functionality
+__version__ = "2.2.1"
+# warning on non-windows system
 
 # import pyHook
 # import pythoncom
