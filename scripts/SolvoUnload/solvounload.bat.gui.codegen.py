@@ -6,6 +6,7 @@
 from sys import argv
 import sys
 sys.path.insert(0, "..")
+sys.path.insert(0, ".")
 sys.path.insert(0, "../..")
 sys.path.insert(0, "..\..")
 from commands7 import *  # mine commands
@@ -19,7 +20,7 @@ if OS.name == "macos":
 iterpreter_of_codegened_script = 'pyw'
 if isDebug:
     iterpreter_of_codegened_script = 'py'
-path_of_codegened_script = Path.extend(Locations.share, "scripts", "SolvoUnload", "solvounload.bat.gui.codegened.py")
+path_of_codegened_script = Path.extend(Locations.scripts_folder, "SolvoUnload", "solvounload.bat.gui.codegened.py")
 File.backup(argv[0], quiet = not isDebug)
 
 try:

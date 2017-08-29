@@ -309,9 +309,9 @@ try:
                         print (err)
                         move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
                         if OS.windows_version == 10:
+                            position_of_button = wait_locate("buttonup", every=0.1, timeout=30)
                             for i in Int.from_to(1,5):
                                 sleep(0.1)
-                                position_of_button = wait_locate("buttonup", every=0.1, timeout=30)
                                 Click.left(move(position_of_button))
                         Scroll.up()
                 move(position)
