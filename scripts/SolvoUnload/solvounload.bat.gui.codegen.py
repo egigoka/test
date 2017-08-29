@@ -53,14 +53,17 @@ if True: # code stamps
         free_row += 1
         return free_row
 
-    init_commands = """import sys
-sys.path.insert(0, "..")
-sys.path.insert(0, "../..")
-sys.path.insert(0, "..\..")
-from commands7 import *  # mine commands"""
+    init_commands = "import sys" + newline
+    init_commands += 'sys.path.insert(0, ".")' + newline
+    init_commands += 'sys.path.insert(0, "..")' + newline
+    init_commands += 'sys.path.insert(0, "../..")' + newline
+    init_commands += 'sys.path.insert(0, "..\..")' + newline
+    init_commands += 'from commands7 import *  # mine commands' + newline
+
+    
 
 
-    init_legacy = 'from solvounload import get_safe_time, get_current_time, settingsJsonFile as json_on_disk'
+    init_legacy = 'from solvounload import get_safe_time, get_current_time, settingsJsonFile as json_on_disk' + newline
 
     init_tk = "from tkinter import *" + newline
 
@@ -82,13 +85,13 @@ from commands7 import *  # mine commands"""
 
     func_load_json = newline
     func_load_json += 'def reloadJSON():' + newline
-    func_load_json += '    file_backup(json_on_disk)' + newline  # backup
+    func_load_json += '    File.backup(json_on_disk)' + newline  # backup
     func_load_json += '    global json_in_memory' + newline  # globalization
-    func_load_json += '    json_in_memory = loadjson(json_on_disk)' + newline
+    func_load_json += '    json_in_memory = Json.load(json_on_disk)' + newline
     func_load_json += 'reloadJSON()' + newline
 
     func_save_json = newline
-    func_save_json += 'def saveJSON():' + newline
+    func_save_json += 'def savejson():' + newline
     func_save_json += '    json_in_memory["last_lo"] = last_lo_var.get()' + newline
     func_save_json += '    json_in_memory["last_batch"] = last_batch_var.get()' + newline
     func_save_json += '    json_in_memory["last_onebyone"] = last_onebyone_var.get()' + newline
@@ -97,7 +100,7 @@ from commands7 import *  # mine commands"""
         func_save_json += ('    json_in_memory["kan_otb_note_' + group["number"] + '"] = ko_note_' + group["number"] + '_var.get()') + newline
     func_save_json += '    json_in_memory["note"] = note_var.get()' + newline
     func_save_json += '    check_buttons_and_colors()' + newline
-    func_save_json += '    savejson(json_on_disk, json_in_memory)' + newline
+    func_save_json += '    Json.save(json_on_disk, json_in_memory)' + newline
 
     func_inc_day = 'def inc_day(var):' + newline
     func_inc_day += '    reloadJSON()' + newline
@@ -108,12 +111,12 @@ from commands7 import *  # mine commands"""
     func_inc_day += '        new_date = "01." + new_month' + newline # todo for entry in entries!!!
     func_inc_day += '    json_in_memory[var] = new_date + json_in_memory[var][len(new_date):]' + newline
     func_inc_day += '''    exec(var + "_var.set('" + json_in_memory[var] + "')")''' + newline
-    func_inc_day += '    saveJSON()'
+    func_inc_day += '    savejson()'
 
     func_check_colors = newline + "def check_colors():" + newline  # todo
-    func_check_colors += "    green_tk = tkinter_color(200, 255, 200)" + newline
-    func_check_colors += "    yellow_tk = tkinter_color(255, 255, 200)" + newline
-    func_check_colors += "    red_tk = tkinter_color(255, 200, 200)" + newline
+    func_check_colors += "    green_tk = Tkinter.color(200, 255, 200)" + newline
+    func_check_colors += "    yellow_tk = Tkinter.color(255, 255, 200)" + newline
+    func_check_colors += "    red_tk = Tkinter.color(255, 200, 200)" + newline
     for entry in entrys:
         func_check_colors += "    if " + entry + "_var.get() == get_safe_time():" + newline
         func_check_colors += "        " + entry + "_entry.configure(bg=green_tk)" + newline
@@ -126,8 +129,8 @@ from commands7 import *  # mine commands"""
         func_check_colors += "    pass" + newline
     for group in groups:
         group = group["number"]
-        func_check_colors += "    if getIntegers(ko_" + group + "_var.get())[0] == getIntegers(get_current_time())[0]:" + newline  # сегодня
-        func_check_colors += "        if getIntegers(ko_" + group + "_var.get())[3] == getIntegers(get_current_time())[3]:" + newline  # в этот час
+        func_check_colors += "    if Str.get_integers(ko_" + group + "_var.get())[0] == Str.get_integers(get_current_time())[0]:" + newline  # сегодня
+        func_check_colors += "        if Str.get_integers(ko_" + group + "_var.get())[3] == Str.get_integers(get_current_time())[3]:" + newline  # в этот час
         func_check_colors += "            ko_note_" + group + "_entry.configure(bg=green_tk)" + newline
         func_check_colors += "        else:" + newline
         func_check_colors += "            ko_note_" + group + "_entry.configure(bg=yellow_tk)" + newline
@@ -198,7 +201,7 @@ from commands7 import *  # mine commands"""
     def safe_time_row(row):
         code = label_code("safe_time", "Безопасное время:", row, column=0)
         code += entry_code("safe_time", "get_safe_time()", row, column=1, entry_state="DISABLED", columnspan=2)
-        # code += button_code("safe_time", "Update", "saveJSON()", row, column=2)
+        # code += button_code("safe_time", "Update", "savejson()", row, column=2)
         return code
 
     def remember_btn_row(name, row):
@@ -218,7 +221,7 @@ from commands7 import *  # mine commands"""
     def note_row(row):
         code = label_code("note", "Заметка:", row, column=0)
         code += entry_code("note", "json_in_memory['note']", row, column=1, columnspan=2)
-        # code += button_code("note", "Save", "saveJSON()", row, column=2)
+        # code += button_code("note", "Save", "savejson()", row, column=2)
         return code
 
     def ko_line(group, ko = None, lo = None):
@@ -237,7 +240,7 @@ from commands7 import *  # mine commands"""
         code += '    json_in_memory["kan_otb_note_' + group + '"] = ko_note_' + group + '_var.get()' + newline
         code += '    json_in_memory["kan_otb_time_' + group + '"] = get_current_time()' + newline
         code += '    ko_' + group + '_var.set(json_in_memory["kan_otb_time_' + group + '"])' + newline
-        code += '    saveJSON()' + newline
+        code += '    savejson()' + newline
         return code
 
     def tkinter_title(title):
@@ -277,7 +280,7 @@ Codegen.add_line(func_check_buttons_and_colors())
 
 Codegen.add_line(note_row(get_free_row()))
 
-Codegen.add_line(button_code(name="save", text="Save all! and update", lambdax="saveJSON()", row=get_free_row(), column=0, columnspan=3))
+Codegen.add_line(button_code(name="save", text="Save all! and update", lambdax="savejson()", row=get_free_row(), column=0, columnspan=3))
 
 
 major_v = 3
@@ -285,7 +288,7 @@ minor_v = 43
 patch_v = 0
 Codegen.add_line("json_in_memory['version'] = {'major':" + str(major_v) + ", 'minor':"
          + str(minor_v) + ", 'patch':" + str(patch_v) + "}" + newline
-         + "saveJSON()" + newline)
+         + "savejson()" + newline)
 Codegen.add_line(tkinter_title("SolvoUnload " + str(major_v) + "." + str(minor_v) + "." + str(patch_v) + " beta"))
 Codegen.add_line(run_mainloop)
 Codegen.end()

@@ -1,9 +1,13 @@
 #! python3
-# -*- coding: utf-8 -*-import sys
+# -*- coding: utf-8 -*-
+import sys
+sys.path.insert(0, ".")
 sys.path.insert(0, "..")
 sys.path.insert(0, "../..")
 sys.path.insert(0, "..\..")
-from commands7 import *  # mine commandsfrom solvounload import get_safe_time, get_current_time, settingsJsonFile as json_on_diskfrom tkinter import *
+from commands7 import *  # mine commands
+from solvounload import get_safe_time, get_current_time, settingsJsonFile as json_on_disk
+from tkinter import *
 root = Tk()
 groups = [{"number": "1", "ko": "158", "lo": "329 %305 %269"},
           {"number": "2", "ko": "156", "lo": "268 %327"},
@@ -14,12 +18,12 @@ groups = [{"number": "1", "ko": "158", "lo": "329 %305 %269"},
           {"number": "fp", "ko": "143 %154", "lo": "332 %333"}, ]
 
 def reloadJSON():
-    file_backup(json_on_disk)
+    File.backup(json_on_disk)
     global json_in_memory
-    json_in_memory = loadjson(json_on_disk)
+    json_in_memory = Json.load(json_on_disk)
 reloadJSON()
 
-def saveJSON():
+def savejson():
     json_in_memory["last_lo"] = last_lo_var.get()
     json_in_memory["last_batch"] = last_batch_var.get()
     json_in_memory["last_onebyone"] = last_onebyone_var.get()
@@ -39,7 +43,7 @@ def saveJSON():
     json_in_memory["kan_otb_note_fp"] = ko_note_fp_var.get()
     json_in_memory["note"] = note_var.get()
     check_buttons_and_colors()
-    savejson(json_on_disk, json_in_memory)
+    Json.save(json_on_disk, json_in_memory)
 def inc_day(var):
     reloadJSON()
     new_date = json_in_memory[var][:2]
@@ -49,14 +53,14 @@ def inc_day(var):
         new_date = "01." + new_month
     json_in_memory[var] = new_date + json_in_memory[var][len(new_date):]
     exec(var + "_var.set('" + json_in_memory[var] + "')")
-    saveJSON()
+    savejson()
 def update_ko_1():
     if ko_note_1_var.get() == "п12мм12мо12" or ko_note_1_var.get() == "п1212мм1212мо1212":
         ko_note_1_var.set("пмммо")
     json_in_memory["kan_otb_note_1"] = ko_note_1_var.get()
     json_in_memory["kan_otb_time_1"] = get_current_time()
     ko_1_var.set(json_in_memory["kan_otb_time_1"])
-    saveJSON()
+    savejson()
 ko_1_label = Label(root, text='1ГР %158 К.О. / %329 %305 %269 Л.О.')
 ko_1_label.grid(row=0, column=0, sticky=E, rowspan=2)
 ko_1_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -86,7 +90,7 @@ def update_ko_2():
     json_in_memory["kan_otb_note_2"] = ko_note_2_var.get()
     json_in_memory["kan_otb_time_2"] = get_current_time()
     ko_2_var.set(json_in_memory["kan_otb_time_2"])
-    saveJSON()
+    savejson()
 ko_2_label = Label(root, text='2ГР %156 К.О. / %268 %327 Л.О.')
 ko_2_label.grid(row=2, column=0, sticky=E, rowspan=2)
 ko_2_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -116,7 +120,7 @@ def update_ko_3():
     json_in_memory["kan_otb_note_3"] = ko_note_3_var.get()
     json_in_memory["kan_otb_time_3"] = get_current_time()
     ko_3_var.set(json_in_memory["kan_otb_time_3"])
-    saveJSON()
+    savejson()
 ko_3_label = Label(root, text='3ГР %73 К.О. / %336 %337 %339 Л.О.')
 ko_3_label.grid(row=4, column=0, sticky=E, rowspan=2)
 ko_3_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -146,7 +150,7 @@ def update_ko_4():
     json_in_memory["kan_otb_note_4"] = ko_note_4_var.get()
     json_in_memory["kan_otb_time_4"] = get_current_time()
     ko_4_var.set(json_in_memory["kan_otb_time_4"])
-    saveJSON()
+    savejson()
 ko_4_label = Label(root, text='4ГР %125 К.О. / %321 %322 Л.О.')
 ko_4_label.grid(row=6, column=0, sticky=E, rowspan=2)
 ko_4_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -176,7 +180,7 @@ def update_ko_5():
     json_in_memory["kan_otb_note_5"] = ko_note_5_var.get()
     json_in_memory["kan_otb_time_5"] = get_current_time()
     ko_5_var.set(json_in_memory["kan_otb_time_5"])
-    saveJSON()
+    savejson()
 ko_5_label = Label(root, text='5ГР %159 К.О. / %335 %334 Л.О.')
 ko_5_label.grid(row=8, column=0, sticky=E, rowspan=2)
 ko_5_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -206,7 +210,7 @@ def update_ko_10():
     json_in_memory["kan_otb_note_10"] = ko_note_10_var.get()
     json_in_memory["kan_otb_time_10"] = get_current_time()
     ko_10_var.set(json_in_memory["kan_otb_time_10"])
-    saveJSON()
+    savejson()
 ko_10_label = Label(root, text='10ГР %121 К.О. / %330 %331 Л.О.')
 ko_10_label.grid(row=10, column=0, sticky=E, rowspan=2)
 ko_10_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -236,7 +240,7 @@ def update_ko_fp():
     json_in_memory["kan_otb_note_fp"] = ko_note_fp_var.get()
     json_in_memory["kan_otb_time_fp"] = get_current_time()
     ko_fp_var.set(json_in_memory["kan_otb_time_fp"])
-    saveJSON()
+    savejson()
 ko_fp_label = Label(root, text='fpГР %143 %154 К.О. / %332 %333 Л.О.')
 ko_fp_label.grid(row=12, column=0, sticky=E, rowspan=2)
 ko_fp_label.bind('<Enter>', lambda x: check_buttons_and_colors())
@@ -309,9 +313,9 @@ last_onebyone_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 last_onebyone_btn.grid(row=last_onebyone_btn_r, column=2, sticky=W+E+S+N, rowspan=1, columnspan=1)
 
 def check_colors():
-    green_tk = tkinter_color(200, 255, 200)
-    yellow_tk = tkinter_color(255, 255, 200)
-    red_tk = tkinter_color(255, 200, 200)
+    green_tk = Tkinter.color(200, 255, 200)
+    yellow_tk = Tkinter.color(255, 255, 200)
+    red_tk = Tkinter.color(255, 200, 200)
     if last_lo_var.get() == get_safe_time():
         last_lo_entry.configure(bg=green_tk)
     elif int(last_lo_var.get()[:2]) - int(get_safe_time()[:2]) <= -2:
@@ -339,44 +343,44 @@ def check_colors():
     else:
         last_onebyone_entry.configure(bg=yellow_tk)
     pass
-    if getIntegers(ko_1_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_1_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_1_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_1_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_1_entry.configure(bg=green_tk)
         else:
             ko_note_1_entry.configure(bg=yellow_tk)
     else:        ko_note_1_entry.configure(bg=red_tk)
-    if getIntegers(ko_2_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_2_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_2_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_2_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_2_entry.configure(bg=green_tk)
         else:
             ko_note_2_entry.configure(bg=yellow_tk)
     else:        ko_note_2_entry.configure(bg=red_tk)
-    if getIntegers(ko_3_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_3_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_3_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_3_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_3_entry.configure(bg=green_tk)
         else:
             ko_note_3_entry.configure(bg=yellow_tk)
     else:        ko_note_3_entry.configure(bg=red_tk)
-    if getIntegers(ko_4_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_4_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_4_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_4_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_4_entry.configure(bg=green_tk)
         else:
             ko_note_4_entry.configure(bg=yellow_tk)
     else:        ko_note_4_entry.configure(bg=red_tk)
-    if getIntegers(ko_5_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_5_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_5_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_5_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_5_entry.configure(bg=green_tk)
         else:
             ko_note_5_entry.configure(bg=yellow_tk)
     else:        ko_note_5_entry.configure(bg=red_tk)
-    if getIntegers(ko_10_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_10_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_10_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_10_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_10_entry.configure(bg=green_tk)
         else:
             ko_note_10_entry.configure(bg=yellow_tk)
     else:        ko_note_10_entry.configure(bg=red_tk)
-    if getIntegers(ko_fp_var.get())[0] == getIntegers(get_current_time())[0]:
-        if getIntegers(ko_fp_var.get())[3] == getIntegers(get_current_time())[3]:
+    if Str.get_integers(ko_fp_var.get())[0] == Str.get_integers(get_current_time())[0]:
+        if Str.get_integers(ko_fp_var.get())[3] == Str.get_integers(get_current_time())[3]:
             ko_note_fp_entry.configure(bg=green_tk)
         else:
             ko_note_fp_entry.configure(bg=yellow_tk)
@@ -430,11 +434,11 @@ note_entry.bind('<Enter>', lambda x: check_buttons_and_colors())
 note_entry.bind('<Leave>', lambda x: check_buttons_and_colors())
 save_btn_r = 18
 save_btn = Button(root, height = 1, text = 'Save all! and update')
-save_btn.bind('<Button-1>', lambda x: saveJSON())
+save_btn.bind('<Button-1>', lambda x: savejson())
 save_btn.bind('<Enter>', lambda x: check_buttons_and_colors())
 save_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 save_btn.grid(row=save_btn_r, column=0, sticky=W+E+S+N, rowspan=1, columnspan=3)
 json_in_memory['version'] = {'major':3, 'minor':43, 'patch':0}
-saveJSON()
+savejson()
 root.title("SolvoUnload 3.43.0 beta")
 mainloop()
