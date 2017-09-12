@@ -9,7 +9,7 @@ from commands7 import *  # mine commands
 
 
 isDebug = False
-isDebug=True
+# isDebug=True
 if OS.name == "macos":
     warning("debug mode on macOS")
     isDebug = True

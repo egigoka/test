@@ -281,6 +281,8 @@ try:
                     sleep(State.before_ctrl_a_sleep)
                     hotkey('ctrl', 'a')                                                             # выделить всё
                     sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
+                    hotkey('ctrl', 'a')                                                             
+                    sleep(State.ctrl_a_sleep)                                                       
                     dropdown = None                                                                 # меню не выпало
                     while not dropdown:                                                             # пока не выпадет меню:
                         Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области

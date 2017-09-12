@@ -8,6 +8,7 @@ import sys
 sys.path.append("../..")
 sys.path.append("..\..")
 sys.path.append(".")
+sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(".\term")
 from commands7 import *

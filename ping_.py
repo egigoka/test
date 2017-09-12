@@ -41,6 +41,8 @@ if not State.no81:
 domains += ['192.168.98.82']  # fingerprint
 domains += ['192.168.98.83']  # fingerprint
 domains += ['192.168.98.84']  # fingerprint
+domains += ['192.168.99.240']  # PC on "returns"
+domains += ['192.168.99.99']  # PC on "fruits"
 
 if State.online:
     domains += ['ya.ru']
