@@ -351,6 +351,13 @@ if True:
     # fix in import how-to
     __version__ = "7.13.2-alpha"
     # Locations.scripts_folder
+    __version__ = "7.14.0-alpha"
+    # debug_print now Print.debug
+    # f Print.rewrite()
+    # Time.timer update
+    __version__ = "7.14.1-alpha"
+    # Print.rewrite bugfix
+    # Time.timer bugfix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -426,17 +433,56 @@ def is_python3():
     return is_true
 
 
+class Print():
+    @staticmethod
+    def debug(*arguments, raw=False):
+        line = "-" * Console.width()
+        print("Debug sheet:")
+        for arg in arguments:
+            print(line, end="")
+            if raw:
+                print(repr(arg))
+            else:
+                print(arg)
+            print(line)
+
+    @staticmethod
+    def rewrite(*arguments, sep = " ", raw=False):
+        line = " " * Console.width()
+        print(line, end="\r")
+        print(*arguments, sep=sep, end="\r")
+
+    @classmethod
+    def test(cls, string):
+
+        for i in range(100):
+            time.sleep(1)
+            print("\b" * i)
+            print("fuck")
+
+        for i in range(100):
+            if i != 0:
+                print('\b' * 6)
+            else:
+                print('header')
+            print(str(i) + '%').ljust(4),
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        from time import sleep
+        for i in range(100):
+            sys.stdout.write('%2s%%' % i)
+            sys.stdout.flush()
+            sleep(1)
+            sys.stdout.write('\b' * 3)
+
+
+
+#PRINT REWRITE
+
 def debug_print(*arguments, raw=False):
-    con_w = Console.width()
-    print("Debug sheet:")
-    for arg in arguments:
-        line = "-" * con_w
-        print(line, end="")
-        if raw:
-            print(repr(arg))
-        else:
-            print(arg)
-        print(line)
+    warning("debug_print now Print.debug")
+    Print.debug(*arguments, raw=raw)
 
 
 class Str:
@@ -890,23 +936,24 @@ class Time:
         + str(hour) + ":" + str(minute) + ":" + str(second)
         return rustime
 
-    @staticmethod
-    def sleep(seconds):
+    @classmethod
+    def sleep(cls, seconds):
+        warning("Time.sleep now Time.timer")
         print("Sleep", seconds, "seconds...")
-        time.sleep(seconds)
+        cls.timer(seconds=seconds)
 
     @staticmethod
-    def timer(seconds, print_every=1, check_per_sec=100):
+    def timer(seconds, check_per_sec=10):
         Countdown = Bench
         Countdown.start()
-        print("Timer for", seconds, "sec started")
         secs_second_var = int(seconds)
         while Countdown.get() < seconds:
             time.sleep(1/check_per_sec)
             secs_left_int = int(seconds - Countdown.get())
             if secs_left_int != secs_second_var:
                 secs_second_var = secs_left_int
-                print(secs_left_int)
+                Print.rewrite("Timer for " + str(seconds) + " seconds. " + str(secs_left_int) + " left")
+        Print.rewrite("")
 
 
 class Json():
