@@ -46,10 +46,10 @@ domains += ['192.168.99.99']  # PC on "fruits"
 
 if State.online:
     domains += ['ya.ru']
-errDomains = 0  # количество заведомо плохих доменов
-timeout = "5000"  # таймаут пинга в мс
-time_sleep = 60  # задержка перед новым проходом в с
-count_ping = 2  # количество попыток
+errDomains = 0  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+timeout = "5000"  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ
+time_sleep = 60  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ
+count_ping = 2  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 # debug_print(dir())
 
@@ -72,25 +72,28 @@ def checkfolder(folder, name):
 def main():
     # cnt_workin = 2
     while True:
-        # os.system('cls') # очистка экрана
-        # if cnt_workin <= 1:  # определение цвета верхнего пустого блока
+        # os.system('cls') # пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        # if cnt_workin <= 1:  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         #     color_upordown = 'on_red'
         # elif cnt_workin < len(domains)-errDomains:
         #     color_upordown = 'on_yellow'
         # else:
         #     color_upordown = 'on_green'
+        print_end = newline
+        if OS.name == 'windows':
+            print_end = ''
         cnt_workin = 0
-        cnt_space_h = Console.height() - len(domains)  # заполнение блока цветными пробалами
+        cnt_space_h = Console.height() - len(domains)  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         while cnt_space_h > 0:
             # cprint(" " * Console.width() *5, 'white', color_upordown, end = '')
             cnt_space_h += -1
-        for hostname in domains:  # сопсна, пинговка
+        for hostname in domains:  # пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             response = ping(hostname, quiet=True, count=count_ping)
             if response:  # and then check the response...
-                cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end='')
+                cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end=print_end)
                 cnt_workin += 1
             else:
-                cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end='')
+                cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end=print_end)
                 plog(__logfile__, hostname + " is down", quiet=True)
         if OS.name == "windows":
             folders = [{"name":"wms2host", "location":Locations.wms2host},
