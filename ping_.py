@@ -98,6 +98,5 @@ def main():
             for folder in folders:
                 checkfolder(folder["location"], folder["name"])
         print(Time.rustime())
-        print("Sleep...")
-        time.sleep(time_sleep)  # задержка перед новым проходом
+        Time.timer(60)
 main()

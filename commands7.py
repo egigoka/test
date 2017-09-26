@@ -358,6 +358,8 @@ if True:
     __version__ = "7.14.1-alpha"
     # Print.rewrite bugfix
     # Time.timer bugfix
+    __version__ = "7.14.2-alpha"
+    # Print.rewrite bugfix on Windows
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -449,6 +451,8 @@ class Print():
     @staticmethod
     def rewrite(*arguments, sep = " ", raw=False):
         line = " " * Console.width()
+        if OS.name == "windows":
+            line = line[:-1]
         print(line, end="\r")
         print(*arguments, sep=sep, end="\r")
 
