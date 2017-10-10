@@ -65,11 +65,12 @@ def bartenderMineDocument(name):
     return path
 
 # создаём группу фрукты
-# jsonStringInMemory["group_fruit"] = {} # имя группы
-# jsonStringInMemory["group_fruit"]["prefix"] = "FA" # префикс
-# jsonStringInMemory["group_fruit"]["lastnum"] = 0 # последний номер
-# savejson(settingsJsonFile, jsonStringInMemory)
-# sys.exit()
+#name_of_group = "group_" + "holod"
+#jsonStringInMemory[name_of_group] = {} # имя группы
+#jsonStringInMemory[name_of_group]["prefix"] = "RA" # префикс
+#jsonStringInMemory[name_of_group]["lastnum"] = 0 # последний номер
+#Json.save(settingsJsonFile, jsonStringInMemory)
+#sys.exit()
 
 
 def newPrintBars(cnt_bars, group_name, file_save_name = outputFile):
@@ -140,6 +141,7 @@ def main(arg1=None, arg2=None, arg3=None, arg4 = None):  # todo печать п�
         print("[8] - Алкоголь")
         print("[9] - Фрукты")
         print("[10]- 10 группа")
+        print("[11]- Холодильник")
         print("[g] - Грузчики логины")
         print("[t] - 1 ячейку")
         print("[mt]- Несколько ячеек")
@@ -157,7 +159,9 @@ def main(arg1=None, arg2=None, arg3=None, arg4 = None):  # todo печать п�
     else:
         inputGroupAndCount = input("Введите номер: ")
     groupName = False
-    if "10" in inputGroupAndCount:
+    if "11" in inputGroupAndCount:
+        groupName = "group_holod"
+    elif "10" in inputGroupAndCount:
         groupName = "group10"
     elif "1" in inputGroupAndCount:
         groupName = "group1"

@@ -63,7 +63,7 @@ Timer = Bench
 def get_img_name(*name_shards):
     if len(name_shards[0]) == 0:
         raise IndexError("first name shard is empty")
-    #debug_print("name_shards",name_shards,"len(name_shards)",len(name_shards),"len(name_shards[0])",len(name_shards[0]))
+    #Print.debug("name_shards",name_shards,"len(name_shards)",len(name_shards),"len(name_shards[0])",len(name_shards[0]))
     imgs = []
     for file in Dir.contain(State.buttons_pics_folder):
         file_is_good = True
@@ -126,15 +126,20 @@ def locate(*names, safe=False, timer=False):
 
 
 def wait_locate(*names, every=1, timeout=60, safe=False):
+    Print.debug("wait_locate started")
     timeout_reached = False
     position = None
     Timer.start()
     while not timeout_reached and not position:
         sleep(every)
         position = locate(*names, safe=True, timer=True)
+        Print.debug("Timer.get()", Timer.get(), "timeout", timeout, )
         timeout_reached = Timer.get() > timeout
+        Print.debug("timeout_reached = Timer.get() > timeout", timeout_reached)
+    Print.debug("timeout_reached and not position")
     if timeout_reached and not position and not safe:
         raise RuntimeError("timeout " + str(timeout) + " reached while searching for " + str(names))
+    Print.debug("wait_locate ended")
     return position
 
 def hotkey(*args):
@@ -143,8 +148,9 @@ def hotkey(*args):
 
 def sleep(seconds):
     if seconds >= 1:
-        print("sleeping", seconds, "seconds")
-    time.sleep(seconds)
+        Time.timer(seconds)
+    else:
+        time.sleep(seconds)
 
 def message(text, title='some window', button='oh no'):
     pyautogui.alert(text=text, title=title, button=button)
@@ -179,23 +185,25 @@ class Exceptions:
 
 class Actions:
     def wait_for_done(fast=False):
+        Print.debug ("Actions.wait_for_done started", "fast = "+str(fast))
         ok_position = None
         while not ok_position:
             try:
-                ok_position = locate("окбелаяw7", "окбелаяw10")
-            except IndexError as err:
-                print (err)
+                ok_position = locate("окбелаяw7", "окбелаяw10")  # вначале пробуем найти кнопку ок
+            except IndexError as err:  # кнопка ок не найдена
+                print (err)  # вывести сообщение о том, что ничего не найдено
                 try:
                     sleep(2)
                     ok_position = locate("progressbaremptyw7", "progressbaremptyw10")
                     if not fast:
                         if ok_position:
-                            ok_position_2 = wait_locate("окбелаяw7", "окбелаяw10", timeout=10, safe=True)
+                            ok_position_2 = wait_locate("окбелаяw7", "окбелаяw10", timeout=10, safe=True)  # ошибка тут
                             if ok_position_2:
                                 ok_position = ok_position_2
                 except IndexError as err:
                     print(err)
         move(ok_position)
+        Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         Click.left()
 
 
@@ -297,6 +305,18 @@ try:
 
     if Arguments.batch_unload:    # рейсы
         def main():
+            
+            def unload():
+                Click.right()
+                move(wait_locate("команды...белая", every=0.1, timeout=10))
+                move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
+                Click.left()
+            
+            def unload_last():
+                move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
+                unload()
+                
+            
             Open.solvo()
             Open.Solvo.Menu.Documents.shipments()
             Click.left(move(wait_locate("светлозел", every=0.1, timeout=30)))
@@ -310,17 +330,19 @@ try:
                     except IndexError as err:
                         print (err)
                         move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
-                        if OS.windows_version == 10:
-                            position_of_button = wait_locate("buttonup", every=0.1, timeout=30)
+                        # if OS.windows_version == 10:
+                        if True:
+                            try:
+                                position_of_button = wait_locate("buttonup_working", every=0.1, timeout=30)
+                            except IndexError:
+                                unload_last()
+                                
                             for i in Int.from_to(1,5):
                                 sleep(0.1)
                                 Click.left(move(position_of_button))
-                        Scroll.up()
+                        # Scroll.up()
                 move(position)
-                Click.right()
-                move(wait_locate("команды...белая", every=0.1, timeout=10))
-                move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
-                Click.left()
+                unload()
                 Actions.wait_for_done()
                 Bench.end()
 
@@ -330,7 +352,7 @@ try:
                 Open.solvo()
                 Open.Solvo.Menu.Documents.orders()
                 position = None
-                debug_print("position", position)
+                # Print.debug("position", position)
                 while not position:
                     try:
                         position = locate("собрансиняяw7", "собрансиняяw10", "собранзел")
