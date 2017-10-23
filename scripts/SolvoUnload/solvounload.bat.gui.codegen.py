@@ -9,7 +9,8 @@ from commands7 import *  # mine commands
 
 
 isDebug = False
-# isDebug=True
+if "debug" in sys.argv:
+    isDebug = True
 if OS.name == "macos":
     warning("debug mode on macOS")
     isDebug = True
@@ -235,8 +236,11 @@ if True: # code stamps
     def ko_update_func(group):
         code = newline + 'def update_ko_' + group + '():' + newline
         # code += '    global kan_otb_note_var_' + group + newline
-        code += '    if ko_note_' + group + '_var.get() == "п12мм12мо12" or ko_note_' + group + '_var.get() == "п1212мм1212мо1212":' + newline
+        code += '    if ko_note_' + group + '_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:' + newline
+        # code += '    if ko_note_' + group + '_var.get() == "п12мм12мо12" or ko_note_' + group + '_var.get() == "п1212мм1212мо1212" or ko_note_' + group + '_var.get() == "п12мм12мо12мМ":' + newline
         code += '        ko_note_' + group + '_var.set("пмммо")' + newline
+        code += '    elif ko_note_' + group + '_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:' + newline
+        code += '        ko_note_' + group + '_var.set("пмммомМ")' + newline
         code += '    json_in_memory["kan_otb_note_' + group + '"] = ko_note_' + group + '_var.get()' + newline
         code += '    json_in_memory["kan_otb_time_' + group + '"] = get_current_time()' + newline
         code += '    ko_' + group + '_var.set(json_in_memory["kan_otb_time_' + group + '"])' + newline
@@ -284,8 +288,8 @@ Codegen.add_line(button_code(name="save", text="Save all! and update", lambdax="
 
 
 major_v = 3
-minor_v = 43
-patch_v = 0
+minor_v = 44
+patch_v = 3
 Codegen.add_line("json_in_memory['version'] = {'major':" + str(major_v) + ", 'minor':"
          + str(minor_v) + ", 'patch':" + str(patch_v) + "}" + newline
          + "savejson()" + newline)

@@ -55,8 +55,10 @@ def inc_day(var):
     exec(var + "_var.set('" + json_in_memory[var] + "')")
     savejson()
 def update_ko_1():
-    if ko_note_1_var.get() == "п12мм12мо12" or ko_note_1_var.get() == "п1212мм1212мо1212":
+    if ko_note_1_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_1_var.set("пмммо")
+    elif ko_note_1_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_1_var.set("пмммомМ")
     json_in_memory["kan_otb_note_1"] = ko_note_1_var.get()
     json_in_memory["kan_otb_time_1"] = get_current_time()
     ko_1_var.set(json_in_memory["kan_otb_time_1"])
@@ -85,8 +87,10 @@ ko_1_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 ko_1_btn.grid(row=ko_1_btn_r, column=2, sticky=W+E+S+N, rowspan=2, columnspan=1)
 
 def update_ko_2():
-    if ko_note_2_var.get() == "п12мм12мо12" or ko_note_2_var.get() == "п1212мм1212мо1212":
+    if ko_note_2_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_2_var.set("пмммо")
+    elif ko_note_2_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_2_var.set("пмммомМ")
     json_in_memory["kan_otb_note_2"] = ko_note_2_var.get()
     json_in_memory["kan_otb_time_2"] = get_current_time()
     ko_2_var.set(json_in_memory["kan_otb_time_2"])
@@ -115,8 +119,10 @@ ko_2_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 ko_2_btn.grid(row=ko_2_btn_r, column=2, sticky=W+E+S+N, rowspan=2, columnspan=1)
 
 def update_ko_3():
-    if ko_note_3_var.get() == "п12мм12мо12" or ko_note_3_var.get() == "п1212мм1212мо1212":
+    if ko_note_3_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_3_var.set("пмммо")
+    elif ko_note_3_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_3_var.set("пмммомМ")
     json_in_memory["kan_otb_note_3"] = ko_note_3_var.get()
     json_in_memory["kan_otb_time_3"] = get_current_time()
     ko_3_var.set(json_in_memory["kan_otb_time_3"])
@@ -145,8 +151,10 @@ ko_3_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 ko_3_btn.grid(row=ko_3_btn_r, column=2, sticky=W+E+S+N, rowspan=2, columnspan=1)
 
 def update_ko_4():
-    if ko_note_4_var.get() == "п12мм12мо12" or ko_note_4_var.get() == "п1212мм1212мо1212":
+    if ko_note_4_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_4_var.set("пмммо")
+    elif ko_note_4_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_4_var.set("пмммомМ")
     json_in_memory["kan_otb_note_4"] = ko_note_4_var.get()
     json_in_memory["kan_otb_time_4"] = get_current_time()
     ko_4_var.set(json_in_memory["kan_otb_time_4"])
@@ -175,8 +183,10 @@ ko_4_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 ko_4_btn.grid(row=ko_4_btn_r, column=2, sticky=W+E+S+N, rowspan=2, columnspan=1)
 
 def update_ko_5():
-    if ko_note_5_var.get() == "п12мм12мо12" or ko_note_5_var.get() == "п1212мм1212мо1212":
+    if ko_note_5_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_5_var.set("пмммо")
+    elif ko_note_5_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_5_var.set("пмммомМ")
     json_in_memory["kan_otb_note_5"] = ko_note_5_var.get()
     json_in_memory["kan_otb_time_5"] = get_current_time()
     ko_5_var.set(json_in_memory["kan_otb_time_5"])
@@ -205,8 +215,10 @@ ko_5_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 ko_5_btn.grid(row=ko_5_btn_r, column=2, sticky=W+E+S+N, rowspan=2, columnspan=1)
 
 def update_ko_10():
-    if ko_note_10_var.get() == "п12мм12мо12" or ko_note_10_var.get() == "п1212мм1212мо1212":
+    if ko_note_10_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_10_var.set("пмммо")
+    elif ko_note_10_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_10_var.set("пмммомМ")
     json_in_memory["kan_otb_note_10"] = ko_note_10_var.get()
     json_in_memory["kan_otb_time_10"] = get_current_time()
     ko_10_var.set(json_in_memory["kan_otb_time_10"])
@@ -235,8 +247,10 @@ ko_10_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 ko_10_btn.grid(row=ko_10_btn_r, column=2, sticky=W+E+S+N, rowspan=2, columnspan=1)
 
 def update_ko_fp():
-    if ko_note_fp_var.get() == "п12мм12мо12" or ko_note_fp_var.get() == "п1212мм1212мо1212":
+    if ko_note_fp_var.get() in ["п12мм12мо12", "п1212мм1212мо1212", "п2мм2мо2", "п22мм22мо22"]:
         ko_note_fp_var.set("пмммо")
+    elif ko_note_fp_var.get() in ["п12мм12мо12мМ", "п2мм2мо2мМ", "п12мм12мо12мМ12", "п2мм2мо2мМ2", ]:
+        ko_note_fp_var.set("пмммомМ")
     json_in_memory["kan_otb_note_fp"] = ko_note_fp_var.get()
     json_in_memory["kan_otb_time_fp"] = get_current_time()
     ko_fp_var.set(json_in_memory["kan_otb_time_fp"])
@@ -438,7 +452,7 @@ save_btn.bind('<Button-1>', lambda x: savejson())
 save_btn.bind('<Enter>', lambda x: check_buttons_and_colors())
 save_btn.bind('<Leave>', lambda x: check_buttons_and_colors())
 save_btn.grid(row=save_btn_r, column=0, sticky=W+E+S+N, rowspan=1, columnspan=3)
-json_in_memory['version'] = {'major':3, 'minor':43, 'patch':0}
+json_in_memory['version'] = {'major':3, 'minor':44, 'patch':3}
 savejson()
-root.title("SolvoUnload 3.43.0 beta")
+root.title("SolvoUnload 3.44.3 beta")
 mainloop()

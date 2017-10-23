@@ -176,6 +176,8 @@ class RealButton:
         if right != cls.state_right:  # Button state changed
             cls.state_right = right
             if right >= 0:
+                while win32api.GetKeyState(0x02) >= 0:
+                    print("left button pressed?!")
                 return True
             else:
                 return False
@@ -198,10 +200,12 @@ def main():
 
 def start():
     while True:  # крутить до остановки
+        print(win32api.GetKeyState(0x02))
         try:# обработка остановки программы
             time.sleep(0.01)  # небольшая задержка
             if RealButton.check_right_button_release():  # if button pressed
                 Counter.increase()  # increase counter
+                Print.debug("Counter.cnt increased", Counter.cnt)
                 if Counter.check():  # if counter triggered
                     if ShittyTime.notimeout():  # if timeout not reached
                         main()  # run main function

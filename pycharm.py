@@ -13,12 +13,15 @@ __version__ = "1.0.4"
 # bugfix
 __version__ = "1.1.0"
 # macOS support
+__version__ = "1.1.1"
+# support updated c7
 
 if OS.name == "macos":
     pycharmExec = Path.extend("Applications", "Pycharm CE.app", "Contents", "MacOS", "pycharm")
 elif OS.name == "windows":
     pycharmName = "pycharm.exe"
-    pycharmFolder = r"C:\Program Files (x86)\JetBrains\PyCharm Community Edition 2016.3.2\bin"
+    # pycharmFolder = r"C:\Program Files (x86)\JetBrains\PyCharm Community Edition 2016.3.2\bin"
+    pycharmFolder = r"C:\Program Files\JetBrains\PyCharm Community Edition 2017.2.3\bin"
     pycharmExec = Path.extend(pycharmFolder, pycharmName)
 
 
@@ -32,11 +35,11 @@ def openFile(fileFullPath):
         pathOfRealFile = batfilepathIO.readline() # чтение первой строчки
         batfilepathIO.close() # закрытие файла
         if pathOfRealFile[:1] == "@":  # обработка случая, когда в бат файле указаны различные аргументы
-            pathOfRealFile = substring(pathOfRealFile, before="@", after=" %")
+            pathOfRealFile = Str.substring(pathOfRealFile, before="@", after=" %")
         if "pyw" in pathOfRealFile:
-            pathOfRealFile = substring(pathOfRealFile, "pyw ")
+            pathOfRealFile = Str.substring(pathOfRealFile, "pyw ")
         if "py" in pathOfRealFile:
-            pathOfRealFile = substring(pathOfRealFile, "py ")
+            pathOfRealFile = Str.substring(pathOfRealFile, "py ")
         pathOfRealFile = Path.full(pathOfRealFile)
         pathOfRealFile = pathOfRealFile.rstrip(newline2)
         pathOfRealFile = pathOfRealFile.rstrip(newline)

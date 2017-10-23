@@ -184,6 +184,18 @@ class Exceptions:
 
 
 class Actions:
+    
+    def wait_for_done(fast=False):
+        class LocalState:
+            def reset():
+                ok_position = None
+                pb_position = None
+            def check_ok_position(timeout=False):
+                if not timer:
+                    return locate("окбелаяw7", "окбелаяw10")
+                else:
+                    wait_locate("окбелаяw7", "окбелаяw10", timeout=timeout, safe=True)
+    
     def wait_for_done(fast=False):
         Print.debug ("Actions.wait_for_done started", "fast = "+str(fast))
         ok_position = None
@@ -252,11 +264,11 @@ try:
             pass
             # Open.solvo()
 
-    if Arguments.ctrl_v:
+    elif Arguments.ctrl_v:
         def main():
             hotkey('ctrl', 'v')
 
-    if Arguments.lo:
+    elif Arguments.lo:
         def main():
             try:
                 while True:
@@ -277,7 +289,7 @@ try:
                 Windows.lock()
 
 
-    if Arguments.single_unload:
+    elif Arguments.single_unload:
         def main():
             #try:
                 while True:
@@ -303,7 +315,7 @@ try:
             #except RuntimeError:
             #    Windows.lock()
 
-    if Arguments.batch_unload:    # рейсы
+    elif Arguments.batch_unload:    # рейсы
         def main():
             
             def unload():
@@ -346,7 +358,7 @@ try:
                 Actions.wait_for_done()
                 Bench.end()
 
-    if Arguments.single_unload_batch_support:
+    elif Arguments.single_unload_batch_support:
         def main():
             while True:
                 Open.solvo()
@@ -380,7 +392,10 @@ try:
                 move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
                 Click.left()
                 Actions.wait_for_done()
-
+    
+    else:
+        def main():
+            message("wrong argument!")
 
 
 
