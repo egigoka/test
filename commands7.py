@@ -393,6 +393,7 @@ def mine_import(module_name, to_root_globals=None):
         print(command)
         exec(import_command, globals())
 
+mine_import("pyautogui")
 
 import os, \
        json, \
