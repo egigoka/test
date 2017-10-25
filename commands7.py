@@ -401,7 +401,7 @@ import os, \
        subprocess, \
        datetime, \
        re, \
-       ctypes, \
+       ctypes
 mine_import("pyautogui")
        termcolors
        colorama
