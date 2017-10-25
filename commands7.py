@@ -368,6 +368,28 @@ if True:
 # todo version diff
 # todo delete all try wide except bugs-hidingers
 
+def is_python3():
+    is_true = sys.version_info >= (3, 0)
+    return is_true
+
+import subprocess
+
+def mine_import(module_name, to_root_globals=None):
+    if to_root_globals:
+        import_command = "from " + module_name + " import " + to_root_globals
+    else:
+        import_command = "import " + module_name
+    try:
+        exec(import_command, globals())
+    except ImportError:
+        if is_python3():
+            pipver = "3"
+        else:
+            pipver = ""
+        subprocess.call("pip" + pipver " install " + module_name)
+        exec(import_command, globals())
+
+
 import os, \
        json, \
        sys, \
@@ -378,8 +400,8 @@ import os, \
        datetime, \
        re, \
        ctypes, \
-       pyautogui, \
-       termcolor, \
+mine_import("pyautogui")
+       termcolors
        colorama
 from tkinter import *
 
@@ -445,9 +467,7 @@ backslash = "\ "[:1]
 newline2 = "\r\n"
 
 
-def is_python3():
-    is_true = sys.version_info >= (3, 0)
-    return is_true
+
 
 
 class Print():
