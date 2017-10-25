@@ -1,5 +1,7 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
+import os
+import sys  
 if True:
     import datetime
     start_bench_no_bench = datetime.datetime.now()
@@ -374,7 +376,6 @@ def is_python3():
     is_true = sys.version_info >= (3, 0)
     return is_true
 
-import os
 
 def mine_import(module_name, to_root_globals=None):
     if to_root_globals:
@@ -395,9 +396,7 @@ def mine_import(module_name, to_root_globals=None):
 
 mine_import("pyautogui")
 
-import os, \
-       json, \
-       sys, \
+import json, \
        shutil, \
        time, \
        random, \
