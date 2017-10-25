@@ -379,6 +379,22 @@ def is_python3():
     return is_true
 
 
+class OS:
+    windows_version = None
+    if sys.platform == "linux" or sys.platform == "linux2":
+        name = "linux"
+    elif sys.platform == "win32" or sys.platform == "cygwin":
+        name = "windows"
+        windows_version = sys.getwindowsversion().major
+    elif sys.platform == "darwin":
+        name = "macos"
+
+    if name == "windows":
+        family = "nt"
+    elif name in ["macos", "linux"]:
+        family = "unix"
+
+
 def mine_import(module_name, to_root_globals=None):
     if is_python3():
         pipver = "3"
@@ -447,20 +463,7 @@ from commands7 import *""")
 # from commands7 import *
 
 
-class OS:
-    windows_version = None
-    if sys.platform == "linux" or sys.platform == "linux2":
-        name = "linux"
-    elif sys.platform == "win32" or sys.platform == "cygwin":
-        name = "windows"
-        windows_version = sys.getwindowsversion().major
-    elif sys.platform == "darwin":
-        name = "macos"
 
-    if name == "windows":
-        family = "nt"
-    elif name in ["macos", "linux"]:
-        family = "unix"
 
 
 
