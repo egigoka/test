@@ -439,8 +439,7 @@ def mine_import(module_name, to_root_globals=None):
 
 if OS.display:
     mine_import("pyautogui")
-
-
+mine_import("colorama")
 import json, \
        shutil, \
        time, \
@@ -448,8 +447,7 @@ import json, \
        subprocess, \
        datetime, \
        re, \
-       ctypes, \
-       colorama
+       ctypes
 from tkinter import *
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
