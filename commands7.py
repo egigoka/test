@@ -433,8 +433,7 @@ def mine_import(module_name, objects=None):
         command = "pip" + pipver + " install " + module_name
         os.system(command)
         print(command)
-        print("module", module_name, "not imported")
-        #exec(import_command, globals())
+        exec(import_command, globals())
 
 
 if OS.display:
@@ -998,6 +997,9 @@ class Time:
             minute = gettime.strftime('%M')
             second = gettime.strftime('%S')
         rustime = str(day) + " числа " + str(month) + " месяца " + str(year) + " года в " \
+        + str(hour) + ":" + str(minute) + ":" + str(second)
+        if OS.name == "linux":
+            rustime = str(day) + "." + str(month) + "." + str(year) + "y at " \
         + str(hour) + ":" + str(minute) + ":" + str(second)
         return rustime
 
