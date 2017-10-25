@@ -366,6 +366,8 @@ if True:
     # import how-to now kinda interactive
     __version__ = "7.15.0-alpha"
     # f mine_import
+    __version__ = "7.15.1-alpha"
+    # mine_import update for pyautogui support
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -378,6 +380,21 @@ def is_python3():
 
 
 def mine_import(module_name, to_root_globals=None):
+    if is_python3():
+        pipver = "3"
+    else:
+        pipver = ""
+    ###########RARE###########
+    if module_name == "pyautogui":
+        if OS.name == "linux":
+            if is_python3():
+                os.system("apt-get install python-xlib")
+            else
+                os.system("apt-get install python3-Xlib")
+        if OS.name == "macos":
+            os.system("pip" + pipver + " install pyobjc-core")
+            os.system("pip" + pipver + " install pyobjc")
+    ###########RARE###########
     if to_root_globals:
         import_command = "from " + module_name + " import " + to_root_globals
     else:
@@ -385,10 +402,7 @@ def mine_import(module_name, to_root_globals=None):
     try:
         exec(import_command, globals())
     except ImportError:
-        if is_python3():
-            pipver = "3"
-        else:
-            pipver = ""
+
         command = "pip" + pipver + " install " + module_name
         os.system(command)
         print(command)
