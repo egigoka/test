@@ -449,7 +449,6 @@ import json, \
        datetime, \
        re, \
        ctypes, \
-       pyautogui, \
        colorama
 from tkinter import *
 
