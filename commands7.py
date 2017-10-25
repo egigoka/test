@@ -368,6 +368,8 @@ if True:
     # f mine_import
     __version__ = "7.15.1-alpha"
     # mine_import update for pyautogui support
+    __version__ = "7.16.0-alpha"
+    # OS.display
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -393,6 +395,14 @@ class OS:
         family = "nt"
     elif name in ["macos", "linux"]:
         family = "unix"
+
+    try:
+        os.environ['DISPLAY']
+        display = True
+    except KeyError:
+        display = False
+        print("Your system haven't display -_-")
+
 
 
 def mine_import(module_name, to_root_globals=None):
@@ -426,7 +436,10 @@ def mine_import(module_name, to_root_globals=None):
         print("module", module_name, "not imported")
         #exec(import_command, globals())
 
-mine_import("pyautogui")
+
+if OS.display:
+    mine_import("pyautogui")
+
 
 import json, \
        shutil, \
@@ -1235,6 +1248,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
 
 
 def warning(message):
+
     pyautogui.alert(message)
 
 def substring(string, before, after=None):
