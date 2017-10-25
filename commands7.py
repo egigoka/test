@@ -405,7 +405,7 @@ class OS:
 
 
 
-def mine_import(module_name, to_root_globals=None):
+def mine_import(module_name, to_root_globals=False):
     if is_python3():
         pipver = "3"
     else:
@@ -439,6 +439,8 @@ def mine_import(module_name, to_root_globals=None):
 
 if OS.display:
     mine_import("pyautogui")
+    mine_import("tkinter", to_root_globals=True)
+    #from tkinter import *
 mine_import("colorama")
 import json, \
        shutil, \
@@ -448,7 +450,7 @@ import json, \
        datetime, \
        re, \
        ctypes
-from tkinter import *
+
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
 # http://python.su/forum/topic/15531/?page=1#post-93316
