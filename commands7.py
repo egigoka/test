@@ -392,7 +392,7 @@ def mine_import(module_name, to_root_globals=None):
         command = "pip" + pipver + " install " + module_name
         os.system(command)
         print(command)
-        Print.debug("module", module_name, "not imported")
+        print("module", module_name, "not imported")
         #exec(import_command, globals())
 
 mine_import("pyautogui")
