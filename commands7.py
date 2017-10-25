@@ -433,6 +433,7 @@ def mine_import(module_name, objects=None):
         command = "pip" + pipver + " install " + module_name
         os.system(command)
         print(command)
+        input()
         exec(import_command, globals())
 
 
