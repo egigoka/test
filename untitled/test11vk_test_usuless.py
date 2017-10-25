@@ -4,22 +4,36 @@ import vk_requests
 import time
 import sys
 
-import win_unicode_console
-win_unicode_console.enable()
+# mine commands
+import sys
+sys.path.append("../..")
+sys.path.append("..\..")
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("./term")
+sys.path.append(r".	erm")
+from commands7 import *
+
+if OS.name == "winows":
+    import win_unicode_console
+    win_unicode_console.enable()
 
 import test11vk_test_usuless_login
 
 #print(test11vk_test_usuless_login.varVkUser)
 #print(test11vk_test_usuless_login.varVkPass)
 
-#api = vk_requests.create_api(app_id=5569080, login=test11vk_test_usuless_login.varVkUser, password=test11vk_test_usuless_login.varVkPass) # todo включить авторизацию
-api = vk_requests.create_api() # создание сессии без логина
+api = vk_requests.create_api(app_id=5569080, login=test11vk_test_usuless_login.varVkUser, password=test11vk_test_usuless_login.varVkPass) # todo включить авторизацию
+api_status_kim = vk_requests.create_api(app_id=5569080, login=test11vk_test_usuless_login.varVkUser, password=test11vk_test_usuless_login.varVkPass, scope=['offline', 'status'])#, api_version='5.00')
+api_mine_interactive = vk_requests.create_api(interactive=True, scope=['offline', 'status'])
+#api = vk_requests.create_api() # создание сессии без логина
 
+api_status_kim.status.set(text='Не Ким!1один')
 #print(api.users.get(user_ids=1))
 #print()
 #print(api.users.get(user_ids=49920173))
 #print()
-cnt = 1549 # с какого поста начинать отображать
+cnt = 7400 # с какого поста начинать отображать
 timeSleep = .250 # так как программа однопоточная, то чтобы вк не банил, стоит задержка в 250 мс
 whitespace = "   " # отступ
 postCount = 1 # количество постов за раз скачивать
@@ -91,6 +105,7 @@ def printReversely(input_, depth=0):
 
 
 while True:
+    sys.exit()
     print()
     print("тест ", cnt)
     print()
@@ -203,7 +218,7 @@ def closeWindow(ev):
 
 def editPic(ev):
     img.show() # открывает BMP в Photoshop.
-    print("Доделай это нормально!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    warning("Доделай это нормально!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 def savePic(ev):
     global root

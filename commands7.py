@@ -360,6 +360,8 @@ if True:
     # Time.timer bugfix
     __version__ = "7.14.2-alpha"
     # Print.rewrite bugfix on Windows
+    __version__ = "7.14.3-alpha"
+    # import how-to now kinda interactive
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -383,12 +385,25 @@ from tkinter import *
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
 # http://python.su/forum/topic/15531/?page=1#post-93316
+def how_to_import_this_useless_stuff():
+    print("""# import module like this:
+# mine commands
+import sys
+sys.path.append("../..")
+sys.path.append("..\..")
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("./term")
+sys.path.append(r".\term")
+from commands7 import *""")
+#
 # import sys
-# sys.path.append("..\..")
 # sys.path.append("../..")
-# sys.path.append("..")
+# sys.path.append("..\..")
 # sys.path.append(".")
-# from commands7 import *  # mine commands ###it didn't work with comment todo why?
+# sys.path.append("..")
+# sys.path.append("./term")
+# sys.path.append(r".\term")
 # from commands7 import *
 
 
@@ -407,7 +422,7 @@ class OS:
     elif name in ["macos", "linux"]:
         family = "unix"
 
-    
+
 
 
 def get_os():
@@ -1418,6 +1433,7 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
 
 
 if __name__ == "__main__":
+    how_to_import_this_useless_stuff()
     Repl.loop()
     #File.backup(r"\\192.168.99.91\shares\scripts\utilsupdate\utils_dev.py")
     #print(rustime(1487646452.7141206))

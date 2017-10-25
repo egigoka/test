@@ -1,7 +1,11 @@
 #! python3
 # -*- coding: utf-8 -*-
+# mine commands
 import sys
-sys.path.insert(0, "..")
-sys.path.insert(0, "../..")
-sys.path.insert(0, "..\..")
-from commands7 import *  # mine commands
+sys.path.append("../..")
+sys.path.append("..\..")
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("./term")
+sys.path.append(r".\term")
+from commands7 import *
