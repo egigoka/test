@@ -388,7 +388,9 @@ def mine_import(module_name, to_root_globals=None):
             pipver = "3"
         else:
             pipver = ""
-        os.system("pip" + pipver + " install " + module_name)
+        command = "pip" + pipver + " install " + module_name
+        os.system(command)
+        print(command)
         exec(import_command, globals())
 
 
