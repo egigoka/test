@@ -423,7 +423,7 @@ def mine_import(module_name, objects=None):
             os.system("pip" + pipver + " install pyobjc")
     ###########RARE###########
     if objects:
-        import_command = "from " + module_name + " import " + to_root_globals
+        import_command = "from " + module_name + " import " + objects
     else:
         import_command = "import " + module_name
     try:
