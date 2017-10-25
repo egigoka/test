@@ -388,7 +388,7 @@ def mine_import(module_name, to_root_globals=None):
             pipver = "3"
         else:
             pipver = ""
-        subprocess.call("pip" + pipver + " install " + module_name)
+        subprocess.call("pip" + pipver, "install", module_name)
         exec(import_command, globals())
 
 
