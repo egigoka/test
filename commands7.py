@@ -405,7 +405,7 @@ class OS:
 
 
 
-def mine_import(module_name, to_root_globals=False):
+def mine_import(module_name, objects=None):
     if is_python3():
         pipver = "3"
     else:
@@ -439,7 +439,7 @@ def mine_import(module_name, to_root_globals=False):
 
 if OS.display:
     mine_import("pyautogui")
-    mine_import("tkinter", to_root_globals=True)
+    mine_import("tkinter", objects="*")
     #from tkinter import *
 mine_import("colorama")
 import json, \
@@ -465,15 +465,6 @@ sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
 from commands7 import *""")
-#
-# import sys
-# sys.path.append("../..")
-# sys.path.append("..\..")
-# sys.path.append(".")
-# sys.path.append("..")
-# sys.path.append("./term")
-# sys.path.append(r".\term")
-# from commands7 import *
 
 
 
@@ -494,7 +485,7 @@ if OS.name == "windows":
 # win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
-from termcolor import colored, cprint  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 
 newline = '\n'
 ruble = u"\u20bd"  # \u20bd is ₽
