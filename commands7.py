@@ -362,6 +362,8 @@ if True:
     # Print.rewrite bugfix on Windows
     __version__ = "7.14.3-alpha"
     # import how-to now kinda interactive
+    __version__ = "7.15.0-alpha"
+    # f mine_import
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -386,7 +388,7 @@ def mine_import(module_name, to_root_globals=None):
             pipver = "3"
         else:
             pipver = ""
-        subprocess.call("pip" + pipver " install " + module_name)
+        subprocess.call("pip" + pipver + " install " + module_name)
         exec(import_command, globals())
 
 
