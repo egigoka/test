@@ -408,6 +408,7 @@ def mine_import(module_name, to_root_globals=None):
             else:
                 os.system("apt-get install python3-Xlib")
         if OS.name == "macos":
+            os.system("pip" + pipver + " install python" + pipver + "-xlib")
             os.system("pip" + pipver + " install pyobjc-core")
             os.system("pip" + pipver + " install pyobjc")
     ###########RARE###########
