@@ -403,8 +403,8 @@ import os, \
        re, \
        ctypes
 mine_import("pyautogui")
-       termcolors
-       colorama
+import termcolors
+import colorama
 from tkinter import *
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
