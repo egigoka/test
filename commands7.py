@@ -1,7 +1,7 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
 import os
-import sys  
+import sys
 if True:
     import datetime
     start_bench_no_bench = datetime.datetime.now()
@@ -392,7 +392,8 @@ def mine_import(module_name, to_root_globals=None):
         command = "pip" + pipver + " install " + module_name
         os.system(command)
         print(command)
-        exec(import_command, globals())
+        Print.debug("module", module_name, "not imported")
+        #exec(import_command, globals())
 
 mine_import("pyautogui")
 
