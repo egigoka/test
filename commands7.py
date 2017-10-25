@@ -403,10 +403,9 @@ import os, \
        subprocess, \
        datetime, \
        re, \
-       ctypes
-mine_import("pyautogui")
-import termcolors
-import colorama
+       ctypes, \
+       pyautogui, \
+       colorama
 from tkinter import *
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
@@ -458,7 +457,8 @@ def get_os():
 if OS.name == "windows":
     import win_unicode_console, \
            win32api, \
-           win32con
+           win32con, \
+           termcolors
 
 # win_unicode_console.enable()
 colorama.init()
