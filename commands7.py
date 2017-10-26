@@ -1191,8 +1191,9 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
             timeout_arg = "W"
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
                   " -" + timeout_arg + " " + str(timeout)
-        ping_output = Console.get_output(command)
         print(command, input())
+        ping_output = Console.get_output(command)
+
     except KeyboardInterrupt:
         sys.exit()
     except:  # any exception is not good ping
