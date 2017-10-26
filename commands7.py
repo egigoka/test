@@ -501,7 +501,7 @@ if OS.name == "windows":
     import win_unicode_console, \
            win32api, \
            win32con, \
-           termcolors
+           termcolor
 mine_import("colorama")
 # win_unicode_console.enable()
 colorama.init()
