@@ -378,6 +378,8 @@ if True:
     # ping on linux fix
     __version__ = "7.17.3-alpha"
     # mine_import fix
+    __version__ = "7.17.4-alpha"
+    # ping update
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -1181,7 +1183,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
     domain = getDomainOfUrl(domain)
     if not quiet:
         colorama.reinit()
-        print("Pinging", domain, count, "times...")
+        Print.rewrite("Pinging", domain, count, "times...")
         up_message = domain + " is up!"
         down_message = domain + " is down."
     try:
