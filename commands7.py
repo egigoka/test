@@ -372,8 +372,10 @@ if True:
     # OS.display
     __version__ = "7.17.0-alpha"
     # OS.cyrrilic_support
-    __version__ = "7.17.0-alpha"
+    __version__ = "7.17.1-alpha"
     # OS.cyrrilic_support fix
+    __version__ = "7.17.2-alpha"
+    # ping on linux fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -1189,6 +1191,8 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
         if OS.name in ["macos", "linux"]:
             count_arg = "c"
             timeout_arg = "W"
+        if OS.name == "linux":
+            timeout = timeout/1000
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
                   " -" + timeout_arg + " " + str(timeout)
         print(command, input())
