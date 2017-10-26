@@ -156,7 +156,7 @@ class Timer:
             cls.what_to_do()
 
 
-class RealButton:
+class legacy_RealButton:
     state_left = win32api.GetKeyState(0x01)
     state_right = win32api.GetKeyState(0x02)
 
@@ -183,6 +183,30 @@ class RealButton:
                 return False
 
 
+class RealButton:
+
+    
+    @staticmethod
+    def human_to_winapi_button_name(button):
+        buttons = {"left":0x01, "right":0x02}
+        return buttons[button]
+      
+    @classmethod
+    def winapi_button_state(cls, button):
+        return win32api.GetKeyState(cls.human_to_winapi_button_name(button))
+        
+    @classmethod
+    def pressed(cls, button):
+        state = cls.winapi_button_state(button)
+        if state in [0, 1]:
+            return False
+        elif state in [-127, -128]:
+            return True
+        
+    
+    
+
+
 def reset():
     Counter.reset()
     ShittyTime.reset()
@@ -194,27 +218,28 @@ def main():
     print("like this:")
     print("import tripleclick")
     print("def some_function()")
-    print("    # do what you want")
-    print("    pass")
+    print("    pass  # do what you want")
     print("tripleclick.main = some_function")
 
 def start():
     while True:  # крутить до остановки
-        print(win32api.GetKeyState(0x02))
-        try:# обработка остановки программы
-            time.sleep(0.01)  # небольшая задержка
-            if RealButton.check_right_button_release():  # if button pressed
-                Counter.increase()  # increase counter
-                Print.debug("Counter.cnt increased", Counter.cnt)
-                if Counter.check():  # if counter triggered
-                    if ShittyTime.notimeout():  # if timeout not reached
-                        main()  # run main function
-                        reset()  # reset classes
-            if RealButton.check_left_button_release():
-                reset()
-        except KeyboardInterrupt:
-            print("OK!")
-            sys.exit(0)
+        print (RealButton.pressed("right"))
+        print (RealButton.pressed("left"))
+        # print(win32api.GetKeyState(0x02))
+        #try:# обработка остановки программы
+        #    time.sleep(0.01)  # небольшая задержка
+        #    if RealButton.check_right_button_release():  # if button pressed
+        #        Counter.increase()  # increase counter
+        #        Print.debug("Counter.cnt increased", Counter.cnt)
+        #        if Counter.check():  # if counter triggered
+        #            if ShittyTime.notimeout():  # if timeout not reached
+        #                main()  # run main function
+        #                reset()  # reset classes
+        #    if RealButton.check_left_button_release():
+        #        reset()
+        #except KeyboardInterrupt:
+        #    print("OK!")
+        #    sys.exit(0)
 
     # if str("%.1f" % Timer.time_after_last_click)[-1:] == "0":
     #     print("%.0f" % (Timer.time_warn - Timer.time_after_last_click))

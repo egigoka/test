@@ -26,11 +26,6 @@ class Arguments:
         if arg in ["lo"]:  # накладные, привя
             lo = True
 
-    bugged_tripleclick = False
-    for arg in sys.argv:
-        if arg == "btk":
-            bugged_tripleclick = True
-
 
 class State:
     move_duration = 0.5
@@ -222,6 +217,12 @@ class Actions:
         move(ok_position)
         Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         Click.left()
+        
+    def wait_for_done(fast=None):
+        if fast:
+            sleep(30)
+        else:
+            sleep(200)
 
 
 class Open:
@@ -306,8 +307,8 @@ try:
                     sleep(State.before_ctrl_a_sleep)
                     hotkey('ctrl', 'a')                                                             # выделить всё
                     sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
-                    hotkey('ctrl', 'a')
-                    sleep(State.ctrl_a_sleep)
+                    hotkey('ctrl', 'a')                                                             
+                    sleep(State.ctrl_a_sleep)                                                       
                     dropdown = None                                                                 # меню не выпало
                     while not dropdown:                                                             # пока не выпадет меню:
                         Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
@@ -322,18 +323,18 @@ try:
 
     elif Arguments.batch_unload:    # рейсы
         def main():
-
+            
             def unload():
                 Click.right()
                 move(wait_locate("команды...белая", every=0.1, timeout=10))
                 move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
                 Click.left()
-
+            
             def unload_last():
                 move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
                 unload()
-
-
+                
+            
             Open.solvo()
             Open.Solvo.Menu.Documents.shipments()
             Click.left(move(wait_locate("светлозел", every=0.1, timeout=30)))
@@ -353,7 +354,7 @@ try:
                                 position_of_button = wait_locate("buttonup_working", every=0.1, timeout=30)
                             except IndexError:
                                 unload_last()
-
+                                
                             for i in Int.from_to(1,5):
                                 sleep(0.1)
                                 Click.left(move(position_of_button))
@@ -419,8 +420,6 @@ except KeyboardInterrupt:
 
 
 
+main() # fucking shit
 tripleclick.main = main
-if Arguments.bugged_tripleclick:
-    main()
-else:
-    tripleclick.start()
+tripleclick.start()
