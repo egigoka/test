@@ -1,9 +1,5 @@
 #!python3
 
-import vk_requests
-import time
-import sys
-
 # mine commands
 import sys
 sys.path.append("../..")
@@ -13,6 +9,9 @@ sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".	erm")
 from commands7 import *
+
+mine_import("vk_requests")
+
 
 if OS.name == "winows":
     import win_unicode_console

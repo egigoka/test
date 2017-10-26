@@ -1017,7 +1017,7 @@ class Time:
             second = gettime.strftime('%S')
         rustime = str(day) + " числа " + str(month) + " месяца " + str(year) + " года в " \
         + str(hour) + ":" + str(minute) + ":" + str(second)
-        if OS.name == "linux":
+        if not OS.cyrrilic_support:
             rustime = str(day) + "." + str(month) + "." + str(year) + "y at " \
         + str(hour) + ":" + str(minute) + ":" + str(second)
         return rustime
