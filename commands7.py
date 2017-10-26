@@ -376,6 +376,8 @@ if True:
     # OS.cyrrilic_support fix
     __version__ = "7.17.2-alpha"
     # ping on linux fix
+    __version__ = "7.17.3-alpha"
+    # mine_import fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -450,8 +452,6 @@ def mine_import(module_name, objects=None):
 
         command = "pip" + pipver + " install " + module_name
         os.system(command)
-        print(command)
-        input()
         exec(import_command, globals())
 
 
