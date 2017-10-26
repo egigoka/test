@@ -1,5 +1,7 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
+import os
+import sys
 if True:
     import datetime
     start_bench_no_bench = datetime.datetime.now()
@@ -360,36 +362,33 @@ if True:
     # Time.timer bugfix
     __version__ = "7.14.2-alpha"
     # Print.rewrite bugfix on Windows
+    __version__ = "7.14.3-alpha"
+    # import how-to now kinda interactive
+    __version__ = "7.15.0-alpha"
+    # f mine_import
+    __version__ = "7.15.1-alpha"
+    # mine_import update for pyautogui support
+    __version__ = "7.16.0-alpha"
+    # OS.display
+    __version__ = "7.17.0-alpha"
+    # OS.cyrrilic_support
+    __version__ = "7.17.1-alpha"
+    # OS.cyrrilic_support fix
+    __version__ = "7.17.2-alpha"
+    # ping on linux fix
+    __version__ = "7.17.3-alpha"
+    # mine_import fix
+    __version__ = "7.17.4-alpha"
+    # ping update
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
 # todo delete all try wide except bugs-hidingers
 
-import os, \
-       json, \
-       sys, \
-       shutil, \
-       time, \
-       random, \
-       subprocess, \
-       datetime, \
-       re, \
-       ctypes, \
-       pyautogui, \
-       termcolor, \
-       colorama
-from tkinter import *
-
-# ###############################################!!! HOW TO IMPORT !!!##################################################
-# http://python.su/forum/topic/15531/?page=1#post-93316
-# import sys
-# sys.path.append("..\..")
-# sys.path.append("../..")
-# sys.path.append("..")
-# sys.path.append(".")
-# from commands7 import *  # mine commands ###it didn't work with comment todo why?
-# from commands7 import *
+def is_python3():
+    is_true = sys.version_info >= (3, 0)
+    return is_true
 
 
 class OS:
@@ -407,7 +406,91 @@ class OS:
     elif name in ["macos", "linux"]:
         family = "unix"
 
-    
+    try:
+        os.environ['DISPLAY']
+        display = True
+    except KeyError:
+        display = False
+        print("Your system haven't display -_-")
+
+    try:
+        cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+        print(cyrline, end="\r")
+        print(" "*len(cyrline), end="\r")
+        cyrrilic_support = True
+    except UnicodeEncodeError as err:
+        cyrrilic_support = False
+        # print (err)
+        print ("Your system doesn't properly work with cyrrilic -_-")
+
+
+
+
+
+def mine_import(module_name, objects=None):
+    if is_python3():
+        pipver = "3"
+    else:
+        pipver = ""
+    ###########RARE###########
+    if module_name == "pyautogui":
+        if OS.name == "linux":
+            if is_python3():
+                os.system("apt-get install python-xlib")
+            else:
+                os.system("apt-get install python3-Xlib")
+        if OS.name == "macos":
+            os.system("pip" + pipver + " install python" + pipver + "-xlib")
+            os.system("pip" + pipver + " install pyobjc-core")
+            os.system("pip" + pipver + " install pyobjc")
+    ###########RARE###########
+    if objects:
+        import_command = "from " + module_name + " import " + objects
+    else:
+        import_command = "import " + module_name
+    try:
+        exec(import_command, globals())
+    except ImportError:
+
+        command = "pip" + pipver + " install " + module_name
+        os.system(command)
+        exec(import_command, globals())
+
+
+if OS.display:
+    mine_import("pyautogui")
+    mine_import("tkinter", objects="*")
+    #from tkinter import *
+
+
+import json, \
+       shutil, \
+       time, \
+       random, \
+       subprocess, \
+       datetime, \
+       re, \
+       ctypes
+
+
+# ###############################################!!! HOW TO IMPORT !!!##################################################
+# http://python.su/forum/topic/15531/?page=1#post-93316
+def how_to_import_this_useless_stuff():
+    print("""# import module like this:
+# mine commands
+import sys
+sys.path.append("../..")
+sys.path.append("..\..")
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("./term")
+sys.path.append(r".\term")
+from commands7 import *""")
+
+
+
+
+
 
 
 def get_os():
@@ -417,12 +500,13 @@ def get_os():
 if OS.name == "windows":
     import win_unicode_console, \
            win32api, \
-           win32con
-
+           win32con, \
+           termcolors
+mine_import("colorama")
 # win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
-from termcolor import colored, cprint  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 
 newline = '\n'
 ruble = u"\u20bd"  # \u20bd is ₽
@@ -430,9 +514,7 @@ backslash = "\ "[:1]
 newline2 = "\r\n"
 
 
-def is_python3():
-    is_true = sys.version_info >= (3, 0)
-    return is_true
+
 
 
 class Print():
@@ -651,8 +733,7 @@ class Console():
                 print(termcolor.colored(string, color, highlight))
                 time.sleep(sleep)
             except KeyboardInterrupt as err:
-                if OS.name == "windows":
-                    print(termcolor.colored("OK", "white", "on_grey"))
+                print(termcolor.colored("OK", "white", "on_grey"))
                 colorama.deinit()
                 cls.clean()
                 break
@@ -938,6 +1019,9 @@ class Time:
             second = gettime.strftime('%S')
         rustime = str(day) + " числа " + str(month) + " месяца " + str(year) + " года в " \
         + str(hour) + ":" + str(minute) + ":" + str(second)
+        if not OS.cyrrilic_support:
+            rustime = str(day) + "." + str(month) + "." + str(year) + "y at " \
+        + str(hour) + ":" + str(minute) + ":" + str(second)
         return rustime
 
     @classmethod
@@ -1099,7 +1183,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
     domain = getDomainOfUrl(domain)
     if not quiet:
         colorama.reinit()
-        print("Pinging", domain, count, "times...")
+        Print.rewrite("Pinging", domain, count, "times...")
         up_message = domain + " is up!"
         down_message = domain + " is down."
     try:
@@ -1109,9 +1193,12 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
         if OS.name in ["macos", "linux"]:
             count_arg = "c"
             timeout_arg = "W"
+        if OS.name == "linux":
+            timeout = int(timeout/1000)
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
                   " -" + timeout_arg + " " + str(timeout)
         ping_output = Console.get_output(command)
+
     except KeyboardInterrupt:
         sys.exit()
     except:  # any exception is not good ping
@@ -1177,6 +1264,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
 
 
 def warning(message):
+
     pyautogui.alert(message)
 
 def substring(string, before, after=None):
@@ -1410,7 +1498,7 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
             print(termcolor.colored(string, color, highlight))
             time.sleep(sleep)
         except KeyboardInterrupt as err:
-            if get_os() == "windows":
+            if OS.name == "windows":
                 print (termcolor.colored("OK", "white", "on_grey"))
             colorama.deinit()
             Console.clean()
@@ -1418,6 +1506,7 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
 
 
 if __name__ == "__main__":
+    how_to_import_this_useless_stuff()
     Repl.loop()
     #File.backup(r"\\192.168.99.91\shares\scripts\utilsupdate\utils_dev.py")
     #print(rustime(1487646452.7141206))
@@ -1427,6 +1516,7 @@ if __name__ == "__main__":
     #print(checkWidthOfConsole())
     #print(checkHeightOfConsole())
     #import UtilsUpdate
+
 
 
 colorama.reinit()

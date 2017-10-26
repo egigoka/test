@@ -21,11 +21,12 @@ __logfile__ = Path.extend(Path.current(), "ping_.py.log")
 
 class State:
     online = False
+    online_only = False
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
-    no81 = False
-    if ("-no81" in sys.argv):
-        no81 = True
+    if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
+        online_only = True
+        online = True
 
 domains = ['192.168.99.3']  # solvo
 domains += ['192.168.99.5']  # zabbix
@@ -36,20 +37,26 @@ domains += ['192.168.99.11']  # solvo win print
 domains += ['192.168.99.18']  # keto
 domains += ['192.168.99.91']  # notebook1
 domains += ['192.168.99.253']  # share
-if not State.no81:
-    domains += ['192.168.98.81']  # fingerprint
+domains += ['192.168.98.81']  # fingerprint
 domains += ['192.168.98.82']  # fingerprint
 domains += ['192.168.98.83']  # fingerprint
 domains += ['192.168.98.84']  # fingerprint
 domains += ['192.168.99.240']  # PC on "returns"
 domains += ['192.168.99.99']  # PC on "fruits"
 
+if State.online_only:
+    domains = []
+
 if State.online:
     domains += ['ya.ru']
-errDomains = 0  # ���������� �������� ������ �������
-timeout = "5000"  # ������� ����� � ��
-time_sleep = 60  # �������� ����� ����� �������� � �
-count_ping = 2  # ���������� �������
+    domains += ['google.com']
+    domains += ['8.8.8.8']
+    domains += ['8.8.4.4']
+
+errDomains = 0  # количество заведомо плохих доменов
+timeout = "5000"  # таймаут пинга в мс
+time_sleep = 60  # задержка перед новым проходом в с
+count_ping = 2  # количество попыток
 
 # debug_print(dir())
 
@@ -72,8 +79,8 @@ def checkfolder(folder, name):
 def main():
     # cnt_workin = 2
     while True:
-        # os.system('cls') # ������� ������
-        # if cnt_workin <= 1:  # ����������� ����� �������� ������� �����
+        # os.system('cls') # очистка экрана
+        # if cnt_workin <= 1:  # определение цвета верхнего пустого блока
         #     color_upordown = 'on_red'
         # elif cnt_workin < len(domains)-errDomains:
         #     color_upordown = 'on_yellow'
@@ -83,11 +90,11 @@ def main():
         if OS.name == 'windows':
             print_end = ''
         cnt_workin = 0
-        cnt_space_h = Console.height() - len(domains)  # ���������� ����� �������� ���������
+        cnt_space_h = Console.height() - len(domains)  # заполнение блока цветными пробалами
         while cnt_space_h > 0:
             # cprint(" " * Console.width() *5, 'white', color_upordown, end = '')
             cnt_space_h += -1
-        for hostname in domains:  # ������, ��������
+        for hostname in domains:  # сопсна, пинговка
             response = ping(hostname, quiet=True, count=count_ping)
             if response:  # and then check the response...
                 cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end=print_end)
