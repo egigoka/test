@@ -412,7 +412,7 @@ class OS:
         cyrrilic_support = True
     except UnicodeEncodeError as err:
         cyrrilic_support = False
-        print err
+        print (err)
         print ("Your system doesn't properly work with cyrrilic -_-")
 
 
