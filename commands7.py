@@ -372,6 +372,8 @@ if True:
     # OS.display
     __version__ = "7.17.0-alpha"
     # OS.cyrrilic_support
+    __version__ = "7.17.0-alpha"
+    # OS.cyrrilic_support fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
