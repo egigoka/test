@@ -404,6 +404,10 @@ class OS:
         print("Your system haven't display -_-")
 
 
+        print("йцукенгшщзхъфывапролджэячсмитьбю")
+
+
+
 
 def mine_import(module_name, objects=None):
     if is_python3():
