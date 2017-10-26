@@ -25,7 +25,7 @@ class Arguments:
         lo = False
         if arg in ["lo"]:  # накладные, привя
             lo = True
-        
+
         bugged_tripleclick = False
         if arg == "btk":
             bugged_tripleclick = True
@@ -419,7 +419,7 @@ except KeyboardInterrupt:
 
 
 tripleclick.main = main
-if State.bugged_tripleclick:
+if Arguments.bugged_tripleclick:
     main()
 else:
     tripleclick.start()
