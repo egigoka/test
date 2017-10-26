@@ -718,7 +718,7 @@ class Console():
             width = cls.width()
         if height is None:
             height = cls.height()
-        if OS.name = "windows":
+        if OS.name == "windows":
             colorama.reinit()
         while True:
             colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
