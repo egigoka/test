@@ -374,8 +374,6 @@ if True:
     # OS.cyrrilic_support
     __version__ = "7.17.0-alpha"
     # OS.cyrrilic_support fix
-    __version__ = "7.17.1-alpha"
-    # colorama will run only under Windows
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -416,7 +414,7 @@ class OS:
         cyrrilic_support = True
     except UnicodeEncodeError as err:
         cyrrilic_support = False
-        print (err)
+        # print (err)
         print ("Your system doesn't properly work with cyrrilic -_-")
 
 
@@ -500,10 +498,10 @@ if OS.name == "windows":
            win32api, \
            win32con, \
            termcolors
-    mine_import("colorama")
-    # win_unicode_console.enable()
-    colorama.init()
-    colorama.deinit()
+mine_import("colorama")
+# win_unicode_console.enable()
+colorama.init()
+colorama.deinit()
 mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 
 newline = '\n'
@@ -718,8 +716,7 @@ class Console():
             width = cls.width()
         if height is None:
             height = cls.height()
-        if OS.name == "windows":
-            colorama.reinit()
+        colorama.reinit()
         while True:
             colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
             highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
@@ -733,8 +730,7 @@ class Console():
                 time.sleep(sleep)
             except KeyboardInterrupt as err:
                 print(termcolor.colored("OK", "white", "on_grey"))
-                if OS.name == "windows":
-                    colorama.deinit()
+                colorama.deinit()
                 cls.clean()
                 break
 
@@ -1182,8 +1178,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
     # с таким эксепшном можно сделать куда проще это всё
     domain = getDomainOfUrl(domain)
     if not quiet:
-        if OS.name == "windows":
-            colorama.reinit()
+        colorama.reinit()
         print("Pinging", domain, count, "times...")
         up_message = domain + " is up!"
         down_message = domain + " is down."
@@ -1197,6 +1192,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
                   " -" + timeout_arg + " " + str(timeout)
         ping_output = Console.get_output(command)
+        print(command, input())
     except KeyboardInterrupt:
         sys.exit()
     except:  # any exception is not good ping
@@ -1217,8 +1213,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
             cprint(up_message, "white", "on_green")
         else:
             cprint(down_message, "white", "on_red")
-        if OS.name == "windows":
-            colorama.deinit()
+        colorama.deinit()
     return up
 
 
@@ -1484,8 +1479,7 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
         width = Console.width()
     if height == None:
         height = Console.height()
-    if OS.name == "windows":
-        colorama.reinit()
+    colorama.reinit()
     while True:
         colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
         highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
@@ -1500,8 +1494,7 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
         except KeyboardInterrupt as err:
             if OS.name == "windows":
                 print (termcolor.colored("OK", "white", "on_grey"))
-            if OS.name == "windows":
-                colorama.deinit()
+            colorama.deinit()
             Console.clean()
             break
 
@@ -1518,8 +1511,9 @@ if __name__ == "__main__":
     #print(checkHeightOfConsole())
     #import UtilsUpdate
 
-if OS.name == "windows":
-    colorama.reinit()
+
+
+colorama.reinit()
 Bench.time_start = start_bench_no_bench
 time_loading = Bench.end(quiet=True)
 cprint("commands7 v" + __version__ + " loaded in " + str(time_loading) + " seconds", "grey", "on_white")
