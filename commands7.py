@@ -733,7 +733,7 @@ class Console():
                 time.sleep(sleep)
             except KeyboardInterrupt as err:
                 print(termcolor.colored("OK", "white", "on_grey"))
-                if OS.name = "windows":
+                if OS.name == "windows":
                     colorama.deinit()
                 cls.clean()
                 break
@@ -1182,7 +1182,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
     # с таким эксепшном можно сделать куда проще это всё
     domain = getDomainOfUrl(domain)
     if not quiet:
-        if OS.name = "windows":
+        if OS.name == "windows":
             colorama.reinit()
         print("Pinging", domain, count, "times...")
         up_message = domain + " is up!"
@@ -1217,7 +1217,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
             cprint(up_message, "white", "on_green")
         else:
             cprint(down_message, "white", "on_red")
-        if OS.name = "windows":
+        if OS.name == "windows":
             colorama.deinit()
     return up
 
@@ -1484,7 +1484,7 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
         width = Console.width()
     if height == None:
         height = Console.height()
-    if OS.name = "windows":
+    if OS.name == "windows":
         colorama.reinit()
     while True:
         colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
