@@ -25,7 +25,7 @@ class Arguments:
         lo = False
         if arg in ["lo"]:  # накладные, привя
             lo = True
-
+    for arg in sys.argv:
         bugged_tripleclick = False
         if arg == "btk":
             bugged_tripleclick = True
