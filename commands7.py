@@ -370,6 +370,8 @@ if True:
     # mine_import update for pyautogui support
     __version__ = "7.16.0-alpha"
     # OS.display
+    __version__ = "7.17.0-alpha"
+    # OS.cyrrilic_support
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -403,8 +405,16 @@ class OS:
         display = False
         print("Your system haven't display -_-")
 
+    try:
+        cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+        print(cyrline, end="\r")
+        print(" "*len(cyrline), end="\r")
+        cyrrilic_support = True
+    except UnicodeEncodeError as err:
+        cyrrilic_support = False
+        print err
+        print ("Your system doesn't properly work with cyrrilic -_-")
 
-        print("йцукенгшщзхъфывапролджэячсмитьбю")
 
 
 
