@@ -1192,10 +1192,9 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
             count_arg = "c"
             timeout_arg = "W"
         if OS.name == "linux":
-            timeout = timeout/1000
+            timeout = int(timeout/1000)
         command = "ping " + domain + " -" + count_arg + " " + str(count) + \
                   " -" + timeout_arg + " " + str(timeout)
-        print(command, input())
         ping_output = Console.get_output(command)
 
     except KeyboardInterrupt:
