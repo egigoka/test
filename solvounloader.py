@@ -63,7 +63,7 @@ class Click:
         cls.click(button='left',position=position)
 
 
-Timer = Bench
+Timer_wait_locate = copy.deepcopy(Bench)
 
 def get_img_name(*name_shards):
     if len(name_shards[0]) == 0:
@@ -115,7 +115,7 @@ def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
         if position:
             message = Str.substring(message, before="not ") + " on " + str(position)
         elif timer:
-            message += " timer " + str(Timer.get())
+            message += " timer " + str(Timer_wait_locate.get())
         print(message)
     return position
 
@@ -134,17 +134,17 @@ def wait_locate(*names, every=1, timeout=60, safe=False):
     Print.debug("wait_locate started")
     timeout_reached = False
     position = None
-    Timer.start()
+    Timer_wait_locate.start()
     while not timeout_reached and not position:
         sleep(every)
         position = locate(*names, safe=True, timer=True)
-        Print.debug("Timer.get()", Timer.get(), "timeout", timeout, )
-        timeout_reached = Timer.get() > timeout
-        Print.debug("timeout_reached = Timer.get() > timeout", timeout_reached)
-    Print.debug("timeout_reached and not position")
+        plog("Timer_wait_locate.get()", Timer_wait_locate.get(), "timeout", timeout, )
+        timeout_reached = Timer_wait_locate.get() > timeout
+        plog("timeout_reached = Timer_wait_locate.get() > timeout", timeout_reached)
+    plog("timeout_reached and not position")
     if timeout_reached and not position and not safe:
         raise RuntimeError("timeout " + str(timeout) + " reached while searching for " + str(names))
-    Print.debug("wait_locate ended")
+    plog("wait_locate ended")
     return position
 
 def hotkey(*args):
