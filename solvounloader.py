@@ -81,7 +81,7 @@ def get_img_name(*name_shards):
         raise IndexError("found " + str(len(imgs)) + " buttons pics by " + str(name_shards) + " shards: " + str(imgs))
 
 
-def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyautogui.easeInOutQuad):
+def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyautogui.easeInOutQuad, rel=False):
     if isinstance(x, tuple):
         if len(x) == 2:
             y = x[1]
@@ -95,7 +95,12 @@ def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyauto
         x,y = pyautogui.center((x,y,x2,y2))
     if not State.quiet:
         print("moved mouse to", x, y)
-    pyautogui.moveTo(x, y, duration=duration, tween=tween)
+    
+    if rel:
+        pyautogui.moveTo(x, y, duration=duration, tween=tween)
+    else:
+        pyautogui.moveTo(x, y, duration=duration, tween=tween)
+
 
 def locate_by_shards(*name_shards, safe=False, timer=False):  # seconds
     sleep(State.sleep_before_locate)
@@ -218,11 +223,11 @@ class Actions:
         Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         Click.left()
         
-    def wait_for_done(fast=None):
-        if fast:
-            sleep(30)
-        else:
-            sleep(200)
+    #def wait_for_done(fast=None):
+    #    if fast:
+    #        sleep(30)
+    #    else:
+    #        sleep(200)
 
 
 class Open:
@@ -254,7 +259,13 @@ class Open:
         opened = None
         opened = locate("solvomini", safe=True)
         if not opened:
-            Click.left(move(locate("SOLVO")))
+            Click.left(move(locate("SOLVOw"+str(OS.windows_version))))
+            sm = locate("solvomini")
+            print(sm)
+            input()
+            if sm[1]>500:
+                warning("yeah")
+                input()
         else:
             move(opened)
             Click.left(move(opened))
@@ -419,7 +430,6 @@ except KeyboardInterrupt:
 
 
 
-
-main() # fucking shit
+main()  # fucking shit
 tripleclick.main = main
 tripleclick.start()

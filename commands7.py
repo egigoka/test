@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import copy
 if True:
     import datetime
     start_bench_no_bench = datetime.datetime.now()
@@ -382,6 +383,10 @@ if True:
     # ping update
     __version__ = "7.17.5-alpha"
     # Time.timer fix
+    __version__ = "7.18.0-alpha"
+    # import copy
+    __version__ = "7.18.1-alpha"
+    # OS.display fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -409,9 +414,10 @@ class OS:
         family = "unix"
 
     try:
-        os.environ['DISPLAY']
+        if name == "linux":
+            from Xlib.display import Display
         display = True
-    except KeyError:
+    except ImportError:
         display = False
         print("Your system haven't display -_-")
 

@@ -9,6 +9,13 @@ __version__ = "2.0.2"
 __version__ = "2.0.3"
 # refactor for new commands7
 # add coding in shebang
+__version__ = "2.1.0"
+# -online argument
+__version__ = "2.2.0"
+# -online-only argument
+__version__ = "2.3.0"
+# -wms-folders argument
+
 from colorama import init
 from commands7 import *
 # from termcolor import colored, cprint #print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
@@ -20,13 +27,17 @@ __logfile__ = Path.extend(Path.current(), "ping_.py.log")
 
 
 class State:
+    sleep = 60
     online = False
     online_only = False
+    wms_folders = False
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
     if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
         online_only = True
         online = True
+    if ("-wf" in sys.argv) or ("-wms-folders" in sys.argv) or ("--wms-folders" in sys.argv):
+        wms_folders = True
 
 domains = ['192.168.99.3']  # solvo
 domains += ['192.168.99.5']  # zabbix
@@ -43,6 +54,11 @@ domains += ['192.168.98.83']  # fingerprint
 domains += ['192.168.98.84']  # fingerprint
 domains += ['192.168.99.240']  # PC on "returns"
 domains += ['192.168.99.99']  # PC on "fruits"
+
+
+if State.wms_folders:
+    State.sleep = 0
+    domains = []
 
 if State.online_only:
     domains = []
@@ -108,5 +124,5 @@ def main():
             for folder in folders:
                 checkfolder(folder["location"], folder["name"])
         print(Time.rustime())
-        Time.timer(60)
+        Time.timer(State.sleep)
 main()
