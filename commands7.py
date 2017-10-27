@@ -380,6 +380,8 @@ if True:
     # mine_import fix
     __version__ = "7.17.4-alpha"
     # ping update
+    __version__ = "7.17.5-alpha"
+    # Time.timer fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -1027,12 +1029,11 @@ class Time:
     @classmethod
     def sleep(cls, seconds):
         warning("Time.sleep now Time.timer")
-        print("Sleep", seconds, "seconds...")
         cls.timer(seconds=seconds)
 
     @staticmethod
     def timer(seconds, check_per_sec=10):
-        Countdown = Bench
+        Countdown = copy.deepcopy(Bench)
         Countdown.start()
         secs_second_var = int(seconds)
         while Countdown.get() < seconds:
