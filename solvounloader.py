@@ -404,7 +404,7 @@ try:
                         # if OS.windows_version == 10:
                         if True:
                             try:
-                                position_of_button = wait_locate("buttonup_working", every=0.1, timeout=30)
+                                position_of_button = wait_locate("buttonup_ready", every=0.1, timeout=30)
                                 for i in Int.from_to(1,5):
                                     sleep(0.1)
                                     Click.left(move(position_of_button))
