@@ -4,6 +4,7 @@ import pyautogui
 from commands7 import *
 import tripleclick
 
+winver = str(OS.windows_version)
 
 class Arguments:
     for arg in sys.argv:
@@ -94,10 +95,14 @@ def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyauto
     if x2 and y2:
         x,y = pyautogui.center((x,y,x2,y2))
     if not State.quiet:
-        print("moved mouse to", x, y)
+        if rel:
+            how = "relative"
+        else:
+            how = "to"
+        print("moved mouse", how, x, y)
     
     if rel:
-        pyautogui.moveTo(x, y, duration=duration, tween=tween)
+        pyautogui.moveRel(x, y, duration=duration, tween=tween)
     else:
         pyautogui.moveTo(x, y, duration=duration, tween=tween)
 
@@ -138,13 +143,13 @@ def wait_locate(*names, every=1, timeout=60, safe=False):
     while not timeout_reached and not position:
         sleep(every)
         position = locate(*names, safe=True, timer=True)
-        plog("Timer_wait_locate.get()", Timer_wait_locate.get(), "timeout", timeout, )
+        plog(Path.extend(Path.current(), "slvnldr.log"), "Timer_wait_locate.get()" + str(Timer_wait_locate.get()) + " timeout " + str(timeout))
         timeout_reached = Timer_wait_locate.get() > timeout
-        plog("timeout_reached = Timer_wait_locate.get() > timeout", timeout_reached)
-    plog("timeout_reached and not position")
+        plog(Path.extend(Path.current(), "slvnldr.log"), "timeout_reached = Timer_wait_locate.get() > timeout " + str(timeout_reached))
+    plog(Path.extend(Path.current(), "slvnldr.log"), "timeout_reached and not position")
     if timeout_reached and not position and not safe:
         raise RuntimeError("timeout " + str(timeout) + " reached while searching for " + str(names))
-    plog("wait_locate ended")
+    plog(Path.extend(Path.current(), "slvnldr.log"), "wait_locate ended")
     return position
 
 def hotkey(*args):
@@ -152,9 +157,9 @@ def hotkey(*args):
     print("pressed", str(args))
 
 def sleep(seconds):
-    if seconds >= 1:
-        Time.timer(seconds)
-    else:
+    #if seconds >= 1: 
+    #    Time.timer(seconds)  # bug don't copy object
+    #else:
         time.sleep(seconds)
 
 def message(text, title='some window', button='oh no'):
@@ -187,6 +192,18 @@ class Exceptions:
             if position:
                 message("LO must be in work!")
 
+                
+lin_servers = {
+'192.168.99.7':{}, 
+'192.168.99.9':{}}
+
+
+for ip, login in lin_servers.items():
+    lin_servers[ip]['username'] = input("Username for " + str(ip) + ":")
+    # todo сделать проверку пароля перед его установкой в словарь
+    lin_servers[ip]['password'] = Str.input_pass("Password for " + str(ip) + ":")
+# print(lin_servers)
+                
 
 class Actions:
     
@@ -197,30 +214,48 @@ class Actions:
                 pb_position = None
             def check_ok_position(timeout=False):
                 if not timer:
-                    return locate("окбелаяw7", "окбелаяw10")
+                    return locate("окбелаяw"+winver)
                 else:
-                    wait_locate("окбелаяw7", "окбелаяw10", timeout=timeout, safe=True)
+                    wait_locate("окбелаяw"+winver, timeout=timeout, safe=True)
     
     def wait_for_done(fast=False):
         Print.debug ("Actions.wait_for_done started", "fast = "+str(fast))
         ok_position = None
         while not ok_position:
             try:
-                ok_position = locate("окбелаяw7", "окбелаяw10")  # вначале пробуем найти кнопку ок
+                ok_position = locate("окбелаяw"+winver)  # вначале пробуем найти кнопку ок
             except IndexError as err:  # кнопка ок не найдена
                 print (err)  # вывести сообщение о том, что ничего не найдено
                 try:
                     sleep(2)
-                    ok_position = locate("progressbaremptyw7", "progressbaremptyw10")
+                    ok_position = locate("progressbaremptyw"+winver)
                     if not fast:
                         if ok_position:
-                            ok_position_2 = wait_locate("окбелаяw7", "окбелаяw10", timeout=10, safe=True)  # ошибка тут
+                            ok_position_2 = wait_locate("окбелаяw"+winver, timeout=15, safe=True)  # ошибка тут
                             if ok_position_2:
                                 ok_position = ok_position_2
                 except IndexError as err:
                     print(err)
         move(ok_position)
         Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
+        
+        ################ CHECK FOR SERVER OVERLOAD ################
+        overload = True
+        while overload:
+            load = []
+            for ip, login in lin_servers.items(): 
+                lin_servers[ip]['avg_load'] = float(Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])[0])
+                load.append(lin_servers[ip]['avg_load'])
+                if lin_servers[ip]['avg_load'] > 3.7:
+                    print(ip, "is overload: ", avg_load)
+            print("avg_loads:",load)
+            if max(load) > 3.7:
+                print("Sleep 20s...")
+                time.sleep(20)
+            else:
+                overload = False
+        ############## CHECK FOR SERVER OVERLOAD END ##############
+        
         Click.left()
         
     #def wait_for_done(fast=None):
@@ -237,7 +272,7 @@ class Open:
             class Documents:
                 @staticmethod
                 def documents():
-                    Click.left(move(locate("документыбелаяw7", "документыбелаяw10")))
+                    Click.left(move(locate("документыбелаяw"+winver)))
                 @classmethod
                 def orders(cls):
                     cls.documents()
@@ -259,18 +294,19 @@ class Open:
         opened = None
         opened = locate("solvomini", safe=True)
         if not opened:
-            Click.left(move(locate("SOLVOw"+str(OS.windows_version))))
+            Click.left(move(locate("SOLVOw"+winver)))
             sm = locate("solvomini")
-            print(sm)
-            input()
+            #print(sm)
+            #input()
             if sm[1]>500:
-                warning("yeah")
-                input()
+                move(sm)
+                move(15,0,rel=True)
+                Click.left()
         else:
             move(opened)
-            Click.left(move(opened))
-            sleep(0.3)
-            Click.left(move(opened))
+            Click.left(move(15,0,rel=True))
+            #sleep(0.3)
+            #Click.left(move(opened))
 
 
 
@@ -299,7 +335,7 @@ try:
                         Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
                         dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
                     Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
-                    Click.left(move(wait_locate("окмаленькаяw10", "окмаленькаяw7", every=1, timeout=60)))        # нажать ОК
+                    Click.left(move(wait_locate("окмаленькаяw"+winver, every=1, timeout=60)))        # нажать ОК
                     Exceptions.Check.must_be_in_work()
                     Actions.wait_for_done()
             except RuntimeError:
@@ -327,7 +363,7 @@ try:
                     Click.left(move(dropdown))                                                      # нажать на Команды...
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))          # нажать на Отгрузить
 
-                    wait_locate("progressbaremptyw7", "progressbaremptyw10", every=15, timeout=600) # подождать, пока отгрузится
+                    Actions.wait_for_done()                                                         # подождать, пока отгрузится
                     Bench.end()
             #except RuntimeError:
             #    Windows.lock()
@@ -342,7 +378,13 @@ try:
                 Click.left()
             
             def unload_last():
-                move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
+                for cnt in Int.from_to(1,2):
+                    try:
+                        pos_last = locate("готовкотгрузкевыделеннаяw"+winver)
+                        break
+                    except IndexError:
+                        Open.Solvo.Menu.Documents.shipments()
+                move(pos_last)
                 unload()
                 
             
@@ -355,20 +397,21 @@ try:
                 position = None
                 while not position:
                     try:
-                        position = locate("готовкотгрузкесиняяw7", "готовкотгрузкесиняяw10", "готовкотгрузкебелаяw7", "готовкотгрузкебелаяw10")
+                        position = locate("готовкотгрузкесиняяw"+winver, "готовкотгрузкебелаяw"+winver)
                     except IndexError as err:
                         print (err)
-                        move(locate("готовкотгрузкевыделеннаяw7", "готовкотгрузкевыделеннаяw10"))
+                        move(locate("готовкотгрузкевыделеннаяw"+winver))
                         # if OS.windows_version == 10:
                         if True:
                             try:
                                 position_of_button = wait_locate("buttonup_working", every=0.1, timeout=30)
+                                for i in Int.from_to(1,5):
+                                    sleep(0.1)
+                                    Click.left(move(position_of_button))
                             except IndexError:
                                 unload_last()
                                 
-                            for i in Int.from_to(1,5):
-                                sleep(0.1)
-                                Click.left(move(position_of_button))
+                            
                         # Scroll.up()
                 move(position)
                 unload()
@@ -384,7 +427,7 @@ try:
                 # Print.debug("position", position)
                 while not position:
                     try:
-                        position = locate("собрансиняяw7", "собрансиняяw10", "собранзел")
+                        position = locate("собрансиняяw"+winver, "собранзел")
                     except IndexError as err:
                         print(err)
                         move(wait_locate("светлозел", every=1, timeout=30))
@@ -403,7 +446,7 @@ try:
                     raise RuntimeError('batch in work')
                 position = None
                 while not position:
-                    position = locate("собрансиняяw7", "собрансиняяw10", "собранбел")  # уже в отправках
+                    position = locate("собрансиняяw"+winver, "собранбел")  # уже в отправках
                 Click.right(move(position))
                 move(wait_locate("команды...бел", every=0.5, timeout=20))
                 move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))

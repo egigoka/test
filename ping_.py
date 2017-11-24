@@ -15,6 +15,8 @@ __version__ = "2.2.0"
 # -online-only argument
 __version__ = "2.3.0"
 # -wms-folders argument
+__version__ = "2.4.0"
+# check server avg load
 
 from colorama import init
 from commands7 import *
@@ -56,6 +58,21 @@ domains += ['192.168.99.240']  # PC on "returns"
 domains += ['192.168.99.99']  # PC on "fruits"
 
 
+lin_servers = {
+'192.168.99.7':{}, 
+'192.168.99.9':{}, 
+'192.168.99.18':{}}
+
+
+for ip, login in lin_servers.items():
+    lin_servers[ip]['username'] = input("Username for " + str(ip) + ":")
+    # todo сделать проверку пароля перед его установкой в словарь
+    lin_servers[ip]['password'] = Str.input_pass("Password for " + str(ip) + ":")
+# print(lin_servers)
+
+
+
+
 if State.wms_folders:
     State.sleep = 0
     domains = []
@@ -90,6 +107,9 @@ def checkfolder(folder, name):
         bg_color = "on_red"
     cprint(Str.rightpad(name + " contain " + str(cnt_of_files) + " files", Console.width(), " "),
            font_color, bg_color, end="")
+           
+
+
 
 
 def main():
@@ -123,6 +143,14 @@ def main():
                        {"name":"host2wms", "location":Locations.host2wms}]
             for folder in folders:
                 checkfolder(folder["location"], folder["name"])
+        
+        for ip, login in lin_servers.items():
+            uptime = Ssh.get_uptime_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+            avg_load = Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+            
+            print(ip, "is", uptime, "uptime and ", avg_load, "average load")
+            
+        
         print(Time.rustime())
         Time.timer(State.sleep)
 main()

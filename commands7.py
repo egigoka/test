@@ -387,6 +387,15 @@ if True:
     # import copy
     __version__ = "7.18.1-alpha"
     # OS.display fix
+    __version__ = "7.18.2-alpha"
+    # ping fix
+    __version__ = "7.19.0-alpha"
+    # f Ssh.get_output
+    # f Ssh.get_avg_load_lin
+    # f Ssh.get_uptime_lin
+    # f Str.input_pass
+    __version__ = "7.19.1-alpha"
+    # Ssh.get_avg_load_lin split fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -467,8 +476,8 @@ def mine_import(module_name, objects=None):
 
 if OS.display:
     mine_import("pyautogui")
-    mine_import("tkinter", objects="*")
-    #from tkinter import *
+    mine_import("tkinter", objects="*")  # from tkinter import *
+    mine_import("paramiko")
 
 
 import json, \
@@ -478,7 +487,8 @@ import json, \
        subprocess, \
        datetime, \
        re, \
-       ctypes
+       ctypes, \
+       getpass
 
 
 # ###############################################!!! HOW TO IMPORT !!!##################################################
@@ -688,6 +698,11 @@ class Str:
                 elif s[0] == '+':
                     print(u'Add "{}" to position {}'.format(s[-1], i))
             print()
+    
+    @staticmethod
+    def input_pass(string="Password:"):
+        return getpass.getpass(string)
+    
 
 
 class Console():
@@ -753,6 +768,35 @@ class Console():
         if split_lines:
             output = Str.nl(output)
         return output
+    
+
+    
+class Ssh:
+    
+    
+    @staticmethod
+    def get_output(host, username, password, command, safe=False):
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # automatically add unknown hosts
+        ssh.connect(host, username=username, password=password)
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("uptime")
+        if (ssh_stderr.read() != b'') and not safe:
+            raise IOError("ssh_stderr = " + str(ssh_stderr))
+        return str(ssh_stdout.read(), 'utf8')
+    
+    @classmethod
+    def get_avg_load_lin(cls, host, username, password, safe=False):
+        output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
+        output = Str.substring(output, before="load average: ", after=newline)
+        output = output.split(", ")
+        return output
+    
+    @classmethod
+    def get_uptime_lin(cls, host, username, password, safe=False):
+        output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
+        output = Str.substring(output, before=" up ", after=", ")
+        return output
+    
 
 
 class Path:
@@ -1221,7 +1265,9 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
         else:
             plog(logfile, down_message, quiet=True)
             cprint(down_message, "white", "on_red")
+            
     elif not quiet:
+        Print.rewrite("")
         if up:
             cprint(up_message, "white", "on_green")
         else:
@@ -1293,6 +1339,7 @@ class Bench:
 
     @classmethod
     def start(cls):
+        Print.debug("Bench started")
         cls.time_start = datetime.datetime.now()
 
     @classmethod

@@ -19,7 +19,7 @@ __version__ = "1.1.1"
 if OS.name == "macos":
     pycharmExec = Path.extend("Applications", "Pycharm CE.app", "Contents", "MacOS", "pycharm")
 elif OS.name == "windows":
-    pycharmName = "pycharm.exe"
+    pycharmName = "pycharm64.exe"
     # pycharmFolder = r"C:\Program Files (x86)\JetBrains\PyCharm Community Edition 2016.3.2\bin"
     pycharmFolder = r"C:\Program Files\JetBrains\PyCharm Community Edition 2017.2.3\bin"
     pycharmExec = Path.extend(pycharmFolder, pycharmName)
