@@ -37,6 +37,7 @@ class State:
     buttons_pics_folder = Path.extend("T:", "buttonpics")
     quiet = False
     get_img_name_quiet = True
+    max_servers_load = 3.5
 
 
 class Click:
@@ -236,8 +237,6 @@ class Actions:
                                 ok_position = ok_position_2
                 except IndexError as err:
                     print(err)
-        move(ok_position)
-        Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         
         ################ CHECK FOR SERVER OVERLOAD ################
         overload = True
@@ -246,16 +245,18 @@ class Actions:
             for ip, login in lin_servers.items(): 
                 lin_servers[ip]['avg_load'] = float(Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])[0])
                 load.append(lin_servers[ip]['avg_load'])
-                if lin_servers[ip]['avg_load'] > 3.7:
-                    print(ip, "is overload: ", avg_load)
+                if lin_servers[ip]['avg_load'] > State.max_servers_load:
+                    print(ip, "is overload:", lin_servers[ip]['avg_load'])
             print("avg_loads:",load)
-            if max(load) > 3.7:
+            if max(load) > State.max_servers_load:
                 print("Sleep 20s...")
                 time.sleep(20)
             else:
                 overload = False
         ############## CHECK FOR SERVER OVERLOAD END ##############
-        
+
+        move(ok_position)
+        Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         Click.left()
         
     #def wait_for_done(fast=None):
