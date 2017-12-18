@@ -145,10 +145,14 @@ def main():
                 checkfolder(folder["location"], folder["name"])
         
         for ip, login in lin_servers.items():
-            uptime = Ssh.get_uptime_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
-            avg_load = Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+            try:
+                uptime = Ssh.get_uptime_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+                avg_load = Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+            except TimeoutError:
+                uptime = "timeout"
+                avg_load = "timeout"
             
-            print(ip, "is", uptime, "uptime and ", avg_load, "average load")
+            print(ip, "is", uptime, "uptime and", avg_load, "average load")
             
         
         print(Time.rustime())
