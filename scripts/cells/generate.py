@@ -6,8 +6,8 @@ sys.path.insert(0, "../..")
 sys.path.insert(0, "..\..")
 from commands7 import *  # mine commands
 
-prefixes = ["PC01-", ]
-roots = Int.from_to(1, 99, to_str=True)
+prefixes = ["S01-", ]
+roots = Int.from_to(46, 57, to_str=True)
 suffixes = []
 #suffixes.append("-0A")
 #suffixes.append("-0B")
@@ -23,6 +23,7 @@ suffixes.append("-1A")
 #suffixes.append("-5")
 #suffixes.append("-6")
 #suffixes.append("-7")
+#suffixes.append("")
 count = 0
 for prefix in prefixes:
     Codegen.start("output.txt")
@@ -30,6 +31,7 @@ for prefix in prefixes:
         for suffix in suffixes:
             root = Str.leftpad(root, 2, 0)
             Codegen.add_line(prefix + root + suffix + newline)
+            #Codegen.add_line("'"+prefix+root+suffix+"', ")
             print(prefix, root, suffix, sep='')
             count += 1
     Codegen.end()
