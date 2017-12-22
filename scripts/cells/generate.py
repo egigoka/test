@@ -1,4 +1,4 @@
-#! python3
+﻿#! python3
 # -*- coding: utf-8 -*-
 import sys
 sys.path.insert(0, ".")
@@ -27,6 +27,7 @@ suffixes.append("-4C")
 #suffixes.append("-5")
 #suffixes.append("-6")
 #suffixes.append("-7")
+#suffixes.append("")
 count = 0
 for prefix in prefixes:
     Codegen.start("output.txt")
@@ -34,6 +35,7 @@ for prefix in prefixes:
         for suffix in suffixes:
             root = Str.leftpad(root, 2, 0)
             Codegen.add_line(prefix + root + suffix + newline)
+            #Codegen.add_line("'"+prefix+root+suffix+"', ")
             print(prefix, root, suffix, sep='')
             count += 1
     Codegen.end()
