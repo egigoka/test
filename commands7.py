@@ -396,6 +396,8 @@ if True:
     # f Str.input_pass
     __version__ = "7.19.1-alpha"
     # Ssh.get_avg_load_lin split fix
+    __version__ = "7.19.2-alpha"
+    # Ssh.get_output cpu load fix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -782,6 +784,7 @@ class Ssh:
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("uptime")
         if (ssh_stderr.read() != b'') and not safe:
             raise IOError("ssh_stderr = " + str(ssh_stderr))
+        ssh.close()
         return str(ssh_stdout.read(), 'utf8')
     
     @classmethod
