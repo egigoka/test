@@ -37,7 +37,7 @@ class State:
     buttons_pics_folder = Path.extend("T:", "buttonpics")
     quiet = False
     get_img_name_quiet = True
-    max_servers_load = 3.5
+    max_servers_load = 3.3
 
 
 class Click:
