@@ -396,6 +396,9 @@ if True:
     # f Str.input_pass
     __version__ = "7.19.1-alpha"
     # Ssh.get_avg_load_lin split fix
+    __version__ = "7.19.2-alpha"
+    # Process.start bugfix
+    # mine_import bugfix
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -449,18 +452,7 @@ def mine_import(module_name, objects=None):
         pipver = "3"
     else:
         pipver = ""
-    ###########RARE###########
-    if module_name == "pyautogui":
-        if OS.name == "linux":
-            if is_python3():
-                os.system("apt-get install python-xlib")
-            else:
-                os.system("apt-get install python3-Xlib")
-        if OS.name == "macos":
-            os.system("pip" + pipver + " install python" + pipver + "-xlib")
-            os.system("pip" + pipver + " install pyobjc-core")
-            os.system("pip" + pipver + " install pyobjc")
-    ###########RARE###########
+
     if objects:
         import_command = "from " + module_name + " import " + objects
     else:
@@ -468,7 +460,18 @@ def mine_import(module_name, objects=None):
     try:
         exec(import_command, globals())
     except ImportError:
-
+        ###########RARE###########
+        if module_name == "pyautogui":
+            if OS.name == "linux":
+                if is_python3():
+                    os.system("apt-get install python-xlib")
+                else:
+                    os.system("apt-get install python3-Xlib")
+            if OS.name == "macos":
+                os.system("pip" + pipver + " install python" + pipver + "-xlib")
+                os.system("pip" + pipver + " install pyobjc-core")
+                os.system("pip" + pipver + " install pyobjc")
+        ###########RARE###########
         command = "pip" + pipver + " install " + module_name
         os.system(command)
         exec(import_command, globals())
@@ -1188,7 +1191,8 @@ class Process():
             elif OS.name == "macos":
                 commands = ""
                 for argument_ in arguments:
-                    commands += argument_ + " "
+                    commands += str(argument_) + " "
+                warning("commands = " + str(commands))
                 os.system(commands)
 
 
