@@ -1195,7 +1195,6 @@ class Process():
                 commands = ""
                 for argument_ in arguments:
                     commands += str(argument_) + " "
-                warning("commands = " + str(commands))
                 os.system(commands)
 
 
