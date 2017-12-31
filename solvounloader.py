@@ -38,6 +38,8 @@ class State:
     quiet = False
     get_img_name_quiet = True
     max_servers_load = 3.3
+    
+    log_object_debug = False
 
 
 class Click:
@@ -137,7 +139,8 @@ def locate(*names, safe=False, timer=False):
 
 
 def wait_locate(*names, every=1, timeout=60, safe=False):
-    Print.debug("wait_locate started")
+    if State.log_object_debug:
+        Print.debug("wait_locate started")
     timeout_reached = False
     position = None
     Timer_wait_locate.start()
@@ -220,7 +223,8 @@ class Actions:
                     wait_locate("окбелаяw"+winver, timeout=timeout, safe=True)
     
     def wait_for_done(fast=False):
-        Print.debug ("Actions.wait_for_done started", "fast = "+str(fast))
+        if State.log_object_debug:
+            Print.debug ("Actions.wait_for_done started", "fast = "+str(fast))
         ok_position = None
         while not ok_position:
             try:
@@ -256,7 +260,8 @@ class Actions:
         ############## CHECK FOR SERVER OVERLOAD END ##############
 
         move(ok_position)
-        Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
+        if State.log_object_debug:
+            Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         Click.left()
         
     #def wait_for_done(fast=None):
