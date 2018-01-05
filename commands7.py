@@ -403,6 +403,11 @@ if True:
     # mine_import bugfix
     __version__ = "7.19.4-alpha"
     # c Bench now factory function get_Bench
+    __version__ = "7.20.0-alpha"
+    # Wget.download now have quiet option (need to debug)
+    __version__ = "7.21.0-alpha"
+    # Wget.download fix
+    # Console.get_output crossplatfowm
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -770,8 +775,11 @@ class Console():
 
     @staticmethod
     def get_output(command, quiet=True, split_lines=False):
-        p = subprocess.check_output(command, shell=True)
-        output = p.decode("cp866")
+        p = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+        if OS.name == "windows":
+            output = p.decode("cp866")
+        elif OS.family == "unix":
+            output = p.decode("utf8")
         if split_lines:
             output = Str.nl(output)
         return output
@@ -1405,13 +1413,18 @@ class Random:
 
 class Wget:
     @staticmethod
-    def download(url, output):
-        url = url.replace("&", backslash + "&")
-        # onestring = "wget " + url + " -O " + output
+    def download(url, output, quiet=False):
         arguments = '--header="Accept: text/html" ' + \
-                    '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) ' + \
+                    '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) ' + \
                     'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3167.0 Safari/537.36"'
-        Process.start("wget", url, "-O", output, arguments, pureshell=True)
+        if quiet:
+            command = "wget '" + url + f"' -O " + output + " " + arguments
+            return Console.get_output(command)
+        else:
+            url = url.replace("&", backslash + "&")
+            Process.start("wget", url, "-O", output, arguments, pureshell=True)
+
+
 
         # Another way to fix blocks by creating ~/.wgetrc file https://stackoverflow.com/a/34166756
 
