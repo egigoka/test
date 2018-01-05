@@ -43,6 +43,8 @@ def stripify(obj):
     #     output = output[:output.find("|")]
     output = output.strip(newline)
     output = output.strip(" ")
+    output = output.strip(newline)
+    output = output.replace(u'\xa0', u' ')
     return output
 
 
@@ -57,6 +59,7 @@ def dirify(object_):
 
 class State:
     class Debug:
+        on_parse_printprettify = False
         print_missing_elements_while_parsing = False
         print_count_of_ads_at_end_of_parsing = False
         print_status_of_page_after_parsing = False
@@ -76,7 +79,8 @@ def get_Page():
         number = None
         html = ""
         soup = None
-        parsed = {}
+        soup_items = []
+        json_items = {}
         filename = ""
         title = ""
         ads = 0
@@ -95,7 +99,7 @@ def get_Page():
                 status = 429  # Too Many Requests
             elif cls.title == "":
                 status = 100  # Continue
-            elif cls.parsed == {}:
+            elif cls.json_items == {}:
                 status = 102  # Processing
             elif cls.ads != State.usual_number_of_ads:
                 status = 206  # Partial Content
@@ -125,36 +129,36 @@ def get_Page():
             cls.status = cls.get_status()
 
         @classmethod
-        def parse(cls, printprettify=False):
+        def parse(cls):
 
             pass
-            items = (cls.soup.find_all('div', attrs={'class': ['item', 'item_table']}))
+            cls.soup_items = (cls.soup.find_all('div', attrs={'class': ['item', 'item_table']}))
             cls.ads = 0
-            for item in items:
+            for item in cls.soup_items:
                 cls.ads += 1
-                if printprettify:
+                if State.Debug.on_parse_printprettify:
                     print(item.prettify())
                     print()
-                cls.parsed[cls.ads] = {}
+                cls.json_items[cls.ads] = {}
                 try:
-                    cls.parsed[cls.ads]['mini_photo'] = urlish(item.div.a.img.get('src'))
+                    cls.json_items[cls.ads]['mini_photo'] = urlish(item.div.a.img.get('src'))
                 except AttributeError as err:
                     if State.Debug.print_missing_elements_while_parsing: print(err)
-                    cls.parsed[cls.ads]['mini_photo'] = None
+                    cls.json_items[cls.ads]['mini_photo'] = None
                 try:
-                    cls.parsed[cls.ads]['name'] = item.div.a.img.get('alt')
+                    cls.json_items[cls.ads]['name'] = item.div.a.img.get('alt')
                 except AttributeError as err:
                     if State.Debug.print_missing_elements_while_parsing: print(err)
-                    cls.parsed[cls.ads]['name'] = None
+                    cls.json_items[cls.ads]['name'] = None
                 try:
-                    cls.parsed[cls.ads]['url'] = urlish(item.div.a.get('href'))
+                    cls.json_items[cls.ads]['url'] = urlish(item.div.a.get('href'))
                 except AttributeError as err:
                     if State.Debug.print_missing_elements_while_parsing: print(err)
-                    cls.parsed[cls.ads]['url'] = None
+                    cls.json_items[cls.ads]['url'] = None
                 for price in item.find_all('div', attrs={'class':['about']}):
                     price = stripify(price.text)
                     if "руб." in price:
-                        cls.parsed[cls.ads]['price'] = price
+                        cls.json_items[cls.ads]['price'] = price.replace(" руб.", ruble)
                 for dataset in item.find_all('div', attrs={'class':['data']}):
                     cnt_p = 0
                     for p in dataset.find_all('p'):
@@ -162,16 +166,17 @@ def get_Page():
                         for ptext in ptexts:
                             cnt_p += 1
                             if cnt_p == 1:
-                                cls.parsed[cls.ads]["group"] = stripify(ptext)
+                                cls.json_items[cls.ads]["group"] = stripify(ptext)
                             elif (len(ptexts) == 2) and (cnt_p == 2):
-                                cls.parsed[cls.ads]["store"] = stripify(ptext)
+                                cls.json_items[cls.ads]["store"] = stripify(ptext)
                             elif (len(ptexts) == 1) and (cnt_p == 2):
-                                cls.parsed[cls.ads]["city"] = stripify(ptext)
+                                cls.json_items[cls.ads]["city"] = stripify(ptext)
                             else:
-                                # cls.parsed[cls.ads]["store"] = "__--__"
-                                cls.parsed[cls.ads]["city"] = stripify(ptext)
+                                # cls.json_items[cls.ads]["store"] = "__--__"
+                                cls.json_items[cls.ads]["city"] = stripify(ptext)
                 for timeanddate in item.find_all('div', attrs={'class': ['date', 'c-2']}):
-                    cls.parsed[cls.ads]["time"] = stripify(timeanddate.text)
+                    cls.json_items[cls.ads]["time"] = stripify(timeanddate.text)
+
             cls.status = cls.get_status()
 
         @classmethod
@@ -192,6 +197,7 @@ def get_Page():
 #sys.exit()
 
 pages = {}
+ads = []
 
 def download_all_pages():
     for cnt in Int.from_to(1,State.number_of_pages):
@@ -205,7 +211,7 @@ def download_all_pages():
             cprint("pages[" + str(cnt) + "].ads " + str(pages[cnt].ads), "green", "on_white")
         if State.Debug.print_status_of_page_after_parsing:
             cprint("pages[" + str(cnt) + "].get_status() " + str(pages[cnt].get_status()), "red", "on_white")
-        # cprint(json.dumps(pages[cnt].parsed, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
+        # cprint(json.dumps(pages[cnt].json_items, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
         if pages[cnt].status != 200:  # check status
             if pages[cnt].status == 206:
                 cprint("Loaded!", "white", "on_green")
@@ -215,7 +221,13 @@ def download_all_pages():
 
 
 def get_all_positions():
-    pass
+    for page in pages:
+        for ad_cnt in pages[page].json_items:
+            print(newline, ad_cnt)
+            print(pages[page].soup_items[ad_cnt-1].prettify(), newline)
+            print(pages[page].json_items[ad_cnt])
+            input()
+
 
 
 
@@ -225,9 +237,10 @@ def main():
 
 
 
+main()
 
 
-# old pages loader from download3 without factory of Page's
+# old pages loader from download2 without factory of Page's
 #for cnt in Int.from_to(1,100):  # What the fuck? Why it load only one page?
 #    def main():
 #        Page.load(cnt)
@@ -237,7 +250,7 @@ def main():
 #        Page.parse()
 #        cprint("Page.ads " + str(Page.ads), "green", "on_white")
 #        cprint("Page.get_status() " + str(Page.get_status()), "red", "on_white")
-#        # cprint(json.dumps(Page.parsed, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
+#        # cprint(json.dumps(Page.json_items, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
 #    while Page.get_status() != 200:
 #        main()
 #        if Page.status == 429:
