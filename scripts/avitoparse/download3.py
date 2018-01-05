@@ -33,6 +33,8 @@ def avitish(string):
         return "rossiya"
     elif string == "kurgan+obl":
         return "kurganskaya_oblast"
+    elif string == "spb":
+        return "sankt-peterburg"
     else:
         raise IndexError("this script doesn't know how avito calls " + string)
 
@@ -64,10 +66,24 @@ class State:
         print_count_of_ads_at_end_of_parsing = False
         print_status_of_page_after_parsing = False
         print_every_page_title = False
-    # product = urlish("iPhone SE")
-    product = urlish("сим")
+    class Arg:
+        no_download = False
+        integers = []
+        for arg in sys.argv:
+            try:
+                integers.append(int(arg))
+            except ValueError:
+                pass
+            if arg in ["",]:
+                pass
+            elif arg in ["nodownload", "nodl"]:
+                no_download = True
+
+    product = urlish("iPhone SE")
+    # product = urlish("сим")
     # region = avitish("Russia")
-    region = avitish("Kurgan obl")
+    # region = avitish("Kurgan obl")
+    region = avitish("SPB")
     number_of_pages = 100
     subfolder = "test"  # subfolder for downloaded content
     usual_number_of_ads = 50  # normal amount of ads on page
@@ -117,7 +133,8 @@ def get_Page():
             filename = State.product + '_in_' + State.region + "_" + str(cls.number) + ".html"  # define ouput file name
             output = Path.extend(".", State.subfolder, filename)  # define path to output file
 
-            Wget.download(cls.get_url(), output=output, quiet=True)  # download file
+            if not State.Arg.no_download:
+                Wget.download(cls.get_url(), output=output, quiet=True)  # download file
 
             cls.html = str(File.read(output))
             cls.status = cls.get_status()
@@ -130,7 +147,7 @@ def get_Page():
 
         @classmethod
         def parse(cls):
-
+            cls.preparse()
             pass
             cls.soup_items = (cls.soup.find_all('div', attrs={'class': ['item', 'item_table']}))
             cls.ads = 0
@@ -146,15 +163,23 @@ def get_Page():
                     if State.Debug.print_missing_elements_while_parsing: print(err)
                     cls.json_items[cls.ads]['mini_photo'] = None
                 try:
-                    cls.json_items[cls.ads]['name'] = item.div.a.img.get('alt')
+                    cls.json_items[cls.ads]['name'] = Str.substring(item.div.a.img.get('alt'),before="Продаю ")
                 except AttributeError as err:
-                    if State.Debug.print_missing_elements_while_parsing: print(err)
-                    cls.json_items[cls.ads]['name'] = None
+                    try:
+                        cls.json_items[cls.ads]['name'] = stripify(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.text)
+                    except AttributeError as err:
+                        if State.Debug.print_missing_elements_while_parsing: print(err)
+                        cls.json_items[cls.ads]['name'] = None
                 try:
                     cls.json_items[cls.ads]['url'] = urlish(item.div.a.get('href'))
                 except AttributeError as err:
-                    if State.Debug.print_missing_elements_while_parsing: print(err)
-                    cls.json_items[cls.ads]['url'] = None
+                    try:
+                        cls.json_items[cls.ads]['url'] = urlish(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.get('href'))
+                    except AttributeError as err:
+                        if State.Debug.print_missing_elements_while_parsing: print(err)
+                        cls.json_items[cls.ads]['url'] = None
+
+                cls.json_items[cls.ads]['price'] = "0"+ruble
                 for price in item.find_all('div', attrs={'class':['about']}):
                     price = stripify(price.text)
                     if "руб." in price:
@@ -186,7 +211,9 @@ def get_Page():
             else:
                 Print.rewrite("Downloading " + str(cnt) + " page...")
                 cls.load(cnt)
-                cls.preparse()
+                Print.rewrite("")
+
+                Print.rewrite("Parsing " + str(cnt) + " page...")
                 cls.parse()
                 Print.rewrite("")
     return Page
@@ -220,19 +247,39 @@ def download_all_pages():
             break
 
 
-def get_all_positions():
+
+def print_debug_single_position(page, item):
+    print(newline, item)
+    print(pages[page].soup_items[item-1].prettify(), newline)
+    print(json.dumps(pages[page].json_items[item], indent=4, sort_keys=True, ensure_ascii=False))
+    return pages[page].soup_items[item-1] # возвращаю соуп объект для улучшения парсера
+
+def get_all_positions():  # пока непонятно, чо делать с данными
     for page in pages:
         for ad_cnt in pages[page].json_items:
-            print(newline, ad_cnt)
-            print(pages[page].soup_items[ad_cnt-1].prettify(), newline)
-            print(pages[page].json_items[ad_cnt])
+            print_debug_single_position(page, ad_cnt)
             input()
+
+
 
 
 
 
 def main():
     download_all_pages()
+    #print_debug_single_position(1, 23)
+    #print_debug_single_position(1, 24)
+
+
+    #print("Debug shit:")
+    #fi1_23 = print_debug_single_position(1, 23)
+    #item = fi1_23
+    #print(urlish(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.get('href')))
+
+    # item find
+    # name = item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.text
+
+    #name = item.div.a.img.get('alt')
     get_all_positions()
 
 
