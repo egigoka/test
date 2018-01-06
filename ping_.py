@@ -59,16 +59,15 @@ domains += ['192.168.99.99']  # PC on "fruits"
 
 
 lin_servers = {
-'192.168.99.7':{}, 
-'192.168.99.9':{}, 
+'192.168.99.7':{},
+'192.168.99.9':{},
 '192.168.99.18':{}}
 
-
-for ip, login in lin_servers.items():
-    lin_servers[ip]['username'] = input("Username for " + str(ip) + ":")
-    # todo сделать проверку пароля перед его установкой в словарь
-    lin_servers[ip]['password'] = Str.input_pass("Password for " + str(ip) + ":")
-# print(lin_servers)
+if not (State.online_only or State.wms_folders):
+    for ip, login in lin_servers.items():
+        lin_servers[ip]['username'] = input("Username for " + str(ip) + ":")
+        # todo сделать проверку пароля перед его установкой в словарь
+        lin_servers[ip]['password'] = Str.input_pass("Password for " + str(ip) + ":")
 
 
 
@@ -107,7 +106,7 @@ def checkfolder(folder, name):
         bg_color = "on_red"
     cprint(Str.rightpad(name + " contain " + str(cnt_of_files) + " files", Console.width(), " "),
            font_color, bg_color, end="")
-           
+
 
 
 
@@ -143,18 +142,19 @@ def main():
                        {"name":"host2wms", "location":Locations.host2wms}]
             for folder in folders:
                 checkfolder(folder["location"], folder["name"])
-        
-        for ip, login in lin_servers.items():
-            try:
-                uptime = Ssh.get_uptime_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
-                avg_load = Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
-            except TimeoutError:
-                uptime = "timeout"
-                avg_load = "timeout"
-            
-            print(ip, "is", uptime, "uptime and", avg_load, "average load")
-            
-        
+
+        if not (State.online_only or State.wms_folders):
+            for ip, login in lin_servers.items():
+                try:
+                    uptime = Ssh.get_uptime_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+                    avg_load = Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])
+                except TimeoutError:
+                    uptime = "timeout"
+                    avg_load = "timeout"
+
+                print(ip, "is", uptime, "uptime and", avg_load, "average load")
+
+
         print(Time.rustime())
         Time.timer(State.sleep)
 main()

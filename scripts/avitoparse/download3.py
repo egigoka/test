@@ -61,11 +61,13 @@ def dirify(object_):
 
 class State:
     class Debug:
-        on_parse_printprettify = False
-        print_missing_elements_while_parsing = False
+        on_parse_print_prettify = False
+        print_missing_elements_while_parsing = True
+        print_missing_img_elements_while_parsing = False
         print_count_of_ads_at_end_of_parsing = False
         print_status_of_page_after_parsing = False
         print_every_page_title = False
+        print_wget_output = False
     class Arg:
         no_download = False
         integers = []
@@ -117,11 +119,11 @@ def get_Page():
                 status = 100  # Continue
             elif cls.json_items == {}:
                 status = 102  # Processing
-            elif cls.ads != State.usual_number_of_ads:
+            elif cls.ads < State.usual_number_of_ads:
                 status = 206  # Partial Content
             elif (cls.number != 1) and ("страница" not in cls.title):
                 status = 400  # Not normal page
-            elif cls.ads == State.usual_number_of_ads:
+            elif cls.ads >= State.usual_number_of_ads:
                 status = 200  # OK
             else:
                 raise Exception("not realised")
@@ -134,7 +136,7 @@ def get_Page():
             output = Path.extend(".", State.subfolder, filename)  # define path to output file
 
             if not State.Arg.no_download:
-                Wget.download(cls.get_url(), output=output, quiet=True)  # download file
+                Wget.download(cls.get_url(), output=output, quiet=not State.Debug.print_wget_output)  # download file
 
             cls.html = str(File.read(output))
             cls.status = cls.get_status()
@@ -153,14 +155,14 @@ def get_Page():
             cls.ads = 0
             for item in cls.soup_items:
                 cls.ads += 1
-                if State.Debug.on_parse_printprettify:
+                if State.Debug.on_parse_print_prettify:
                     print(item.prettify())
                     print()
                 cls.json_items[cls.ads] = {}
                 try:
                     cls.json_items[cls.ads]['mini_photo'] = urlish(item.div.a.img.get('src'))
                 except AttributeError as err:
-                    if State.Debug.print_missing_elements_while_parsing: print(err)
+                    if State.Debug.print_missing_elements_while_parsing and State.Debug.print_missing_img_elements_while_parsing: print(err)
                     cls.json_items[cls.ads]['mini_photo'] = None
                 try:
                     cls.json_items[cls.ads]['name'] = Str.substring(item.div.a.img.get('alt'),before="Продаю ")
@@ -250,7 +252,8 @@ def download_all_pages():
 
 def print_debug_single_position(page, item):
     print(newline, item)
-    print(pages[page].soup_items[item-1].prettify(), newline)
+    # raw soap
+    # print(pages[page].soup_items[item-1].prettify(), newline)
     print(json.dumps(pages[page].json_items[item], indent=4, sort_keys=True, ensure_ascii=False))
     return pages[page].soup_items[item-1] # возвращаю соуп объект для улучшения парсера
 
@@ -266,6 +269,9 @@ def get_all_positions():  # пока непонятно, чо делать с д
 
 
 def main():
+    Bench = get_Bench()
+    Bench.start()
+    Bench.prefix = "Downloaded in"
     download_all_pages()
     #print_debug_single_position(1, 23)
     #print_debug_single_position(1, 24)
@@ -280,8 +286,9 @@ def main():
     # name = item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.text
 
     #name = item.div.a.img.get('alt')
-    get_all_positions()
+    #get_all_positions()
 
+    Bench.end()
 
 
 main()

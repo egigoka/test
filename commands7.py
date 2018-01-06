@@ -408,6 +408,10 @@ if True:
     __version__ = "7.21.0-alpha"
     # Wget.download fix
     # Console.get_output crossplatfowm
+    __version__ = "7.22.0-alpha"
+    # get_Bench output object has "prefix" property now
+    __version__ = "7.23.0-alpha"
+    # get_Bench cut unneded symbols
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -1354,6 +1358,7 @@ def get_Bench(start=False):
         time_start = datetime.datetime.now()
         time_end = None
         previous = None
+        prefix = "Bench runned in"
 
         @classmethod
         def start(cls):
@@ -1371,7 +1376,7 @@ def get_Bench(start=False):
             delta_combined = cls.get()
             cls.previous = delta_combined
             if not quiet:
-                cprint("Bench runned in " + str(delta_combined) + " seconds", "grey", "on_white")
+                cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
             else:
                 return delta_combined
     return Bench
@@ -1599,8 +1604,9 @@ if __name__ == "__main__":
 colorama.reinit()
 LoadTimeBenchMark = get_Bench()
 LoadTimeBenchMark.time_start = start_bench_no_bench
-time_loading = LoadTimeBenchMark.end(quiet=True)
-cprint("commands7 v" + __version__ + " loaded in " + str(time_loading) + " seconds", "grey", "on_white")
+LoadTimeBenchMark.prefix = "commands7 v" + __version__ + " loaded in"
+LoadTimeBenchMark.end()
+
 
 # Есть словарь: my_list = [{'name':'Homer', 'age':39}, {'name':'Bart', 'age':10}]
 # Сортировка словаря по одному ключу:
