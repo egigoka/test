@@ -38,7 +38,7 @@ class State:
     quiet = False
     get_img_name_quiet = True
     max_servers_load = 3.3
-    
+
     log_object_debug = False
 
 
@@ -62,7 +62,7 @@ class Click:
         cls.click(button='left',position=position)
 
 
-Timer_wait_locate = copy.deepcopy(Bench)
+Timer_wait_locate = get_Bench()
 
 def get_img_name(*name_shards):
     if len(name_shards[0]) == 0:
@@ -103,7 +103,7 @@ def move(x, y=None, x2=None, y2=None, duration=State.move_duration, tween=pyauto
         else:
             how = "to"
         print("moved mouse", how, x, y)
-    
+
     if rel:
         pyautogui.moveRel(x, y, duration=duration, tween=tween)
     else:
@@ -161,9 +161,9 @@ def hotkey(*args):
     print("pressed", str(args))
 
 def sleep(seconds):
-    #if seconds >= 1: 
-    #    Time.timer(seconds)  # bug don't copy object
-    #else:
+    if seconds >= 1:
+        Time.timer(seconds)
+    else:
         time.sleep(seconds)
 
 def message(text, title='some window', button='oh no'):
@@ -196,9 +196,9 @@ class Exceptions:
             if position:
                 message("LO must be in work!")
 
-                
+
 lin_servers = {
-'192.168.99.7':{}, 
+'192.168.99.7':{},
 '192.168.99.9':{}}
 
 
@@ -207,10 +207,10 @@ for ip, login in lin_servers.items():
     # todo сделать проверку пароля перед его установкой в словарь
     lin_servers[ip]['password'] = Str.input_pass("Password for " + str(ip) + ":")
 # print(lin_servers)
-                
+
 
 class Actions:
-    
+
     def wait_for_done(fast=False):
         class LocalState:
             def reset():
@@ -221,7 +221,7 @@ class Actions:
                     return locate("окбелаяw"+winver)
                 else:
                     wait_locate("окбелаяw"+winver, timeout=timeout, safe=True)
-    
+
     def wait_for_done(fast=False):
         if State.log_object_debug:
             Print.debug ("Actions.wait_for_done started", "fast = "+str(fast))
@@ -241,12 +241,12 @@ class Actions:
                                 ok_position = ok_position_2
                 except IndexError as err:
                     print(err)
-        
+
         ################ CHECK FOR SERVER OVERLOAD ################
         overload = True
         while overload:
             load = []
-            for ip, login in lin_servers.items(): 
+            for ip, login in lin_servers.items():
                 lin_servers[ip]['avg_load'] = float(Ssh.get_avg_load_lin(ip, lin_servers[ip]['username'], lin_servers[ip]['password'])[0])
                 load.append(lin_servers[ip]['avg_load'])
                 if lin_servers[ip]['avg_load'] > State.max_servers_load:
@@ -263,7 +263,7 @@ class Actions:
         if State.log_object_debug:
             Print.debug ("Actions.wait_for_done ended", "fast = "+str(fast))
         Click.left()
-        
+
     #def wait_for_done(fast=None):
     #    if fast:
     #        sleep(30)
@@ -352,7 +352,8 @@ try:
         def main():
             #try:
                 while True:
-                    Bench.start()
+                    BenchMark = get_Bench()
+                    BenchMark.start()
                     Open.solvo()                                                                    # открыть солво
                     Open.Solvo.Menu.Documents.orders()                                              # открыть окно заказы
                     workarea = wait_locate("светлозел", every=1, timeout=30)                        # найти зелёную рабочую область
@@ -360,8 +361,8 @@ try:
                     sleep(State.before_ctrl_a_sleep)
                     hotkey('ctrl', 'a')                                                             # выделить всё
                     sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
-                    hotkey('ctrl', 'a')                                                             
-                    sleep(State.ctrl_a_sleep)                                                       
+                    hotkey('ctrl', 'a')
+                    sleep(State.ctrl_a_sleep)
                     dropdown = None                                                                 # меню не выпало
                     while not dropdown:                                                             # пока не выпадет меню:
                         Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
@@ -370,19 +371,19 @@ try:
                     Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))          # нажать на Отгрузить
 
                     Actions.wait_for_done()                                                         # подождать, пока отгрузится
-                    Bench.end()
+                    BenchMark.end()
             #except RuntimeError:
             #    Windows.lock()
 
     elif Arguments.batch_unload:    # рейсы
         def main():
-            
+
             def unload():
                 Click.right()
                 move(wait_locate("команды...белая", every=0.1, timeout=10))
                 move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
                 Click.left()
-            
+
             def unload_last():
                 for cnt in Int.from_to(1,2):
                     try:
@@ -392,14 +393,15 @@ try:
                         Open.Solvo.Menu.Documents.shipments()
                 move(pos_last)
                 unload()
-                
-            
+
+
             Open.solvo()
             Open.Solvo.Menu.Documents.shipments()
             Click.left(move(wait_locate("светлозел", every=0.1, timeout=30)))
             hotkey('end')
             while True:
-                Bench.start()
+                BenchMark2 = get_Bench()
+                BenchMark2.start()
                 position = None
                 while not position:
                     try:
@@ -416,13 +418,13 @@ try:
                                     Click.left(move(position_of_button))
                             except IndexError:
                                 unload_last()
-                                
-                            
+
+
                         # Scroll.up()
                 move(position)
                 unload()
                 Actions.wait_for_done()
-                Bench.end()
+                BenchMark2.end()
 
     elif Arguments.single_unload_batch_support:
         def main():
@@ -458,7 +460,7 @@ try:
                 move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
                 Click.left()
                 Actions.wait_for_done()
-    
+
     else:
         def main():
             message("wrong argument!")

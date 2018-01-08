@@ -401,6 +401,17 @@ if True:
     __version__ = "7.19.3-alpha"
     # Process.start bugfix
     # mine_import bugfix
+    __version__ = "7.19.4-alpha"
+    # c Bench now factory function get_Bench
+    __version__ = "7.20.0-alpha"
+    # Wget.download now have quiet option (need to debug)
+    __version__ = "7.21.0-alpha"
+    # Wget.download fix
+    # Console.get_output crossplatfowm
+    __version__ = "7.22.0-alpha"
+    # get_Bench output object has "prefix" property now
+    __version__ = "7.23.0-alpha"
+    # get_Bench cut unneded symbols
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -703,11 +714,11 @@ class Str:
                 elif s[0] == '+':
                     print(u'Add "{}" to position {}'.format(s[-1], i))
             print()
-    
+
     @staticmethod
     def input_pass(string="Password:"):
         return getpass.getpass(string)
-    
+
 
 
 class Console():
@@ -768,17 +779,20 @@ class Console():
 
     @staticmethod
     def get_output(command, quiet=True, split_lines=False):
-        p = subprocess.check_output(command, shell=True)
-        output = p.decode("cp866")
+        p = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+        if OS.name == "windows":
+            output = p.decode("cp866")
+        elif OS.family == "unix":
+            output = p.decode("utf8")
         if split_lines:
             output = Str.nl(output)
         return output
-    
 
-    
+
+
 class Ssh:
-    
-    
+
+
     @staticmethod
     def get_output(host, username, password, command, safe=False):
         ssh = paramiko.SSHClient()
@@ -789,20 +803,20 @@ class Ssh:
             raise IOError("ssh_stderr = " + str(ssh_stderr))
         ssh.close()
         return str(ssh_stdout.read(), 'utf8')
-    
+
     @classmethod
     def get_avg_load_lin(cls, host, username, password, safe=False):
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before="load average: ", after=newline)
         output = output.split(", ")
         return output
-    
+
     @classmethod
     def get_uptime_lin(cls, host, username, password, safe=False):
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before=" up ", after=", ")
         return output
-    
+
 
 
 class Path:
@@ -1089,7 +1103,7 @@ class Time:
 
     @staticmethod
     def timer(seconds, check_per_sec=10):
-        Countdown = copy.deepcopy(Bench)
+        Countdown = get_Bench()
         Countdown.start()
         secs_second_var = int(seconds)
         while Countdown.get() < seconds:
@@ -1271,7 +1285,7 @@ def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000)
         else:
             plog(logfile, down_message, quiet=True)
             cprint(down_message, "white", "on_red")
-            
+
     elif not quiet:
         Print.rewrite("")
         if up:
@@ -1338,31 +1352,34 @@ def getDomainOfUrl(url):
     return url_output
 
 
-class Bench:
-    time_start = datetime.datetime.now()
-    time_end = None
-    previous = None
 
-    @classmethod
-    def start(cls):
-        Print.debug("Bench started")
-        cls.time_start = datetime.datetime.now()
+def get_Bench(start=False):
+    class Bench(object):
+        time_start = datetime.datetime.now()
+        time_end = None
+        previous = None
+        prefix = "Bench runned in"
 
-    @classmethod
-    def get(cls):
-        cls.time_end = datetime.datetime.now()
-        delta = cls.time_end - cls.time_start
-        delta_combined = delta.seconds + delta.microseconds / 1E6
-        return delta_combined
+        @classmethod
+        def start(cls):
+            cls.time_start = datetime.datetime.now()
 
-    @classmethod
-    def end(cls, quiet=False):
-        delta_combined = cls.get()
-        cls.previous = delta_combined
-        if not quiet:
-            cprint("Bench runned in " + str(delta_combined) + " seconds", "grey", "on_white")
-        else:
+        @classmethod
+        def get(cls):
+            cls.time_end = datetime.datetime.now()
+            delta = cls.time_end - cls.time_start
+            delta_combined = delta.seconds + delta.microseconds / 1E6
             return delta_combined
+
+        @classmethod
+        def end(cls, quiet=False):
+            delta_combined = cls.get()
+            cls.previous = delta_combined
+            if not quiet:
+                cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
+            else:
+                return delta_combined
+    return Bench
 
 
 class Tkinter():
@@ -1401,13 +1418,18 @@ class Random:
 
 class Wget:
     @staticmethod
-    def download(url, output):
-        url = url.replace("&", backslash + "&")
-        # onestring = "wget " + url + " -O " + output
+    def download(url, output, quiet=False):
         arguments = '--header="Accept: text/html" ' + \
-                    '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) ' + \
+                    '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) ' + \
                     'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3167.0 Safari/537.36"'
-        Process.start("wget", url, "-O", output, arguments, pureshell=True)
+        if quiet:
+            command = "wget '" + url + f"' -O " + output + " " + arguments
+            return Console.get_output(command)
+        else:
+            url = url.replace("&", backslash + "&")
+            Process.start("wget", url, "-O", output, arguments, pureshell=True)
+
+
 
         # Another way to fix blocks by creating ~/.wgetrc file https://stackoverflow.com/a/34166756
 
@@ -1580,9 +1602,11 @@ if __name__ == "__main__":
 
 
 colorama.reinit()
-Bench.time_start = start_bench_no_bench
-time_loading = Bench.end(quiet=True)
-cprint("commands7 v" + __version__ + " loaded in " + str(time_loading) + " seconds", "grey", "on_white")
+LoadTimeBenchMark = get_Bench()
+LoadTimeBenchMark.time_start = start_bench_no_bench
+LoadTimeBenchMark.prefix = "commands7 v" + __version__ + " loaded in"
+LoadTimeBenchMark.end()
+
 
 # Есть словарь: my_list = [{'name':'Homer', 'age':39}, {'name':'Bart', 'age':10}]
 # Сортировка словаря по одному ключу:
