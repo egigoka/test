@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import pyautogui
 from commands7 import *
-import tripleclick
+#import tripleclick
 
 winver = str(OS.windows_version)
 
@@ -34,7 +34,7 @@ class State:
     sleep_before_locate = 0.1
     before_ctrl_a_sleep = 0.5
     ctrl_a_sleep = 3
-    buttons_pics_folder = Path.extend("T:", "buttonpics")
+    buttons_pics_folder = Path.extend("T:", "buttonpics")  # картиночки
     quiet = False
     get_img_name_quiet = True
     max_servers_load = 3.3
@@ -393,12 +393,15 @@ try:
                         Open.Solvo.Menu.Documents.shipments()
                 move(pos_last)
                 unload()
-
-
-            Open.solvo()
-            Open.Solvo.Menu.Documents.shipments()
-            Click.left(move(wait_locate("светлозел", every=0.1, timeout=30)))
-            hotkey('end')
+            
+            def go_to_end():
+                Open.solvo()
+                Open.Solvo.Menu.Documents.shipments()
+                Click.left(move(wait_locate("светлозел", every=0.1, timeout=30, safe=True)))
+                hotkey('end')
+            
+            
+            go_to_end()
             while True:
                 BenchMark2 = get_Bench()
                 BenchMark2.start()
@@ -407,18 +410,9 @@ try:
                     try:
                         position = locate("готовкотгрузкесиняяw"+winver, "готовкотгрузкебелаяw"+winver)
                     except IndexError as err:
-                        print (err)
-                        move(locate("готовкотгрузкевыделеннаяw"+winver))
-                        # if OS.windows_version == 10:
-                        if True:
-                            try:
-                                position_of_button = wait_locate("buttonup_ready", every=0.1, timeout=30)
-                                for i in Int.from_to(1,5):
-                                    sleep(0.1)
-                                    Click.left(move(position_of_button))
-                            except IndexError:
-                                unload_last()
-
+                        unload_last()
+                        go_to_end()
+                    
 
                         # Scroll.up()
                 move(position)
@@ -463,7 +457,10 @@ try:
 
     else:
         def main():
-            message("wrong argument!")
+            message("""obo - открузка накладных(заказов)
+batch - отгрузка рейсов
+obozero - подготовка накладных в рейсе (заказы с отправкой не равной нулю)
+lo - подтверждение ЛО""")
 
 
 
@@ -482,5 +479,5 @@ except KeyboardInterrupt:
 
 
 main()  # fucking shit
-tripleclick.main = main
-tripleclick.start()
+#tripleclick.main = main
+#tripleclick.start()
