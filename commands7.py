@@ -134,6 +134,7 @@ mine_import("colorama")
 colorama.init()
 colorama.deinit()
 mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+mine_import("copypaste")
 
 newline = '\n'
 ruble = u"\u20bd"  # \u20bd is ₽
@@ -650,6 +651,13 @@ class File:
 
 
 class Time:
+
+    rnd = str(random.randint(1,100))
+
+    @classmethod
+    def fuck(cls):
+        print("fuck it all "+cls.rnd)
+
     @staticmethod
     def stamp():
         return time.time()
@@ -932,7 +940,6 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
 
 
 def warning(message):
-
     pyautogui.alert(message)
 
 def substring(string, before, after=None):
@@ -1187,29 +1194,18 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
 
 
 def reload_commands7():
-    dir_diff = ['ACTIVE', 'ALL', 'ANCHOR', 'ARC', 'BASELINE', 'BEVEL', 'BOTH', 'BOTTOM', 'BROWSE', 'BUTT', 'BaseWidget',
-                'BitmapImage', 'BooleanVar', 'Button', 'CASCADE', 'CENTER', 'CHAR', 'CHECKBUTTON', 'CHORD', 'COMMAND',
-                'CURRENT', 'CallWrapper', 'Canvas', 'Checkbutton', 'Codegen', 'Console', 'DISABLED', 'DOTBOX', 'Dir',
-                'DoubleVar', 'E', 'END', 'EW', 'EXCEPTION', 'EXTENDED', 'Entry', 'Event', 'EventType', 'FALSE', 'FIRST',
-                'FLAT', 'File', 'Frame', 'GROOVE', 'Grid', 'HIDDEN', 'HORIZONTAL', 'INSERT', 'INSIDE', 'Image', 'Int',
-                'IntVar', 'Json', 'LAST', 'LEFT', 'Label', 'LabelFrame', 'Learning', 'Listbox', 'LoadTimeBenchMark',
-                'Locations', 'MITER', 'MOVETO', 'MULTIPLE', 'Menu', 'Menubutton', 'Message', 'Misc', 'N', 'NE', 'NO',
-                'NONE', 'NORMAL', 'NS', 'NSEW', 'NUMERIC', 'NW', 'NoDefaultRoot', 'OFF', 'ON', 'OS', 'OUTSIDE',
-                'OptionMenu', 'PAGES', 'PIESLICE', 'PROJECTING', 'Pack', 'PanedWindow', 'Path', 'PhotoImage', 'Place',
-                'Print', 'Process', 'RADIOBUTTON', 'RAISED', 'READABLE', 'RIDGE', 'RIGHT', 'ROUND', 'Radiobutton',
-                'Random', 'Repl', 'S', 'SCROLL', 'SE', 'SEL', 'SEL_FIRST', 'SEL_LAST', 'SEPARATOR', 'SINGLE', 'SOLID',
-                'SUNKEN', 'SW', 'Scale', 'Scrollbar', 'Spinbox', 'Ssh', 'Str', 'StringVar', 'TOP', 'TRUE', 'Tcl',
-                'TclError', 'TclVersion', 'Text', 'Time', 'Tk', 'TkVersion', 'Tkinter', 'Toplevel', 'UNDERLINE',
-                'UNITS', 'VERTICAL', 'Variable', 'W', 'WORD', 'WRITABLE', 'Wget', 'Widget', 'Windows', 'Wm', 'X',
-                'XView', 'Y', 'YES', 'YView', 'backslash', 'colorama', 'colored', 'constants', 'cprint', 'ctypes',
-                'datetime', 'debug_print', 'dir_clean', 'enum', 'getDomainOfUrl', 'get_Bench', 'get_os', 'getboolean',
-                'getdouble', 'getint', 'getpass', 'how_to_import_this_useless_stuff', 'image_names', 'image_types',
-                'input_int', 'is_python3', 'json', 'mainloop', 'mine_import', 'newline', 'newline2', 'os', 'paramiko',
-                'ping', 'plog', 'pyautogui', 'random', 're', 'ruble', 'screenblink', 'shutil', 'start_bench_no_bench',
-                'subprocess', 'substring', 'sys', 'time', 'wantobjects', 'warning', 'winRepair_UnicodeEncodeError']
-    for obj in dir_diff:
-        exec("del "+obj, globals())
-    exec("from commands7 import *")
+    import commands7, importlib
+    commands7 = importlib.reload(commands7)
+    del commands7
+
+def f():
+    reload_commands7()
+    exec("from commands7 import *", globals())
+
+def rel(quiet=False):
+    reload_commands7()
+    if not quiet:
+        pass
 
 
 if __name__ == "__main__":
@@ -1222,7 +1218,6 @@ if __name__ == "__main__":
     #screenblink()
     #print(checkWidthOfConsole())
     #print(checkHeightOfConsole())
-    #import UtilsUpdate
 
 
 
