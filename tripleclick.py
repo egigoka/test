@@ -69,7 +69,7 @@ class State:
 
 
 class ShittyTime:
-    Ben = Bench
+    Ben = get_Bench()
 
     @classmethod
     def start(cls):
