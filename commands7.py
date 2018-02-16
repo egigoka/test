@@ -1,11 +1,10 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
-import os
-import sys
 import datetime
 start_bench_no_bench = datetime.datetime.now()
 __version__ = "7.24.0-alpha"
-
+import os
+import sys
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -41,8 +40,9 @@ class OS:
 
     try:
         cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
-        print(cyrline, end="\r")
-        print(" "*len(cyrline), end="\r")
+        for cyrsybol in cyrline:
+            print(cyrline, end="\r")
+        print(" ", end="\r")
         cyrrilic_support = True
     except UnicodeEncodeError as err:
         cyrrilic_support = False
