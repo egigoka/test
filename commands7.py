@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.25.0-alpha"
+__version__ = "7.26.0-alpha"
 import os
 import sys
 
@@ -1193,18 +1193,16 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
             break
 
 
-def reload_commands7():
+
+
+def rel(quiet=False):
     import commands7, importlib
     commands7 = importlib.reload(commands7)
     del commands7
-
-def f():
-    reload_commands7()
-    exec("from commands7 import *", globals())
-
-def rel(quiet=False):
-    reload_commands7()
+    string = "from commands7 import *"  # you need to manually add this string to code :(
     if not quiet:
+        print('"'+string+'" copied to clipboard')
+        copypaste.copy(string)
         pass
 
 
