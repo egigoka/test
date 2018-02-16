@@ -213,6 +213,7 @@ class Str:
         integer_found = False
         integers = []
         current_integer = 0
+        negative = False
         for symbol in string:
             try:
                 if symbol in ['-', '—']:
@@ -911,6 +912,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
                 integer = Str.get_integers(integer)[0]
             except IndexError:
                 print("Это не число")
+                continue
         elif default and integer != "":
             output_int = default
         elif integer == "":
