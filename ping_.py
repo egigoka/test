@@ -41,29 +41,30 @@ class State:
     if ("-wf" in sys.argv) or ("-wms-folders" in sys.argv) or ("--wms-folders" in sys.argv):
         wms_folders = True
 
-domains = ['192.168.99.3']  # solvo
-domains += ['192.168.99.5']  # zabbix
-domains += ['192.168.99.7']  # solvo1
-domains += ['192.168.99.8']  # solvo2 ??????
-domains += ['192.168.99.9']  # solvo_BD ??????
-domains += ['192.168.99.11']  # solvo win print
-domains += ['192.168.99.18']  # keto
-domains += ['192.168.99.91']  # notebook1
-domains += ['192.168.99.253']  # share
-domains += ['192.168.98.81']  # fingerprint
-domains += ['192.168.98.82']  # fingerprint
-domains += ['192.168.98.83']  # fingerprint
-domains += ['192.168.98.84']  # fingerprint
-domains += ['192.168.99.240']  # PC on "returns"
-domains += ['192.168.99.99']  # PC on "fruits"
+domains = ['192.168.1.1'] # router by default
+#domains = ['192.168.99.3']  # solvo
+#domains += ['192.168.99.5']  # zabbix
+#domains += ['192.168.99.7']  # solvo1
+#domains += ['192.168.99.8']  # solvo2 ??????
+#domains += ['192.168.99.9']  # solvo_BD ??????
+#domains += ['192.168.99.11']  # solvo win print
+#domains += ['192.168.99.18']  # keto
+#domains += ['192.168.99.91']  # notebook1
+#domains += ['192.168.99.253']  # share
+#domains += ['192.168.98.81']  # fingerprint
+#domains += ['192.168.98.82']  # fingerprint
+#domains += ['192.168.98.83']  # fingerprint
+#domains += ['192.168.98.84']  # fingerprint
+#domains += ['192.168.99.240']  # PC on "returns"
+#domains += ['192.168.99.99']  # PC on "fruits"
 
 
-lin_servers = {
-'192.168.99.7':{},
-'192.168.99.9':{},
-'192.168.99.18':{}}
+lin_servers = {}
+#'192.168.99.7':{},
+#'192.168.99.9':{},
+#'192.168.99.18':{}}
 
-if not (State.online_only or State.wms_folders):
+if (not (State.online_only or State.wms_folders)) and (lin_servers):
     for ip, login in lin_servers.items():
         lin_servers[ip]['username'] = input("Username for " + str(ip) + ":")
         # todo сделать проверку пароля перед его установкой в словарь
@@ -80,10 +81,12 @@ if State.online_only:
     domains = []
 
 if State.online:
-    domains += ['ya.ru']
+    domains += ['yandex.ru']
     domains += ['google.com']
     domains += ['8.8.8.8']
     domains += ['8.8.4.4']
+    domains += ['gmail.com']
+    domains += ['vk.com']
 
 errDomains = 0  # количество заведомо плохих доменов
 timeout = "5000"  # таймаут пинга в мс

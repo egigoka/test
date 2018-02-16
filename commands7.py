@@ -2,416 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import copy
-if True:
-    import datetime
-    start_bench_no_bench = datetime.datetime.now()
-if True:
-    __version__ = "1.0.0"
-    # f createdirs
-    # f createfile
-    # f savejson
-    # f loadjson
-    # f pathInWindowsWithSpacesToQuotes
-    # f pathInWindowsExtend
-    __version__ = "1.1.0"
-    # f taskkill
-    # f jsonload print "json loaded" output
-    # f jsonsave print "json saved" output
-    __version__ = "1.2.0"
-    # f file_wipe
-    __version__ = "1.3.0"
-    # f filebackup
-    # f jsonrestorebak todo
-    # f jsoncheck todo
-    # f timestamp
-    __version__ = "1.4.0"
-    # f screenblink
-    __version__ = "1.4.1"
-    # update pathInWindowsExtend - three path extend now
-    __version__ = "1.4.2"
-    # update pathInWindowsExtend - unlimited args now#
-    __version__ = "1.4.3"
-    # update pathInWindowsExtend - bugfix
-    __version__ = "1.4.4"
-    # update pathInWindowsExtend - bugfix
-    __version__ = "1.4.5"
-    # update screenblink - bugfix
-    __version__ = "1.4.6"
-    # update screenblink - bugfix
-    __version__ = "1.4.7"
-    # update screenblink - bugfix
-    __version__ = "1.4.8"
-    # update screenblink - bugfix
-    __version__ = "1.4.9"
-    # update screenblink - add change size of console window
-    __version__ = "1.5.0"
-    # f getOutPutFromCommand
-    # f getIntegers
-    # stringWidthNewlinesToString todo
-    # f checkWidthOfConsole
-    # update screenblink
-    __version__ = "1.5.1"
-    # enable new functionality in screenblink
-    # todoed вместо вывода кучи строк вывести одну длинную?
-    __version__ = "1.6.0"
-    # f homePath
-    __version__ = "1.6.1"
-    # loadjson warning expanded
-    __version__ = "1.7.0"
-    # f plog
-    # const newline
-    # f rustime
-    __version__ = "1.7.0"
-    # plog add custom time
-    # rustime add custom time
-    __version__ = "1.7.1"
-    # loadjson quiet option
-    __version__ = "1.7.2"
-    # filebackup quiet option
-    __version__ = "1.8.0"
-    # f ping
-    __version__ = "1.9.0"
-    # f currentfolder
-    __version__ = "1.9.1"
-    # gettime debug
-    # rustime update
-    __version__ = "1.10.0"
-    # f winRepair_UnicodeEncodeError
-    __version__ = "1.11.0"
-    # loadjson now create clean json if file not exist
-    # const ruble
-    # f cls
-    __version__ = "1.12.0"
-    # f dottedtime
-    __version__ = "1.13.0"
-    # f hidefile
-    # filebackup hidefile enable
-    __version__ = "1.14.0"
-    # f winRepair_UnicodeEncodeError
-    __version__ = "1.15.0"
-    # f doNothing
-    __version__ = "1.15.1"
-    # savejson now can be quiet
-    __version__ = "1.16.0"
-    # f deletefile
-    __version__ = "1.17.0"
-    # f bigdigits
-    __version__ = "1.18.0"
-    # f inputint
-    __version__ = "1.18.1"
-    # fix savejson
-    __version__ = "1.19.0"
-    # f isPython3
-    __version__ = "1.20.0"
-    # openInNewWindow
-    # f getDomainOfUrl
-    # enabled getDomainOfUrl in ping
-    # const backslash
-    # f substring (string, before, after=None)
-    __version__ = "1.21.0"
-    # f leftpad beta version todo fix all exceptions
-    __version__ = "1.22.0"
-    # allias to f currentfolder as currentdir
-    __version__ = "1.23.0"
-    # allias to f openInNewWindow as openInCurrentWindow
-    __version__ = "1.24.0"
-    # f openInCurrentWindow now isn't allias
-    __version__ = "1.25.0"
-    # f openInCurrentWindow doesn't work need fix
-    __version__ = "1.25.1"
-    # fix f openInCurrentWindow
-    __version__ = "1.25.2"
-    # fix get_time
-    __version__ = "1.26.0"
-    # f run_code
-    __version__ = "1.25.2"
-    # del f run_code(code): exec(code, globals()) (work only in local code)
-    __version__ = "1.26.0"
-    # f tkinter_color
-    __version__ = "1.26.1"
-    # loadjson, savejson print option
-    __version__ = "1.27.0"
-    # allias to_quotes pathInWindowsWithSpacesToQuotes(path)
-    __version__ = "1.28.0"
-    # f path_check
-    __version__ = "2.0.0"
-    # pathInWindowsExtend is crossplatfowm and now names path_extend # done
-    __version__ = "3.0.0"
-    # wipefile mow file_wipe
-    # deletefile now file_delete # done
-    # filebackup now  # done
-    # pathInWindowsWithSpacesToQuotes now path_to_quotes
-    # homePath now home_path  # done
-    # createfile now file_create  # done
-    __version__ = "4.0.0"
-    # file_backup now creates file in subfolder
-    # createdirs now dir_create # done
-    # wipefile now file_wipe
-    __version__ = "4.1.0"
-    # f close_all_gone_wrong(error_while, try_to_do)
-    __version__ = "4.2.0"
-    # f debug_print
-    __version__ = "4.2.1"
-    # add some tests
-    __version__ = "4.3.0"
-    # f get_os
-    __version__ = "4.3.1"
-    # add some crossplatformity
-    __version__ = "4.3.2"
-    # add some crossplatformity
-    __version__ = "4.3.3"
-    # add some crossplatformity
-    __version__ = "4.3.4aplha1"
-    # add some crossplatformity
-    __version__ = "4.3.4aplha2"
-    # add some crossplatformity plog, path_extend
-    __version__ = "5.0.0alpha1"
-    # hidefileWin now file_hide
-    # add some crossplatformity file_hide
-    # f file_rename
-    # f file_move
-    # file_hide bugfix
-    # add some crossplatformity ping
-    # path_check now path_full
-    __version__ = "5.0.0alpha2"
-    # rightpad bugfix
-    __version__ = "5.0.0alpha3"
-    # path_extend bugfix
-    __version__ = "5.0.0alpha4"
-    # path_extend bugfix
-    __version__ = "5.0.0alpha5"
-    # path_extend bugfix
-    __version__ = "5.0.0alpha6"
-    # path_extend bugfix
-    __version__ = "5.0.0alpha7"
-    # path_extend debugging
-    __version__ = "5.0.0alpha8"
-    # path_extend bugfix
-    __version__ = "5.1.0"
-    # file_backup now return backupfilename
-    __version__ = "5.1.1"
-    # path_extend bugfix
-    __version__ = "5.1.2"
-    # path_extend support for windows \\ip_or_pcname\paths
-    __version__ = "5.1.3"
-    # path_extend bugfix
-    __version__ = "5.1.4"
-    # path_extend bugfix
-    __version__ = "5.1.5"
-    # path_extend bugfix
-    __version__ = "5.1.6"
-    # file_create bugfix
-    __version__ = "5.1.7"
-    # file_create bugfix
-    __version__ = "5.1.8"
-    # file_create bugfix
-    __version__ = "5.1.9"
-    # add some crossplatformity cls
-    __version__ = "5.1.10"
-    # file_hide bugfix
-    __version__ = "5.1.11"
-    # screenblink simplification
-    __version__ = "5.1.12"
-    # stringWidthNewlinesToString now work
-    __version__ = "5.1.13"
-    # getOutPutFromCommand(split_lines=False)
-    __version__ = "5.1.14"
-    # stringWidthNewlinesToString now crossplatfowm
-    __version__ = "5.1.15"
-    # file_hide simplification
-    __version__ = "5.1.16"
-    # getOutPutFromCommand bugfix
-    __version__ = "6.0.0"
-    # isPython3 now is_python3
-    # currentfolder and currentdir now path_current
-    __version__ = "7.0.0alpha1"
-    # now most of functions in classes
-    # Time.get bugfix
-    __version__ = "7.0.0alpha2"
-    # File.delete bugfix
-    __version__ = "7.0.0alpha2"
-    # f Dir.list_of_files
-    __version__ = "7.0.0alpha3"
-    # getOutPutFromCommand now Console.get_output
-    __version__ = "7.0.0alpha4"
-    # getIntegers now Str.get_integers
-    __version__ = "7.0.0alpha5"
-    # Process.start bugfix
-    __version__ = "7.0.0alpha6"
-    # Str.to_quotes bugfix
-    __version__ = "7.0.0alpha7"
-    # debug option to Codegen
-    # f Str.split_every
-    # optimize debug_print
-    # debug_print no swearing anymore
-    # Str.split_every bugfix
-    __version__ = "7.0.0alpha8"
-    # f Path.set_current
-    __version__ = "7.0.0alpha9"
-    # allias to Dir.list_of_files as Dir.contents
-    __version__ = "7.0.0alpha10"
-    # new to Locations
-    __version__ = "7.0.0alpha11"
-    # f Dir.number_of_files()
-    __version__ = "7.0.0alpha12"
-    # f Tkinter.warn()
-    __version__ = "7.0.0alpha13"
-    # Tkinter.warn() try to grab focus
-    __version__ = "7.0.0alpha14"
-    # Tkinter.warn() try to grab focus in different way (it works)
-    __version__ = "7.0.0alpha15"
-    # Time.get() bugfix
-    __version__ = "7.1.0alpha1"
-    # class Bench for benchmarking
-    __version__ = "7.1.0alpha2"
-    # bench while loading
-    __version__ = "7.1.0alpha3"
-    # alias Dir.contain to Dir.contents
-    __version__ = "7.1.0alpha4"
-    # input_int bugfix
-    __version__ = "7.1.0alpha5"
-    # Str.rightpad bugfix
-    __version__ = "7.1.0alpha6"
-    # more like PEP8
-    __version__ = "7.2.0alpha1"
-    # f Windows.lock
-    __version__ = "7.3.0alpha1"
-    # f Random.integer
-    __version__ = "7.3.0alpha2"
-    # f Bench.get
-    __version__ = "7.3.0alpha3"
-    # Process.kill() now support macOS
-    __version__ = "7.4.0alpha1"
-    # f Wget.download()
-    __version__ = "7.4.0alpha2"
-    # bugfix Path.extend
-    __version__ = "7.4.0alpha3"
-    # bugfix Path.extend
-    __version__ = "7.4.0alpha4"
-    # bugfix Path.extend
-    __version__ = "7.4.0alpha5"
-    # bugfix Wget.download
-    __version__ = "7.4.0alpha6"
-    # bugfix Path.extend
-    __version__ = "7.4.0alpha7"
-    # bugfix Wget.download
-    __version__ = "7.4.0alpha8"
-    # bugfix Wget.download
-    # f Str.to_quotes_2
-    # Process.start now more crossplatfowm
-    # debug option to Process.start
-    # pureshell option to Process.start
-    __version__ = "7.5.0alpha1"
-    # substring is now warning and moved to Str.substring
-    # Str.strings_to_newlines arg quiet
-    __version__ = "7.6.0alpha1"
-    # f File.read
-    # class Repl
-    # f Repl.loop()
-    __version__ = "7.6.0alpha2"
-    # bugfix File.read
-    # Repl.loop safe arg
-    __version__ = "7.6.0alpha3"
-    # Str.leftpad bugfix
-    __version__ = "7.7.0aplha1"
-    # cls Int
-    # f Int.from_to
-    __version__ = "7.7.0aplha2"
-    # Int.from_to bugfix
-    __version__ = "7.7.0aplha3"
-    # Path.extend support for ~ path
-    __version__ = "7.7.0aplha4"
-    # Path.extend bugfix for ~ path
-    __version__ = "7.8.0alpha1"
-    # f Dir.batch_rename
-    __version__ = "7.8.0alpha2"
-    # Wget.download fix for blocking by wget user_agent
-    __version__ = "7.8.0alpha3"
-    # Process.start bugfix
-    __version__ = "7.9.0alpha1"
-    # cls OS
-    # var OS.name
-    # now get_os() is OS.name
-    # var OS.family
-    # warning bugfix
-    __version__ = "7.10.0-alpha"
-    # new versioning
-    # new arg for debug_print - raw
-    __version__ = "7.11.0-alpha"
-    # var OS.windows_version
-    __version__ = "7.11.1-alpha"
-    # var OS.windows_version bugfix
-    __version__ = "7.12.0-alpha"
-    # screenblink is back, meh
-    __version__ = "7.12.1-alpha"
-    # Codegen.start bugfix
-    __version__ = "7.12.2-alpha"
-    # Locations.share bugfix
-    __version__ = "7.13.0-alpha"
-    # Process.start warning on macOS
-    __version__ = "7.13.1-alpha"
-    # fix in import how-to
-    __version__ = "7.13.2-alpha"
-    # Locations.scripts_folder
-    __version__ = "7.14.0-alpha"
-    # debug_print now Print.debug
-    # f Print.rewrite()
-    # Time.timer update
-    __version__ = "7.14.1-alpha"
-    # Print.rewrite bugfix
-    # Time.timer bugfix
-    __version__ = "7.14.2-alpha"
-    # Print.rewrite bugfix on Windows
-    __version__ = "7.14.3-alpha"
-    # import how-to now kinda interactive
-    __version__ = "7.15.0-alpha"
-    # f mine_import
-    __version__ = "7.15.1-alpha"
-    # mine_import update for pyautogui support
-    __version__ = "7.16.0-alpha"
-    # OS.display
-    __version__ = "7.17.0-alpha"
-    # OS.cyrrilic_support
-    __version__ = "7.17.1-alpha"
-    # OS.cyrrilic_support fix
-    __version__ = "7.17.2-alpha"
-    # ping on linux fix
-    __version__ = "7.17.3-alpha"
-    # mine_import fix
-    __version__ = "7.17.4-alpha"
-    # ping update
-    __version__ = "7.17.5-alpha"
-    # Time.timer fix
-    __version__ = "7.18.0-alpha"
-    # import copy
-    __version__ = "7.18.1-alpha"
-    # OS.display fix
-    __version__ = "7.18.2-alpha"
-    # ping fix
-    __version__ = "7.19.0-alpha"
-    # f Ssh.get_output
-    # f Ssh.get_avg_load_lin
-    # f Ssh.get_uptime_lin
-    # f Str.input_pass
-    __version__ = "7.19.1-alpha"
-    # Ssh.get_avg_load_lin split fix
-    __version__ = "7.19.2-alpha"
-    # Ssh.get_output cpu load fix
-    __version__ = "7.19.3-alpha"
-    # Process.start bugfix
-    # mine_import bugfix
-    __version__ = "7.19.4-alpha"
-    # c Bench now factory function get_Bench
-    __version__ = "7.20.0-alpha"
-    # Wget.download now have quiet option (need to debug)
-    __version__ = "7.21.0-alpha"
-    # Wget.download fix
-    # Console.get_output crossplatfowm
-    __version__ = "7.22.0-alpha"
-    # get_Bench output object has "prefix" property now
-    __version__ = "7.23.0-alpha"
-    # get_Bench cut unneded symbols
+import datetime
+start_bench_no_bench = datetime.datetime.now()
+__version__ = "7.24.0-alpha"
 
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
@@ -619,13 +212,17 @@ class Str:
         string = str(string)
         integer_found = False
         integers = []
-        # cnt = 0
         current_integer = 0
         for symbol in string:
             try:
+                if symbol in ['-', '—']:
+                    negative = True
                 int(symbol)
                 current_integer = current_integer*10 + int(symbol)
                 integer_found = True
+                if negative and current_integer>0:
+                    current_integer = -current_integer
+                    negative=False
             except ValueError:
                 if integer_found:
                     integers = integers + [current_integer]
@@ -825,7 +422,7 @@ class Path:
         return os.path.abspath(path)
 
     @staticmethod
-    def current(self=None):
+    def current():
         return os.path.dirname(os.path.realpath(__file__))
 
     @classmethod
@@ -860,7 +457,7 @@ class Path:
             path = Console.get_output(r"echo %userprofile%")
             path = path.rstrip(newline2)
         else:
-            path = Console.get_output("echo $HOME", split_lines = True)[0]
+            path = Console.get_output("echo $HOME", split_lines=True)[0]
             path = path.rstrip(newline)
         return path
 
@@ -1528,13 +1125,13 @@ class Learning():
                 return Digits
         Digits = digits_init()
         column = 0
-        while column < digits_init(height = True):
+        while column < digits_init(height=True):
             line = ""
             digits = str(digits)
             for digit in digits:
                 # try:
                 digit = int(digit)
-                line = line + Digits[digit][column] + " "
+                line = line + Digits[digit][column].replace("#", str(digit)) + " "
             print(line)
             column += 1
 
