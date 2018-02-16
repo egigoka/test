@@ -41,7 +41,7 @@ class OS:
     try:
         cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
         for cyrsybol in cyrline:
-            print(cyrline, end="\r")
+            print(cyrsybol, end="\r")
         print(" ", end="\r")
         cyrrilic_support = True
     except UnicodeEncodeError as err:
