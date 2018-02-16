@@ -209,7 +209,7 @@ class Str:
 
     @staticmethod
     def get_integers(string): # todo support for -
-        string = str(string)
+        string = str(string) + " "
         integer_found = False
         integers = []
         current_integer = 0
@@ -221,18 +221,14 @@ class Str:
                 int(symbol)
                 current_integer = current_integer*10 + int(symbol)
                 integer_found = True
-                if negative and current_integer>0:
-                    current_integer = -current_integer
-                    negative=False
             except ValueError:
                 if integer_found:
+                    if negative:
+                        current_integer = -current_integer
+                        negative = False
                     integers = integers + [current_integer]
                     current_integer = 0
                     integer_found = False
-        if integer_found:
-            integers = integers + [current_integer]
-            current_integer = 0
-            integer_found = False
         return integers
 
     @staticmethod
