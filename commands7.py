@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.24.2-alpha"
+__version__ = "7.25.0-alpha"
 import os
 import sys
 
@@ -209,7 +209,7 @@ class Str:
 
     @staticmethod
     def get_integers(string): # todo support for -
-        string = str(string) + " "
+        string = str(string) + " "  # in exception some processing, meh :(
         integer_found = False
         integers = []
         current_integer = 0
@@ -1184,6 +1184,32 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
             colorama.deinit()
             Console.clean()
             break
+
+
+def reload_commands7():
+    dir_diff = ['ACTIVE', 'ALL', 'ANCHOR', 'ARC', 'BASELINE', 'BEVEL', 'BOTH', 'BOTTOM', 'BROWSE', 'BUTT', 'BaseWidget',
+                'BitmapImage', 'BooleanVar', 'Button', 'CASCADE', 'CENTER', 'CHAR', 'CHECKBUTTON', 'CHORD', 'COMMAND',
+                'CURRENT', 'CallWrapper', 'Canvas', 'Checkbutton', 'Codegen', 'Console', 'DISABLED', 'DOTBOX', 'Dir',
+                'DoubleVar', 'E', 'END', 'EW', 'EXCEPTION', 'EXTENDED', 'Entry', 'Event', 'EventType', 'FALSE', 'FIRST',
+                'FLAT', 'File', 'Frame', 'GROOVE', 'Grid', 'HIDDEN', 'HORIZONTAL', 'INSERT', 'INSIDE', 'Image', 'Int',
+                'IntVar', 'Json', 'LAST', 'LEFT', 'Label', 'LabelFrame', 'Learning', 'Listbox', 'LoadTimeBenchMark',
+                'Locations', 'MITER', 'MOVETO', 'MULTIPLE', 'Menu', 'Menubutton', 'Message', 'Misc', 'N', 'NE', 'NO',
+                'NONE', 'NORMAL', 'NS', 'NSEW', 'NUMERIC', 'NW', 'NoDefaultRoot', 'OFF', 'ON', 'OS', 'OUTSIDE',
+                'OptionMenu', 'PAGES', 'PIESLICE', 'PROJECTING', 'Pack', 'PanedWindow', 'Path', 'PhotoImage', 'Place',
+                'Print', 'Process', 'RADIOBUTTON', 'RAISED', 'READABLE', 'RIDGE', 'RIGHT', 'ROUND', 'Radiobutton',
+                'Random', 'Repl', 'S', 'SCROLL', 'SE', 'SEL', 'SEL_FIRST', 'SEL_LAST', 'SEPARATOR', 'SINGLE', 'SOLID',
+                'SUNKEN', 'SW', 'Scale', 'Scrollbar', 'Spinbox', 'Ssh', 'Str', 'StringVar', 'TOP', 'TRUE', 'Tcl',
+                'TclError', 'TclVersion', 'Text', 'Time', 'Tk', 'TkVersion', 'Tkinter', 'Toplevel', 'UNDERLINE',
+                'UNITS', 'VERTICAL', 'Variable', 'W', 'WORD', 'WRITABLE', 'Wget', 'Widget', 'Windows', 'Wm', 'X',
+                'XView', 'Y', 'YES', 'YView', 'backslash', 'colorama', 'colored', 'constants', 'cprint', 'ctypes',
+                'datetime', 'debug_print', 'dir_clean', 'enum', 'getDomainOfUrl', 'get_Bench', 'get_os', 'getboolean',
+                'getdouble', 'getint', 'getpass', 'how_to_import_this_useless_stuff', 'image_names', 'image_types',
+                'input_int', 'is_python3', 'json', 'mainloop', 'mine_import', 'newline', 'newline2', 'os', 'paramiko',
+                'ping', 'plog', 'pyautogui', 'random', 're', 'ruble', 'screenblink', 'shutil', 'start_bench_no_bench',
+                'subprocess', 'substring', 'sys', 'time', 'wantobjects', 'warning', 'winRepair_UnicodeEncodeError']
+    for obj in dir_diff:
+        exec("del "+obj, globals())
+    exec("from commands7 import *")
 
 
 if __name__ == "__main__":
