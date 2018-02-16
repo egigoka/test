@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.24.0-alpha"
+__version__ = "7.24.2-alpha"
 import os
 import sys
 
@@ -41,8 +41,8 @@ class OS:
     try:
         cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
         for cyrsybol in cyrline:
-            print(cyrsybol, end="\r")
-        print(" ", end="\r")
+            print(cyrsybol*2, end="\r")
+        print("  ", end="\r")
         cyrrilic_support = True
     except UnicodeEncodeError as err:
         cyrrilic_support = False
@@ -103,7 +103,7 @@ import json, \
 # ###############################################!!! HOW TO IMPORT !!!##################################################
 # http://python.su/forum/topic/15531/?page=1#post-93316
 def how_to_import_this_useless_stuff():
-    print("""# import module like this:
+    print(r"""# import module like this:
 # mine commands
 import sys
 sys.path.append("../..")
@@ -909,7 +909,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
         if integer != "":
             try:
                 integer = Str.get_integers(integer)[0]
-            except TypeError:
+            except IndexError:
                 print("Это не число")
         elif default and integer != "":
             output_int = default
@@ -1134,6 +1134,10 @@ class Learning():
                 line = line + Digits[digit][column].replace("#", str(digit)) + " "
             print(line)
             column += 1
+
+    @staticmethod
+    def simplecalctest():
+        pass
 
 
 class Repl:
