@@ -14,7 +14,6 @@ def is_python3():
     is_true = sys.version_info >= (3, 0)
     return is_true
 
-
 class OS:
     windows_version = None
     if sys.platform == "linux" or sys.platform == "linux2":
@@ -1050,6 +1049,7 @@ class Int:
 
 
 class Learning():
+    @staticmethod
     def bigdigits(digits):
         def digits_init(height = False):
             Zero = ["   ###   ",
@@ -1139,6 +1139,20 @@ class Learning():
                 line = line + Digits[digit][column].replace("#", str(digit)) + " "
             print(line)
             column += 1
+    @staticmethod
+    def page65():
+        list = []
+        try:
+            while True:
+                list.append(input_int(quiet=True))
+        except ValueError:
+            mean = 0
+            for item in list:
+                mean += item
+            mean /= len(list)
+            print("numbers:", list)
+            print("count =", len(list), "lowest =", min(list), "highest =", max(list), "mean =", mean)
+
 
     @staticmethod
     def simplecalctest():
