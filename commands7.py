@@ -5,6 +5,7 @@ start_bench_no_bench = datetime.datetime.now()
 __version__ = "7.27.0-alpha"
 import os
 import sys
+import copy
 
 # todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
@@ -1052,6 +1053,7 @@ class Learning():
 
     @staticmethod
     def bubblesort(list, quiet=True):
+        list = copy.deepcopy(list)
         is_sorted = False
         if not quiet:
             maxcnt = 0
@@ -1184,6 +1186,27 @@ class Learning():
             mean /= len(list)
             print("numbers:", list)
             print("count =", len(list), "lowest =", min(list), "highest =", max(list), "mean =", mean)
+
+    @staticmethod
+    def simple_calc_advanced_page66():
+        list = []
+        try:
+            while True:
+                list.append(input_int(quiet=True))
+        except ValueError:
+            if len(list) == 0:
+                print("no input")
+            else:
+                mean = 0
+                for item in list:
+                    mean += item
+                mean /= len(list)
+                if len(list) % 2 == 1:
+                    median = list[int(0.5+((len(list)-1)/2))]  # средний элемент списка
+                else:
+                    median = (list[int(len(list)/2)]+list[int(len(list)/2)-1])/2  # среднеарифметическое среди двух средних элементов
+                print("numbers:", list)
+                print("count =", len(list), "lowest =", min(list), "highest =", max(list), "mean =", mean, "median =", median)
 
     @staticmethod
     def awful_poetry_page65(sentences=5):
