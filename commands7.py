@@ -815,6 +815,12 @@ class Process():
 
 
 
+class Dict:
+    @staticmethod
+    def iterable(dict):
+        return dict.items()
+
+
 class Codegen:
     debug = False
 
