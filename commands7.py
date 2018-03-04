@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.28.0-alpha"
+__version__ = "7.29.0-alpha"
 import os
 import sys
 import copy
@@ -958,6 +958,16 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
     return output_int
 
 
+class Bash:
+    escapable_chars = [backslash, "/", "(", ")"]
+    @classmethod
+    def argument_escape(cls, argument):
+        for char in cls.escapable_chars:
+            argument = argument.replace(char, backslash+char)
+        return Str.to_quotes(argument)
+
+
+
 class Git:
     @classmethod
     def add(cls, what):
@@ -968,7 +978,7 @@ class Git:
         commands = ["git", "commit"]
         if message:
             commands.append("-m")
-            commands.append(Str.to_quotes(message))
+            commands.append(Bash.argument_escape(message))
         Process.start(commands)
 
     @classmethod
@@ -1370,7 +1380,10 @@ def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
             Console.clean()
             break
 
-
+def dir_c7():
+    for line in Str.nl(File.read(Path.extend(Path.current(), "commands7.py"))):
+        if ("def " in line) or ("class " in line):
+            print(line)
 
 
 def rel(quiet=False):
