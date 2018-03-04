@@ -1039,7 +1039,8 @@ class macOS:
         commands = cls.osascript.quotes_escape(commands)
         commands = Str.to_quotes(commands)
         Process.start("osascript", "-e", commands)  # def start(*arguments, new_window=False, debug=False, pureshell=False):
-        Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
+        if list_of_sounds:
+            Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
 
 
 def warning(message):

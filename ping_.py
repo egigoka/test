@@ -19,6 +19,8 @@ __version__ = "2.4.0"
 # check server avg load
 __version__ = "2.5.0"
 # -fast argument
+__version__ = "2.6.0"
+# macOS notifcation and deleted old staff
 
 from colorama import init
 from commands7 import *
@@ -32,6 +34,8 @@ class State:
     sleep = 60  # between iterations
     online = False
     online_only = False
+    first_iterate = True
+    internet_status = False
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
     if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
@@ -42,13 +46,6 @@ class State:
 
 
 domains = ['192.168.1.1']  # router by default
-
-if (not (State.online_only or State.wms_folders)) and (lin_servers):
-    for ip, login in lin_servers.items():
-        lin_servers[ip]['username'] = input("Username for " + str(ip) + ":")
-        # todo сделать проверку пароля перед его установкой в словарь
-        lin_servers[ip]['password'] = Str.input_pass("Password for " + str(ip) + ":")
-
 
 if State.online_only:
     domains = []
@@ -62,15 +59,15 @@ if State.online:
     domains += ['vk.com']
     domains += ['starbounder.org']
 
-errDomains = 0  # количество заведомо плохих доменов
-
 
 
 
 
 def main():
     while True:
-
+        if OS.name == "macos":
+            if State.first_iterate:
+                macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
         print_end = newline
         if OS.name == 'windows':
             print_end = ''
@@ -86,10 +83,17 @@ def main():
         print(Time.rustime())
         # notification on macOS
         if OS.name == "macos":
-            if cnt_workin < len(domains)-errDomains:
-                color_upordown = 'on_yellow'
+            if cnt_workin < len(domains):
+                if State.internet_status==True:
+                    macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+                    State.internet_status = False
             else:
-                color_upordown = 'on_green'
-
+                if State.internet_status==False:
+                    subtitle = "You are back online!"
+                    if State.first_iterate:
+                        subtitle = "You are online!"
+                    macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
+                    State.internet_status = True
+            State.first_iterate = False
         Time.timer(State.sleep)
 main()
