@@ -972,7 +972,7 @@ class Git:
         Process.start(commands)
 
     @classmethod
-    def push(path, upstream=False):
+    def push(cls, path, upstream=False):
         commands = ["git", "push"]
         if upstream:
             commands.append("-u")
