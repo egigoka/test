@@ -1040,6 +1040,9 @@ class macOS:
 
 
 def warning(message):
+    if (sys.argv[0][-3] != ".py") or (sys.argv[0] != ""):
+        Print.debug("sys.argv", sys.argv)
+        raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
     if OS.name == 'macos':
         macOS.notification(message)
     pyautogui.alert(message)
