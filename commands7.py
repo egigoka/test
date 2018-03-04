@@ -825,7 +825,7 @@ class Process():
                 commands = ""
                 for argument_ in arguments:
                     commands += str(argument_) + " "
-                print(commands)
+                # print(commands)
                 os.system(commands)
 
 
