@@ -22,16 +22,13 @@ __version__ = "2.5.0"
 __version__ = "2.6.0"
 # macOS notifcation and deleted old staff
 
-from colorama import init
 from commands7 import *
-from termcolor import cprint
-
-__logfile__ = Path.extend(Path.current(), "ping_.py.log")
 
 class State:
     ping_timeout = 2000  # in ms
     ping_count = 5
     sleep = 60  # between iterations
+    count_of_ignored_timeouts = 1  # how much errors ignore
     online = False
     online_only = False
     first_iterate = True
@@ -43,7 +40,6 @@ class State:
         online = True
     if ("-f" in sys.argv) or ("-fast" in sys.argv):
         sleep = 10
-
 
 domains = ['192.168.1.1']  # router by default
 
@@ -58,10 +54,6 @@ if State.online:
     domains += ['gmail.com']
     domains += ['vk.com']
     domains += ['starbounder.org']
-
-
-
-
 
 def main():
     while True:
@@ -79,14 +71,15 @@ def main():
                 cnt_workin += 1
             else:
                 cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end=print_end)
-                plog(__logfile__, hostname + " is down", quiet=True)
         print(Time.rustime())
         # notification on macOS
         if OS.name == "macos":
-            if cnt_workin < len(domains):
-                if State.internet_status==True:
-                    macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
-                    State.internet_status = False
+            if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
+                macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+                State.internet_status = False
+            elif cnt_workin < len(domains):
+                macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+                State.internet_status = False
             else:
                 if State.internet_status==False:
                     subtitle = "You are back online!"

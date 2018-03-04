@@ -1008,24 +1008,12 @@ class macOS:
 
     @classmethod
     def notification(cls, message, title="python3", subtitle=None, sound=None, list_of_sounds=False):
-        # https://apple.stackexchange.com/questions/57412/how-can-i-trigger-a-notification-center-notification-from-an-applescript-or-shel#
-        # Valid sound names are the names of sounds located in…
-        # ~/Library/Sounds
-        # /System/Library/Sounds
-
-        # display notification "message" sound name "Sound Name"
-        # display notification "message" with title "title" subtitle "subtitle"
-
-        # title
-        # subtitle
-        # message
-
-        # bash:
-        # #!/bin/bash
-        # /usr/bin/osascript -e \"display notification \\\"\$*\\\"\"
-        commands = "display notification \"message\" with title \"title\" subtitle \"subtitle\" sound name \"Sosumi\""
+        # https://apple.stackexchange.com/questions/57412/how-can-i-trigger-a-notification-center-notification-from-an-applescript-or-shel# - just applescript
+        # better realizations:
+        # advanced commandline tool - https://github.com/vjeantet/alerter
+        # simpler commandline tool - https://github.com/vjeantet/alerter
+        # commands = "display notification \"message\" with title \"title\" subtitle \"subtitle\" sound name \"Sosumi\""
         commands = "display notification " + Str.to_quotes(cls.osascript.quotes_escape(message))
-
         if title or subtitle:
             commands += " with "
             if title:
@@ -1034,9 +1022,8 @@ class macOS:
                 commands += "subtitle " + Str.to_quotes(cls.osascript.quotes_escape(subtitle)) + " "
         if sound:
             commands += " sound name " + Str.to_quotes(cls.osascript.quotes_escape(sound))
-        # escaping quotes:
-        commands = cls.osascript.quotes_escape(commands)
-        commands = Str.to_quotes(commands)
+        commands = cls.osascript.quotes_escape(commands)  # escaping quotes:
+        commands = Str.to_quotes(commands)  # applescript to quotes
         Process.start("osascript", "-e", commands)  # def start(*arguments, new_window=False, debug=False, pureshell=False):
         if list_of_sounds:
             Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
