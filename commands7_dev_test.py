@@ -70,12 +70,12 @@ class TestPathOperations(unittest.TestCase):
         filename = "test.tst"
         self.assertEqual(Path.full(filename), os.path.abspath(filename))
 
-    if get_os() in ["macos", "linux"]:
+    if os() in ["macos", "linux"]:
         def test02unix_path_extend(self):
             self.assertEqual(Path.extend("usr", "bin", "local"),
                              "/usr/bin/local")
 
-    elif get_os() == "windows":
+    elif OS.name == "windows":
         def test02win_path_extend_smb_windows_share(self):
             self.assertEqual(Path.extend(backslash, "192.168.99.91", "shares"),
                              r"\\192.168.99.91\shares")
