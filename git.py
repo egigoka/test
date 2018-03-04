@@ -4,7 +4,6 @@ from commands7 import *
 
 arguments = list(sys.argv)
 arguments.pop(0)
-print(arguments)
 string = "small update (default message)"
 try:
     arguments[0]
@@ -13,5 +12,7 @@ try:
         string += arg + " "
     string = string.rstrip(" ")
 except IndexError:
-    warning("default message used to commit " + string)
+    input_string = input("Enter a description or press Enter to defaul message: ")
+    if input_string:
+        string = input_string
 Git.update(string)
