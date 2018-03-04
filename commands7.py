@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.27.0-alpha"
+__version__ = "7.28.0-alpha"
 import os
 import sys
 import copy
@@ -767,6 +767,19 @@ class Json():
 
 
 
+class List:
+    @staticmethod
+    def flatterize(input_list):
+        output_list = copy.deepcopy(list(input_list))
+        cnt = 0
+        for object in output_list:
+            if not isinstance(object, (str,int)):
+                output_list.pop(cnt)
+                for item in reversed(object):
+                    output_list.insert(cnt, item)
+            cnt+=1
+        return output_list
+
 
 
 class Process():
@@ -780,6 +793,7 @@ class Process():
             os.system(command_)
     @staticmethod
     def start(*arguments, new_window=False, debug=False, pureshell=False):
+        arguments = List.flatterize(arguments)
         if debug:
             debug_print("Process.start arguments", arguments)
         if new_window or pureshell:
@@ -811,6 +825,7 @@ class Process():
                 commands = ""
                 for argument_ in arguments:
                     commands += str(argument_) + " "
+                print(commands)
                 os.system(commands)
 
 
@@ -943,9 +958,93 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
     return output_int
 
 
+class Git:
+    @classmethod
+    def add(cls, what):
+        Process.start("git", "add", what)
+
+    @classmethod
+    def commit(cls, message=None):
+        commands = ["git", "commit"]
+        if message:
+            commands.append("-m")
+            commands.append(Str.to_quotes(message))
+        Process.start(commands)
+
+    @classmethod
+    def push(path, upstream=False):
+        commands = ["git", "push"]
+        if upstream:
+            commands.append("-u")
+        commands.append(path)
+        Process.start(commands)
+
+
+    @classmethod
+    def update(cls, message, path="github"):
+        cls.add(".")
+        cls.commit(message)
+        print(path, True)
+        cls.push(path, upstream=True)
+
+
+class macOS:
+
+    class osascript:
+        @staticmethod
+        def quotes_escape(string):
+            quote_1 = '"'
+            #quote_2 = "'"
+            # if there any already escaped symbols:
+            string = string.replace(backslash, backslash*3)  # if there any other escaped symbols except quotes
+            string = string.replace(backslash*3+quote_1, backslash*2+quote_1)  # removing one backslash, because it will added furthurer
+            #string = string.replace(backslash*3+quote_2, backslash*2+quote_2)
+
+            # usual quotes escape
+            escaped_1 = backslash + quote_1
+            #escaped_2 = backslash + quote_2
+            string = string.replace(quote_1,escaped_1)
+            #string = string.replace(quote_2, escaped_2)
+            return string
+
+    @classmethod
+    def notification(cls, message, title="python3", subtitle=None, sound=None, list_of_sounds=False):
+        # https://apple.stackexchange.com/questions/57412/how-can-i-trigger-a-notification-center-notification-from-an-applescript-or-shel#
+        # Valid sound names are the names of sounds located in…
+        # ~/Library/Sounds
+        # /System/Library/Sounds
+
+        # display notification "message" sound name "Sound Name"
+        # display notification "message" with title "title" subtitle "subtitle"
+
+        # title
+        # subtitle
+        # message
+
+        # bash:
+        # #!/bin/bash
+        # /usr/bin/osascript -e \"display notification \\\"\$*\\\"\"
+        commands = "display notification \"message\" with title \"title\" subtitle \"subtitle\" sound name \"Sosumi\""
+        commands = "display notification " + Str.to_quotes(cls.osascript.quotes_escape(message))
+
+        if title or subtitle:
+            commands += " with "
+            if title:
+                commands += "title " + Str.to_quotes(cls.osascript.quotes_escape(title)) + " "
+            if subtitle:
+                commands += "subtitle " + Str.to_quotes(cls.osascript.quotes_escape(subtitle)) + " "
+        if sound:
+            commands += " sound name " + Str.to_quotes(cls.osascript.quotes_escape(sound))
+        # escaping quotes:
+        commands = cls.osascript.quotes_escape(commands)
+        commands = Str.to_quotes(commands)
+        Process.start("osascript", "-e", commands)  # def start(*arguments, new_window=False, debug=False, pureshell=False):
+        Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
 
 
 def warning(message):
+    if OS.name == 'macos':
+        macOS.notification(message)
     pyautogui.alert(message)
 
 def substring(string, before, after=None):
