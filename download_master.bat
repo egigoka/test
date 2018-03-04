@@ -1,1 +1,0 @@
-start "" "C:\Program Files (x86)\Download Master\dmaster.exe"

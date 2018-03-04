@@ -1,1 +1,0 @@
-@untitled\fuck.py %1
