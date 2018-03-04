@@ -984,7 +984,6 @@ class Git:
     def update(cls, message, path="github"):
         cls.add(".")
         cls.commit(message)
-        print(path, True)
         cls.push(path, upstream=True)
 
 
