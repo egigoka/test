@@ -959,7 +959,7 @@ def input_int(message="Введите число: ", minimum=None, maximum=None,
 
 
 class Bash:
-    escapable_chars = [backslash, "/", "(", ")"]
+    escapable_chars = [backslash]
     @classmethod
     def argument_escape(cls, argument):
         for char in cls.escapable_chars:

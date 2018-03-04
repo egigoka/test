@@ -13,9 +13,5 @@ try:
         string += arg + " "
     string = string.rstrip(" ")
 except IndexError:
-    message = "default message used to commit " + string
-    Print.debug("message", message)
-    warning(" ")
-    warning(string)
-    warning(message)
+    warning("default message used to commit " + string)
 Git.update(string)
