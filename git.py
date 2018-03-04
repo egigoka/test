@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from commands7 import *
 
-arguments = sys.argv
+arguments = list(sys.argv)
 arguments.pop(0)
 print(arguments)
 string = "small update (default message)"
@@ -13,5 +13,9 @@ try:
         string += arg + " "
     string = string.rstrip(" ")
 except IndexError:
-    warning("default message used to commit: " + string)
+    message = "default message used to commit " + string
+    Print.debug("message", message)
+    warning(" ")
+    warning(string)
+    warning(message)
 Git.update(string)
