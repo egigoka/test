@@ -2,20 +2,25 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.1-alpha"
+__version__ = "8.0.2-alpha"
 import os
 import sys
 import copy
 
-# todo countdown and 1 line option like "Sleep ** seconds..."
 # todo version diff
-# todo delete all try wide except bugs-hidingers
+#   todo export script as json?
+#   todo compare jsons?
+#   todo save changes as commit message?
 
-def is_python3():
-    is_true = sys.version_info >= (3, 0)
-    return is_true
+# this shit for pycharm:
+colorama = None; cprint = None; copypaste = None; pyautogui = None; Tk = None; Button = None; mainloop = None; paramiko = None
+
 
 class OS:
+    @staticmethod
+    def is_python3():
+        is_true = sys.version_info >= (3, 0)
+        return is_true
     windows_version = None
     if sys.platform == "linux" or sys.platform == "linux2":
         name = "linux"
@@ -30,7 +35,7 @@ class OS:
     elif name in ["macos", "linux"]:
         family = "unix"
 
-    try:
+    try:  # todo make this work!
         if name == "linux":
             from Xlib.display import Display
         display = True
@@ -54,7 +59,7 @@ class OS:
 
 
 def mine_import(module_name, objects=None):
-    if is_python3():
+    if OS.is_python3():
         pipver = "3"
     else:
         pipver = ""
@@ -69,7 +74,7 @@ def mine_import(module_name, objects=None):
         ###########RARE###########
         if module_name == "pyautogui":
             if OS.name == "linux":
-                if is_python3():
+                if OS.is_python3():
                     os.system("apt-get install python-xlib")
                 else:
                     os.system("apt-get install python3-Xlib")
@@ -114,15 +119,6 @@ sys.path.append("./term")
 sys.path.append(r".\term")
 from commands8 import *""")
 
-
-
-
-
-
-
-def get_os():
-    warning("get_os now OS.name")
-    return OS.name
 
 if OS.name == "windows":
     import win_unicode_console, \
@@ -191,14 +187,6 @@ class Print():
             sys.stdout.write('\b' * 3)
 
 
-
-#PRINT REWRITE
-
-def debug_print(*arguments, raw=False):
-    warning("debug_print now Print.debug")
-    Print.debug(*arguments, raw=raw)
-
-
 class Str:
     @staticmethod
     def to_quotes(some_string):
@@ -209,7 +197,7 @@ class Str:
         return '"' + str(some_string) + '"'
 
     @staticmethod
-    def get_integers(string): # todo support for -
+    def get_integers(string):
         string = str(string) + " "  # in exception some processing, meh :(
         integer_found = False
         integers = []
@@ -496,7 +484,7 @@ class Path:
     @staticmethod
     def set_current(path):
         os.chdir(path)
-        debug_print("os.getcwd()  # current directory is", os.getcwd())
+        Print.debug("os.getcwd()  # current directory is", os.getcwd())
 
 
 class Locations:
@@ -711,11 +699,6 @@ class Time:
         + str(hour) + ":" + str(minute) + ":" + str(second)
         return rustime
 
-    @classmethod
-    def sleep(cls, seconds):
-        warning("Time.sleep now Time.timer")
-        cls.timer(seconds=seconds)
-
     @staticmethod
     def timer(seconds, check_per_sec=10):
         Countdown = get_Bench()
@@ -808,7 +791,7 @@ class Process():
     def start(*arguments, new_window=False, debug=False, pureshell=False):
         arguments = List.flatterize(arguments)
         if debug:
-            debug_print("Process.start arguments", arguments)
+            Print.debug("Process.start arguments", arguments)
         if new_window or pureshell:
             for argument_ in arguments:
                 if " " in argument_ and argument_[:1] != "-":
@@ -823,7 +806,7 @@ class Process():
                         if OS.name == "windows":
                             command = 'start "" ' + argument_
                         elif OS.name == "macos":
-                            warning("macOS doesn't support creating new window now")
+                            Gui.warning("macOS doesn't support creating new window now")
                             #command = "" +
                     else:
                         command = argument_
@@ -1024,18 +1007,18 @@ class macOS:
         if list_of_sounds:
             Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
 
-
-def warning(message):
-    if (sys.argv[0][-3] != ".py") or (sys.argv[0] != ""):
-        Print.debug("sys.argv", sys.argv)
-        raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
-    if OS.name == 'macos':
-        macOS.notification(message)
-    pyautogui.alert(message)
-
-def substring(string, before, after=None):
-    warning(message="substring now in Str.substring!!!!!")
-    return Str.substring(string, before, after=after)
+class Gui:
+    def warning(message):
+        try:
+            if (sys.argv[0][-3] != ".py") or (sys.argv[0] != ""):
+                Print.debug("sys.argv", sys.argv)
+                raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
+        except IndexError:
+            Print.debug("sys.argv", sys.argv)
+            raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
+        if OS.name == 'macos':
+            macOS.notification(message)
+        pyautogui.alert(message)
 
 
 def getDomainOfUrl(url):
@@ -1082,7 +1065,7 @@ class Tkinter():
         return my_color
 
     @staticmethod
-    def warn():
+    def warn(): # this shit must be deleted
         root = Tk()
         # root.after(300, lambda: root.focus_force())  # try to grab focus after 300ms
 
@@ -1269,7 +1252,7 @@ class Learning():
         list = []
         try:
             while True:
-                list.append(input_int(quiet=True))
+                list.append(Str.input_int(quiet=True))
         except ValueError:
             mean = 0
             for item in list:
@@ -1283,7 +1266,7 @@ class Learning():
         list = []
         try:
             while True:
-                list.append(input_int(quiet=True))
+                list.append(Str.input_int(quiet=True))
         except ValueError:
             if len(list) == 0:
                 print("no input")
