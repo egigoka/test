@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.7-alpha"
+__version__ = "8.0.8-alpha"
 import os
 import sys
 import copy
@@ -12,17 +12,17 @@ import copy
 #   todo compare jsons?
 #   todo save changes as commit message?
 
-# d ###############################################!!! HOW TO IMPORT !!!##################################################
+# ###############################################!!! HOW TO IMPORT !!!##################################################
 # http://python.su/forum/topic/15531/?page=1#post-93316
-# d import module like this:
-# d import sys
-# d sys.path.append("../..")
-# d sys.path.append("..\..")
-# d sys.path.append(".")
-# d sys.path.append("..")
-# d sys.path.append("./term")
-# d sys.path.append(r".\term")
-# d from commands8 import *
+# import module like this:
+# import sys
+# sys.path.append("../..")
+# sys.path.append("..\..")
+# sys.path.append(".")
+# sys.path.append("..")
+# sys.path.append("./term")
+# sys.path.append(r".\term")
+# from commands8 import *
 
 # this shit for pycharm:
 colorama = None; cprint = None; copypaste = None; pyautogui = None; Tk = None; Button = None; mainloop = None; paramiko = None
@@ -109,10 +109,15 @@ class Internal:
     def dir_c():  # d print all functionality of commands8
         for line in Str.nl(File.read(Path.extend(Path.current(), "commands8.py"))):  # dir ignore
             if "# dir ignore" not in line:  # dir ignore
-                if ("def " in line) or ("class " in line):  # dir ignore
-                    print(line)  # dir ignore
+                if "bnl" in line:  # dir ignore
+                    print(newline*Str.get_integers(line)[-1])  # dir ignore
+                if "def " in line:  # dir ignore
+                    print(newline + line)  # dir ignore
+                elif "class " in line:  # dir ignore
+                    print(newline*3 + line)  # dir ignore
                 elif "# d " in line:  # dir ignore
                     print(line.replace("# d ", "# ", 1))  # dir ignore
+
 
     @staticmethod
     def rel(quiet=False):  # d reload commands8, if you use it not in REPL, activate quiet argument
@@ -161,7 +166,8 @@ colorama.deinit()
 Internal.mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 Internal.mine_import("copypaste")
 
-newline = '\n'  # d string with newline
+
+newline = '\n'  # d string with newline bnl3
 ruble = u"\u20bd"  # d string with ₽ symbol
 backslash = "\ "[:1]  # d string with backslash
 newline2 = "\r\n"  # d string with other newline
@@ -172,7 +178,8 @@ newline2 = "\r\n"  # d string with other newline
 
 class Print():
     @staticmethod
-    def debug(*arguments, raw=False):  # d just more notable print
+    def debug(*arguments, raw=False):  # d just more notable print, just for
+      # d debugging
         line = "-" * Console.width()
         print("Debug sheet:")
         for arg in arguments:
@@ -229,7 +236,8 @@ class Str:
         return integers
 
     @staticmethod
-    def newlines_to_strings(string, quiet=False):  # split long string with line breaks to separate strings in list
+    def newlines_to_strings(string, quiet=False):  # split long string with line
+      # d breaks to separate strings in list
         if string:
             string = str(string)
             if OS.name == "windows":
@@ -264,7 +272,7 @@ class Str:
             return string
         strOfCh = str(ch) * leng
         string_output = strOfCh[len(string):leng] + string
-        if rightpad:  # добавление символов справа из аллиаса (rightpad) функции
+        if rightpad:
             string_output = string + strOfCh[len(string):leng]
         return string_output
 
@@ -387,6 +395,8 @@ class Console():
     @classmethod
     def blink(cls, width=None, height=None, symbol="#", sleep=0.5):
       # d fastly print to terminal characters with random color. Completely shit.
+      # d arguments width and height changing size of terminal, works only in
+      # d Windows.
         if width is not None and height is not None:
             os.system("mode con cols=" + str(width) + " lines=" + str(height))
         if width is None:
@@ -410,6 +420,7 @@ class Console():
                 colorama.deinit()
                 cls.clean()
                 break
+
 
     @staticmethod
     def get_output(command, quiet=True, split_lines=False):  # d return output
@@ -450,40 +461,13 @@ class Ssh:
         return output
 
     @classmethod
-    def get_uptime_lin(cls, host, username, password, safe=False):  #
+    def get_uptime_lin(cls, host, username, password, safe=False):  # return
+      # d string with uptime of SSH linux server. As I said before... :(
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before=" up ", after=", ")
         return output
 
-    @classmethod
-    def screenblink(Console, width = None, height = None, symbol = "#", sleep = 0.5):
-        if width != None and height != None:
-            os.system("mode con cols=" + str(width) + " lines=" + str(height))
-        if width == None:
-            width = Console.width()
-        if height == None:
-            height = Console.height()
-        colorama.reinit()
-        while True:
-            colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
-            highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
-            string = symbol * width
-            color = random.choice(colors)
-            colors.pop(colors.index(color))
-            highlight = random.choice(highlights)
-            try: # New version with one long line. Works perfect, as I see.
-                string = string * height
-                if OS.name == "windows":
-                    print(termcolor.colored(string, color, highlight))
-                else:
-                    cprint(string, color, highlight)
-                time.sleep(sleep)
-            except KeyboardInterrupt as err:
-                if OS.name == "windows":
-                    print (termcolor.colored("OK", "white", "on_grey"))
-                colorama.deinit()
-                Console.clean()
-                break
+
 
 
 
@@ -497,11 +481,12 @@ class Path:
         return os.path.dirname(os.path.realpath(__file__))
 
     @classmethod
-    def extend(cls, *paths):
+    def extend(cls, *paths):  # paths input strings of path pieces, return
+      # d string with path, good for OS
         for path_ in paths:
             try:
                 path = os.path.join(str(path), str(path_))
-            except NameError:
+            except NameError:  # first path piece is very important
                 if (OS.name == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
                     path = backslash * 2
                 elif (OS.name == "windows") and (len(path_) <= 3):
@@ -523,7 +508,9 @@ class Path:
         return path
 
     @staticmethod
-    def home():
+    def home():  # return path of home directory of current user. Not tested in
+      # d linux.
+      # todo test in lunux!
         if OS.name == "windows":
             path = Console.get_output(r"echo %userprofile%")
             path = path.rstrip(newline2)
@@ -533,62 +520,44 @@ class Path:
         return path
 
     @staticmethod
-    def set_current(path):
+    def set_current(path, quiet=True):  # changes current working directory.
+      # d If quiet is disabled, prints directory.
         os.chdir(path)
-        Print.debug("os.getcwd()  # current directory is", os.getcwd())
+        if not quiet:
+            Print.debug("os.getcwd()  # current directory is", os.getcwd())
 
 
 class Locations:
-    if OS.name == "windows":
-        npp_exec = "notepad++.exe"
-        npp_dir = Path.extend("C:", "Program Files", "Notepad++")
-        npp = Path.extend(npp_dir, npp_exec)
-        notepad_plus_plus = npp
-
-        notepad = "notepad"
-
+    if OS.name == "windows":  # d ...
+        texteditor = "notepad"  # d notepad is in every version of Windows, yea?
         py = "py"
         pyw = "pyw"
-        python = Path.extend("C:", "Windows", "py.exe")
-
-    else:
-        npp = "atom"
-        notepad_plus_plus = npp
-
-        notepad = "open"
-
+    elif OS.name == "macos":  # d ...
+        texteditor = "open"  # d just open default program for file
+        py = "python3"
+        pyw = "python3"
+    elif OS.name == "linux":  # d ...
+        texteditor = "nano"  # d nano is everywhere, I suppose? ]-:
         py = "python3"
         pyw = "python3"
 
-
 class Dir:
     @staticmethod
-    def create(filename):
-        if os.path.isfile(filename):
-            directory = os.path.dirname(filename)
-        else:
-            directory = filename
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+    def create(filename):  # create dir if didn't exist
+        if not os.path.exists(filename):
+            os.makedirs(filename)
 
     @staticmethod
-    def current(self):
+    def current(self):  # alias to Path.current
         return Path.current()
 
     @staticmethod
-    def list_of_files(path):
+    def list_of_files(path):  # return list of files in folder
         return os.listdir(path)
 
-    @classmethod
-    def contents(cls,path):
-        return cls.list_of_files(path)
-
-    @classmethod
-    def contain(cls,path):
-        return cls.contents(path)
-
     @staticmethod
-    def number_of_files(path, quiet=False):
+    def number_of_files(path, quiet=False):  # return integer of number of files
+      # d in directory
         try:
             dir_contents = Dir.contents(path)
             if not quiet:
@@ -612,7 +581,8 @@ class File:
     @staticmethod
     def create(filename):
         filename = Path.full(filename)
-        Dir.create(os.path.split(filename)[0])  # todo change it to just dir_create(filename)
+        if os.path.split(filename)[0] != "":
+            Dir.create(os.path.split(filename)[0])
         if not os.path.exists(filename):
             with open(filename, 'a'):  # open file and close after
                 os.utime(filename, None)  # changes time of file modification
@@ -621,8 +591,7 @@ class File:
                                     "try to repair script at " + Path.full(sys.argv[0]))
 
     @staticmethod
-    def delete(path, quiet = False):
-        # try:
+    def delete(path, quiet=False):  # ...
         if os.path.isdir(path):
             raise IsADirectoryError(path + " is directory, use Dir.delete to delete")
         try:
@@ -632,51 +601,44 @@ class File:
                 print("file", path, "is not exist")
         if not quiet:
             print("file", path, "is deleted")
-        # except PermissionError:
-        #     try:
-        #         if OS.name == "windows"
-        #             delete_command = "del"
-        #         else:
-        #             delete_command = "rm"
-        #         subprocess.call([delete_command, path])
-        #     except:
+        time.sleep(0.05)
         if os.path.exists(path):
-            time.sleep(0.05)
             raise FileExistsError(path + " is not deleted")
 
     @staticmethod
-    def move(input_file, output_file):
+    def move(input_file, output_file):  # ...
         shutil.move(input_file, output_file)
 
     @staticmethod
-    def copy(input_file, output_file):
+    def copy(input_file, output_file):  # ...
         shutil.copy2(input_file, output_file)
 
     @staticmethod
-    def rename(input_file, output_file):
+    def rename(input_file, output_file):  # ...
         File.move(input_file, output_file)
 
     @staticmethod
-    def hide(filename, quiet=True):
-        filename = Path.full(filename)  #
+    def hide(filename, quiet=True):  # adding dot to filename and set attribute
+      # d FILE_ATTRIBUTE_HIDDEN to file, if running on Windows
+        filename = Path.full(filename)
         if OS.name == "windows":
             win32api.SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)  # hiding file like windows do
-        dotted_file = os.path.split(filename)  # split path to dir and path
-        dotted_file = Path.extend(dotted_file[0], "." + dotted_file[1])  # merging it back and add dot
+        dotted_file = Path.extend(os.path.split(filename)[0], "." + os.path.split(filename)[1])  # adding dot
         File.rename(filename, dotted_file)
         if not quiet:
             print ("file", filename, "is hidden now")
         return dotted_file
 
-    @staticmethod
-    def backup(filename, subfolder="bak", quiet = False):
+    @classmethod
+    def backup(cls, filename, subfolder="bak", hide=True, quiet = False):
+      # d move file to subfolder, adds sort of timestamp to filename and hide
+      # d file if necessary
         filename = Path.full(filename) # normalize filename
         backupfilename = str(filename) + "." + Time.dotted() + ".bak"  # add dottedtime to backup filename
         backupfilename = os.path.split(backupfilename)  # splitting filename to folder and file
         try:  # if subfolder has no len
-            if len(subfolder) < 1:  # if subfolder has non-zero len
-                subfolder = "bak"  # set subfolder to default
-                print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
+            if len(subfolder) < 1:  # if subfolder has zero len
+                raise TypeError("subfolder must have non-zero len")
         except TypeError:  # if subfolder has no len
             subfolder = "bak"  # set subfolder to default
             print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
@@ -684,7 +646,8 @@ class File:
         Dir.create(subfolder)  # create subfolder
         backupfilename = Path.extend(subfolder, backupfilename[1])  # backup file name full path
         shutil.copy2(filename, backupfilename)  # finally backup file
-        backupfilename = File.hide(backupfilename)  # hiding file
+        if hide:
+            backupfilename = cls.hide(backupfilename)  # hiding file
         if not os.path.isfile(backupfilename):  # if file is not created
             raise FileNotFoundError(backupfilename + " isn't created while backup")
         if not quiet:  # if finction is not shutted up
@@ -692,12 +655,12 @@ class File:
         return backupfilename
 
     @staticmethod
-    def wipe(path):
+    def wipe(path):  # clean content of file
         file = open(path, 'w')
         file.close()
 
     @staticmethod
-    def read(path):
+    def read(path):  # return pipe to file content
         with open(path, "r") as f:
             return f.read()
 
@@ -1179,185 +1142,6 @@ class Int:
             return roots
 
 
-class Learning():
-
-    @staticmethod
-    def bubblesort(list, quiet=True):
-        list = copy.deepcopy(list)
-        is_sorted = False
-        if not quiet:
-            maxcnt = 0
-            lenlist = len(list)
-        while not is_sorted:
-            cnt = 0
-            while True:
-                try:
-                    if list[cnt] > list[cnt+1]:
-                        temp_var = list[cnt]
-                        list[cnt] = list[cnt+1]
-                        list[cnt+1] = temp_var
-                        if not quiet:
-                            if cnt > maxcnt:
-                                maxcnt = cnt
-                                output_string = Str.leftpad(str(maxcnt), len(str(lenlist)))+"/"+str(lenlist)
-                                if OS.name == "macos":
-                                    output_string = " " + output_string
-                                Print.rewrite(output_string)
-                        break
-                    cnt += 1
-                except IndexError:  # значит, прошлись по всему списку и всё ок
-                    is_sorted = True
-                    break
-        return list
-
-
-
-    @staticmethod
-    def bigdigits(digits):
-        def digits_init(height = False):
-            Zero = ["   ###   ",
-                    "  #   #  ",
-                    " #     # ",
-                    "#       #",
-                    " #     # ",
-                    "  #   #  ",
-                    "   ###   ", ]
-            One = ["    #    ",
-                   "   ##    ",
-                   "  # #    ",
-                   "    #    ",
-                   "    #    ",
-                   "    #    ",
-                   " ####### ", ]
-            Two = [" ####### ",
-                   "#       #",
-                   "        #",
-                   " ####### ",
-                   "#        ",
-                   "#        ",
-                   "#########", ]
-            Three = [" ####### ",
-                     "#       #",
-                     "        #",
-                     "     ### ",
-                     "        #",
-                     "#       #",
-                     " ####### ", ]
-            Four = ["#       #",
-                    "#       #",
-                    "#       #",
-                    "#########",
-                    "        #",
-                    "        #",
-                    "        #", ]
-            Five = ["#########",
-                    "#        ",
-                    "#        ",
-                    "######## ",
-                    "        #",
-                    "#       #",
-                    " ####### ", ]
-            Six = [" ####### ",
-                   "#       #",
-                   "#        ",
-                   "######## ",
-                   "#       #",
-                   "#       #",
-                   " ####### ", ]
-            Seven = ["#########",
-                     "#       #",
-                     "      ## ",
-                     "    ##   ",
-                     "  ##     ",
-                     " #       ",
-                     "#        ", ]
-            Eight = [" ####### ",
-                     "#       #",
-                     "#       #",
-                     " ####### ",
-                     "#       #",
-                     "#       #",
-                     " ####### ", ]
-            Nine = [" ####### ",
-                    "#       #",
-                    "#       #",
-                    " ########",
-                    "        #",
-                    "#       #",
-                    " ####### ", ]
-            Digits = [Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine]
-            height_int = len(Zero)
-            if height:
-                return height_int
-            else:
-                return Digits
-        Digits = digits_init()
-        column = 0
-        while column < digits_init(height=True):
-            line = ""
-            digits = str(digits)
-            for digit in digits:
-                # try:
-                digit = int(digit)
-                line = line + Digits[digit][column].replace("#", str(digit)) + " "
-            print(line)
-            column += 1
-
-    @staticmethod
-    def simple_calc_page65():
-        list = []
-        try:
-            while True:
-                list.append(Str.input_int(quiet=True))
-        except ValueError:
-            mean = 0
-            for item in list:
-                mean += item
-            mean /= len(list)
-            print("numbers:", list)
-            print("count =", len(list), "lowest =", min(list), "highest =", max(list), "mean =", mean)
-
-    @staticmethod
-    def simple_calc_advanced_page66():
-        list = []
-        try:
-            while True:
-                list.append(Str.input_int(quiet=True))
-        except ValueError:
-            if len(list) == 0:
-                print("no input")
-            else:
-                mean = 0
-                for item in list:
-                    mean += item
-                mean /= len(list)
-                if len(list) % 2 == 1:
-                    median = list[int(0.5+((len(list)-1)/2))]  # средний элемент списка
-                else:
-                    median = (list[int(len(list)/2)]+list[int(len(list)/2)-1])/2  # среднеарифметическое среди двух средних элементов
-                print("numbers:", list)
-                print("count =", len(list), "lowest =", min(list), "highest =", max(list), "mean =", mean, "median =", median)
-
-    @staticmethod
-    def awful_poetry_page65(sentences=5):
-        articles = ["a", "the"]
-        pronouns = ['my', 'your', 'his', 'her', 'its', 'our', 'your', 'their'] + articles
-        pronouns_plural = ['mine', 'yours', 'his', 'hers', 'its', 'ours', 'its', 'ours', 'yours', 'theirs'] + articles
-        pronouns = [pronouns, pronouns_plural]
-        nouns = ["cat", "women", "men", "dog", "cluster", "Sonic the Hedgehog", "queen", "breast"]
-        nouns_multiple = ["cats", "women", "men", "dogs", "clusters", "Sonics the Hedgehogs", "queens", "breasts"]
-        nouns = [nouns, nouns_multiple]
-        verbs = ["jumped", "fucked", "fucks", "sang", "ran", "clusteryfied", "died"]
-        adverbs = ["as fuck", "loudly", "well", "badly", "quetly"]
-
-        for _ in Int.from_to(1,sentences):
-            multiple = Random.integer(0,1)
-            print(pronouns[multiple][Random.integer(0, len(pronouns[multiple])-1)].capitalize(), end=" ")
-            print(nouns[multiple][Random.integer(0, len(nouns[multiple]) - 1)], end=" ")
-            print(verbs[Random.integer(0, len(verbs)-1)], end=" ")
-            print(adverbs[Random.integer(0, len(adverbs) - 1)], end="")
-            print(".", end=" ")
-        print()
 
 
 class Repl:

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.30.0-alpha"
+__version__ = "7.30.0-alpha-discountinued-migrate-to-commands8"
 import os
 import sys
 import copy
