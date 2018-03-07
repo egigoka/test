@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.8-alpha"
+__version__ = "8.0.10-alpha"
 import os
 import sys
 import copy
+import platform
 
 # todo version diff
 #   todo export script as json?
@@ -33,6 +34,7 @@ class OS:
     def is_python3():  # d return boolean
         is_true = sys.version_info >= (3, 0)
         return is_true
+    python_implementation = None # d string with name of python implementation: "cpython" or "pypy"
     family = None  # d string with family of OS: "nt" or "unix"
     name = None  # d string with name of OS: "windows", "linux", or "macos"
     windows_version = None  # d only on Windows, integer of major version of Windows
@@ -45,6 +47,11 @@ class OS:
         windows_version = sys.getwindowsversion().major
     elif sys.platform == "darwin":
         name = "macos"
+
+    if platform.python_implementation == "PyPy":
+        python_implementation = "pypy"
+    else:
+        python_implementation = "cpython"
 
     if name == "windows":
         family = "nt"
@@ -82,6 +89,11 @@ class Internal:
         else:
             pipver = ""
 
+        pipcommand = "pip"+pipver
+        import platform
+        if platform.python_implementation() == "PyPy":
+            pipcommand = "pypy"+pipver+" -m  pip"
+
         if objects:
             import_command = "from " + module_name + " import " + objects
         else:
@@ -97,26 +109,39 @@ class Internal:
                     else:
                         os.system("apt-get install python3-Xlib")
                 if OS.name == "macos":
-                    os.system("pip" + pipver + " install python" + pipver + "-xlib")
-                    os.system("pip" + pipver + " install pyobjc-core")
-                    os.system("pip" + pipver + " install pyobjc")
+                    for package in ["python" + pipver + "-xlib", "pyobjc-core", "pyobjc"]:
+                        os.system(pipcommand + " install " + package)
             ###########RARE###########
-            command = "pip" + pipver + " install " + module_name
+            command = pipcommand + " install " + module_name
             os.system(command)
             exec(import_command, globals())
 
     @staticmethod
     def dir_c():  # d print all functionality of commands8
+        first_func_after_class = 1
+
+        cnt_of_all_def = 0
+        cnt_of_commented_def = 0
+
         for line in Str.nl(File.read(Path.extend(Path.current(), "commands8.py"))):  # dir ignore
             if "# dir ignore" not in line:  # dir ignore
                 if "bnl" in line:  # dir ignore
-                    print(newline*Str.get_integers(line)[-1])  # dir ignore
+                    print(newline*Str.get_integers(line)[-1], end="")  # dir ignore
+                    line = line.replace("bnl"+str(Str.get_integers(line)[-1]),"")
                 if "def " in line:  # dir ignore
+                    print(newline*first_func_after_class + line)  # dir ignore
+                    first_func_after_class = 1
+
+                    cnt_of_all_def += 1
+                    if "  # " in line: cnt_of_commented_def += 1
+
+                elif ("class " in line) and (line[0:4] != "    "):  # dir ignore
+                    first_func_after_class = 0
                     print(newline + line)  # dir ignore
-                elif "class " in line:  # dir ignore
-                    print(newline*3 + line)  # dir ignore
                 elif "# d " in line:  # dir ignore
                     print(line.replace("# d ", "# ", 1))  # dir ignore
+        Print.debug(cnt_of_all_def, cnt_of_commented_def)
+
 
 
     @staticmethod
@@ -135,9 +160,11 @@ class Internal:
 
 
 if OS.display:
-    Internal.mine_import("pyautogui")
+    if OS.name != "macos" and OS.python_implementation != "pypy":  # pyobjc not supported by pypy now
+        # Internal.mine_import("pyautogui")
+        # Internal.mine_import("paramiko")
+        pass
     Internal.mine_import("tkinter", objects="*")  # from tkinter import *
-    Internal.mine_import("paramiko")
 
 
 import json, \
@@ -1041,79 +1068,76 @@ class Gui:
             raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
         if OS.name == 'macos':
             macOS.notification(message)
-        pyautogui.alert(message)
+        if OS.name != "macos" and OS.python_implementation != "pypy":
+            pyautogui.alert(message)
+        else:
+            Print.debug("PyPy doesn't support pyautogui, so warning is here:", warning)
+            input("Press Enter to continue")
 
 
 
 
 
 
-def get_Bench(start=False):
-    class Bench(object):
+def get_Bench(start=False):  # return class with those functions:
+    class Bench(object):  # dir ignore
         time_start = datetime.datetime.now()
         time_end = None
-        previous = None
-        prefix = "Bench runned in"
+        quiet = False  # d argument for disable print to terminal               bnl1
+        prefix = "Bench runned in"  # d what have been done, will print if      bnl1
+        # d "quiet" variable of class is False
 
         @classmethod
-        def start(cls):
+        def start(cls):  # set time of begin to now
             cls.time_start = datetime.datetime.now()
 
         @classmethod
-        def get(cls):
+        def get(cls):  # dir ignore
             cls.time_end = datetime.datetime.now()
             delta = cls.time_end - cls.time_start
             delta_combined = delta.seconds + delta.microseconds / 1E6
             return delta_combined
 
         @classmethod
-        def end(cls, quiet=False):
+        def end(cls):  # return delta between start and end
             delta_combined = cls.get()
-            cls.previous = delta_combined
-            if not quiet:
+            if not cls.quiet:
                 cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
-            else:
-                return delta_combined
+            return delta_combined
     return Bench
 
 
 class Tkinter():
-
-    def color(red, green, blue):
-        my_color = str('#%02x%02x%02x' % (red, green, blue))
-        return my_color
-
     @staticmethod
-    def warn(): # this shit must be deleted
-        root = Tk()
-        # root.after(300, lambda: root.focus_force())  # try to grab focus after 300ms
+    def color(red, green, blue):  # return string of color matching for use in
+      # d Tkinter
+        return str('#%02x%02x%02x' % (red, green, blue))
 
-        root.wm_attributes("-topmost", 1)
-        root.focus_force()
 
-        def close_window():
-            btn_close.name = None
-            root.destroy()
-        btn_close = Button(root, bg="red", text="...", padx=1000, pady=1000, command=close_window)
-        btn_close.grid(row=0, column=0)
-        mainloop()
 
 
 class Windows:
     @staticmethod
-    def lock():
-        ctypes.windll.LockWorkStation()  # todo fix Windows 10
+    def lock():  # locking screen, work only on Windows < 10
+        if OS.windows_version and (OS.windows_version != 10):
+            ctypes.windll.LockWorkStation()  # todo fix Windows 10
+        else:
+            raise OSError("Locking work only on Windows < 10")
 
 
 class Random:
     @staticmethod
-    def integer(min=0, max=100):
+    def integer(min, max):  # return random integer
         return random.randrange(min, max+1)
+
+    @staticmethod
+    def float(min, max):  # return random floating number
+        return random.uniform(min, max)
 
 
 class Wget:
     @staticmethod
-    def download(url, output, quiet=False):
+    def download(url, output, quiet=False):  # just wrapper for commandline wget
         arguments = '--header="Accept: text/html" ' + \
                     '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) ' + \
                     'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3167.0 Safari/537.36"'
@@ -1150,8 +1174,8 @@ class Int:
 
 class Repl:
     @staticmethod
-    def loop(safe=False):
-        def main():
+    def loop(safe=False):  # mine shitty implementation of REPL
+        def main():  # dir ignore
             while True:
                 try:
                     command = input(">>")
@@ -1176,6 +1200,6 @@ LoadTimeBenchMark.time_start = start_bench_no_bench
 LoadTimeBenchMark.prefix = "commands8 v" + __version__ + " loaded in"
 LoadTimeBenchMark.end()
 
-if __name__ == "__main__":
-    Internal.dir_c()
-    Repl.loop()
+#if __name__ == "__main__":
+#    Internal.dir_c()
+#    Repl.loop()
