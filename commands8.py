@@ -986,36 +986,6 @@ class Bash:
         return Str.to_quotes(argument)
 
 
-
-class Git:
-    @classmethod
-    def add(cls, what):
-        Process.start("git", "add", what)
-
-    @classmethod
-    def commit(cls, message=None):
-        commands = ["git", "commit"]
-        if message:
-            commands.append("-m")
-            commands.append(Bash.argument_escape(message))
-        Process.start(commands)
-
-    @classmethod
-    def push(cls, path, upstream=False):
-        commands = ["git", "push"]
-        if upstream:
-            commands.append("-u")
-        commands.append(path)
-        Process.start(commands)
-
-
-    @classmethod
-    def update(cls, message, path="github"):
-        cls.add(".")
-        cls.commit(message)
-        cls.push(path, upstream=True)
-
-
 class macOS:
 
     class osascript:
