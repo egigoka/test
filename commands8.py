@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.10-alpha"
+__version__ = "8.0.11-alpha"
 import os
 import sys
 import copy
@@ -82,7 +82,7 @@ class OS:
 
 class Internal:
     @staticmethod
-    def mine_import(module_name, objects=None):  # d import module, if module
+    def mine_import(module_name, objects=None, justdownload=False):  # d import module, if module
       # d not found, trying to install it by pip
         if OS.is_python3():
             pipver = "3"
@@ -114,7 +114,8 @@ class Internal:
             ###########RARE###########
             command = pipcommand + " install " + module_name
             os.system(command)
-            exec(import_command, globals())
+            if not justdownload:
+                exec(import_command, globals())
 
     @staticmethod
     def dir_c():  # d print all functionality of commands8
@@ -160,9 +161,10 @@ class Internal:
 
 
 if OS.display:
-    if OS.name != "macos" and OS.python_implementation != "pypy":  # pyobjc not supported by pypy now
-        # Internal.mine_import("pyautogui")
-        # Internal.mine_import("paramiko")
+    if OS.python_implementation != "pypy":
+        if OS.name != "macos:":
+            Internal.mine_import("pyautogui", justdownload=True)
+        Internal.mine_import("paramiko", justdownload=True)
         pass
     Internal.mine_import("tkinter", objects="*")  # from tkinter import *
 
@@ -187,7 +189,6 @@ if OS.name == "windows":
            win32con, \
            termcolor
 Internal.mine_import("colorama")
-# win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
 Internal.mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
@@ -470,6 +471,10 @@ class Ssh:
       # d output from command, runned on SSH server. Support only
       # d username:password autorisation.
       # todo autorisation by key.
+        if OS.python_implementation != "pypy":
+            Internal.mine_import("paramiko")
+        else:
+            raise OSError("paramiko doesn't supported by PyPy")
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # automatically add unknown hosts
         ssh.connect(host, username=username, password=password)
@@ -1039,6 +1044,7 @@ class Gui:
         if OS.name == 'macos':
             macOS.notification(message)
         if OS.name != "macos" and OS.python_implementation != "pypy":
+            Internal.mine_import("pyautogui")
             pyautogui.alert(message)
         else:
             Print.debug("PyPy doesn't support pyautogui, so warning is here:", warning)
@@ -1168,7 +1174,7 @@ colorama.reinit()
 LoadTimeBenchMark = get_Bench()
 LoadTimeBenchMark.time_start = start_bench_no_bench
 LoadTimeBenchMark.prefix = "commands8 v" + __version__ + " loaded in"
-LoadTimeBenchMark.end()
+#LoadTimeBenchMark.end()
 
 #if __name__ == "__main__":
 #    Internal.dir_c()
