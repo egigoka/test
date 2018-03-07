@@ -178,7 +178,7 @@ newline2 = "\r\n"  # d string with other newline
 
 class Print():
     @staticmethod
-    def debug(*arguments, raw=False):  # d just more notable print, just for
+    def debug(*arguments, raw=False):  # d just more notable print, only for
       # d debugging
         line = "-" * Console.width()
         print("Debug sheet:")
@@ -1130,13 +1130,17 @@ class Wget:
 
 class Int:
     @staticmethod
-    def from_to(start, end, to_str=False):
+    def from_to(start, end, to_str=False):  # return list of integers, if argument
+      # g "to_str" activated, return list of strings with equal length
         roots = range(start, end + 1)
         if to_str:
             output = []
             max_len = max(len(str(start)), len(str(end)))
             for root in roots:
-                output.append(Str.leftpad(root, max_len, 0))
+                if root < 0:
+                    output.append("-" + Str.leftpad(-root, max_len-1, 0))
+                else:
+                    output.append(Str.leftpad(root, max_len, 0))
             return output
         else:
             return roots
