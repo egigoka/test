@@ -75,7 +75,8 @@ class OS:
 
 class Internal:
     @staticmethod
-    def mine_import(module_name, objects=None):  # d import module, if module not found, trying to install it by pip
+    def mine_import(module_name, objects=None):  # d import module, if module
+      # d not found, trying to install it by pip
         if OS.is_python3():
             pipver = "3"
         else:
@@ -108,17 +109,16 @@ class Internal:
     def dir_c():  # d print all functionality of commands8
         for line in Str.nl(File.read(Path.extend(Path.current(), "commands8.py"))):  # dir ignore
             if "# dir ignore" not in line:  # dir ignore
-                if "# d " in line:  # dir ignore
-                    print(line.replace("# d ", "# ", 1))  # dir ignore
-                elif ("def " in line) or ("class " in line):  # dir ignore
+                if ("def " in line) or ("class " in line):  # dir ignore
                     print(line)  # dir ignore
+                elif "# d " in line:  # dir ignore
+                    print(line.replace("# d ", "# ", 1))  # dir ignore
 
     @staticmethod
     def rel(quiet=False):  # d reload commands8, if you use it not in REPL, activate quiet argument
-        # d require additional line of code after reload if you import not entrie commands8
-        # d you need manually add "from commands8 import *" to script/REPL
-        # d if you import like "import commands8", additional line of code not needed
-
+      # d require additional line of code after reload if you import not entrie commands8
+      # d you need manually add "from commands8 import *" to script/REPL
+      # d if you import like "import commands8", additional line of code not needed
         import commands8, importlib
         commands8 = importlib.reload(commands8)
         del commands8
@@ -185,7 +185,7 @@ class Print():
 
     @staticmethod
     def rewrite(*arguments, sep=" ", raw=False):  # d string, that can be rewritable
-        # d note, that you need to rewrite string to remove characters
+      # d note, that you need to rewrite string to remove characters
 
         line = " " * Console.width()
         if OS.name == "windows":
@@ -204,13 +204,13 @@ class Str:
         return "'" + str(some_string) + "'"
 
     @staticmethod
-    def get_integers(string):
-        string = str(string) + " "  # in exception some processing, meh :(
+    def get_integers(string):  # d return list of integers from string, !!!floating not supported!!!
+      # todo add support for floating numbers, it will be cool!
         integer_found = False
         integers = []
         current_integer = 0
         negative = False
-        for symbol in string:
+        for symbol in str(string) + " ":  # in exception some processing, meh :(
             try:
                 if symbol in ['-', '—']:
                     negative = True
@@ -229,7 +229,7 @@ class Str:
         return integers
 
     @staticmethod
-    def newlines_to_strings(string, quiet=False):
+    def newlines_to_strings(string, quiet=False):  # split long string with line breaks to separate strings in list
         if string:
             string = str(string)
             if OS.name == "windows":
@@ -242,22 +242,23 @@ class Str:
                 print("None can't be splitted")
 
     @classmethod
-    def nl(cls, string):
+    def nl(cls, string):  # alias to newline
         return cls.newlines_to_strings(string=string)
 
     @staticmethod
-    def split_every(string, chars):
+    def split_every(string, chars):  # split string every
         chars = int(chars)
         output_lines = []
         char_exists = "."
         char_can_be_exists = ".?"
         regexp = char_exists + char_can_be_exists*(chars-1)
-        for line in re.findall(regexp, str(string)):
+        for line in re.findall(regexp, str(string)):  # todo can I just return this list?
             output_lines += [line]
         return output_lines
 
     @staticmethod
-    def leftpad(string, leng, ch="0", rightpad=False):
+    def leftpad(string, leng, ch="0", rightpad=False):  # d return string with
+      # d added characters to left side. If string longer — return original string
         string = str(string)
         if len(string) >= leng:
             return string
@@ -268,11 +269,13 @@ class Str:
         return string_output
 
     @classmethod
-    def rightpad(cls, string, leng, ch="0"):
+    def rightpad(cls, string, leng, ch="0"):  # return string with added
+      # d characters to right side. If string longer — return original string
         return cls.leftpad(string, leng, ch=ch, rightpad=True)
 
     @staticmethod
-    def substring(string, before, after=None):
+    def substring(string, before, after=None):  # return string that between
+      # d "before", and "after" strings, not including those.
         startfrom = string.find(before)
         if startfrom != -1:
             startfrom = string.find(before) + len(before)
@@ -290,7 +293,9 @@ class Str:
         return substring
 
     @staticmethod
-    def diff_simple(string_a, string_b):
+    def diff_simple(string_a, string_b):  # d print all symbol differents.
+      # d Not all mine code, must rewrite.
+      # todo rewrite this shit.
         import difflib
 
         strings = [(string_a, string_b)]  # for furthurer support for unlimited srtings
@@ -307,11 +312,13 @@ class Str:
             print()
 
     @staticmethod
-    def input_pass(string="Password:"):
+    def input_pass(string="Password:"):  # d return string from user, securely
+      # d inputed by getpass library
         return getpass.getpass(string)
 
     @staticmethod
-    def input_int(message="Введите число: ", minimum=None, maximum=None, default=None, quiet=False):
+    def input_int(message="Input integer: ", minimum=None, maximum=None, default=None, quiet=False):
+      # d return integer from user with multible parameters.
         output_int = "jabla fitta"
         if default:
             message = "(Enter = " + str(default) + ")"
@@ -346,7 +353,8 @@ class Str:
 
 class Console():
     @staticmethod
-    def clean():
+    def clean():  # wipe terminal output. Not tested on linux
+      # todo test on linux
         if OS.name == "windows":
             os.system("cls")
         elif OS.name == "linux":
@@ -355,7 +363,7 @@ class Console():
             os.system(r"clear && printf '\e[3J'")
 
     @staticmethod
-    def width():
+    def width():  # return width of terminal window in characters
         if OS.name == "windows":
             io = Console.get_output("mode con")
             width_ = Str.get_integers(io)[1]
@@ -365,7 +373,7 @@ class Console():
         return int(width_)
 
     @staticmethod
-    def height():
+    def height():  # return height of terminal window in characters
         if OS.name == "windows":
             modecon = Console.get_output("mode con")
             height = Str.get_integers(modecon)[0]
@@ -378,6 +386,7 @@ class Console():
 
     @classmethod
     def blink(cls, width=None, height=None, symbol="#", sleep=0.5):
+      # d fastly print to terminal characters with random color. Completely shit.
         if width is not None and height is not None:
             os.system("mode con cols=" + str(width) + " lines=" + str(height))
         if width is None:
@@ -403,7 +412,9 @@ class Console():
                 break
 
     @staticmethod
-    def get_output(command, quiet=True, split_lines=False):
+    def get_output(command, quiet=True, split_lines=False):  # d return output
+      # d of executing command. Doesn't output it to terminal in realtime.
+      # d can be output after done if "quiet" argument activated.
         p = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         if OS.name == "windows":
             output = p.decode("cp866")
@@ -416,10 +427,11 @@ class Console():
 
 
 class Ssh:
-
-
     @staticmethod
-    def get_output(host, username, password, command, safe=False):
+    def get_output(host, username, password, command, safe=False):  # return
+      # d output from command, runned on SSH server. Support only
+      # d username:password autorisation.
+      # todo autorisation by key.
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # automatically add unknown hosts
         ssh.connect(host, username=username, password=password)
@@ -430,14 +442,15 @@ class Ssh:
         return str(ssh_stdout.read(), 'utf8')
 
     @classmethod
-    def get_avg_load_lin(cls, host, username, password, safe=False):
+    def get_avg_load_lin(cls, host, username, password, safe=False):  # return
+      # d list of average loads from SSH linux server. Shit, I know
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before="load average: ", after=newline)
         output = output.split(", ")
         return output
 
     @classmethod
-    def get_uptime_lin(cls, host, username, password, safe=False):
+    def get_uptime_lin(cls, host, username, password, safe=False):  #
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before=" up ", after=", ")
         return output
