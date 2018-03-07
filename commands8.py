@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.2-alpha"
+__version__ = "8.0.7-alpha"
 import os
 import sys
 import copy
@@ -12,16 +12,32 @@ import copy
 #   todo compare jsons?
 #   todo save changes as commit message?
 
+# d ###############################################!!! HOW TO IMPORT !!!##################################################
+# http://python.su/forum/topic/15531/?page=1#post-93316
+# d import module like this:
+# d import sys
+# d sys.path.append("../..")
+# d sys.path.append("..\..")
+# d sys.path.append(".")
+# d sys.path.append("..")
+# d sys.path.append("./term")
+# d sys.path.append(r".\term")
+# d from commands8 import *
+
 # this shit for pycharm:
 colorama = None; cprint = None; copypaste = None; pyautogui = None; Tk = None; Button = None; mainloop = None; paramiko = None
 
 
 class OS:
     @staticmethod
-    def is_python3():
+    def is_python3():  # d return boolean
         is_true = sys.version_info >= (3, 0)
         return is_true
-    windows_version = None
+    family = None  # d string with family of OS: "nt" or "unix"
+    name = None  # d string with name of OS: "windows", "linux", or "macos"
+    windows_version = None  # d only on Windows, integer of major version of Windows
+    display = None  # d didn't work yet
+    cyrrilic_support = None  # d boolean variable of cyrrilic output support
     if sys.platform == "linux" or sys.platform == "linux2":
         name = "linux"
     elif sys.platform == "win32" or sys.platform == "cygwin":
@@ -57,41 +73,66 @@ class OS:
 
 
 
+class Internal:
+    @staticmethod
+    def mine_import(module_name, objects=None):  # d import module, if module not found, trying to install it by pip
+        if OS.is_python3():
+            pipver = "3"
+        else:
+            pipver = ""
 
-def mine_import(module_name, objects=None):
-    if OS.is_python3():
-        pipver = "3"
-    else:
-        pipver = ""
+        if objects:
+            import_command = "from " + module_name + " import " + objects
+        else:
+            import_command = "import " + module_name
+        try:
+            exec(import_command, globals())
+        except ImportError:
+            ###########RARE###########
+            if module_name == "pyautogui":
+                if OS.name == "linux":
+                    if OS.is_python3():
+                        os.system("apt-get install python-xlib")
+                    else:
+                        os.system("apt-get install python3-Xlib")
+                if OS.name == "macos":
+                    os.system("pip" + pipver + " install python" + pipver + "-xlib")
+                    os.system("pip" + pipver + " install pyobjc-core")
+                    os.system("pip" + pipver + " install pyobjc")
+            ###########RARE###########
+            command = "pip" + pipver + " install " + module_name
+            os.system(command)
+            exec(import_command, globals())
 
-    if objects:
-        import_command = "from " + module_name + " import " + objects
-    else:
-        import_command = "import " + module_name
-    try:
-        exec(import_command, globals())
-    except ImportError:
-        ###########RARE###########
-        if module_name == "pyautogui":
-            if OS.name == "linux":
-                if OS.is_python3():
-                    os.system("apt-get install python-xlib")
-                else:
-                    os.system("apt-get install python3-Xlib")
-            if OS.name == "macos":
-                os.system("pip" + pipver + " install python" + pipver + "-xlib")
-                os.system("pip" + pipver + " install pyobjc-core")
-                os.system("pip" + pipver + " install pyobjc")
-        ###########RARE###########
-        command = "pip" + pipver + " install " + module_name
-        os.system(command)
-        exec(import_command, globals())
+    @staticmethod
+    def dir_c():  # d print all functionality of commands8
+        for line in Str.nl(File.read(Path.extend(Path.current(), "commands8.py"))):  # dir ignore
+            if "# dir ignore" not in line:  # dir ignore
+                if "# d " in line:  # dir ignore
+                    print(line.replace("# d ", "# ", 1))  # dir ignore
+                elif ("def " in line) or ("class " in line):  # dir ignore
+                    print(line)  # dir ignore
+
+    @staticmethod
+    def rel(quiet=False):  # d reload commands8, if you use it not in REPL, activate quiet argument
+        # d require additional line of code after reload if you import not entrie commands8
+        # d you need manually add "from commands8 import *" to script/REPL
+        # d if you import like "import commands8", additional line of code not needed
+
+        import commands8, importlib
+        commands8 = importlib.reload(commands8)
+        del commands8
+        string = "from commands8 import *"  # you need to manually add this string to code :(
+        if not quiet:
+            print('"'+string+'" copied to clipboard')
+            copypaste.copy(string)
+            pass
 
 
 if OS.display:
-    mine_import("pyautogui")
-    mine_import("tkinter", objects="*")  # from tkinter import *
-    mine_import("paramiko")
+    Internal.mine_import("pyautogui")
+    Internal.mine_import("tkinter", objects="*")  # from tkinter import *
+    Internal.mine_import("paramiko")
 
 
 import json, \
@@ -105,19 +146,7 @@ import json, \
        getpass
 
 
-# ###############################################!!! HOW TO IMPORT !!!##################################################
-# http://python.su/forum/topic/15531/?page=1#post-93316
-def how_to_import_this_useless_stuff():
-    print(r"""# import module like this:
-# mine commands
-import sys
-sys.path.append("../..")
-sys.path.append("..\..")
-sys.path.append(".")
-sys.path.append("..")
-sys.path.append("./term")
-sys.path.append(r".\term")
-from commands8 import *""")
+
 
 
 if OS.name == "windows":
@@ -125,17 +154,17 @@ if OS.name == "windows":
            win32api, \
            win32con, \
            termcolor
-mine_import("colorama")
+Internal.mine_import("colorama")
 # win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
-mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
-mine_import("copypaste")
+Internal.mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+Internal.mine_import("copypaste")
 
-newline = '\n'
-ruble = u"\u20bd"  # \u20bd is ₽
-backslash = "\ "[:1]
-newline2 = "\r\n"
+newline = '\n'  # d string with newline
+ruble = u"\u20bd"  # d string with ₽ symbol
+backslash = "\ "[:1]  # d string with backslash
+newline2 = "\r\n"  # d string with other newline
 
 
 
@@ -143,7 +172,7 @@ newline2 = "\r\n"
 
 class Print():
     @staticmethod
-    def debug(*arguments, raw=False):
+    def debug(*arguments, raw=False):  # d just more notable print
         line = "-" * Console.width()
         print("Debug sheet:")
         for arg in arguments:
@@ -155,46 +184,24 @@ class Print():
             print(line)
 
     @staticmethod
-    def rewrite(*arguments, sep = " ", raw=False):
+    def rewrite(*arguments, sep=" ", raw=False):  # d string, that can be rewritable
+        # d note, that you need to rewrite string to remove characters
+
         line = " " * Console.width()
         if OS.name == "windows":
             line = line[:-1]
         print(line, end="\r")
         print(*arguments, sep=sep, end="\r")
 
-    @classmethod
-    def test(cls, string):
-
-        for i in range(100):
-            time.sleep(1)
-            print("\b" * i)
-            print("fuck")
-
-        for i in range(100):
-            if i != 0:
-                print('\b' * 6)
-            else:
-                print('header')
-            print(str(i) + '%').ljust(4),
-            sys.stdout.flush()
-            time.sleep(0.05)
-
-        from time import sleep
-        for i in range(100):
-            sys.stdout.write('%2s%%' % i)
-            sys.stdout.flush()
-            sleep(1)
-            sys.stdout.write('\b' * 3)
-
 
 class Str:
     @staticmethod
-    def to_quotes(some_string):
+    def to_quotes(some_string):  # d just place input string inside "" quotes
         return '"' + str(some_string) + '"'
 
     @staticmethod
-    def to_quotes_2(some_string):
-        return '"' + str(some_string) + '"'
+    def to_quotes_2(some_string):  # d place input string inside '' quotes
+        return "'" + str(some_string) + "'"
 
     @staticmethod
     def get_integers(string):
@@ -207,6 +214,7 @@ class Str:
             try:
                 if symbol in ['-', '—']:
                     negative = True
+                    continue
                 int(symbol)
                 current_integer = current_integer*10 + int(symbol)
                 integer_found = True
@@ -214,10 +222,10 @@ class Str:
                 if integer_found:
                     if negative:
                         current_integer = -current_integer
-                        negative = False
                     integers = integers + [current_integer]
                     current_integer = 0
                     integer_found = False
+                negative = False
         return integers
 
     @staticmethod
@@ -433,6 +441,36 @@ class Ssh:
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before=" up ", after=", ")
         return output
+
+    @classmethod
+    def screenblink(Console, width = None, height = None, symbol = "#", sleep = 0.5):
+        if width != None and height != None:
+            os.system("mode con cols=" + str(width) + " lines=" + str(height))
+        if width == None:
+            width = Console.width()
+        if height == None:
+            height = Console.height()
+        colorama.reinit()
+        while True:
+            colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+            highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
+            string = symbol * width
+            color = random.choice(colors)
+            colors.pop(colors.index(color))
+            highlight = random.choice(highlights)
+            try: # New version with one long line. Works perfect, as I see.
+                string = string * height
+                if OS.name == "windows":
+                    print(termcolor.colored(string, color, highlight))
+                else:
+                    cprint(string, color, highlight)
+                time.sleep(sleep)
+            except KeyboardInterrupt as err:
+                if OS.name == "windows":
+                    print (termcolor.colored("OK", "white", "on_grey"))
+                colorama.deinit()
+                Console.clean()
+                break
 
 
 
@@ -868,51 +906,60 @@ def plog(logfile, logstring="some shit happened", customtime=None, quiet=False, 
     file.close()
 
 
-def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000):
-    # с таким эксепшном можно сделать куда проще это всё
-    domain = getDomainOfUrl(domain)
-    if not quiet:
-        colorama.reinit()
-        Print.rewrite("Pinging", domain, count, "times...")
-        up_message = domain + " is up!"
-        down_message = domain + " is down."
-    try:
-        if OS.name == "windows":
-            count_arg = "n"
-            timeout_arg = "w"
-        if OS.name in ["macos", "linux"]:
-            count_arg = "c"
-            timeout_arg = "W"
-        if OS.name == "linux":
-            timeout = int(timeout/1000)
-        command = "ping " + domain + " -" + count_arg + " " + str(count) + \
-                  " -" + timeout_arg + " " + str(timeout)
-        ping_output = Console.get_output(command)
+class Network:
+    @staticmethod
+    def getDomainOfUrl(url):
+        url_output = Str.substring(url, "://", "/")
+        if url_output == "":
+            url_output = Str.substring(url, "://")
+        return url_output
 
-    except KeyboardInterrupt:
-        sys.exit()
-    except:  # any exception is not good ping
-        ping_output = ""
-    if ("TTL" in ping_output) or ("ttl" in ping_output):
-        up = True
-    else:
-        up = False
-    if logfile:
-        if up:
-            plog(logfile, domain + " is up!", quiet=True)
-            cprint(up_message, "white", "on_green")
-        else:
-            plog(logfile, down_message, quiet=True)
-            cprint(down_message, "white", "on_red")
 
-    elif not quiet:
-        Print.rewrite("")
-        if up:
-            cprint(up_message, "white", "on_green")
+    def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000):
+        # с таким эксепшном можно сделать куда проще это всё
+        domain = getDomainOfUrl(domain)
+        if not quiet:
+            colorama.reinit()
+            Print.rewrite("Pinging", domain, count, "times...")
+            up_message = domain + " is up!"
+            down_message = domain + " is down."
+        try:
+            if OS.name == "windows":
+                count_arg = "n"
+                timeout_arg = "w"
+            if OS.name in ["macos", "linux"]:
+                count_arg = "c"
+                timeout_arg = "W"
+            if OS.name == "linux":
+                timeout = int(timeout/1000)
+            command = "ping " + domain + " -" + count_arg + " " + str(count) + \
+                      " -" + timeout_arg + " " + str(timeout)
+            ping_output = Console.get_output(command)
+
+        except KeyboardInterrupt:
+            sys.exit()
+        except:  # any exception is not good ping
+            ping_output = ""
+        if ("TTL" in ping_output) or ("ttl" in ping_output):
+            up = True
         else:
-            cprint(down_message, "white", "on_red")
-        colorama.deinit()
-    return up
+            up = False
+        if logfile:
+            if up:
+                plog(logfile, domain + " is up!", quiet=True)
+                cprint(up_message, "white", "on_green")
+            else:
+                plog(logfile, down_message, quiet=True)
+                cprint(down_message, "white", "on_red")
+
+        elif not quiet:
+            Print.rewrite("")
+            if up:
+                cprint(up_message, "white", "on_green")
+            else:
+                cprint(down_message, "white", "on_red")
+            colorama.deinit()
+        return up
 
 
 class Fix:
@@ -1003,7 +1050,7 @@ class macOS:
             commands += " sound name " + Str.to_quotes(cls.osascript.quotes_escape(sound))
         commands = cls.osascript.quotes_escape(commands)  # escaping quotes:
         commands = Str.to_quotes(commands)  # applescript to quotes
-        Process.start("osascript", "-e", commands)  # def start(*arguments, new_window=False, debug=False, pureshell=False):
+        Process.start("osascript", "-e", commands)  # f start(*arguments, new_window=False, debug=False, pureshell=False):
         if list_of_sounds:
             Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
 
@@ -1021,11 +1068,7 @@ class Gui:
         pyautogui.alert(message)
 
 
-def getDomainOfUrl(url):
-    url_output = Str.substring(url, "://", "/")
-    if url_output == "":
-        url_output = Str.substring(url, "://")
-    return url_output
+
 
 
 
@@ -1326,66 +1369,12 @@ class Repl:
             main()
 
 
-def screenblink(width = None, height = None, symbol = "#", sleep = 0.5):
-    if width != None and height != None:
-        os.system("mode con cols=" + str(width) + " lines=" + str(height))
-    if width == None:
-        width = Console.width()
-    if height == None:
-        height = Console.height()
-    colorama.reinit()
-    while True:
-        colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
-        highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
-        string = symbol * width
-        color = random.choice(colors)
-        colors.pop(colors.index(color))
-        highlight = random.choice(highlights)
-        try: # New version with one long line. Works perfect, as I see.
-            string = string * height
-            print(termcolor.colored(string, color, highlight))
-            time.sleep(sleep)
-        except KeyboardInterrupt as err:
-            if OS.name == "windows":
-                print (termcolor.colored("OK", "white", "on_grey"))
-            colorama.deinit()
-            Console.clean()
-            break
-
-def dir_c():
-    for line in Str.nl(File.read(Path.extend(Path.current(), "commands8.py"))):
-        if ("def " in line) or ("class " in line):
-            print(line)
-
-
-def rel(quiet=False):
-    import commands8, importlib
-    commands8 = importlib.reload(commands8)
-    del commands8
-    string = "from commands8 import *"  # you need to manually add this string to code :(
-    if not quiet:
-        print('"'+string+'" copied to clipboard')
-        copypaste.copy(string)
-        pass
-
-
-if __name__ == "__main__":
-    how_to_import_this_useless_stuff()
-    Repl.loop()
-
-
-
 colorama.reinit()
 LoadTimeBenchMark = get_Bench()
 LoadTimeBenchMark.time_start = start_bench_no_bench
 LoadTimeBenchMark.prefix = "commands8 v" + __version__ + " loaded in"
 LoadTimeBenchMark.end()
 
-
-# Есть словарь: my_list = [{'name':'Homer', 'age':39}, {'name':'Bart', 'age':10}]
-# Сортировка словаря по одному ключу:
-# my_list = sorted(my_list, key=lambda k: k['name'])
-# Сортировка словаря по нескольким ключам:
-# my_list = sorted(my_list, key=lambda x,y : cmp(x['name'], y['name']))
-# или
-# my_list.sort(lambda x,y : cmp(x['name'], y['name']))
+if __name__ == "__main__":
+    Internal.dir_c()
+    Repl.loop()
