@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.11-alpha"
+__version__ = "8.0.12-alpha"
 import os
 import sys
 import copy
@@ -922,10 +922,10 @@ class Network:
             url_output = Str.substring(url, "://")
         return url_output
 
-
-    def ping(domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000):
+    @classmethod
+    def ping(Network, domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000):
         # с таким эксепшном можно сделать куда проще это всё
-        domain = getDomainOfUrl(domain)
+        domain = Network.getDomainOfUrl(domain)
         if not quiet:
             colorama.reinit()
             Print.rewrite("Pinging", domain, count, "times...")

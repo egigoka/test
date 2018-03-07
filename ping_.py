@@ -21,8 +21,10 @@ __version__ = "2.5.0"
 # -fast argument
 __version__ = "2.6.0"
 # macOS notifcation and deleted old staff
+__version__ = "2.7.0"
+# update to c8
 
-from commands7 import *
+from commands8 import *
 
 class State:
     ping_timeout = 2000  # in ms
@@ -65,7 +67,7 @@ def main():
             print_end = ''
         cnt_workin = 0
         for hostname in domains:  # сопсна, пинговка
-            response = ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count)
+            response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count)
             if response:  # and then check the response...
                 cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end=print_end)
                 cnt_workin += 1
