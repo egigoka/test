@@ -7,53 +7,34 @@ import os
 import sys
 import copy
 import platform
-import pkgutil
 
 # todo version diff
 #   todo export script as json?
 #   todo compare jsons?
 #   todo save changes as commit message?
 
+# ###############################################!!! HOW TO IMPORT !!!##################################################
+# http://python.su/forum/topic/15531/?page=1#post-93316
+# import module like this:
+# import sys
+# sys.path.append("../..")
+# sys.path.append("..\..")
+# sys.path.append(".")
+# sys.path.append("..")
+# sys.path.append("./term")
+# sys.path.append(r".\term")
+# from commands8 import *
+
 # this shit for pycharm:
 colorama = None; cprint = None; copypaste = None; pyautogui = None; Tk = None; Button = None; mainloop = None; paramiko = None
 
-def get_Bench(start=False):  # return class with those functions:
-    class Bench(object):  # dir ignore
-        time_start = datetime.datetime.now()
-        time_end = None
-        quiet = False  # d argument for disable print to terminal               bnl1
-        prefix = "Bench runned in"  # d what have been done, will print if      bnl1
-        # d "quiet" variable of class is False
-
-        @classmethod
-        def start(cls):  # set time of begin to now
-            cls.time_start = datetime.datetime.now()
-
-        @classmethod
-        def get(cls):  # dir ignore
-            cls.time_end = datetime.datetime.now()
-            delta = cls.time_end - cls.time_start
-            delta_combined = delta.seconds + delta.microseconds / 1E6
-            return delta_combined
-
-        @classmethod
-        def end(cls):  # return delta between start and end
-            delta_combined = cls.get()
-            if not cls.quiet:
-                try:
-                    cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
-                except TypeError:
-                    print(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds")
-            return delta_combined
-    return Bench
 
 class OS:
-    is_python3 = sys.version_info >= (3, 0)  # d boolean
+    @staticmethod
+    def is_python3():  # d return boolean
+        is_true = sys.version_info >= (3, 0)
+        return is_true
     python_implementation = None # d string with name of python implementation: "cpython" or "pypy"
-    python_version_major = sys.version_info.major # d int of major python version
-    python_commandline_version = ""
-    if is_python3:
-        python_commandline_version = "3" # d string of addable "3" to commandline apps if python is 3rd version
     family = None  # d string with family of OS: "nt" or "unix"
     name = None  # d string with name of OS: "windows", "linux", or "macos"
     windows_version = None  # d only on Windows, integer of major version of Windows
@@ -100,43 +81,41 @@ class OS:
 
 
 class Internal:
-
     @staticmethod
-    def mine_import(module_name, objects=None, justdownload=False):  # import
-      # d module, if module not found, trying to install it by pip
-        debug_Bench = get_Bench()
-        debug_Bench.start()
-        def just_install(module_name):
-            import pip
-            pip.main(['install', module_name])
-        modules_list = []
-        for item in pkgutil.iter_modules():
-            modules_list.append(item[1])
-        if module_name not in modules_list:
+    def mine_import(module_name, objects=None, justdownload=False):  # d import module, if module
+      # d not found, trying to install it by pip
+        if OS.is_python3():
+            pipver = "3"
+        else:
+            pipver = ""
+
+        pipcommand = "pip"+pipver
+        import platform
+        if platform.python_implementation() == "PyPy":
+            pipcommand = "pypy"+pipver+" -m  pip"
+
+        if objects:
+            import_command = "from " + module_name + " import " + objects
+        else:
+            import_command = "import " + module_name
+        try:
+            exec(import_command, globals())
+        except ImportError:
             ###########RARE###########
             if module_name == "pyautogui":
                 if OS.name == "linux":
-                    if OS.is_python3:
+                    if OS.is_python3():
                         os.system("apt-get install python-xlib")
                     else:
                         os.system("apt-get install python3-Xlib")
                 if OS.name == "macos":
-                    for package in ["python" + OS.python_commandline_version + "-xlib",
-                                    "pyobjc-core", "pyobjc"]:
-                        just_install(package)
-                    if OS.python_implementation == "pypy":
-                        Print.debug("Yep, PyPy doesn't support pyobjc")
+                    for package in ["python" + pipver + "-xlib", "pyobjc-core", "pyobjc"]:
+                        os.system(pipcommand + " install " + package)
             ###########RARE###########
-            just_install(module_name)
-        if not justdownload:
-            if objects:
-                exec("from " + module_name + " import " + objects, globals())
-            else:
-                import importlib
-                globals()[module_name] = importlib.import_module(module_name)
-        debug_Bench.prefix = module_name + " " + str(objects)
-        debug_Bench.end()
-
+            command = pipcommand + " install " + module_name
+            os.system(command)
+            if not justdownload:
+                exec(import_command, globals())
 
     @staticmethod
     def dir_c():  # d print all functionality of commands8
@@ -186,7 +165,8 @@ if OS.display:
         if OS.name != "macos:":
             Internal.mine_import("pyautogui", justdownload=True)
         Internal.mine_import("paramiko", justdownload=True)
-    Internal.mine_import("tkinter")  # from tkinter import *
+        pass
+    Internal.mine_import("tkinter", objects="*")  # from tkinter import *
 
 
 import json, \
@@ -1075,7 +1055,32 @@ class Gui:
 
 
 
+def get_Bench(start=False):  # return class with those functions:
+    class Bench(object):  # dir ignore
+        time_start = datetime.datetime.now()
+        time_end = None
+        quiet = False  # d argument for disable print to terminal               bnl1
+        prefix = "Bench runned in"  # d what have been done, will print if      bnl1
+        # d "quiet" variable of class is False
 
+        @classmethod
+        def start(cls):  # set time of begin to now
+            cls.time_start = datetime.datetime.now()
+
+        @classmethod
+        def get(cls):  # dir ignore
+            cls.time_end = datetime.datetime.now()
+            delta = cls.time_end - cls.time_start
+            delta_combined = delta.seconds + delta.microseconds / 1E6
+            return delta_combined
+
+        @classmethod
+        def end(cls):  # return delta between start and end
+            delta_combined = cls.get()
+            if not cls.quiet:
+                cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
+            return delta_combined
+    return Bench
 
 
 class Tkinter():
@@ -1118,6 +1123,7 @@ class Wget:
         else:
             url = url.replace("&", backslash + "&")
             Process.start("wget", url, "-O", output, arguments, pureshell=True)
+
 
 
         # Another way to fix blocks by creating ~/.wgetrc file https://stackoverflow.com/a/34166756
@@ -1168,7 +1174,7 @@ colorama.reinit()
 LoadTimeBenchMark = get_Bench()
 LoadTimeBenchMark.time_start = start_bench_no_bench
 LoadTimeBenchMark.prefix = "commands8 v" + __version__ + " loaded in"
-LoadTimeBenchMark.end()
+#LoadTimeBenchMark.end()
 
 #if __name__ == "__main__":
 #    Internal.dir_c()
