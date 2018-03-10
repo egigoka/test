@@ -23,6 +23,8 @@ __version__ = "2.6.0"
 # macOS notifcation and deleted old staff
 __version__ = "2.7.0"
 # update to c8
+__version__ = "2.7.1"
+# no timeout if no internet
 
 from commands8 import *
 
@@ -90,5 +92,6 @@ def main():
                     macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
                     State.internet_status = True
             State.first_iterate = False
-        Time.timer(State.sleep)
+        if State.internet_status:
+            Time.timer(State.sleep)
 main()

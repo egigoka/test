@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "7.30.0-alpha-discountinued-migrate-to-commands8"
+__version__ = "7.30.1-alpha-discountinued-migrate-to-commands8"
 import os
 import sys
 import copy
@@ -1401,8 +1401,9 @@ def rel(quiet=False):
 
 
 if __name__ == "__main__":
-    how_to_import_this_useless_stuff()
-    Repl.loop()
+    pass
+    #how_to_import_this_useless_stuff()
+    #Repl.loop()
     #File.backup(r"\\192.168.99.91\shares\scripts\utilsupdate\utils_dev.py")
     #print(rustime(1487646452.7141206))
     #ping(ip="192.168.99.91")
