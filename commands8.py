@@ -104,6 +104,7 @@ class Internal:
     @staticmethod
     def mine_import(module_name, objects=None, justdownload=False):  # import
       # d module, if module not found, trying to install it by pip
+        # check for pip module
         debug_Bench = get_Bench()
         debug_Bench.start()
         def just_install(module_name):
@@ -112,6 +113,9 @@ class Internal:
         modules_list = []
         for item in pkgutil.iter_modules():
             modules_list.append(item[1])
+        if "pip" not in modules_list:
+            if OS.name == "linux":
+                os.system("sudo apt-get install python" + OS.python_commandline_version + "-pip")
         if module_name not in modules_list:
             ###########RARE###########
             if module_name == "pyautogui":
