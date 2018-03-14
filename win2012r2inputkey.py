@@ -12,5 +12,8 @@ from commands8 import *
 
 import pyautogui
 
+Internal.mine_import("keyboard")
+import keyboard
+
 Time.timer(5)
-pyautogui.typewrite("NVWRR-MWD9J-7JRQ4-J3HQK-QV4RY")
+keyboard.write("NVWRR-MWD9J-7JRQ4-J3HQK-QV4RY")
