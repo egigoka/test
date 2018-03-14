@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.13-alpha"
+__version__ = "8.0.14-alpha"
 import os
 import sys
 import copy
@@ -208,8 +208,8 @@ import json, \
 
 
 if OS.name == "windows":
-    import win_unicode_console, \
-           win32api, \
+	mine_import(win_unicode_console)
+    import win32api, \
            win32con, \
            termcolor
 Internal.mine_import("colorama")
