@@ -130,8 +130,11 @@ class Internal:
                         just_install(package)
                     if OS.python_implementation == "pypy":
                         Print.debug("Yep, PyPy doesn't support pyobjc")
+            if module_name in ["win32api","win32con"]:
+                just_install("pypiwin32")
+            else:
             ###########RARE###########
-            just_install(module_name)
+                just_install(module_name)
         if not justdownload:
             if objects:
                 exec("from " + module_name + " import " + objects, globals())
@@ -208,10 +211,10 @@ import json, \
 
 
 if OS.name == "windows":
-	mine_import(win_unicode_console)
-    import win32api, \
-           win32con, \
-           termcolor
+    Internal.mine_import("win_unicode_console")
+    Internal.mine_import("win32api")
+    Internal.mine_import("win32con")
+    Internal.mine_import("termcolor")
 Internal.mine_import("colorama")
 colorama.init()
 colorama.deinit()

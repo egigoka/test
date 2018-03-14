@@ -13,4 +13,4 @@ from commands8 import *
 import pyautogui
 
 Time.timer(5)
-pyautogui.type("NVWRR-MWD9J-7JRQ4-J3HQK-QV4RY")
+pyautogui.typewrite("NVWRR-MWD9J-7JRQ4-J3HQK-QV4RY")
