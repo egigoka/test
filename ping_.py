@@ -1,4 +1,4 @@
-#! python3
+﻿#! python3
 # -*- coding: utf-8 -*-
 __version__ = "2.0.0"
 # going to commands7
@@ -36,7 +36,7 @@ class State:
     online = False
     online_only = False
     first_iterate = True
-    internet_status = False
+    internet_status = False  # todo doesn't work on non macOS system
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
     if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
