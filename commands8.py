@@ -799,6 +799,7 @@ class Json():
     @classmethod
     def save(cls, filename, jsonstring, quiet=False, debug=False):
         try:
+            File.create(filename)
             settingsJsonTextIO = open(filename, "w")
             json.dump(jsonstring, settingsJsonTextIO)
             settingsJsonTextIO.close()

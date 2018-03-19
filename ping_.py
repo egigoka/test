@@ -59,6 +59,9 @@ if State.online:
     domains += ['vk.com']
     domains += ['starbounder.org']
 
+
+Json.save(Path.extend(Path.current(), "ping_configs", "ping_online_domains"), domains)
+
 def main():
     while True:
         if OS.name == "macos":
@@ -68,7 +71,7 @@ def main():
         if OS.name == 'windows':
             print_end = ''
         cnt_workin = 0
-        for hostname in domains:  # сопсна, пинговка
+        for hostname in domains:
             response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count)
             if response:  # and then check the response...
                 cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end=print_end)
@@ -77,21 +80,20 @@ def main():
                 cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end=print_end)
         print(Time.rustime())
         # notification on macOS
-        if OS.name == "macos":
-            if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
-                macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
-                State.internet_status = False
-            elif cnt_workin < len(domains):
-                macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
-                State.internet_status = False
-            else:
-                if State.internet_status==False:
-                    subtitle = "You are back online!"
-                    if State.first_iterate:
-                        subtitle = "You are online!"
-                    macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
-                    State.internet_status = True
-            State.first_iterate = False
+        if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
+            if OS.name == "macos": macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            State.internet_status = False
+        elif cnt_workin < len(domains):
+            if OS.name == "macos": macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            State.internet_status = False
+        else:
+            if State.internet_status==False:
+                subtitle = "You are back online!"
+                if State.first_iterate:
+                    subtitle = "You are online!"
+                if OS.name == "macos": macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
+                State.internet_status = True
+        State.first_iterate = False
         if State.internet_status:
             Time.timer(State.sleep)
 main()
