@@ -10,18 +10,33 @@ sys.path.append("./term")
 sys.path.append(r".\term")
 from commands8 import *
 
+
+class Arguments:
+    notab = False
+    if "notab" in sys.argv:
+        notab = True
+    nonewline = False
+    if "nonewline" in sys.argv:
+        nonewline = True
+    verbose = False
+    if "verbose" in sys.argv:
+        verbose = True
+
+
 oldinputstr = ""
 while True:
     time.sleep(0.1)
     inputstr = copypaste.paste()
     if inputstr == "":
         continue
-    if oldinputstr != inputstr:
-        print (repr(inputstr), newline)
-        oldinputstr = inputstr
+    if Arguments.verbose:
+        if oldinputstr != inputstr:
+            print (repr(inputstr), newline)
+            oldinputstr = inputstr
     inputstr = str(inputstr)
-    inputstr = inputstr.replace(newline2, "")
-    inputstr = inputstr.replace(newline, "")
-    inputstr = inputstr.replace("\t", "")
-    outputstr = inputstr
-    copypaste.copy(outputstr)
+    if Arguments.nonewline:
+        inputstr = inputstr.replace(newline2, "")
+        inputstr = inputstr.replace(newline, "")
+    if Arguments.notab:
+        inputstr = inputstr.replace("\t", "")
+    copypaste.copy(inputstr)
