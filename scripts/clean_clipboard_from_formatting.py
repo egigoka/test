@@ -24,4 +24,4 @@ while True:
     inputstr = inputstr.replace(newline, "")
     inputstr = inputstr.replace("\t", "")
     outputstr = inputstr
-    #copypaste.copy(outputstr)
+    copypaste.copy(outputstr)
