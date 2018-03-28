@@ -102,7 +102,7 @@ class OS:
 class Internal:
 
     @staticmethod
-    def mine_import(module_name, objects=None, justdownload=False):  # import
+    def mine_import(module_name, objects=None, justdownload=False, az=None):  # import
       # d module, if module not found, trying to install it by pip
         # check for pip module
         debug_Bench = get_Bench()
@@ -136,7 +136,19 @@ class Internal:
             ###########RARE###########
                 just_install(module_name)
         if not justdownload:
-            if objects:
+            if az and objects:
+                if len(objects.split(",")) == 1:
+                    globals()[az] = importlib.import_module(objects[0], package=module_name) 
+                print("Internal.mine_import doesn't support both attributes use 'az' and 'objects', so only 'objects' will apply.")
+                az = None
+            if az:
+                import importlib
+                globals()[az] = importlib.import_module(module_name)
+            elif objects:
+                # import importlib  # todo better code
+                # for object in objects.split(",")
+                #     globals()[object] = importlib.import_module(name, package=module_name):
+                #### if " as " in object поделить и применить правильно, то есть имя назначить второе, а импортировать из первого
                 exec("from " + module_name + " import " + objects, globals())
             else:
                 import importlib
@@ -184,6 +196,7 @@ class Internal:
         string = "from commands8 import *"  # you need to manually add this string to code :(
         if not quiet:
             print('"'+string+'" copied to clipboard')
+            import copypaste
             copypaste.copy(string)
             pass
 
@@ -219,7 +232,10 @@ Internal.mine_import("colorama")
 colorama.init()
 colorama.deinit()
 Internal.mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
-Internal.mine_import("copypaste")
+if OS.name == "windows":
+    Internal.mine_import("pyperclip", az="copypaste")
+else:
+    Internal.mine_import("copypaste")
 
 
 newline = '\n'  # d string with newline bnl3
@@ -297,6 +313,8 @@ class Str:
             string = str(string)
             if OS.name == "windows":
                 strings = string.split(newline2)
+                if len(strings) == 1:
+                    strings = strings[0].split(newline)
             elif OS.name in ["macos", "linux"]:
                 strings = string.split(newline)
             return strings

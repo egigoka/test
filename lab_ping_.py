@@ -50,7 +50,21 @@ domains = ["ee.local",  # parent domain
 "child.ee.local",  # child domain
 "ee-dc2.child.ee.local",  # child DC
 "ee-dc3.child.ee.local",  # child DC replica
-"ee-member-child.child.ee.local"]  # child member
+"ee-member-child.child.ee.local",  # child member
+"ee2.local",  # second fores
+"ee-dc5.ee2.local",  # second forest parent DC
+"paralleltree.local",  # parallel tree to ee.local
+"ee-dc4.paralleltree.local"]  # parallel tree DC
+
+
+
+# NETBIOS check
+#domains += ["ee-dc1"]
+#domains += ["ee-dc2"]
+#domains += ["ee-dc3"]
+#domains += ["ee-member-child"]
+#domains += ["ee-dc4"]
+#domains += ["ee-dc5"]
 
 
 if State.online_only:
