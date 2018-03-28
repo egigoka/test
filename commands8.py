@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.16-alpha"
+__version__ = "8.0.17-alpha"
 import os
 import sys
 import copy
@@ -138,7 +138,7 @@ class Internal:
         if not justdownload:
             if az and objects:
                 if len(objects.split(",")) == 1:
-                    globals()[az] = importlib.import_module(objects[0], package=module_name) 
+                    globals()[az] = importlib.import_module(objects[0], package=module_name)
                 print("Internal.mine_import doesn't support both attributes use 'az' and 'objects', so only 'objects' will apply.")
                 az = None
             if az:
