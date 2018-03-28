@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.15-alpha"
+__version__ = "8.0.16-alpha"
 import os
 import sys
 import copy
@@ -840,6 +840,8 @@ class Json():
 class List:
     @staticmethod
     def flatterize(input_list):
+        if not ((isinstance(input_list,list)) or (isinstance(input_list,tuple))):
+            raise TypeError("object of type '"+str(type(input_list))+"' can't be flatterized")
         output_list = copy.deepcopy(list(input_list))
         cnt = 0
         for object in output_list:

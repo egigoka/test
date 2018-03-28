@@ -1,8 +1,9 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
 import pyautogui
-from commands7 import *
+from commands8 import *
 #import tripleclick
+import pyautogui
 
 winver = str(OS.windows_version)
 
@@ -197,9 +198,9 @@ class Exceptions:
                 message("LO must be in work!")
 
 
-lin_servers = {
-'192.168.99.7':{},
-'192.168.99.9':{}}
+lin_servers = {}
+#'192.168.99.7':{},
+#'192.168.99.9':{}}
 
 
 for ip, login in lin_servers.items():
@@ -393,14 +394,14 @@ try:
                         Open.Solvo.Menu.Documents.shipments()
                 move(pos_last)
                 unload()
-            
+
             def go_to_end():
                 Open.solvo()
                 Open.Solvo.Menu.Documents.shipments()
                 Click.left(move(wait_locate("светлозел", every=0.1, timeout=30, safe=True)))
                 hotkey('end')
-            
-            
+
+
             go_to_end()
             while True:
                 BenchMark2 = get_Bench()
@@ -412,7 +413,7 @@ try:
                     except IndexError as err:
                         unload_last()
                         go_to_end()
-                    
+
 
                         # Scroll.up()
                 move(position)
@@ -457,7 +458,7 @@ try:
 
     else:
         def main():
-            message("""obo - открузка накладных(заказов)
+            Print.debug("""obo - открузка накладных(заказов)
 batch - отгрузка рейсов
 obozero - подготовка накладных в рейсе (заказы с отправкой не равной нулю)
 lo - подтверждение ЛО""")
