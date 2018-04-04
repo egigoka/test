@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.17-alpha"
+__version__ = "8.0.18-alpha"
 import os
 import sys
 import copy
@@ -877,10 +877,21 @@ class Process():
     def kill(process):
         if OS.name == "windows":
             command_ = "taskkill /f /im " + str(process) + ".exe"
-            os.system(command_)
+            try:
+                int(process)
+                command_ = "taskkill /f /pid " + str(process)
+            except:
+                pass
         if OS.name == "macos":
             command_ = "killall " + str(process)
-            os.system(command_)
+            try:
+                int(process)
+                command_ = "kill " + str(process)
+            except:
+                pass
+        else:
+            Gui.warning("OS " + str(OS.name) + " not supported")
+        os.system(command_)
     @staticmethod
     def start(*arguments, new_window=False, debug=False, pureshell=False):
         arguments = List.flatterize(arguments)
