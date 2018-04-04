@@ -24,23 +24,25 @@ class Git:
 
 
     @classmethod
-    def update(cls, message, path="github"):
+    def update(cls, message, path="https://github.com/egigoka/test.git"):
         cls.add(".")
         cls.commit(message)
         cls.push(path, upstream=True)
 
 
-arguments = list(sys.argv)
-arguments.pop(0)
-string = "small update (default message)"
-try:
-    arguments[0]
-    string = ""
-    for arg in arguments:
-        string += arg + " "
-    string = string.rstrip(" ")
-except IndexError:
-    input_string = input("Enter a description or press Enter to defaul message: ")
-    if input_string:
-        string = input_string
-Git.update(string)
+        
+if __name__ == "__main__":
+    arguments = list(sys.argv)
+    arguments.pop(0)
+    string = "small update (default message)"
+    try:
+        arguments[0]
+        string = ""
+        for arg in arguments:
+            string += arg + " "
+        string = string.rstrip(" ")
+    except IndexError:
+        input_string = input("Enter a description or press Enter to defaul message: ")
+        if input_string:
+            string = input_string
+    Git.update(string)
