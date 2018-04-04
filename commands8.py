@@ -882,7 +882,7 @@ class Process():
                 command_ = "taskkill /f /pid " + str(process)
             except:
                 pass
-        if OS.name == "macos":
+        elif OS.name == "macos":
             command_ = "killall " + str(process)
             try:
                 int(process)
@@ -1094,9 +1094,22 @@ class macOS:
 class Gui:
     def warning(message):
         try:
-            if (sys.argv[0][-3] != ".py") or (sys.argv[0] != ""):
+            try:
+                sys.ps1
+                sys.ps2
+                interactive_mode = True
+            except:
+                interactive_mode = False
+            Print.debug("interactive_mode", interactive_mode)
+            try:
+                not_dot_py = sys.argv[0][-3] != ".py"  # todo check logic
+            except:
+                not_dot_py = True
+            
+            if (not_dot_py or (sys.argv[0] != "")) and (not interactive_mode):
                 Print.debug("sys.argv", sys.argv)
-                raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
+                Print.debug("Something wrong with sys.argv. Tkinter doesn't like it.")
+                input()
         except IndexError:
             Print.debug("sys.argv", sys.argv)
             raise RuntimeError ("Something wrong with sys.argv. Tkinter doesn't like it.")
