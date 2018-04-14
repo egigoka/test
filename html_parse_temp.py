@@ -459,3 +459,14 @@ for png in soup.find_all("img", {"class": "event__img"}):
     f.close()
     Print.debug(png_base64, png_recovered, raw=True)
     input("teeestasdfasd")
+
+
+from temp_html import xml
+return_s = xml
+b64strings = []
+
+while return_s:
+    b64string, return_s = Str.substring(return_s, before="", after="", return_after_substring=True)
+    b64b64strings.append(b64b64string)
+
+print(b64strings)

@@ -373,6 +373,7 @@ class Str:
                 after_substring = string[end_at:]
             else:
                 substring = string[startfrom:]
+                after_substring = ""
         else:
             substring = string[startfrom:]
         if return_after_substring:
