@@ -15,6 +15,6 @@ class Base64
     @staticmethod
     def to_png(string, filename)
         png_recovered = base64.decodestring(string.encode('ascii'))  # decode string to pure picture
-        f = open(str(cnt)+".png", "wb")
+        f = open(str(filename)+".png", "wb")
         f.write(png_recovered)
         f.close()

@@ -452,13 +452,9 @@ for png in soup.find_all("img", {"class": "event__img"}):
     cnt+=1
     png_base64 = Str.substring(png.prettify(), before='src="data:image/png;base64,', after='" ')
     print(len(png_base64))
-    import base64
-    png_recovered = base64.decodestring(png_base64.encode('ascii'))  # decode string to pure picture
-    f = open(str(cnt)+".png", "wb")
-    f.write(png_recovered)
-    f.close()
-    Print.debug(png_base64, png_recovered, raw=True)
-    input("teeestasdfasd")
+    import base64_8
+    #Base64.to_png(png_base64, filename=cnt)
+    #Print.debug(png_base64, png_recovered, raw=True)
 
 
 from temp_html import xml
