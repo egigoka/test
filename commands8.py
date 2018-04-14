@@ -252,7 +252,7 @@ class Print():
     def debug(*arguments, raw=False):  # d just more notable print, only for
       # d debugging
         line = "-" * Console.width()
-        print("Debug sheet:")
+        print("<<<End of debug sheet:>>>")
         for arg in arguments:
             print(line, end="")
             if raw:
@@ -260,6 +260,7 @@ class Print():
             else:
                 print(arg)
             print(line)
+        print("<<<End of debug sheet>>>")
 
     @staticmethod
     def rewrite(*arguments, sep=" ", raw=False):  # d string, that can be rewritable

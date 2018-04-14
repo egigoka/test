@@ -390,11 +390,44 @@ Best of shnit 2017
 Турецкое седло
 Приз фестиваля «Кинотавр» за музыку к фильму
 премьера
-Дом Кино
-Яндекс.Афиша
-
-"""
+Дом Кино"""
 lines = Str.newlines_to_strings(sss)
 
-Print.debug(*List.split_every(lines, 2))
-Print.debug(lines)
+splitted = []
+cnt = 0
+
+for line in lines:
+    try:
+        splitted[cnt]
+    except IndexError:
+        #output[cnt] = list()
+        splitted.append(list())
+    splitted[cnt].append(line)
+    for cinema in ["кинотеатрах", "кинотеатре", "Родина", "Каро", "Дом Кино", "Angleterre Cinema Lounge", "Аврора"]:
+        if cinema in line:
+            cnt+=1
+
+Print.debug(*splitted)
+
+bd = []
+cnt=0
+for lll in splitted:
+    bd.append({})
+    cnt+=1
+    #print(len(lll))
+    #if len(lll)>7:
+    #    print(lll)
+    try:
+        bd[cnt]["filmname"] = lll[0]
+    except IndexError:
+        print(lll)
+        input("блядб")
+    try:
+        Str.get_integers(lll[2])[1]
+        bd[cnt]["rating"] = lll[2]
+        bd[cnt]["genre"] = lll[3]
+    except IndexError:
+        bd[cnt]["rating"] = "нет :("
+        bd[cnt]["rating"] = lll[2]
+
+Print.debug(*bd)
