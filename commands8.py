@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.18-alpha"
+__version__ = "8.0.19-alpha"
 import os
 import sys
 import copy
@@ -870,6 +870,11 @@ class List:
             cnt+=1
         return output_list
 
+    @staticmethod
+    def split_every(list_input, count):
+        count = int(count)
+        output_lists = [list_input[x:x+count] for x in range(0, len(list_input), count)]  # https://stackoverflow.com/questions/9671224/split-a-python-list-into-other-sublists-i-e-smaller-lists
+        return output_lists  # todo отдебажить пограничные моменты
 
 
 class Process():
@@ -1105,7 +1110,7 @@ class Gui:
                 not_dot_py = sys.argv[0][-3] != ".py"  # todo check logic
             except:
                 not_dot_py = True
-            
+
             if (not_dot_py or (sys.argv[0] != "")) and (not interactive_mode):
                 Print.debug("sys.argv", sys.argv)
                 Print.debug("Something wrong with sys.argv. Tkinter doesn't like it.")
