@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.19-alpha"
+__version__ = "8.0.20-alpha"
 import os
 import sys
 import copy
@@ -252,7 +252,7 @@ class Print():
     def debug(*arguments, raw=False):  # d just more notable print, only for
       # d debugging
         line = "-" * Console.width()
-        print("<<<End of debug sheet:>>>")
+        print("<<<Debug sheet:>>>")
         for arg in arguments:
             print(line, end="")
             if raw:
@@ -356,8 +356,10 @@ class Str:
         return cls.leftpad(string, leng, ch=ch, rightpad=True)
 
     @staticmethod
-    def substring(string, before, after=None):  # return string that between
-      # d "before", and "after" strings, not including those.
+    def substring(string, before, after=None, return_after_substring=False):  # return
+      # d string that between "before", and "after" strings, not including
+      # d those. If "return_after_substring", return typle with substring and
+      # d part of string after it.
         startfrom = string.find(before)
         if startfrom != -1:
             startfrom = string.find(before) + len(before)
@@ -368,10 +370,13 @@ class Str:
             if end_at != -1:
                 end_at = startfrom + string[startfrom:].find(after)
                 substring = string[startfrom:end_at]
+                after_substring = string[end_at:]
             else:
                 substring = string[startfrom:]
         else:
             substring = string[startfrom:]
+        if return_after_substring:
+            return substring, after_substring
         return substring
 
     @staticmethod

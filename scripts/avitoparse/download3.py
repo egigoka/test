@@ -15,9 +15,10 @@ sys.path.append("..")
 from commands7 import *
 
 
-def urlish(string):
+def urlish(string, force_lowercase=True):
     # приведение имени в строку, поддерживаемую в url
-    string = string.lower()
+    if force_lowercase:
+        string = string.lower()
     string = string.replace(' ', '+')
     # восстановление полной ссылки из обрезка в html
     if string[:2] == "//":
@@ -290,8 +291,8 @@ def main():
 
     Bench.end()
 
-
-main()
+if __name__ == '__main__':
+    main()
 
 
 # old pages loader from download2 without factory of Page's

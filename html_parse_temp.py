@@ -11,6 +11,11 @@ sys.path.append(r".\term")
 from commands8 import *
 from temp_html import html as html_doc
 from bs4 import BeautifulSoup
+sys.path.append(Path.extend(".", "scripts", "avitoparse"))
+#sys.path.append(r".\scripts\avitoparse")
+#sys.path.append(r"./scripts/avitoparse")
+from download3 import urlish
+
 soup = BeautifulSoup(html_doc, 'html.parser')
 #Print.debug("*soup.find_all()", *soup.find_all("img",class="image event__img"))
 sss = """Гоголь. Вий
@@ -407,27 +412,50 @@ for line in lines:
         if cinema in line:
             cnt+=1
 
-Print.debug(*splitted)
+#Print.debug(*splitted)
 
 bd = []
-cnt=0
-for lll in splitted:
+cnt=-1
+for film in splitted:
     bd.append({})
     cnt+=1
-    #print(len(lll))
-    #if len(lll)>7:
-    #    print(lll)
+    #print(len(film))
+    #if len(film)>7:
+    #    print(film)
+    bd[cnt]["filmname"] = film[0]
+    bd[cnt]["youtube_link"] = "https://www.youtube.com/results?search_query=" + urlish(bd[cnt]["filmname"]+" трейлер", force_lowercase=False)
     try:
-        bd[cnt]["filmname"] = lll[0]
-    except IndexError:
-        print(lll)
-        input("блядб")
-    try:
-        Str.get_integers(lll[2])[1]
-        bd[cnt]["rating"] = lll[2]
-        bd[cnt]["genre"] = lll[3]
+        Str.get_integers(film[2])[1]
+        bd[cnt]["rating"] = film[2]
+        bd[cnt]["genre"] = film[3]
     except IndexError:
         bd[cnt]["rating"] = "нет :("
-        bd[cnt]["rating"] = lll[2]
+        bd[cnt]["genre"] = film[2]
+    ##############Print.debug(splitted[cnt],bd[cnt])  # - инфа
+#Print.debug(*bd)
+print(len(bd))
 
-Print.debug(*bd)
+print(len(soup.find_all("div", {"class": "event"})))
+
+for aaa in soup.find_all("div", {"class": "event"}):
+    aaa = aaa.a  # гениально, я себя обожаю
+    aaa = str(aaa)
+    aaa = Str.substring(aaa, before='href="', after='"')
+    #Print.debug("https://afisha.yandex.ru"+aaa.replace("?schedule-preset=tomorrow", "?schedule-date=2018-04-15"))
+
+print(len(soup.find_all("img", {"class": "event__img"})))
+for png in soup.find_all("img", {"class": "event__img"}):
+    #Print.debug(png.prettify(), Str.substring(png.prettify(), before='src="data:image/png;base64,', after='" '))
+    pass
+cnt=0
+for png in soup.find_all("img", {"class": "event__img"}):
+    cnt+=1
+    png_base64 = Str.substring(png.prettify(), before='src="data:image/png;base64,', after='" ')
+    print(len(png_base64))
+    import base64
+    png_recovered = base64.decodestring(png_base64.encode('ascii'))  # decode string to pure picture
+    f = open(str(cnt)+".png", "wb")
+    f.write(png_recovered)
+    f.close()
+    Print.debug(png_base64, png_recovered, raw=True)
+    input("teeestasdfasd")
