@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.1.1-experimental"
+__version__ = "8.2.0-experimental"
 import os
 import sys
 import copy
@@ -569,8 +569,12 @@ class Path:
         return os.path.abspath(path)
 
     @staticmethod
-    def current():
+    def commands8():
         return os.path.dirname(os.path.realpath(__file__))
+
+    @staticmethod
+    def working():
+        return os.getcwd()
 
     @classmethod
     def extend(cls, *paths):  # paths input strings of path pieces, return
