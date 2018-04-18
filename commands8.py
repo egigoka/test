@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.2.0-experimental"
+__version__ = "8.2.8-alpha"
 import os
 import sys
 import copy
 import platform
 import pkgutil
+
+FRACKING_INPUT_DEBUG = False
 
 # todo version diff
 #   todo export script as json?
@@ -41,8 +43,11 @@ def get_Bench(start=False):  # return class with those functions:
             delta_combined = cls.get()
             if not cls.quiet:
                 try:
+                    colorama.init()
                     cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
                 except TypeError:
+                    print(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds")
+                except AttributeError:
                     print(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds")
             return delta_combined
     return Bench
@@ -105,8 +110,8 @@ class Internal:
     def mine_import(module_name, objects=None, justdownload=False, az=None):  # import
       # d module, if module not found, trying to install it by pip
         # check for pip module
-        debug_Bench = get_Bench()
-        debug_Bench.start()
+        if FRACKING_INPUT_DEBUG: debug_Bench = get_Bench()
+        if FRACKING_INPUT_DEBUG: debug_Bench.start()
         def just_install(module_name):
             import pip
             pip.main(['install', module_name])
@@ -153,8 +158,8 @@ class Internal:
             else:
                 import importlib
                 globals()[module_name] = importlib.import_module(module_name)
-        debug_Bench.prefix = module_name + " " + str(objects)
-        debug_Bench.end()
+        if FRACKING_INPUT_DEBUG: debug_Bench.prefix = module_name + " " + str(objects)
+        if FRACKING_INPUT_DEBUG: debug_Bench.end()
 
 
     @staticmethod
@@ -164,7 +169,7 @@ class Internal:
         cnt_of_all_def = 0
         cnt_of_commented_def = 0
 
-        for line in Str.nl(File.read(Path.extend(Path.current(), "commands8.py"))):  # dir ignore
+        for line in Str.nl(File.read(Path.extend(Path.commands8(), "commands8.py"))):  # dir ignore
             if "# dir ignore" not in line:  # dir ignore
                 if "bnl" in line:  # dir ignore
                     print(newline*Str.get_integers(line)[-1], end="")  # dir ignore
@@ -644,8 +649,10 @@ class Dir:
             os.makedirs(filename)
 
     @staticmethod
-    def current(self):  # alias to Path.current
-        return Path.current()
+    def commands8(): return Path.commands8()  # alias to Path.commands8
+
+    @staticmethod
+    def working(): return Path.working()  # alias to Path.working
 
     @staticmethod
     def list_of_files(path):  # return list of files in folder
@@ -841,7 +848,7 @@ class Json():
             json.dump(jsonstring, settingsJsonTextIO)
             settingsJsonTextIO.close()
             if not quiet:
-                print("JSON format succesfull saved")
+                print("JSON succesfull saved")
             if debug:
                 print("sys.argv[0] =",sys.argv[0])
                 print(jsonstring)
@@ -850,8 +857,9 @@ class Json():
                           Path.full(sys.argv[0]))
         json_test_string = cls.load(filename, quiet=True)
         if jsonstring != json_test_string:
+            Print.debug("jsonstring_to_save", jsonstring, "json_test_string_from_file", json_test_string)
             raise IOError("error while saving JSON, try to repair script at path " +
-                          Path.full(sys.argv[0]))
+                          Path.full(sys.argv[0]))  # exception
 
     @classmethod
     def load(cls, filename, quiet = False, debug=False):
@@ -864,7 +872,7 @@ class Json():
             jsonStringInMemory = json.load(settingsJsonTextIO)
             settingsJsonTextIO.close()
             if not quiet:
-                print("JSON format succesfull loaded")
+                print("JSON succesfull loaded")
             if debug:
                 print(jsonStringInMemory)
             return jsonStringInMemory
@@ -1181,6 +1189,11 @@ class Random:
     def float(min, max):  # return random floating number
         return random.uniform(min, max)
 
+    @staticmethod
+    def string(length):
+        import string
+        return ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=length))
+
 
 class Wget:
     @staticmethod
@@ -1216,6 +1229,48 @@ class Int:
             return roots
 
 
+class CLI():
+    @staticmethod
+    def get_y_n(question=""):
+        while True:
+            inputtt = input(str(question) + " (y/n)?")
+            inputtt = inputtt.strip(" ")
+            if inputtt == "y":
+                return True
+            if inputtt == "n":
+                return False
+
+    wait_update_pos = 0
+
+    @classmethod
+    def wait_update(CLI, quiet=False):
+        if CLI.wait_update_pos == 0:
+            stick = "|"
+        elif CLI.wait_update_pos == 1:
+            stick = "/"
+        elif CLI.wait_update_pos == 2:
+            stick = "-"
+        elif CLI.wait_update_pos == 3:
+            stick = "\ "[:1]
+        elif CLI.wait_update_pos == 4:
+            stick = "|"
+        elif CLI.wait_update_pos == 5:
+            stick = "/"
+        elif CLI.wait_update_pos == 6:
+            stick = "-"
+        elif CLI.wait_update_pos == 7:
+            stick = "\ "[:1]
+            CLI.wait_update_pos = -1
+        CLI.wait_update_pos += 1
+        if not quiet:
+            Print.rewrite(stick)
+        else:
+            return stick
+
+    @staticmethod
+    def progressbar(count, of):
+
+        Console.width()
 
 
 class Repl:
