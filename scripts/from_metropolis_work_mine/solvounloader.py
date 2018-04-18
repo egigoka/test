@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 import pyautogui
 from commands8 import *
-#import tripleclick
 import pyautogui
 
-winver = str(OS.windows_version)
+if OS.name == "windows": winver = str(OS.windows_version)
 
 class Arguments:
     for arg in sys.argv:
@@ -218,7 +217,7 @@ class Actions:
                 ok_position = None
                 pb_position = None
             def check_ok_position(timeout=False):
-                if not timer:
+                if not timeout:
                     return locate("окбелаяw"+winver)
                 else:
                     wait_locate("окбелаяw"+winver, timeout=timeout, safe=True)
@@ -316,158 +315,159 @@ class Open:
             #Click.left(move(opened))
 
 
+if __name__ == '__main__':
 
-try:
+    try:
 
-    if Arguments.test:
-        def main():
-            pass
-            # Open.solvo()
+        if Arguments.test:
+            def main():
+                pass
+                # Open.solvo()
 
-    elif Arguments.ctrl_v:
-        def main():
-            hotkey('ctrl', 'v')
+        elif Arguments.ctrl_v:
+            def main():
+                hotkey('ctrl', 'v')
 
-    elif Arguments.lo:
-        def main():
-            try:
+        elif Arguments.lo:
+            def main():
+                try:
+                    while True:
+                        Open.solvo()                                                                # открыть солво
+                        Open.Solvo.Menu.Documents.lo()                                              # открыть окно листов отбора
+                        workarea = wait_locate("светлозел", every=1, timeout=30)                    # найти зелёную рабочую область
+                        Click.left(move(workarea))                                                  # нажать левой кнопкой по рабочей области
+                        sleep(1)                                                                    # подождать, пока всё выделится
+                        dropdown = None                                                             # меню не выпало
+                        while not dropdown:                                                         # пока не выпадет меню:
+                            Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
+                            dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
+                        Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
+                        Click.left(move(wait_locate("окмаленькаяw"+winver, every=1, timeout=60)))        # нажать ОК
+                        Exceptions.Check.must_be_in_work()
+                        Actions.wait_for_done()
+                except RuntimeError:
+                    Windows.lock()
+
+
+        elif Arguments.single_unload:
+            def main():
+                #try:
+                    while True:
+                        BenchMark = get_Bench()
+                        BenchMark.start()
+                        Open.solvo()                                                                    # открыть солво
+                        Open.Solvo.Menu.Documents.orders()                                              # открыть окно заказы
+                        workarea = wait_locate("светлозел", every=1, timeout=30)                        # найти зелёную рабочую область
+                        Click.left(move(workarea))                                                      # нажать левой кнопкой по рабочей области
+                        sleep(State.before_ctrl_a_sleep)
+                        hotkey('ctrl', 'a')                                                             # выделить всё
+                        sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
+                        hotkey('ctrl', 'a')
+                        sleep(State.ctrl_a_sleep)
+                        dropdown = None                                                                 # меню не выпало
+                        while not dropdown:                                                             # пока не выпадет меню:
+                            Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
+                            dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)       # найти Команды...
+                        Click.left(move(dropdown))                                                      # нажать на Команды...
+                        Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))          # нажать на Отгрузить
+
+                        Actions.wait_for_done()                                                         # подождать, пока отгрузится
+                        BenchMark.end()
+                #except RuntimeError:
+                #    Windows.lock()
+
+        elif Arguments.batch_unload:    # рейсы
+            def main():
+
+                def unload():
+                    Click.right()
+                    move(wait_locate("команды...белая", every=0.1, timeout=10))
+                    move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
+                    Click.left()
+
+                def unload_last():
+                    for cnt in Int.from_to(1,2):
+                        try:
+                            pos_last = locate("готовкотгрузкевыделеннаяw"+winver)
+                            break
+                        except IndexError:
+                            Open.Solvo.Menu.Documents.shipments()
+                    move(pos_last)
+                    unload()
+
+                def go_to_end():
+                    Open.solvo()
+                    Open.Solvo.Menu.Documents.shipments()
+                    Click.left(move(wait_locate("светлозел", every=0.1, timeout=30, safe=True)))
+                    hotkey('end')
+
+
+                go_to_end()
                 while True:
-                    Open.solvo()                                                                # открыть солво
-                    Open.Solvo.Menu.Documents.lo()                                              # открыть окно листов отбора
-                    workarea = wait_locate("светлозел", every=1, timeout=30)                    # найти зелёную рабочую область
-                    Click.left(move(workarea))                                                  # нажать левой кнопкой по рабочей области
-                    sleep(1)                                                                    # подождать, пока всё выделится
-                    dropdown = None                                                             # меню не выпало
-                    while not dropdown:                                                         # пока не выпадет меню:
-                        Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
-                        dropdown = wait_locate("подтверждениелобел", every=0.1, timeout=10, safe=True)  # найти Подтверждение ЛО
-                    Click.left(move(dropdown))                                                  # нажать Подтверждение ЛО
-                    Click.left(move(wait_locate("окмаленькаяw"+winver, every=1, timeout=60)))        # нажать ОК
-                    Exceptions.Check.must_be_in_work()
+                    BenchMark2 = get_Bench()
+                    BenchMark2.start()
+                    position = None
+                    while not position:
+                        try:
+                            position = locate("готовкотгрузкесиняяw"+winver, "готовкотгрузкебелаяw"+winver)
+                        except IndexError as err:
+                            unload_last()
+                            go_to_end()
+
+
+                            # Scroll.up()
+                    move(position)
+                    unload()
                     Actions.wait_for_done()
-            except RuntimeError:
-                Windows.lock()
+                    BenchMark2.end()
 
-
-    elif Arguments.single_unload:
-        def main():
-            #try:
+        elif Arguments.single_unload_batch_support:
+            def main():
                 while True:
-                    BenchMark = get_Bench()
-                    BenchMark.start()
-                    Open.solvo()                                                                    # открыть солво
-                    Open.Solvo.Menu.Documents.orders()                                              # открыть окно заказы
-                    workarea = wait_locate("светлозел", every=1, timeout=30)                        # найти зелёную рабочую область
-                    Click.left(move(workarea))                                                      # нажать левой кнопкой по рабочей области
-                    sleep(State.before_ctrl_a_sleep)
-                    hotkey('ctrl', 'a')                                                             # выделить всё
-                    sleep(State.ctrl_a_sleep)                                                       # подождать, пока всё выделится
-                    hotkey('ctrl', 'a')
-                    sleep(State.ctrl_a_sleep)
-                    dropdown = None                                                                 # меню не выпало
-                    while not dropdown:                                                             # пока не выпадет меню:
-                        Click.right(move(workarea))                                                     # нажать правой кнопкой по рабочей области
-                        dropdown = wait_locate("команды...бел", every=0.1, timeout=10, safe=True)       # найти Команды...
-                    Click.left(move(dropdown))                                                      # нажать на Команды...
-                    Click.left(move(wait_locate("отгрузитьбелая", every=0.1, timeout=10)))          # нажать на Отгрузить
+                    Open.solvo()
+                    Open.Solvo.Menu.Documents.orders()
+                    position = None
+                    # Print.debug("position", position)
+                    while not position:
+                        try:
+                            position = locate("собрансиняяw"+winver, "собранзел")
+                        except IndexError as err:
+                            print(err)
+                            move(wait_locate("светлозел", every=1, timeout=30))
+                            Click.left()
+                            Scroll.down(300)
+                    move(position)
+                    Click.right()
+                    move(wait_locate("перейтикэкранубелая", every=0, timeout=20))
+                    move(wait_locate("'отправки'белая", every=0, timeout=20))
+                    Click.left()
+                    Actions.wait_for_done()
+                    position_in_work = None
+                    position_in_work = locate("вработесин", "вработебел", safe=True)  # проверка рейса на собранность
+                    if position_in_work:
+                        message('batch in work')
+                        raise RuntimeError('batch in work')
+                    position = None
+                    while not position:
+                        position = locate("собрансиняяw"+winver, "собранбел")  # уже в отправках
+                    Click.right(move(position))
+                    move(wait_locate("команды...бел", every=0.5, timeout=20))
+                    move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
+                    Click.left()
+                    Actions.wait_for_done()
 
-                    Actions.wait_for_done()                                                         # подождать, пока отгрузится
-                    BenchMark.end()
-            #except RuntimeError:
-            #    Windows.lock()
-
-    elif Arguments.batch_unload:    # рейсы
-        def main():
-
-            def unload():
-                Click.right()
-                move(wait_locate("команды...белая", every=0.1, timeout=10))
-                move(wait_locate("отгрузитьбелая", every=0.1, timeout=30))
-                Click.left()
-
-            def unload_last():
-                for cnt in Int.from_to(1,2):
-                    try:
-                        pos_last = locate("готовкотгрузкевыделеннаяw"+winver)
-                        break
-                    except IndexError:
-                        Open.Solvo.Menu.Documents.shipments()
-                move(pos_last)
-                unload()
-
-            def go_to_end():
-                Open.solvo()
-                Open.Solvo.Menu.Documents.shipments()
-                Click.left(move(wait_locate("светлозел", every=0.1, timeout=30, safe=True)))
-                hotkey('end')
-
-
-            go_to_end()
-            while True:
-                BenchMark2 = get_Bench()
-                BenchMark2.start()
-                position = None
-                while not position:
-                    try:
-                        position = locate("готовкотгрузкесиняяw"+winver, "готовкотгрузкебелаяw"+winver)
-                    except IndexError as err:
-                        unload_last()
-                        go_to_end()
-
-
-                        # Scroll.up()
-                move(position)
-                unload()
-                Actions.wait_for_done()
-                BenchMark2.end()
-
-    elif Arguments.single_unload_batch_support:
-        def main():
-            while True:
-                Open.solvo()
-                Open.Solvo.Menu.Documents.orders()
-                position = None
-                # Print.debug("position", position)
-                while not position:
-                    try:
-                        position = locate("собрансиняяw"+winver, "собранзел")
-                    except IndexError as err:
-                        print(err)
-                        move(wait_locate("светлозел", every=1, timeout=30))
-                        Click.left()
-                        Scroll.down(300)
-                move(position)
-                Click.right()
-                move(wait_locate("перейтикэкранубелая", every=0, timeout=20))
-                move(wait_locate("'отправки'белая", every=0, timeout=20))
-                Click.left()
-                Actions.wait_for_done()
-                position_in_work = None
-                position_in_work = locate("вработесин", "вработебел", safe=True)  # проверка рейса на собранность
-                if position_in_work:
-                    message('batch in work')
-                    raise RuntimeError('batch in work')
-                position = None
-                while not position:
-                    position = locate("собрансиняяw"+winver, "собранбел")  # уже в отправках
-                Click.right(move(position))
-                move(wait_locate("команды...бел", every=0.5, timeout=20))
-                move(wait_locate("подготовитькотгрузкебел", every=0.5, timeout=20))
-                Click.left()
-                Actions.wait_for_done()
-
-    else:
-        def main():
-            Print.debug("""obo - открузка накладных(заказов)
-batch - отгрузка рейсов
-obozero - подготовка накладных в рейсе (заказы с отправкой не равной нулю)
-lo - подтверждение ЛО""")
+        else:
+            def main():
+                Print.debug("""obo - открузка накладных(заказов)
+    batch - отгрузка рейсов
+    obozero - подготовка накладных в рейсе (заказы с отправкой не равной нулю)
+    lo - подтверждение ЛО""")
 
 
 
 
-except KeyboardInterrupt:
-    print("^C")
+    except KeyboardInterrupt:
+        print("^C")
 
 #def main():
 #     while True:
@@ -478,7 +478,5 @@ except KeyboardInterrupt:
 
 
 
-
-main()  # fucking shit
-#tripleclick.main = main
-#tripleclick.start()
+if __name__ == '__main__':
+    main()  # fucking shit

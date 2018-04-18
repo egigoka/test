@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.0.21-alpha"
+__version__ = "8.1.1-experimental"
 import os
 import sys
 import copy
@@ -200,7 +200,6 @@ class Internal:
             copypaste.copy(string)
             pass
 
-
 if OS.display:
     if OS.python_implementation != "pypy":
         if OS.name != "macos:":
@@ -365,7 +364,7 @@ class Str:
             startfrom = string.find(before) + len(before)
         else:
             startfrom = 0
-        if after:
+        if (after) or (after == ""):
             end_at = string[startfrom:].find(after)
             if end_at != -1:
                 end_at = startfrom + string[startfrom:].find(after)
@@ -377,6 +376,15 @@ class Str:
         else:
             substring = string[startfrom:]
         if return_after_substring:
+            #try:
+            #    after_substring
+            #except UnboundLocalError:
+            #    Print.debug("string", string,
+            #                "before", before,
+            #                "after", after,
+            #                "return_after_substring", return_after_substring,
+            #                "substring", substring,
+            #                "after_substring", "UnboundLocalError: local variable 'after_substring' referenced before assignment")
             return substring, after_substring
         return substring
 

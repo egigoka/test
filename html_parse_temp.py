@@ -9,393 +9,25 @@ sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
 from commands8 import *
-from temp_html import html as html_doc
+from base64_8 import *
+from temp_html import sss, html_doc
 from bs4 import BeautifulSoup
 sys.path.append(Path.extend(".", "scripts", "avitoparse"))
 #sys.path.append(r".\scripts\avitoparse")
 #sys.path.append(r"./scripts/avitoparse")
-from download3 import urlish
+#from download3 import urlish
+
+
+def urlish(string, force_lowercase=True):
+    # приведение имени в строку, поддерживаемую в url
+    if force_lowercase:
+        string = string.lower()
+    string = string.replace(' ', '+')
+    return string
 
 soup = BeautifulSoup(html_doc, 'html.parser')
 #Print.debug("*soup.find_all()", *soup.find_all("img",class="image event__img"))
-sss = """Гоголь. Вий
-Есть билеты
-6.5
-ДЕТЕКТИВ
-Гоголь. Вий
-Александр Петров в роли Гоголя
-в 56 кинотеатрах
-Первому игроку приготовиться
-Есть билеты
-7.6
-ФАНТАСТИКА
-Первому игроку приготовиться
-По мотивам романа Эрнеста Клайна
-в 55 кинотеатрах
-Рэмпейдж
-Есть билеты
-6.5
-ФАНТАСТИКА
-Рэмпейдж
-В главной роли Дуэйн Джонсон
-премьера
-в 53 кинотеатрах
-Тихое место
-Есть билеты
-7.2
-УЖАСЫ
-Тихое место
-В главной роли Эмили Блант
-премьера
-в 51 кинотеатре
-Жажда смерти
-Есть билеты
-6.5
-БОЕВИК
-Жажда смерти
-В главной роли Брюс Уиллис
-в 46 кинотеатрах
-Тихоокеанский рубеж 2
-Есть билеты
-6.1
-ФАНТАСТИКА
-Тихоокеанский рубеж 2
-в 41 кинотеатре
-Винчестер. Дом, который построили призраки
-Есть билеты
-5.7
-УЖАСЫ
-Винчестер. Дом, который построили призраки
-В главной роли Хелен Миррен
-в 38 кинотеатрах
-Славные пташки
-Есть билеты
-МУЛЬТФИЛЬМ
-Славные пташки
-премьера
-в 44 кинотеатрах
-Кролик Питер
-Есть билеты
-7.2
-МУЛЬТФИЛЬМ
-Кролик Питер
-Экранизация книги Беатрис Поттер
-в 41 кинотеатре
-Мария Магдалина
-Есть билеты
-6.6
-ДРАМА
-Мария Магдалина
-В главных ролях Руни Мара и Хоакин Феникс
-в 26 кинотеатрах
-Я худею
-Есть билеты
-7.1
-КОМЕДИЯ
-Я худею
-В ролях Ирина Горбачёва и Сергей Шнуров
-в 21 кинотеатре
-Девушки и танки
-Есть билеты
-АНИМЕ
-Девушки и танки
-в 21 кинотеатре
-Мульт в кино. Выпуск №73. Просто космос!
-Есть билеты
-МУЛЬТФИЛЬМ
-Мульт в кино. Выпуск №73. Просто космос!
-премьера сегодня
-в 31 кинотеатре
-Зачётный препод 3
-Есть билеты
-6.0
-КОМЕДИЯ
-Зачётный препод 3
-премьера
-в 16 кинотеатрах
-Tomb Raider: Лара Крофт
-Есть билеты
-6.4
-БОЕВИК
-Tomb Raider: Лара Крофт
-В главной роли Алисия Викандер
-в 15 кинотеатрах
-Белль и Себастьян
-Есть билеты
-7.5
-ПРИКЛЮЧЕНИЯ
-Белль и Себастьян
-По мотивам повестей Сесиль Обри
-в 21 кинотеатре
-Взрослые игры
-Есть билеты
-6.6
-КОМЕДИЯ
-Взрослые игры
-в 11 кинотеатрах
-Каникулы президента
-Есть билеты
-4.7
-КОМЕДИЯ
-Каникулы президента
-В ролях Настасья Самбурская и Гоша Куценко
-в 11 кинотеатрах
-Не в себе
-Есть билеты
-6.8
-УЖАСЫ
-Не в себе
-От режиссёра фильмов «Эрин Брокович» и «Траффик»
-в 10 кинотеатрах
-Операция «Шаровая молния»
-Есть билеты
-6.2
-ТРИЛЛЕР
-Операция «Шаровая молния»
-в 10 кинотеатрах
-Пассажир
-Есть билеты
-6.6
-БОЕВИК
-Пассажир
-В главной роли Лиам Нисон
-в 7 кинотеатрах
-Тебя никогда здесь не было
-Есть билеты
-7.2
-ТРИЛЛЕР
-Тебя никогда здесь не было
-В главной роли Хоакин Феникс
-в 7 кинотеатрах
-Невероятная история о гигантской груше
-Есть билеты
-МУЛЬТФИЛЬМ
-Невероятная история о гигантской груше
-По книге Якоба Мартина Стрида
-в 10 кинотеатрах
-Шерлок Гномс
-Есть билеты
-5.8
-МУЛЬТФИЛЬМ
-Шерлок Гномс
-От режиссёра мультфильма «Кунг-фу Панда»
-в 8 кинотеатрах
-Жили-были
-Есть билеты
-КОМЕДИЯ
-Жили-были
-В ролях Фёдор Добронравов и Ирина Розанова
-в 5 кинотеатрах
-О чём говорят мужчины. Продолжение
-Есть билеты
-7.0
-КОМЕДИЯ
-О чём говорят мужчины. Продолжение
-С участием Татьяны Догилевой и Леонида Каневского
-в 5 кинотеатрах
-Большой злой Лис и другие сказки
-Есть билеты
-МУЛЬТФИЛЬМ
-Большой злой Лис и другие сказки
-Премия «Сезар» за лучший анимационный фильм
-премьера
-в 7 кинотеатрах
-Голодные сердца
-Есть билеты
-6.8
-ТРИЛЛЕР
-Голодные сердца
-По мотивам романа Марко Францозо
-в 4 кинотеатрах
-Ван Гог. С любовью, Винсент
-Есть билеты
-8.3
-АВТОРСКОЕ КИНО
-Ван Гог. С любовью, Винсент
-Озвучивание от Константина Хабенского
-в 3 кинотеатрах
-Три билборда на границе Эббинга, Миссури
-Есть билеты
-8.2
-АВТОРСКОЕ КИНО
-Три билборда на границе Эббинга, Миссури
-«Золотой глобус» за лучший драматический фильм
-в 3 кинотеатрах
-Свинья
-Есть билеты
-ДРАМА
-Свинья
-в 3 кинотеатрах
-Карп отмороженный
-Есть билеты
-6.9
-АВТОРСКОЕ КИНО
-Карп отмороженный
-В ролях Алиса Фрейндлих и Евгений Миронов
-в 2 кинотеатрах
-Чёрная Пантера
-Есть билеты
-6.8
-ФАНТАСТИКА
-Чёрная Пантера
-В ролях Лупита Нионго и Мартин Фриман
-в 2 кинотеатрах
-Лёд
-Есть билеты
-6.9
-МЕЛОДРАМА
-Лёд
-в 2 кинотеатрах
-Призрачная нить
-Есть билеты
-7.2
-АВТОРСКОЕ КИНО
-Призрачная нить
-От создателя фильмов «Магнолия» и «Нефть»
-в 2 кинотеатрах
-Леди Бёрд
-Есть билеты
-7.2
-ДРАМА
-Леди Бёрд
-«Золотой глобус» за лучшую женскую роль
-в 2 кинотеатрах
-Мадам
-Есть билеты
-6.5
-АВТОРСКОЕ КИНО
-Мадам
-С участием Харви Кейтеля
-в 2 кинотеатрах
-Подлинный Вермеер
-Есть билеты
-ДРАМА
-Подлинный Вермеер
-в 2 кинотеатрах
-Земля: Один потрясающий день
-Есть билеты
-8.2
-ДОКУМЕНТАЛЬНОЕ КИНО
-Земля: Один потрясающий день
-Озвучивание от Николая Дроздова
-в 2 кинотеатрах
-Дикие предки
-Есть билеты
-6.8
-МУЛЬТФИЛЬМ
-Дикие предки
-От создателя мультфильмов «Уоллес и Громит»
-в 2 кинотеатрах
-Осенняя соната
-Есть билеты
-8.0
-МУЗЫКАЛЬНЫЙ ФИЛЬМ
-Осенняя соната
-Фильм Ингмара Бергмана
-в 2 кинотеатрах
-Проект Флорида
-Есть билеты
-7.2
-ДРАМА
-Проект Флорида
-С участием Уиллема Дефо
-Дом Кино
-Italian Best Shorts 2: Любовь в вечном городе
-Есть билеты
-КОРОТКОМЕТРАЖНЫЙ ФИЛЬМ
-Italian Best Shorts 2: Любовь в вечном городе
-Родина
-Апокалипсис сегодня
-Есть билеты
-8.1
-ВОЕННЫЙ
-Апокалипсис сегодня
-Аврора
-Гонка века
-Есть билеты
-6.4
-ДРАМА
-Гонка века
-В главных ролях Колин Фёрт и Рэйчел Вайс
-завтра 15 апреля, 20:20
-Angleterre Cinema Lounge
-Oscar Shorts 2017: Фильмы
-Есть билеты
-7.5
-АВТОРСКОЕ КИНО
-Oscar Shorts 2017: Фильмы
-Дом Кино
-Ева
-Есть билеты
-5.3
-ТРИЛЛЕР
-Ева
-Экранизация романа Джеймса Хэдли Чейза
-Дом Кино
-12 мелодий любви
-Есть билеты
-5.4
-АВТОРСКОЕ КИНО
-12 мелодий любви
-Фильм Клода Лелуша
-Дом Кино
-На пределе
-Есть билеты
-7.2
-АВТОРСКОЕ КИНО
-На пределе
-«Золотой глобус» за лучший иностранный фильм
-Дом Кино
-Город кошек
-Есть билеты
-7.8
-АВТОРСКОЕ КИНО
-Город кошек
-Дом Кино
-Хэппи-энд
-Есть билеты
-6.7
-АВТОРСКОЕ КИНО
-Хэппи-энд
-В главных ролях Изабель Юппер и Жан-Луи Трентиньян
-Дом Кино
-Идеальные незнакомцы
-Есть билеты
-7.6
-АВТОРСКОЕ КИНО
-Идеальные незнакомцы
-Дом Кино
-За пропастью во ржи
-Есть билеты
-7.0
-ДРАМА
-За пропастью во ржи
-В главных ролях Кевин Спейси и Николас Холт
-Дом Кино
-Аритмия
-Есть билеты
-7.8
-АВТОРСКОЕ КИНО
-Аритмия
-Главный приз фестиваля «Кинотавр»
-Каро 7 Лиговъ
-Фестиваль короткометражной анимации «А4»
-Есть билеты
-МУЛЬТФИЛЬМ
-Фестиваль короткометражной анимации «А4»
-Родина
-Best of shnit 2017
-Есть билеты
-КОРОТКОМЕТРАЖНЫЙ ФИЛЬМ
-Best of shnit 2017
-Родина
-Турецкое седло
-Есть билеты
-ДРАМА
-Турецкое седло
-Приз фестиваля «Кинотавр» за музыку к фильму
-премьера
-Дом Кино"""
+
 lines = Str.newlines_to_strings(sss)
 
 splitted = []
@@ -448,21 +80,114 @@ for png in soup.find_all("img", {"class": "event__img"}):
     #Print.debug(png.prettify(), Str.substring(png.prettify(), before='src="data:image/png;base64,', after='" '))
     pass
 cnt=0
-for png in soup.find_all("img", {"class": "event__img"}):
-    cnt+=1
-    png_base64 = Str.substring(png.prettify(), before='src="data:image/png;base64,', after='" ')
-    print(len(png_base64))
-    import base64_8
-    #Base64.to_png(png_base64, filename=cnt)
-    #Print.debug(png_base64, png_recovered, raw=True)
+#for png in soup.find_all("img", {"class": "event__img"}):
+#    cnt+=1
+#    png_base64 = Str.substring(png.prettify(), before='src="data:image/png;base64,', after='" ')
+#    print(len(png_base64))
+#    import base64_8
+#    #Base64.to_png(png_base64, filename=cnt)
+#    #Print.debug(png_base64, png_recovered, raw=True)
 
 
-from temp_html import xml
-return_s = xml
-b64strings = []
+#from temp_html import xml
+#return_s = xml
+#b64strings = []
+#cnt = 0
+#while return_s:
+#    cnt+=1
+#    Print.rewrite(cnt)
+#    print()
+#    b64string, return_s = Str.substring(return_s, before="data:image/png;base64,", after=")", return_after_substring=True)
+#    print("len(return_s)", len(return_s), "len(b64string)", len(b64string), "len(b64strings)", len(b64strings))
+#    if b64string == "":
+#        break
+#    b64strings.append(b64string)
 
-while return_s:
-    b64string, return_s = Str.substring(return_s, before="", after="", return_after_substring=True)
-    b64b64strings.append(b64b64string)
+#print(b64strings)
+#cnt = 0
+#for b64string in b64strings:
+#    cnt += 1
+#    Base64.to_png(b64string, cnt)
 
-print(b64strings)
+import tmdbsimple as tmdb
+import uuid
+
+tmdb.API_KEY = 'f7b34fec9298959611b1a513cdb48c0d'
+
+class Tmdb:
+    @staticmethod
+    def image(url, width="original", outputfile=str(uuid.uuid4())+".png", no_download=False):
+        width_symbol = ""
+        if width != "original":
+            width_symbol = "w"
+
+        url = "https://image.tmdb.org/t/p/" + width_symbol + str(width) + str(url)
+        if not no_download: Wget.download(url=url, output=outputfile)
+        return url
+
+    @classmethod
+    def downloadimage(cls, film_name, outputfile, width, no_download):
+        Print.rewrite("-")
+        search = tmdb.Search()
+        response = search.movie(query=film_name)
+        Print.rewrite(backslash)
+        if response["total_results"] == 1:
+            print("all okay")
+            filmid = search.results[0]["id"]
+        else:
+            cnt = 0
+            Print.rewrite("|")
+            filmid = None
+            failsafe_None_filmid_cnt = 0
+            while not filmid:
+                if failsafe_None_filmid_cnt < 1000:
+                    failsafe_None_filmid_cnt += 1
+                else:
+                    raise UnboundLocalError("what wrong with " + film_name + "?")
+                Print.rewrite("/"+str(len(response)))
+                print("Все варианты:")
+                for film in search.results:
+                    print(film["original_title"] + "(" + str(film['release_date']) + ")")
+                print()
+                for film in search.results:
+                    cnt+=1
+                    print(film_name, "is", film["original_title"]+"("+str(film['release_date'])+")?")
+
+                    answer = None
+                    # answer = "y"  # заглушка
+                    while not answer:
+                        input_ = input("y/n?")
+                        if input_ == "y":
+                            answer = "y"
+                        elif input_ == "n":
+                            answer = "n"
+                        else:
+                            pass
+
+                    if answer == "y":
+                        filmid = film["id"]
+                        break
+
+
+        return Tmdb.image(tmdb.Movies(filmid).info()['backdrop_path'],
+                            outputfile=outputfile,width=width, no_download=no_download)
+
+
+cnt = 0
+for film in bd:
+    cnt += 1
+    print(cnt)
+    if (film["filmname"] not in ["Мульт в кино. Выпуск №73. Просто космос!",
+                                "Italian Best Shorts 2: Любовь в вечном городе",
+                                "Oscar Shorts 2017: Фильмы",
+                                "Фестиваль короткометражной анимации «А4»",
+                                "Best of shnit 2017"]):
+        bd[cnt-1]["img"] = Tmdb.downloadimage(film["filmname"], str(cnt)+"_"+film["filmname"]+".png", width=200, no_download=True)
+
+
+Json.save("films.json", bd)
+#movie = tmdb.Movies(123)
+#print(movie.info())
+
+#Tmdb.image(movie.info()['backdrop_path'])
+#Tmdb.image(movie.info()['poster_path'])
