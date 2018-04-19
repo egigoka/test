@@ -25,9 +25,13 @@ except FileNotFoundError:
 except IndexError:
     filename = Path.extend(Path.commands8(), "testacl", "text.txt")
 
-
+file_operations = True
 while not os.path.isfile(filename):
     filename = input("Enter filename: ")
+    File.create(Path.extend(Path.working(), filename))
+    if filename == "":
+        file_operations = False
+        break
 
 
 users = {}
@@ -35,6 +39,7 @@ sd = None
 dacl = None
 backupjsonfile = filename+"_bak.json"
 userscreatedjsonfile = Path.extend(Path.working(), "userscreated.json")
+
 
 def dirify(object):
     for subobj in dir(object):
@@ -139,61 +144,63 @@ def count_of_users():
     a = Str.nl(a)
     print(len(a))
 
-print(newline, "file", filename, "has", ace_count(), "ACE's", newline)
 
-if CLI.get_y_n("Save ACEs"):
-    json_string = {}
-    for i in Int.from_to(0, ace_count()-1):
-        i = str(i)
-        json_string[i] = {}
-        tempace = dacl.GetAce(int(i))
-        json_string[i]["0"] = 1
-        json_string[i]["1"] = tempace[1]
-        json_string[i]["2"] = win32security.ConvertSidToStringSid(tempace[2])
-        Print.rewrite(CLI.wait_update(quiet=True), "Saving", tempace[2])
-    Print.rewrite(" "*Console.width())
-    if debug_verbose: Print.debug(json_string)
-    Json.save(backupjsonfile, json_string, quiet=debug_verbose)
-    json_string = Json.load(backupjsonfile, quiet=debug_verbose)
-    if debug_verbose: print("file", filename, "have", ace_count(), "ACE's")
-    if debug_verbose: print("backup file", backupjsonfile, "have", len(json_string), "ACE's")
+if file_operations:
+    print(newline, "file", filename, "has", ace_count(), "ACE's", newline)
 
-if ace_count() == 0:
-    print("DACL already clean")
-else:
-    if CLI.get_y_n("flush ACL"):
-        flush_acl()
+    if CLI.get_y_n("Save ACEs"):
+        json_string = {}
+        for i in Int.from_to(0, ace_count()-1):
+            i = str(i)
+            json_string[i] = {}
+            tempace = dacl.GetAce(int(i))
+            json_string[i]["0"] = 1
+            json_string[i]["1"] = tempace[1]
+            json_string[i]["2"] = win32security.ConvertSidToStringSid(tempace[2])
+            Print.rewrite(CLI.wait_update(quiet=True), "Saving", tempace[2])
+        Print.rewrite(" "*Console.width())
+        if debug_verbose: Print.debug(json_string)
+        Json.save(backupjsonfile, json_string, quiet=debug_verbose)
+        json_string = Json.load(backupjsonfile, quiet=debug_verbose)
+        if debug_verbose: print("file", filename, "have", ace_count(), "ACE's")
+        if debug_verbose: print("backup file", backupjsonfile, "have", len(json_string), "ACE's")
 
-cnt = 0
-# if ace_count() == 0:
-if CLI.get_y_n("Flood ACL"):
-    try:
-        while True:
-            if cnt%5 == 0:
-                Print.rewrite(CLI.wait_update(quiet=True) + str(cnt))
-            level = 1
-            binary_mask = 2032127
-            username = create_user()
-            SID_object = win32security.LookupAccountName("", username)[0]
-            dacl.AddAccessAllowedAce(level, binary_mask, SID_object)
-            save_dacl()
-            cnt += 1
-            #print(cnt)
-    except pywintypes.error as err:
-        Print.debug(err, "max count of ACE's is", ace_count())
-# else:
-    # print("flood test isn't check good if you didn't flush DACL")
+    if ace_count() == 0:
+        print("DACL already clean")
+    else:
+        if CLI.get_y_n("flush ACL"):
+            flush_acl()
 
-if CLI.get_y_n("Restore ACEs"):
-    json_string = Json.load(backupjsonfile, quiet=debug_verbose)
-    if debug_verbose: print("file", filename, "has", ace_count(), "ACE's before restore")
-    if debug_verbose: print("backup file", backupjsonfile, "have", len(json_string), "ACE's")
-    for int_, ace in Dict.iterable(json_string):
-        dacl.AddAccessAllowedAce(json_string[int_]["0"], json_string[int_]["1"], win32security.ConvertStringSidToSid(json_string[int_]["2"]))
-        Print.rewrite(CLI.wait_update(quiet=True), "Restoring", json_string[int_]["2"])
-    Print.rewrite(" "*Console.width())
-    save_dacl()
-    if debug_verbose: print("file", filename, "have", ace_count(), "ACE's now")
+    cnt = 0
+    # if ace_count() == 0:
+    if CLI.get_y_n("Flood ACL"):
+        try:
+            while True:
+                if cnt%5 == 0:
+                    Print.rewrite(CLI.wait_update(quiet=True) + str(cnt))
+                level = 1
+                binary_mask = 2032127
+                username = create_user()
+                SID_object = win32security.LookupAccountName("", username)[0]
+                dacl.AddAccessAllowedAce(level, binary_mask, SID_object)
+                save_dacl()
+                cnt += 1
+                #print(cnt)
+        except pywintypes.error as err:
+            Print.debug(err, "max count of ACE's is", ace_count())
+    # else:
+        # print("flood test isn't check good if you didn't flush DACL")
+
+    if CLI.get_y_n("Restore ACEs"):
+        json_string = Json.load(backupjsonfile, quiet=debug_verbose)
+        if debug_verbose: print("file", filename, "has", ace_count(), "ACE's before restore")
+        if debug_verbose: print("backup file", backupjsonfile, "have", len(json_string), "ACE's")
+        for int_, ace in Dict.iterable(json_string):
+            dacl.AddAccessAllowedAce(json_string[int_]["0"], json_string[int_]["1"], win32security.ConvertStringSidToSid(json_string[int_]["2"]))
+            Print.rewrite(CLI.wait_update(quiet=True), "Restoring", json_string[int_]["2"])
+        Print.rewrite(" "*Console.width())
+        save_dacl()
+        if debug_verbose: print("file", filename, "have", ace_count(), "ACE's now")
 
 if CLI.get_y_n("Delete all users created by this sctipt"):
     remove_all_created_users()
