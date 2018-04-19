@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.2.8-alpha"
+__version__ = "8.2.9-alpha"
 import os
 import sys
 import copy
@@ -113,8 +113,11 @@ class Internal:
         if FRACKING_INPUT_DEBUG: debug_Bench = get_Bench()
         if FRACKING_INPUT_DEBUG: debug_Bench.start()
         def just_install(module_name):
-            import pip
-            pip.main(['install', module_name])
+            try:
+                from pip import main as pip_main
+            except ImportError:
+                from pip._internal import main as pip_main
+            pip_main(['install', module_name])
         modules_list = []
         for item in pkgutil.iter_modules():
             modules_list.append(item[1])
