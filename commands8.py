@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.2.9-alpha"
+__version__ = "8.2.10.3-alpha"
 import os
 import sys
 import copy
@@ -166,13 +166,16 @@ class Internal:
 
 
     @staticmethod
-    def dir_c():  # d print all functionality of commands8
+    def dir_c(debug=False):  # d print all functionality of commands8
         first_func_after_class = 1
 
         cnt_of_all_def = 0
         cnt_of_commented_def = 0
-
-        for line in Str.nl(File.read(Path.extend(Path.commands8(), "commands8.py"))):  # dir ignore
+        
+        file_path = Path.extend(Path.commands8(), "commands8.py")
+        file_pipe = File.read(file_path)
+        file_lines = Str.nl(file_pipe)
+        for line in file_lines:  # dir ignore
             if "# dir ignore" not in line:  # dir ignore
                 if "bnl" in line:  # dir ignore
                     print(newline*Str.get_integers(line)[-1], end="")  # dir ignore
@@ -189,7 +192,7 @@ class Internal:
                     print(newline + line)  # dir ignore
                 elif "# d " in line:  # dir ignore
                     print(line.replace("# d ", "# ", 1))  # dir ignore
-        Print.debug(cnt_of_all_def, cnt_of_commented_def)
+        if debug: Print.debug(cnt_of_all_def, cnt_of_commented_def)
 
 
 
@@ -767,7 +770,10 @@ class File:
 
     @staticmethod
     def read(path):  # return pipe to file content
-        with open(path, "r") as f:
+    # import locale
+    # locale.getpreferredencoding(False) # what is that?
+    # locale.getpreferredencoding(False)
+        with open(path, "r", encoding='utf-8') as f:
             return f.read()
 
 
