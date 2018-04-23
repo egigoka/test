@@ -58,14 +58,15 @@ def add_user(username):  # deprecated, return infro about user to "users" list
     users[username]["sid_obj"], users[username]["domain"], users[username]["type"] = win32security.LookupAccountName ("", username)
 
 
-def renew():
-    global sd
-    global dacl
-    SECURITY_DESCRIPTOR = win32security.GetFileSecurity(filename, win32security.DACL_SECURITY_INFORMATION)
-    DACL = SECURITY_DESCRIPTOR.GetSecurityDescriptorDacl()  # instead of dacl = win32security.ACL()
-    sd = SECURITY_DESCRIPTOR
-    dacl = DACL
-renew()
+if file_operations:
+    def renew():
+        global sd
+        global dacl
+        SECURITY_DESCRIPTOR = win32security.GetFileSecurity(filename, win32security.DACL_SECURITY_INFORMATION)
+        DACL = SECURITY_DESCRIPTOR.GetSecurityDescriptorDacl()  # instead of dacl = win32security.ACL()
+        sd = SECURITY_DESCRIPTOR
+        dacl = DACL
+    renew()
 
 
 def ace_count():

@@ -60,7 +60,7 @@ if State.online:
     domains += ['starbounder.org']
 
 
-Json.save(Path.extend(Path.current(), "ping_configs", "ping_online_domains"), domains)
+Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
 
 def main():
     while True:

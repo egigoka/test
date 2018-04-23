@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.2.10.3-alpha"
+__version__ = "8.2.11-alpha"
 import os
 import sys
 import copy
@@ -695,6 +695,8 @@ class File:
         if not os.path.exists(filename):
             with open(filename, 'a'):  # open file and close after
                 os.utime(filename, None)  # changes time of file modification
+        else:
+            raise FileExistsError("file" + str(filename) + "exists")
         if not os.path.exists(filename):
             raise FileNotFoundError("error while creating file " + filename +
                                     "try to repair script at " + Path.full(sys.argv[0]))
@@ -775,6 +777,15 @@ class File:
     # locale.getpreferredencoding(False)
         with open(path, "r", encoding='utf-8') as f:
             return f.read()
+
+    @staticmethod
+    def write(filename, what_to_write, mode="at"):
+        with open(filename, mode=mode) as file:  # open file then closes it
+            file.write(what_to_write)
+
+    @staticmethod
+    def get_size(filename):
+        return os.stat(filename).st_size
 
 
 class Time:
