@@ -25,6 +25,9 @@ __version__ = "2.7.0"
 # update to c8
 __version__ = "2.7.1"
 # no timeout if no internet
+__version__ = "2.8.0"
+# new list to check roskomnadzor accidentally blocked sites
+# arg -frkn for that
 
 from commands8 import *
 
@@ -36,12 +39,16 @@ class State:
     online = False
     online_only = False
     first_iterate = True
-    internet_status = False  # todo doesn't work on non macOS system
+    internet_status = False
+    extended_rkn_list = False
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
     if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
         online_only = True
         online = True
+    if ("-frkn" in sys.argv):
+        online = True
+        extended_rkn_list = True
     if ("-f" in sys.argv) or ("-fast" in sys.argv):
         sleep = 10
 
@@ -59,11 +66,26 @@ if State.online:
     domains += ['vk.com']
     domains += ['starbounder.org']
 
+if State.extended_rkn_list:
+    domains += ['1password.com']
+    domains += ['dlang.org']
+    domains += ['ggpht.com']
+    domains += ['gmail.com']
+    domains += ['google.com.ua']
+    domains += ['google.fr']
+    domains += ['google.ru']
+    domains += ['googleusercontent.com']
+    domains += ['gstatic.com']
+    domains += ['youtube.com']
+    domains += ['ytimg.com']
 
-Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
+
+# Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
 
 def main():
     while True:
+        if State.extended_rkn_list:
+            Process.start("ipconfig", "/flushdns")
         if OS.name == "macos":
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
@@ -72,12 +94,15 @@ def main():
             print_end = ''
         cnt_workin = 0
         for hostname in domains:
-            response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count)
-            if response:  # and then check the response...
-                cprint(Str.rightpad(hostname + ' is up!', Console.width(), " "), 'white', 'on_green', end=print_end)
+            response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
+            ip = response[1]
+            # Print.debug(response[2])
+            response = response[0]
+            if response:
+                cprint(Str.rightpad(hostname + ' is up! IP ' + str(ip), Console.width(), " "), 'white', 'on_green', end=print_end)
                 cnt_workin += 1
             else:
-                cprint(Str.rightpad(hostname + ' is down!', Console.width(), " "), 'white', 'on_red', end=print_end)
+                cprint(Str.rightpad(hostname + ' is down! IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
         print(Time.rustime())
         # notification on macOS
         if cnt_workin < len(domains)-State.count_of_ignored_timeouts:

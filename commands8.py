@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.2.11.1-alpha"
+__version__ = "8.2.12.12-alpha"
 import os
 import sys
 import copy
@@ -171,7 +171,7 @@ class Internal:
 
         cnt_of_all_def = 0
         cnt_of_commented_def = 0
-        
+
         file_path = Path.extend(Path.commands8(), "commands8.py")
         file_pipe = File.read(file_path)
         file_lines = Str.nl(file_pipe)
@@ -330,8 +330,7 @@ class Str:
                 strings = string.split(newline)
             return strings
         else:
-            if not quiet:
-                print("None can't be splitted")
+            raise TypeError("None can't be splitted")
 
     @classmethod
     def nl(cls, string):  # alias to newline
@@ -1034,10 +1033,19 @@ class Network:
             url_output = Str.substring(url, "://")
         return url_output
 
+    @staticmethod
+    def dnslookup(domain):
+        import socket
+        try:
+            return socket.gethostbyname(domain)  # I don't how it work todo check code of 'socket'
+        except socket.gaierror:
+            return "not found"
+
     @classmethod
-    def ping(Network, domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000):
+    def ping(Network, domain ="127.0.0.1", count=1, quiet=False, logfile=None, timeout=10000, return_ip=False):
         # с таким эксепшном можно сделать куда проще это всё
         domain = Network.getDomainOfUrl(domain)
+        backup_ping_output = ""
         if not quiet:
             colorama.reinit()
             Print.rewrite("Pinging", domain, count, "times...")
@@ -1059,6 +1067,10 @@ class Network:
         except KeyboardInterrupt:
             sys.exit()
         except:  # any exception is not good ping
+            try:
+                backup_ping_output = ping_output
+            except UnboundLocalError:
+                backup_ping_output = ""
             ping_output = ""
         if ("TTL" in ping_output) or ("ttl" in ping_output):
             up = True
@@ -1079,7 +1091,21 @@ class Network:
             else:
                 cprint(down_message, "white", "on_red")
             colorama.deinit()
+        ip = None
+        if return_ip:
+            try:
+                for line in Str.nl(ping_output+backup_ping_output):
+                    if len(Str.get_integers(line)) >= 4:
+                        octaves = Str.get_integers(line)
+                        ip = str(octaves[0]) + "." + str(octaves[1]) + "." + str(octaves[2]) + "." + str(octaves[3])
+                        break
+            except TypeError:
+                pass
+            if not ip:
+                ip = Network.dnslookup(domain)
+            return up, ip, ping_output
         return up
+
 
 
 class Fix:
