@@ -42,9 +42,7 @@ SET currency = 'GPB'
 WHERE currency = 'RUB';
 */
 
-SELECT FORMAT(GETDATE(), 'yyyy-MM-dd HH:mm:ss.fff')
-WAITFOR DELAY '00:00:01'
-SELECT FORMAT(GETDATE(), 'yyyy-MM-dd HH:mm:ss.fff')
+
 SELECT * from someproducts
 
 --SELECT *
