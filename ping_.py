@@ -28,6 +28,8 @@ __version__ = "2.7.1"
 __version__ = "2.8.0"
 # new list to check roskomnadzor accidentally blocked sites
 # arg -frkn for that
+__version__ = "2.8.1"
+# now IP's output is beatiful
 
 from commands8 import *
 
@@ -93,16 +95,20 @@ def main():
         if OS.name == 'windows':
             print_end = ''
         cnt_workin = 0
+        longest_hostname = 0
+        for hostname in domains:
+            if len(hostname) > longest_hostname:
+                longest_hostname = len(hostname)
         for hostname in domains:
             response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
             ip = response[1]
             # Print.debug(response[2])
             response = response[0]
             if response:
-                cprint(Str.rightpad(hostname + ' is up! IP ' + str(ip), Console.width(), " "), 'white', 'on_green', end=print_end)
+                cprint(Str.rightpad(hostname + ' is up!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_green', end=print_end)
                 cnt_workin += 1
             else:
-                cprint(Str.rightpad(hostname + ' is down! IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
+                cprint(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
         print(Time.rustime())
         # notification on macOS
         if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
