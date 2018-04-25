@@ -67,17 +67,17 @@ if State.online:
     domains += ['starbounder.org']
 
 if State.extended_rkn_list:
-    domains += ['1password.com']
-    domains += ['dlang.org']
-    domains += ['ggpht.com']
+    # domains += ['1password.com']  # they doesn't reply to ICMP echo
+    # domains += ['dlang.org']  # something strange
+    # domains += ['ggpht.com']  # no DNS records, it use something unknown for me
     domains += ['gmail.com']
     domains += ['google.com.ua']
     domains += ['google.fr']
     domains += ['google.ru']
-    domains += ['googleusercontent.com']
+    # domains += ['googleusercontent.com']  # no DNS records, it use something unknown for me
     domains += ['gstatic.com']
     domains += ['youtube.com']
-    domains += ['ytimg.com']
+    # domains += ['ytimg.com']  # no DNS records, it use something unknown for me
 
 
 # Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
