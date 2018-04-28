@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.2.12.13-alpha"
+__version__ = "8.3.0.11-alpha"
 import os
 import sys
 import copy
 import platform
 import pkgutil
 
-FRACKING_INPUT_DEBUG = False
+FRACKING_Internal_mine_import_speed_tweaking = False
 
 # todo version diff
 #   todo export script as json?
@@ -102,29 +102,52 @@ class OS:
         print ("Your system doesn't properly work with cyrrilic -_-")
 
 
+class Pip:
+    @classmethod
+    def install(Pip, module_name):
+        try:
+            from pip import main as pip_main
+        except ImportError:
+            from pip._internal import main as pip_main
+        pip_main(['install', module_name])
+        Pip.update_list_of_modules()
+
+    @classmethod
+    def uninstall(Pip, module_name, force=False):
+        try:
+            from pip import main as pip_main
+        except ImportError:
+            from pip._internal import main as pip_main
+        commands = ['uninstall', module_name]
+        if force:
+            commands.insert(1, "-y")
+        pip_main(commands)
+        Pip.update_list_of_modules()
+
+    @classmethod
+    def check_pip_installation(Pip):
+        if "pip" not in Pip.list_of_modules:
+            if OS.name == "linux":
+                os.system("sudo apt-get install python" + OS.python_commandline_version + "-pip")
+
+    list_of_modules = []
+
+    @classmethod
+    def update_list_of_modules(Pip):
+        Pip.list_of_modules = []
+        for item in pkgutil.iter_modules():
+            Pip.list_of_modules.append(item[1])
+Pip.update_list_of_modules()
 
 
 class Internal:
-
     @staticmethod
     def mine_import(module_name, objects=None, justdownload=False, az=None):  # import
       # d module, if module not found, trying to install it by pip
-        # check for pip module
-        if FRACKING_INPUT_DEBUG: debug_Bench = get_Bench()
-        if FRACKING_INPUT_DEBUG: debug_Bench.start()
-        def just_install(module_name):
-            try:
-                from pip import main as pip_main
-            except ImportError:
-                from pip._internal import main as pip_main
-            pip_main(['install', module_name])
-        modules_list = []
-        for item in pkgutil.iter_modules():
-            modules_list.append(item[1])
-        if "pip" not in modules_list:
-            if OS.name == "linux":
-                os.system("sudo apt-get install python" + OS.python_commandline_version + "-pip")
-        if module_name not in modules_list:
+        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench = get_Bench()
+        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.start()
+        Pip.check_pip_installation()
+        if module_name not in Pip.list_of_modules:
             ###########RARE###########
             if module_name == "pyautogui":
                 if OS.name == "linux":
@@ -135,34 +158,54 @@ class Internal:
                 if OS.name == "macos":
                     for package in ["python" + OS.python_commandline_version + "-xlib",
                                     "pyobjc-core", "pyobjc"]:
-                        just_install(package)
+                        Pip.install(package)
                     if OS.python_implementation == "pypy":
                         Print.debug("Yep, PyPy doesn't support pyobjc")
             if module_name in ["win32api","win32con"]:
-                just_install("pypiwin32")
+                Pip.install("pypiwin32")
             else:
             ###########RARE###########
-                just_install(module_name)
+                Pip.install(module_name)
         if not justdownload:
-            if az and objects:
-                if len(objects.split(",")) == 1:
-                    globals()[az] = importlib.import_module(objects[0], package=module_name)
-                print("Internal.mine_import doesn't support both attributes use 'az' and 'objects', so only 'objects' will apply.")
-                az = None
-            if az:
-                import importlib
-                globals()[az] = importlib.import_module(module_name)
-            elif objects:
-                # import importlib  # todo better code
-                # for object in objects.split(",")
-                #     globals()[object] = importlib.import_module(name, package=module_name):
-                #### if " as " in object поделить и применить правильно, то есть имя назначить второе, а импортировать из первого
-                exec("from " + module_name + " import " + objects, globals())
-            else:
-                import importlib
-                globals()[module_name] = importlib.import_module(module_name)
-        if FRACKING_INPUT_DEBUG: debug_Bench.prefix = module_name + " " + str(objects)
-        if FRACKING_INPUT_DEBUG: debug_Bench.end()
+            try:
+                if az and objects:
+                    if len(objects.split(",")) == 1:
+                        globals()[az] = importlib.import_module(objects[0], package=module_name)
+                    print("Internal.mine_import doesn't support both attributes use 'az' and 'objects', so only 'objects' will apply.")
+                    az = None
+                if az:
+                    import importlib
+                    try:
+                        globals()[az] = importlib.import_module(module_name)
+                    except ModuleNotFoundError as err:
+                        print(err)
+                        print("trying to import " + module_name + " in another way")
+                        exec ("import " + module_name + " as " + az, globals())
+                elif objects:
+                    # import importlib  # todo better code
+                    # for object in objects.split(",")
+                    #     globals()[object] = importlib.import_module(name, package=module_name):
+                    #### if " as " in object поделить и применить правильно, то есть имя назначить второе, а импортировать из первого
+                    exec("from " + module_name + " import " + objects, globals())
+                else:
+                    import importlib
+                    try:
+                        globals()[module_name] = importlib.import_module(module_name)
+                    except ModuleNotFoundError as err:
+                        print(err)
+                        print("trying to import " + module_name + " in another way")
+                        exec ("import " + module_name, globals())
+            except ModuleNotFoundError:
+                commands = ""
+                for arg in sys.argv:
+                    commands += arg + " "
+                commands = commands.rstrip(" ")
+                print('<<<<<<<<<<Some errors occured with importing "' + str(module_name) + '", trying to re-run script with parameters "' + commands + '">>>>>>>>>>')
+                os.system(commands)
+                sys.exit()
+
+        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.prefix = module_name + " " + str(objects)
+        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.end()
 
 
     @staticmethod
@@ -204,7 +247,7 @@ class Internal:
         import commands8, importlib
         commands8 = importlib.reload(commands8)
         del commands8
-        string = "from commands8 import *"  # you need to manually add this string to code :(
+        string = "from commands8 import *"  # d you need to manually add this string to code :(
         if not quiet:
             print('"'+string+'" copied to clipboard')
             import copypaste
@@ -216,7 +259,7 @@ if OS.display:
         if OS.name != "macos:":
             Internal.mine_import("pyautogui", justdownload=True)
         Internal.mine_import("paramiko", justdownload=True)
-    Internal.mine_import("tkinter")  # from tkinter import *
+    import tkinter
 
 
 import json, \
