@@ -37,7 +37,6 @@ Print.rewrite("Status set, trying to download posts")
 cnt = 7774 # с какого поста начинать отображать
 timeSleep = .250 # так как программа однопоточная, то чтобы вк не банил, стоит задержка в 250 мс
 whitespace = "   " # отступ
-postCount = 1 # количество постов за раз скачивать
 
 
 def wprint(depth):
@@ -79,13 +78,36 @@ def printReversely(input_, depth=0):
         print("type of input_: ", type(input_))
 
 
+class Vk:
+    last_download = datetime.datetime.now()
+    @classmethod
+    def download_post(Vk, groupname, post_number, posts_count=1, quiet=False):
+        time_started = datetime.datetime.now()
+        time_delta = Time.delta(Vk.last_download, time_started)
+        print(time_delta)
+        if time_delta<timeSleep:
+            time.sleep(timeSleep-time_delta)
+
+        post_dict = api.wall.get(domain=groupname, count=posts_count, offset=post_number)
+
+
+        if not quiet:
+            printReversely(post_dict)
+
+
+
+
+        # END
+        vk.last_download = datetime.datetime.now()
+        return post_dict
+
+
+
 while True:
     print()
     print("тест ", cnt)
     print()
-    time.sleep(timeSleep)
-    postCurrent = api.wall.get(domain='egigokasprint', count=postCount, offset=cnt) #  домен - короткое имя группы в адрессной строке
-    #Print.debug(postCurrent)
+    postCurrent = Vk.download_post("egigokasprint", cnt)
     printReversely(postCurrent)
     cnt+=postCount
     cnt_ = 0
@@ -115,10 +137,32 @@ img = ImageTk.PhotoImage(Image.open(path))
 panel = tkinter.Label(window, image = img)
 
 #The Pack geometry manager packs widgets in rows or columns.
-panel.pack(side = "bottom", fill = "both", expand = "yes")
+#panel.pack(side = "bottom", fill = "both", expand = "yes")
+panel.grid(row=1, column=1, columnspan=3)
+
+
+exitBtn = tkinter.Button(window, text = 'Закрыть')
+def closeWindow(ev):
+    window.destroy()
+exitBtn.bind("<Button-1>", closeWindow)
+exitBtn.grid(row=2,column=1)
+
+exit2Btn = tkinter.Button(window, text = 'Закрыть2')
+def closeWindow2(ev):
+    window.destroy()
+exit2Btn.bind("<Button-1>", closeWindow2)
+exit2Btn.grid(row=2,column=2)
+
+exit3Btn = tkinter.Button(window, text = 'Закрыть3')
+def closeWindow3(ev):
+    window.destroy()
+exit3Btn.bind("<Button-1>", closeWindow3)
+exit3Btn.grid(row=2,column=3)
+
 
 #Start the GUI
 window.mainloop()
+
 
 
 

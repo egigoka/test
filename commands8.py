@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.0.11-alpha"
+__version__ = "8.3.1.1-alpha"
 import os
 import sys
 import copy
@@ -34,9 +34,8 @@ def get_Bench(start=False):  # return class with those functions:
         @classmethod
         def get(cls):  # dir ignore
             cls.time_end = datetime.datetime.now()
-            delta = cls.time_end - cls.time_start
-            delta_combined = delta.seconds + delta.microseconds / 1E6
-            return delta_combined
+
+            return Time.delta(cls.time_start, cls.time_end)
 
         @classmethod
         def end(cls):  # return delta between start and end
@@ -891,6 +890,12 @@ class Time:
                 secs_second_var = secs_left_int
                 Print.rewrite("Timer for " + str(seconds) + " seconds. " + str(secs_left_int) + " left")
         Print.rewrite("")
+
+    @staticmethod
+    def delta(time_a, time_b):  # return difference between two timestamps
+        delta = time_b - time_a
+        delta_combined = delta.seconds + delta.microseconds / 1E6
+        return delta_combined
 
 
 class Json():
