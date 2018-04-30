@@ -87,18 +87,10 @@ class Vk:
         print(time_delta)
         if time_delta<timeSleep:
             time.sleep(timeSleep-time_delta)
-
         post_dict = api.wall.get(domain=groupname, count=posts_count, offset=post_number)
-
-
         if not quiet:
             printReversely(post_dict)
-
-
-
-
-        # END
-        vk.last_download = datetime.datetime.now()
+        Vk.last_download = datetime.datetime.now()  # last logic line!!!
         return post_dict
 
 
@@ -107,9 +99,8 @@ while True:
     print()
     print("тест ", cnt)
     print()
-    postCurrent = Vk.download_post("egigokasprint", cnt)
-    printReversely(postCurrent)
-    cnt+=postCount
+    postCurrent = Vk.download_post("egigokasprint", cnt, quiet=False)
+    cnt+=1
     cnt_ = 0
     print(",,,,,,,,,,,,,,,,,,,,,,,,")
     if cnt >= postCurrent ["count"]:

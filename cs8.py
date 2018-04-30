@@ -10,7 +10,16 @@ sys.path.append("./term")
 sys.path.append(r".\term")
 from commands8 import *
 
+#some shitty functions that i wrote million time in other shitty scripts
+
 def dirify(object):
     for subobj in dir(object):
         if "__" not in subobj:
             print(subobj)
+
+def sleep(time):
+    if time >= 1:
+        Time.timer(time)
+    else:
+        print("sleeping", time)
+        time.sleep(time)
