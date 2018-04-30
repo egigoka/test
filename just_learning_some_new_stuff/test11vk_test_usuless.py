@@ -8,9 +8,10 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".	erm")
-from commands7 import *
+from commands8 import *
 
-mine_import("vk_requests")
+#Internal.mine_import("vk_requests")
+import vk_requests
 
 
 if OS.name == "winows":
@@ -21,51 +22,26 @@ import test11vk_test_usuless_login
 
 #print(test11vk_test_usuless_login.varVkUser)
 #print(test11vk_test_usuless_login.varVkPass)
-
+Print.rewrite("Try to log in...")
 api = vk_requests.create_api(app_id=5569080, login=test11vk_test_usuless_login.varVkUser, password=test11vk_test_usuless_login.varVkPass) # todo включить авторизацию
+Print.rewrite("Succesfully logged in, trying create api")
 api_status_kim = vk_requests.create_api(app_id=5569080, login=test11vk_test_usuless_login.varVkUser, password=test11vk_test_usuless_login.varVkPass, scope=['offline', 'status'])#, api_version='5.00')
+Print.rewrite("Succesfully created api, trying create interactive api")
 api_mine_interactive = vk_requests.create_api(interactive=True, scope=['offline', 'status'])
+Print.rewrite("Created interactive api??? Trying to set status")
 #api = vk_requests.create_api() # создание сессии без логина
 
 api_status_kim.status.set(text='Не Ким!1один')
-#print(api.users.get(user_ids=1))
-#print()
-#print(api.users.get(user_ids=49920173))
-#print()
-cnt = 7400 # с какого поста начинать отображать
+Print.rewrite("Status set, trying to download posts")
+
+cnt = 7774 # с какого поста начинать отображать
 timeSleep = .250 # так как программа однопоточная, то чтобы вк не банил, стоит задержка в 250 мс
 whitespace = "   " # отступ
 postCount = 1 # количество постов за раз скачивать
 
+
 def wprint(depth):
     print(whitespace * depth, end="")
-
-#def valuePrintCmd(key, value = None, depth = 0):
-#    if (key == "photo") & (value is None):
-#        wprint(depth)
-#        print("!!!STARTED PHOTO!!!")
-#    elif key[0:5] == "photo":
-#        wprint(depth)
-#        print("!!!PHOTO!!!")
-#    elif (key == "count") & (depth == 0):
-#        wprint(depth)
-#        print("Количество записей в группе:", value)
-#    elif key == "items":
-#        wprint(depth)
-#        print("Начало поста:")
-#    elif key == "comments":
-#        wprint(depth)
-#        print("Комментарии:",)
-#    elif (key == "count") & (depth == 2):
-#        wprint(depth)
-#        print("Количество комментариев:", value)
-#    elif (key == "copy_history"):
-#        wprint(depth)
-#        print("История репостов:", value)
-#    else:
-#        print(whitespace * depth, end="")
-#        print("Key '", key, "' is not supported. Script is ending")
-#        sys.exit()
 
 def printListReversely(input_, depth=0):
     for value in input_:
@@ -79,6 +55,7 @@ def printListReversely(input_, depth=0):
         else:
             print("ЕГГОГ! Этава! Не можед! Быд!")
             print("type of input_: ", type(input_))
+            raise TypeError("type must be dict")
 
 
 def printReversely(input_, depth=0):
@@ -102,44 +79,17 @@ def printReversely(input_, depth=0):
         print("type of input_: ", type(input_))
 
 
-
 while True:
-    sys.exit()
     print()
     print("тест ", cnt)
     print()
     time.sleep(timeSleep)
     postCurrent = api.wall.get(domain='egigokasprint', count=postCount, offset=cnt) #  домен - короткое имя группы в адрессной строке
-    #print(postCurrent_str)
-    ############################
+    #Print.debug(postCurrent)
+    printReversely(postCurrent)
+    cnt+=postCount
     cnt_ = 0
     print(",,,,,,,,,,,,,,,,,,,,,,,,")
-    #print(str(postCurrent))
-    printReversely(postCurrent)
-    cnt += postCount
-    #printReversely(postCurrent["items"])
-    #print(type(postCurrent["items"]))
-    #print(type(postCurrent["items"][0]))
-
-
-    #for i in postCurrent['items']:
-    #    cnt_ += 1
-    #    print(cnt_)
-    #    #print(i)
-    #    #print(type(i))
-    #    #print(dict.items(i))
-    #    print(i.get('copy_history'))
-    #    for j in i:
-    #        #print(j)
-    #
-    #        if j == "":
-    #            print("Найдено! Найдено!")
-    #print("''''''''''''''''''''''''")
-    #######################
-    # todo доделать парсер
-    # todo найти последний пост
-    #if cnt == 3:
-    #    break
     if cnt >= postCurrent ["count"]:
         print("Ошибка! Пустой пост №" + str(postCurrent['count']) + r"!")
         break
@@ -147,6 +97,28 @@ while True:
 
 
 
+import tkinter
+from PIL import ImageTk, Image
+
+#This creates the main window of an application
+window = tkinter.Tk()
+window.title("Join")
+#window.geometry("300x300")
+window.configure(background='grey')
+
+path = Path.extend(Path.home(), "Desktop", "Pictures", "1496861327127533991.jpg")
+
+#Creates a Tkinter-compatible photo image, which can be used everywhere Tkinter expects an image object.
+img = ImageTk.PhotoImage(Image.open(path))
+
+#The Label widget is a standard Tkinter widget used to display a text or image on the screen.
+panel = tkinter.Label(window, image = img)
+
+#The Pack geometry manager packs widgets in rows or columns.
+panel.pack(side = "bottom", fill = "both", expand = "yes")
+
+#Start the GUI
+window.mainloop()
 
 
 
@@ -184,8 +156,7 @@ while True:
 
 
 
-
-
+"""
 # Вывод изображения!!!! (просто тестового)
 from PIL import Image, ImageTk
 import tkinter as tk
@@ -217,12 +188,12 @@ def closeWindow(ev):
 
 def editPic(ev):
     img.show() # открывает BMP в Photoshop.
-    warning("Доделай это нормально!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    GUI.warning("Доделай это нормально!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 def savePic(ev):
     global root
     root.destroy()
-    print("Доделай грёбаный код!")
+    raise NotImplementedError("Доделай грёбаный код!")
 
 exitBtn = tk.Button(root, text = 'Закрыть')
 editBtn = tk.Button(root, text = 'Редактировать')
@@ -250,3 +221,4 @@ saveBtn.place(x = btnGap*3 + btnWidth*2, y = img.height + btnGap, width = btnWid
 #canv111.create_image(1, 1, anchor=NW, image=ph_im)
 #canv111.place(x=10, y=10)
 #windowMain.mainloop()
+"""
