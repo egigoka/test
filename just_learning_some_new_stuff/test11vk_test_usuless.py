@@ -49,7 +49,7 @@ Print.rewrite("Succesfully logged in, trying create api")
 
 #api_status_kim.status.set(text='Не Ким!1один')
 #Print.rewrite("Status set, trying to download posts")
-
+Print.rewrite("")
 
 timeSleep = .250 # так как программа однопоточная, то чтобы вк не банил, стоит задержка в 250 мс
 whitespace = "   " # отступ
@@ -130,7 +130,10 @@ class Vk:
         try:
             output = post_dict['items'][0][property]
         except KeyError:
-            output = post_dict['items'][0]['copy_history'][0][property]
+            try:
+                output = post_dict['items'][0]['copy_history'][0][property]
+            except KeyError:
+                output = []
         return output
 
     @staticmethod
@@ -159,6 +162,33 @@ class Vk:
         return date
 
 
+    @classmethod
+    def get_id_of_publisher(Vk, post_dict):
+        try:
+            id = post_dict["items"][0]["signer_id"]
+        except KeyError:
+            return None
+        link = "https://vk.com/id" + str(id)
+        return link
+
+
+    @classmethod
+    def get_name_of_publisher(Vk, post_dict):
+        try:
+            if post_dict["profiles"][0]['id'] != post_dict["items"][0]["signer_id"]:
+                raise ValueError
+        except IndexError:
+            pass
+        try:
+            first_name = post_dict["profiles"][0]['first_name']
+            last_name = post_dict["profiles"][0]['last_name']
+        except IndexError:
+            return None
+        return first_name + " " + last_name
+
+
+
+
 if Arguments.print_:
     while True:
         cnt = 7773 # с какого поста начинать отображать
@@ -177,14 +207,6 @@ if Arguments.print_:
 
 
 
-Time1 = Time.stamp()
-print("Fuck"*10000)
-Time2 = Time.stamp()
-print(Time.delta(Time1,Time2))
-print(Time.delta(Time2,Time1))
-
-
-
 
 if Arguments.spb_house:
     json_file = Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json")
@@ -194,14 +216,17 @@ if Arguments.spb_house:
         Json.save(json_file, {})
     cnt = 0
     date = datetime.datetime.now()
-    while date.day>=17 and date.month>=4 and date.year==2018:
+    while (date.day>=17 or (date.day==1 and date.month==5)) and date.month>=4 and date.year==2018:
         cnt += 1
-        print(CLI.stick(quiet=True), Str.leftpad(cnt,3,0))
+        print(CLI.wait_update(quiet=True), Str.leftpad(cnt,3,0))
         post = Vk.download_post("yuytnoe_gnezdishko", cnt, quiet=False)
         url = Vk.get_url_of_post(post)
         photos = Vk.get_photos_of_post(post)
         text = Vk.get_text_of_post(post)
         date = Vk.get_date_of_post(post)
+        Print.debug(url)
+        publisher = Vk.get_name_of_publisher(post)
+        publisher_url = Vk.get_id_of_publisher(post)
 
         jsonstring[str(cnt)] = {}
 
@@ -210,13 +235,17 @@ if Arguments.spb_house:
         jsonstring[str(cnt)]["full_post"] = post
         jsonstring[str(cnt)]["text"] = text
         jsonstring[str(cnt)]["date"] = date
+        jsonstring[str(cnt)]["publisher"] = publisher
+        jsonstring[str(cnt)]["publisher_url"] = publisher_url
 
 
         Print.debug("url", url,
         #            "attachments", attachments,
         #            "photos", photos,
                     "text", text,
-                    "date", Time.rustime(date)
+                    "date", Time.rustime(date),
+                    "publisher", publisher,
+                    "publisher_url", publisher_url
                     )
 
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.4.14-alpha"
+__version__ = "8.3.4.17-alpha"
 import os
 import sys
 import copy
@@ -746,12 +746,12 @@ class File:
         filename = Path.full(filename)
         if os.path.split(filename)[0] != "":
             Dir.create(os.path.split(filename)[0])
-        if not os.path.exists(filename):
+        if not File.exists(filename):
             with open(filename, 'a'):  # open file and close after
                 os.utime(filename, None)  # change time of file modification
         else:
             raise FileExistsError("file" + str(filename) + "exists")
-        if not os.path.exists(filename):
+        if not File.exists(filename):
             raise FileNotFoundError("error while creating file " + filename +
                                     "try to repair script at " + Path.full(sys.argv[0]))
 
@@ -767,7 +767,7 @@ class File:
         if not quiet:
             print("file", path, "is deleted")
         time.sleep(0.05)
-        if os.path.exists(path):
+        if File.exists(path):
             raise FileExistsError(path + " is not deleted")
 
     @staticmethod
@@ -841,6 +841,10 @@ class File:
     @staticmethod
     def get_size(filename):  # return size in bytes
         return os.stat(filename).st_size
+
+    @staticmethod
+    def exists(filename):
+        return os.path.exists(filename)
 
 
 class Time:
@@ -927,7 +931,7 @@ class Json():
     @classmethod
     def save(cls, filename, jsonstring, quiet=False, debug=False):
         try:
-            File.create(filename)
+            File.wipe(filename)
             settingsJsonTextIO = open(filename, "w")
             json.dump(jsonstring, settingsJsonTextIO)
             settingsJsonTextIO.close()
