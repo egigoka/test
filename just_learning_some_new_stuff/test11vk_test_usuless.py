@@ -16,7 +16,7 @@ from test11vk_test_usuless_login import *
 if OS.name == "winows":
     import win_unicode_console
     win_unicode_console.enable()
-json_file = Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json")
+
 
 
 class Arguments:
@@ -176,27 +176,44 @@ if Arguments.print_:
             break
 
 
-Json.save({}, json_file)
 
-jsonstring = Json.load()
+
+
+
+
 
 if Arguments.spb_house:
-    cnt = 1
-    post = Vk.download_post("yuytnoe_gnezdishko", cnt, quiet=False)
-    url = Vk.get_url_of_post(post)
-    #attachments = Vk.get_attachments_of_post(post)
-    #photos = Vk.get_photos_of_post(post)
-    text = Vk.get_text_of_post(post)
-    date = Vk.get_date_of_post(post)
+    json_file = Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json")
+    try:
+        jsonstring = Json.load()
+    except:
+        Json.save({}, json_file)
+    cnt = 0
+    date = datetime.datetime.now()
+    while date.day>=17 and date.month >=4 and date.year=2018:
+        cnt += 1
+        print(CLI.stick(quiet=True), Str.leftpad(cnt,3,0))
+        post = Vk.download_post("yuytnoe_gnezdishko", cnt, quiet=False)
+        url = Vk.get_url_of_post(post)
+        photos = Vk.get_photos_of_post(post)
+        text = Vk.get_text_of_post(post)
+        date = Vk.get_date_of_post(post)
+
+        jsonstring[str(cnt)] = {}
+
+        jsonstring[str(cnt)]["url"] = url
+        jsonstring[str(cnt)]["photos"] = photos
+        jsonstring[str(cnt)]["full_post"] = post
+        jsonstring[str(cnt)]["text"] = text
+        jsonstring[str(cnt)]["date"] = date
 
 
-
-    Print.debug("url", url,
-    #            "attachments", attachments,
-    #            "photos", photos,
-                "text", text,
-                "date", Time.rustime(date)
-                )
+        Print.debug("url", url,
+        #            "attachments", attachments,
+        #            "photos", photos,
+                    "text", text,
+                    "date", Time.rustime(date)
+                    )
 
 
 
