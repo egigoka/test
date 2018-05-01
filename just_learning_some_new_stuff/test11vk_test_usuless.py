@@ -247,7 +247,24 @@ if Arguments.spb_house:
                     "publisher", publisher,
                     "publisher_url", publisher_url
                     )
+    Json.save(json_file, jsonstring)
 
+
+
+elif "s2" in sys.argv:
+    jsonstring = Json.load(Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json"))
+    for ad in jsonstring:
+        #print(ad)
+        #print(ad["text"])
+        if "старая" in ad["text"].down():
+            Print.debug("url", ad["url"],
+            #            "attachments", attachments,
+            #            "photos", photos,
+                        "text", ad["text"],
+                        "date", Time.rustime(ad["date)"]),
+                        "publisher", ad["publisher"],
+                        "publisher_url", ad["publisher_url"])
+    pass
 
 
 else:

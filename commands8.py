@@ -1390,7 +1390,6 @@ class CLI():
 
     @staticmethod
     def progressbar(count, of):
-
         Console.width()
 
 
