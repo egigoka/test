@@ -177,7 +177,11 @@ if Arguments.print_:
 
 
 
-
+Time1 = Time.stamp()
+print("Fuck"*10000)
+Time2 = Time.stamp()
+print(Time.delta(Time1,Time2))
+print(Time.delta(Time2,Time1))
 
 
 
@@ -185,12 +189,12 @@ if Arguments.print_:
 if Arguments.spb_house:
     json_file = Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json")
     try:
-        jsonstring = Json.load()
+        jsonstring = Json.load(json_file)
     except:
-        Json.save({}, json_file)
+        Json.save(json_file, {})
     cnt = 0
     date = datetime.datetime.now()
-    while date.day>=17 and date.month >=4 and date.year=2018:
+    while date.day>=17 and date.month>=4 and date.year==2018:
         cnt += 1
         print(CLI.stick(quiet=True), Str.leftpad(cnt,3,0))
         post = Vk.download_post("yuytnoe_gnezdishko", cnt, quiet=False)

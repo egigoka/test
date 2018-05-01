@@ -905,6 +905,7 @@ class Time:
 
     @classmethod
     def delta(Time, time_a, time_b):  # return difference between two timestamps
+        if time_a > time_b: time_a, time_b = time_b, time_a
         time_a = Time.timestamp_to_datetime(time_a)
         time_b = Time.timestamp_to_datetime(time_b)
         delta = time_b - time_a
