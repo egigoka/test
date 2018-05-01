@@ -16,6 +16,7 @@ from test11vk_test_usuless_login import *
 if OS.name == "winows":
     import win_unicode_console
     win_unicode_console.enable()
+json_file = Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json")
 
 
 class Arguments:
@@ -52,6 +53,7 @@ Print.rewrite("Succesfully logged in, trying create api")
 
 timeSleep = .250 # так как программа однопоточная, то чтобы вк не банил, стоит задержка в 250 мс
 whitespace = "   " # отступ
+
 
 
 def wprint(depth):
@@ -173,6 +175,11 @@ if Arguments.print_:
             print("Ошибка! Пустой пост №" + str(postCurrent['count']) + r"!")
             break
 
+
+Json.save({}, json_file)
+
+jsonstring = Json.load()
+
 if Arguments.spb_house:
     cnt = 1
     post = Vk.download_post("yuytnoe_gnezdishko", cnt, quiet=False)
@@ -181,6 +188,8 @@ if Arguments.spb_house:
     #photos = Vk.get_photos_of_post(post)
     text = Vk.get_text_of_post(post)
     date = Vk.get_date_of_post(post)
+
+
 
     Print.debug("url", url,
     #            "attachments", attachments,

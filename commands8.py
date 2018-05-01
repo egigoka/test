@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.4.12-alpha"
+__version__ = "8.3.4.13-alpha"
 import os
 import sys
 import copy
@@ -903,8 +903,10 @@ class Time:
                 Print.rewrite("Timer for " + str(seconds) + " seconds. " + str(secs_left_int) + " left")
         Print.rewrite("")
 
-    @staticmethod
-    def delta(time_a, time_b):  # return difference between two timestamps
+    @classmethod
+    def delta(Time, time_a, time_b):  # return difference between two timestamps
+        time_a = Time.timestamp_to_datetime(time_a)
+        time_b = Time.timestamp_to_datetime(time_b)
         delta = time_b - time_a
         delta_combined = delta.seconds + delta.microseconds / 1E6
         return delta_combined
