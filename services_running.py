@@ -1,13 +1,6 @@
 #! python3
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
-import sys
-sys.path.append("../..")
-sys.path.append("..\..")
-sys.path.append(".")
-sys.path.append("..")
-sys.path.append("./term")
-sys.path.append(r".\term")
 from commands8 import *
 
 
@@ -15,11 +8,15 @@ strings = Str.nl(Console.get_output('tasklist /svc /fi "imagename eq svchost.exe
 strings = strings[3:]  # remove table legend
 
 
+def get_full_name_of_service(short_name):
+    output = Console.get_output("sc GetDisplayName "+short_name)
+    name = Str.substring(output, before="Name = ", after="\r\n")
+    return name
+
 
 services = {}
 executable = None
 pid = None
-
 
 for string in strings:
     print(string)
@@ -39,13 +36,17 @@ for string in strings:
     for service in words[skip:]:
         if len(service) == 0: continue
         service = service.rstrip(",")
-        services[service] = {"pid":pid, "executable":executable}
+        services[service] = {"pid":pid, "executable":executable, "full_name":get_full_name_of_service(service)}
 
-
-from operator import itemgetter
-services = Dict.sorted_by_key(services)
-
-
+services = Dict.sorted_by_key(services, case_insensitive=True)
 
 for service, values in Dict.iterable(services):
     print(service, values)
+
+service_name = "SSDPSRV"
+
+Process.start("net", "start", service_name)
+# print(services[service_name]["full_name"], "is started?")
+
+Process.kill(services[service_name]["pid"])
+print(services[service_name]["full_name"], "is killed")

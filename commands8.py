@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.0.13-alpha"
+__version__ = "8.3.0.15-alpha"
 import os
 import sys
 import copy
@@ -824,7 +824,7 @@ class File:
     def write(filename, what_to_write, mode="at"):  # write to end of file with default mode, you can change it to any
       # g that supported by python open() func
         with open(filename, mode=mode) as file:  # open file then closes it
-            file.write(what_to_write)
+            file.write(what_to_write.encode("utf-8"))
 
     @staticmethod
     def get_size(filename):  # return size in bytes
@@ -1034,7 +1034,10 @@ class Dict:
     @staticmethod
     def sorted_by_key(dict, case_insensitive=False):
         if case_insensitive == True:
-            return sorted(d, key=str.lower)
+            output = {}
+            for i in sorted(dict, key=str.lower):
+                output[i] = dict[i]
+            return output
         else:
             import collections
             return collections.OrderedDict(sorted(dict.items()))
