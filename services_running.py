@@ -39,7 +39,7 @@ for string in strings:
     for service in words[skip:]:
         if len(service) == 0: continue
         service = service.rstrip(",")
-        services.[service] = {"pid" = pid, "executable" = executable}
+        services[service] = {"pid":pid, "executable":executable}
 
 
 from operator import itemgetter
