@@ -8,7 +8,7 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
-from commands7 import *
+from commands8 import *
 
 
 def get_percentage():

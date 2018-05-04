@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, "..")
 sys.path.insert(0, "../..")
 sys.path.insert(0, "..\..")
-from commands7 import *  # mine commands
+from commands8 import *  # mine commands
 
 
 
