@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.0.15-alpha"
+__version__ = "8.3.0.16-alpha"
 import os
 import sys
 import copy
@@ -821,7 +821,7 @@ class File:
             return f.read()
 
     @staticmethod
-    def write(filename, what_to_write, mode="at"):  # write to end of file with default mode, you can change it to any
+    def write(filename, what_to_write, mode="ab"):  # write to end of file with default mode, you can change it to any
       # g that supported by python open() func
         with open(filename, mode=mode) as file:  # open file then closes it
             file.write(what_to_write.encode("utf-8"))
