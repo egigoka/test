@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.0.11-alpha"
+__version__ = "8.3.0.12-alpha"
 import os
 import sys
 import copy
@@ -1032,8 +1032,9 @@ class Dict:
         return dict.items()
 
     @staticmethod
-    def sorted(dict):
-        raise NotImplementedError  # todo get it done
+    def sorted_by_key(dict):
+        import collections
+        return collections.OrderedDict(sorted(dict.items()))
 
 
 class Codegen:
