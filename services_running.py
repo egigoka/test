@@ -43,8 +43,9 @@ for string in strings:
 
 
 from operator import itemgetter
-#services = sorted(services, key=itemgetter(0))
+services = Dict.sorted_by_key(services)
 
 
-for service in services:
-    print(service)
+
+for service, values in Dict.iterable(services):
+    print(service, values)
