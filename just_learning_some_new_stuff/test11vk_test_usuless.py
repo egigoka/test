@@ -13,7 +13,7 @@ from cs8 import *
 import vk_requests
 from test11vk_test_usuless_login import *
 
-if OS.name == "winows":
+if OS.name == "windows":
     import win_unicode_console
     win_unicode_console.enable()
 
@@ -214,6 +214,8 @@ if Arguments.spb_house:
         jsonstring = Json.load(json_file)
     except:
         Json.save(json_file, {})
+    finally:
+        jsonstring = Json.load(json_file)
     cnt = 0
     date = datetime.datetime.now()
     while (date.day>=17 or (date.day==1 and date.month==5)) and date.month>=4 and date.year==2018:
@@ -234,7 +236,7 @@ if Arguments.spb_house:
         jsonstring[str(cnt)]["photos"] = photos
         jsonstring[str(cnt)]["full_post"] = post
         jsonstring[str(cnt)]["text"] = text
-        jsonstring[str(cnt)]["date"] = date
+        jsonstring[str(cnt)]["date"] = Time.datetime_to_timestamp(date)
         jsonstring[str(cnt)]["publisher"] = publisher
         jsonstring[str(cnt)]["publisher_url"] = publisher_url
 
@@ -253,17 +255,25 @@ if Arguments.spb_house:
 
 elif "s2" in sys.argv:
     jsonstring = Json.load(Path.extend(Path.working(), "vk_sbp_оютное_гнездо.json"))
-    for ad in jsonstring:
-        #print(ad)
-        #print(ad["text"])
-        if "старая" in ad["text"].down():
-            Print.debug("url", ad["url"],
+    #Print.prettify(jsonstring)
+    for ad, value in Dict.iterable(jsonstring):
+        if "старая" in value["text"].lower():
+            message = "Здравствуйте, @id" + str(Str.get_integers(value["publisher_url"])[0]) + " (" + value["publisher"].split(" ")[0] +")! " + newline + "Ещё не сдали?"
+            Print.debug("url", value["url"],
             #            "attachments", attachments,
             #            "photos", photos,
-                        "text", ad["text"],
-                        "date", Time.rustime(ad["date)"]),
-                        "publisher", ad["publisher"],
-                        "publisher_url", ad["publisher_url"])
+                        "text", value["text"],
+                        "date", Time.rustime(value["date"]),
+                        "publisher", value["publisher"],
+                        "publisher_url", value["publisher_url"],
+                        message)
+            import copypaste
+            copypaste.copy(value["url"])
+            input("Press Enter to copy message")
+            copypaste.copy(message)
+            input("Press Enter to next ad")
+
+
     pass
 
 
