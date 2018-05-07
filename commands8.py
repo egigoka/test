@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.0.19-alpha"
+__version__ = "8.3.0.20-alpha"
 import os
 import sys
 import copy
@@ -1377,14 +1377,17 @@ class Int:
 
 class CLI():
     @staticmethod
-    def get_y_n(question=""):
-        while True:
-            inputtt = input(str(question) + " (y/n)?")
-            inputtt = inputtt.strip(" ")
+    def get_y_n(question="", answer=None):
+        def check_answer(string):
             if inputtt == "y":
                 return True
             if inputtt == "n":
                 return False
+        if answer: check_answer(answer)
+        while True:
+            inputtt = input(str(question) + " (y/n)?")
+            inputtt = inputtt.strip(" ")
+            check_answer(inputtt)
 
     wait_update_pos = 0
 
