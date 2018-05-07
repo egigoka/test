@@ -2,12 +2,21 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.0.20-alpha"
+__version__ = "8.3.3.13-alpha"
 import os
 import sys
 import copy
 import platform
 import pkgutil
+import json
+import shutil
+import time
+import random
+import subprocess
+import datetime
+import re
+import ctypes
+import getpass
 
 FRACKING_Internal_mine_import_speed_tweaking = False
 
@@ -102,13 +111,20 @@ class OS:
 
 
 class Pip:
+
+
+
     @classmethod
-    def install(Pip, module_name):
+    def install(Pip, *module_names, upgrade=False):
         try:
             from pip import main as pip_main
         except ImportError:
             from pip._internal import main as pip_main
-        pip_main(['install', module_name])
+        if upgrade:
+            module_names = list(module_names)
+            module_names.insert(0, "--upgrade")
+        pip_main(['install', *module_names])
+        time.sleep(0.5)
         Pip.update_list_of_modules()
 
     @classmethod
@@ -128,6 +144,23 @@ class Pip:
         if "pip" not in Pip.list_of_modules:
             if OS.name == "linux":
                 os.system("sudo apt-get install python" + OS.python_commandline_version + "-pip")
+
+    @classmethod
+    def update_all_packages(Pip):
+        import pip
+        packages = Str.nl(Console.get_output("pip list"))
+        packages_names = []
+        for package in packages[3:]:
+            if ("Package" not in package) and ("---" not in package) and package != "":
+                packages_names.append(Str.get_words(package)[0])
+        Print.debug(packages_names)
+        Pip.install(*packages_names, upgrade=True)
+        Pip.reload_pip()
+
+    @classmethod
+    def reload_pip(Pip):
+        import pip, importlib
+        pip = importlib.reload(pip)
 
     list_of_modules = []
 
@@ -265,7 +298,7 @@ class Internal:
         import commands8, importlib
         commands8 = importlib.reload(commands8)
         del commands8
-        string = "from commands8 import *"  # d you need to manually add this string to code :(
+        string = "from commands8 import *"  # d you need to manually add this <<< string to code :(
         if not quiet:
             print('"'+string+'" copied to clipboard')
             import copypaste
@@ -280,15 +313,7 @@ if OS.display:
     import tkinter
 
 
-import json, \
-       shutil, \
-       time, \
-       random, \
-       subprocess, \
-       datetime, \
-       re, \
-       ctypes, \
-       getpass
+
 
 
 
@@ -528,6 +553,14 @@ class Str:
             print("Итоговое число:", output_int)
         return output_int
 
+
+    @classmethod
+    def remove_spaces(Str, string_):
+        return ' '.join(string_.split())  # at least, it's fast https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+    @classmethod
+    def get_words(Str, string_):
+        return Str.remove_spaces(string_).split(" ")
 
 
 class Console():
