@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.3.13-alpha"
+__version__ = "8.3.3.14-alpha"
 import os
 import sys
 import copy
@@ -153,7 +153,6 @@ class Pip:
         for package in packages[3:]:
             if ("Package" not in package) and ("---" not in package) and package != "":
                 packages_names.append(Str.get_words(package)[0])
-        Print.debug(packages_names)
         Pip.install(*packages_names, upgrade=True)
         Pip.reload_pip()
 
@@ -1262,7 +1261,6 @@ class Bash:
 
 
 class macOS:
-
     class osascript:
         @staticmethod
         def quotes_escape(string):
