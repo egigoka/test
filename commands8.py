@@ -34,9 +34,8 @@ def get_Bench(start=False):  # return class with those functions:
         @classmethod
         def get(cls):  # dir ignore
             cls.time_end = datetime.datetime.now()
-            delta = cls.time_end - cls.time_start
-            delta_combined = delta.seconds + delta.microseconds / 1E6
-            return delta_combined
+
+            return Time.delta(cls.time_start, cls.time_end)
 
         @classmethod
         def end(cls):  # return delta between start and end
@@ -63,7 +62,7 @@ class OS:
     name = None  # d string with name of OS: "windows", "linux", or "macos"
     windows_version = None  # d only on Windows, integer of major version of Windows
     display = None  # d didn't work yet
-    cyrrilic_support = None  # d boolean variable of cyrrilic output support
+    cyrillic_support = None  # d boolean variable of cyrrilic output support
     if sys.platform == "linux" or sys.platform == "linux2":
         name = "linux"
     elif sys.platform == "win32" or sys.platform == "cygwin":
@@ -95,9 +94,9 @@ class OS:
         for cyrsybol in cyrline:
             print(cyrsybol*2, end="\r")
         print("  ", end="\r")
-        cyrrilic_support = True
+        cyrillic_support = True
     except UnicodeEncodeError as err:
-        cyrrilic_support = False
+        cyrillic_support = False
         # print (err)
         print ("Your system doesn't properly work with cyrrilic -_-")
 
@@ -144,6 +143,7 @@ class Internal:
     @staticmethod
     def mine_import(module_name, objects=None, justdownload=False, az=None):  # import
       # d module, if module not found, trying to install it by pip
+        #return
         if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench = get_Bench()
         if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.start()
         Pip.check_pip_installation()
@@ -300,8 +300,11 @@ if OS.name == "windows":
     Internal.mine_import("win32con")
     Internal.mine_import("termcolor")
 Internal.mine_import("colorama")
-colorama.init()
-colorama.deinit()
+try:
+    colorama.init()
+    colorama.deinit()
+except AttributeError:
+    print("failed to init colorama, maybe problem with importing")
 Internal.mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 if OS.name == "windows":
     Internal.mine_import("pyperclip", az="copypaste")
@@ -342,6 +345,15 @@ class Print():
             line = line[:-1]
         print(line, end="\r")
         print(*arguments, sep=sep, end="\r")
+
+    @staticmethod
+    def prettify(object, indent=4, quiet=False):
+        import pprint
+        pp = pprint.PrettyPrinter(indent=indent)
+        if not quiet:
+            pp.pprint(object)
+        else:
+            return pp.pformat(object=object)
 
 
 class Str:
@@ -752,12 +764,12 @@ class File:
         filename = Path.full(filename)
         if os.path.split(filename)[0] != "":
             Dir.create(os.path.split(filename)[0])
-        if not os.path.exists(filename):
+        if not File.exists(filename):
             with open(filename, 'a'):  # open file and close after
-                os.utime(filename, None)  # changes time of file modification
+                os.utime(filename, None)  # change time of file modification
         else:
             raise FileExistsError("file" + str(filename) + "exists")
-        if not os.path.exists(filename):
+        if not File.exists(filename):
             raise FileNotFoundError("error while creating file " + filename +
                                     "try to repair script at " + Path.full(sys.argv[0]))
 
@@ -773,7 +785,7 @@ class File:
         if not quiet:
             print("file", path, "is deleted")
         time.sleep(0.05)
-        if os.path.exists(path):
+        if File.exists(path):
             raise FileExistsError(path + " is not deleted")
 
     @staticmethod
@@ -848,21 +860,20 @@ class File:
     def get_size(filename):  # return size in bytes
         return os.stat(filename).st_size
 
+    @staticmethod
+    def exists(filename):
+        return os.path.exists(filename)
+
 
 class Time:
-
-    rnd = str(random.randint(1,100))
-
-    @classmethod
-    def fuck(cls):
-        print("fuck it all "+cls.rnd)
 
     @staticmethod
     def stamp():
         return time.time()
 
-    @staticmethod
-    def dotted():
+
+    @classmethod
+    def dotted(Time):
         dateandtime = Time.get("year") + "." + Time.get("month", 2) + "." + \
                       Time.get("day", 2) + "_at_" + Time.get("hour", 2) + "." + \
                       Time.get("minute", 2) + "." + Time.get("second", 2) + "." + \
@@ -873,28 +884,32 @@ class Time:
     def get(size, zfill=0):
         return Str.leftpad(eval("str(datetime.datetime.now()." + size + ")"), leng=zfill, ch=0)
 
+
     @staticmethod
-    def rustime(customtime=None):
+    def timestamp_to_datetime(timestamp):
+        if isinstance(timestamp, datetime.datetime):
+            return timestamp
+        return datetime.datetime.fromtimestamp(timestamp)
+
+
+    @staticmethod
+    def datetime_to_timestamp(datetime_object):
+        return time.mktime(datetime_object.timetuple())
+
+
+    @classmethod
+    def rustime(Time, customtime=None):
         if customtime:
-            day = datetime.datetime.fromtimestamp(customtime).strftime('%d')
-            month = datetime.datetime.fromtimestamp(customtime).strftime('%m')
-            year = datetime.datetime.fromtimestamp(customtime).strftime('%Y')
-            hour = datetime.datetime.fromtimestamp(customtime).strftime('%H')
-            minute = datetime.datetime.fromtimestamp(customtime).strftime('%M')
-            second = datetime.datetime.fromtimestamp(customtime).strftime('%S')
+            time = Time.timestamp_to_datetime(customtime)
         else:
-            gettime = datetime.datetime.now()
-            day = gettime.strftime("%d")
-            month = gettime.strftime('%m')
-            year = gettime.strftime('%Y')
-            hour = gettime.strftime('%H')
-            minute = gettime.strftime('%M')
-            second = gettime.strftime('%S')
-        rustime = str(day) + " числа " + str(month) + " месяца " + str(year) + " года в " \
-        + str(hour) + ":" + str(minute) + ":" + str(second)
-        if not OS.cyrrilic_support:
-            rustime = str(day) + "." + str(month) + "." + str(year) + "y at " \
-        + str(hour) + ":" + str(minute) + ":" + str(second)
+            time = datetime.datetime.now()
+        def lp(string): return Str.leftpad(string, 2, 0)
+        rustime = lp(time.day) + " числа " \
+        + lp(time.month) + " месяца " \
+        + lp(time.year) + " года в " \
+        + lp(time.hour) + ":" + lp(time.minute) + ":" + lp(time.second)
+        if not OS.cyrillic_support:
+            rustime = Time.dotted()
         return rustime
 
     @staticmethod
@@ -910,6 +925,16 @@ class Time:
                 Print.rewrite("Timer for " + str(seconds) + " seconds. " + str(secs_left_int) + " left")
         Print.rewrite("")
 
+    @classmethod
+    def delta(Time, time_a, time_b):  # return difference between two timestamps
+        if time_a > time_b: time_a, time_b = time_b, time_a
+        time_a = Time.timestamp_to_datetime(time_a)
+        time_b = Time.timestamp_to_datetime(time_b)
+        delta = time_b - time_a
+        delta_combined = delta.seconds + delta.microseconds / 1E6
+        return delta_combined
+
+
 
 class Json():
     @classmethod
@@ -924,7 +949,7 @@ class Json():
     @classmethod
     def save(cls, filename, jsonstring, quiet=False, debug=False):
         try:
-            File.create(filename)
+            File.wipe(filename)
             settingsJsonTextIO = open(filename, "w")
             json.dump(jsonstring, settingsJsonTextIO)
             settingsJsonTextIO.close()
@@ -1046,8 +1071,10 @@ class Process():
 
 class Dict:
     @staticmethod
-    def iterable(dict):
-        return dict.items()
+    def iterable(dict_):
+        if not isinstance(dict_, dict):
+            raise TypeError("There must be dict in input")
+        return dict_.items()
 
     @staticmethod
     def sorted_by_key(dict, case_insensitive=False):
@@ -1388,7 +1415,6 @@ class CLI():
 
     @staticmethod
     def progressbar(count, of):
-
         Console.width()
 
 
@@ -1414,7 +1440,10 @@ class Repl:
             main()
 
 
-colorama.reinit()
+try:
+    colorama.reinit()
+except AttributeError:
+    print("failed to init colorama, maybe problem with importing")
 LoadTimeBenchMark = get_Bench()
 LoadTimeBenchMark.time_start = start_bench_no_bench
 LoadTimeBenchMark.prefix = "commands8 v" + __version__ + " loaded in"
