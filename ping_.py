@@ -88,7 +88,7 @@ if State.extended_rkn_list:
 def main():
     while True:
         if State.extended_rkn_list:
-            Process.start("ipconfig", "/flushdns")
+            if OS.name == "windows": Process.start("ipconfig", "/flushdns")
         if OS.name == "macos":
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
@@ -111,7 +111,6 @@ def main():
             else:
                 cprint(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
         print(Time.rustime())
-        # notification on macOS
         if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
             if OS.name == "macos": macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
             State.internet_status = False

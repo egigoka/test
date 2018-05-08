@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.3.14-alpha"
+__version__ = "8.3.3.15-alpha"
 import os
 import sys
 import copy
@@ -60,7 +60,7 @@ def get_Bench(start=False):  # return class with those functions:
             return delta_combined
     return Bench
 
-class OS:
+class OS:   # TODO name of system make boolean
     is_python3 = sys.version_info >= (3, 0)  # d boolean
     python_implementation = None # d string with name of python implementation: "cpython" or "pypy"
     python_version_major = sys.version_info.major # d int of major python version
@@ -149,10 +149,12 @@ class Pip:
     def update_all_packages(Pip):
         import pip
         packages = Str.nl(Console.get_output("pip list"))
+        Print.debug(packages)
         packages_names = []
         for package in packages[3:]:
             if ("Package" not in package) and ("---" not in package) and package != "":
                 packages_names.append(Str.get_words(package)[0])
+        Print.debug(packages_names)
         Pip.install(*packages_names, upgrade=True)
         Pip.reload_pip()
 
@@ -629,6 +631,7 @@ class Console():
     def get_output(command, quiet=True, split_lines=False):  # d return output
       # d of executing command. Doesn't output it to terminal in realtime.
       # d can be output after done if "quiet" argument activated.
+        # TODO make ouptut even if exit status != 0
         p = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         if OS.name == "windows":
             output = p.decode("cp866")
