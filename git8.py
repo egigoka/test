@@ -24,7 +24,7 @@ class Git:
 
 
     @classmethod
-    def update(cls, message, path="https://github.com/" + Path.working().split(os.sep)[-1] + "/test.git"):
+    def update(cls, message, path="https://github.com/egigoka/" + Path.working().split(os.sep)[-1] + ".git"):
         cls.add(".")
         cls.commit(message)
         cls.push(path, upstream=True)
