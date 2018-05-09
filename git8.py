@@ -1,6 +1,14 @@
 #! python3
 # -*- coding: utf-8 -*-
 from commands8 import *
+
+def get_name_of_repo():
+    if Path.working().split(os.sep)[-1] == "term":
+        return "test"
+    else:
+        return Path.working().split(os.sep)[-1]
+
+
 class Git:
     @classmethod
     def add(cls, what):
@@ -22,9 +30,8 @@ class Git:
         commands.append(path)
         Process.start(commands)
 
-
     @classmethod
-    def update(cls, message, path="https://github.com/egigoka/" + Path.working().split(os.sep)[-1] + ".git"):
+    def update(cls, message, path="https://github.com/egigoka/" + get_name_of_repo() + ".git"):
         cls.add(".")
         cls.commit(message)
         cls.push(path, upstream=True)
