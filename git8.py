@@ -24,13 +24,13 @@ class Git:
 
 
     @classmethod
-    def update(cls, message, path="https://github.com/egigoka/test.git"):
+    def update(cls, message, path="https://github.com/" + Path.working().split(os.sep)[-1] + "/test.git"):
         cls.add(".")
         cls.commit(message)
         cls.push(path, upstream=True)
 
 
-        
+
 if __name__ == "__main__":
     arguments = list(sys.argv)
     arguments.pop(0)
