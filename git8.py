@@ -3,7 +3,7 @@
 from commands8 import *
 
 def get_name_of_repo():
-    if Path.working().split(os.sep)[-1] == "term":
+    if Path.working().split(os.sep)[-1] in ["t", "term"]:
         return "test"
     else:
         return Path.working().split(os.sep)[-1]
