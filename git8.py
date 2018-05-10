@@ -49,7 +49,7 @@ if __name__ == "__main__":
             string += arg + " "
         string = string.rstrip(" ")
     except IndexError:
-        input_string = input("Enter a description or press Enter to defaul message: ")
+        input_string = input("Enter a description or press Enter to default message: ")
         if input_string:
             string = input_string
     Git.update(string)
