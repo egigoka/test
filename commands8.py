@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.3.15-alpha"
+__version__ = "8.3.3.16-alpha"
 import os
 import sys
 import copy
@@ -99,6 +99,12 @@ class OS:   # TODO name of system make boolean
         print("Your system haven't display -_-")
 
     try:
+        if name == "windows":
+            try:
+                import win_unicode_console
+                win_unicode_console.enable()
+            except:
+                pass
         cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
         for cyrsybol in cyrline:
             print(cyrsybol*2, end="\r")
@@ -321,7 +327,7 @@ if OS.display:
 
 
 if OS.name == "windows":
-    Internal.mine_import("win_unicode_console")
+    # Internal.mine_import("win_unicode_console")
     Internal.mine_import("win32api")
     Internal.mine_import("win32con")
     Internal.mine_import("termcolor")
