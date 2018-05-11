@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.3.22-alpha"
+__version__ = "8.3.3.27-alpha"
 import os
 import sys
 import copy
@@ -99,13 +99,14 @@ class OS:   # TODO name of system make boolean
         print("Your system haven't display -_-")
 
     try:
-        if name == "windows":
+        #if name == "windows":
+        cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+        if (sys.platform == "win32" or sys.platform == "cygwin") and sys.version_info < (3,6):
             try:
                 import win_unicode_console
                 win_unicode_console.enable()
             except:
                 pass
-        cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
         for cyrsybol in cyrline:
             print(cyrsybol*2, end="\r")
         print("  ", end="\r")
@@ -114,6 +115,7 @@ class OS:   # TODO name of system make boolean
         cyrillic_support = False
         # print (err)
         print ("Your system doesn't properly work with cyrrilic -_-")
+
 
 
 class Pip:
@@ -318,7 +320,7 @@ if OS.display:
 
 
 if OS.name == "windows":
-    # Internal.mine_import("win_unicode_console")
+    Internal.mine_import("win_unicode_console")
     Internal.mine_import("win32api")
     Internal.mine_import("win32con")
     Internal.mine_import("termcolor")
@@ -694,27 +696,29 @@ class Path:
     @classmethod
     def extend(cls, *paths):  # paths input strings of path pieces, return
       # d string with path, good for OS
-        for path_ in paths:
+        for path_part in paths:
             try:
-                path = os.path.join(str(path), str(path_))
+                path = os.path.join(str(path), str(path_part))
             except NameError:  # first path piece is very important
-                if (OS.name == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
+                if OS.family == "": pass # fix
+                if (OS.name == "windows") and path_part == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
                     path = backslash * 2
-                elif (OS.name == "windows") and (len(path_) <= 3):
-                    path = os.path.join(path_, os.sep)
+                elif (OS.name == "windows") and (len(path_part) <= 3):
+                    path = os.path.join(path_part, os.sep)
                 elif OS.name == "windows":
-                    path = path_
+                    path = path_part
+                    Print.debug("path", path, "path_part", path_part)
                 elif OS.family == "unix":
-                    if path_ == "..":
-                        path = path_
-                    elif path_ == ".":
-                        path = path_
-                    elif path_ == "~":
+                    if path_part == "..":
+                        path = path_part
+                    elif path_part == ".":
+                        path = path_part
+                    elif path_part == "~":
                         path = cls.home()
                     else:
-                        path = os.path.join(os.sep, path_)
+                        path = os.path.join(os.sep, path_part)
                 else:
-                    raise FileNotFoundError("path_" + str(path_) + "is not expected")
+                    raise FileNotFoundError("path_part" + str(path_part) + "is not expected")
 
         return path
 
