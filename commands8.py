@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.3.18-alpha"
+__version__ = "8.3.3.22-alpha"
 import os
 import sys
 import copy
@@ -118,32 +118,24 @@ class OS:   # TODO name of system make boolean
 
 class Pip:
 
-    @staticmethod
-    def get_main():
-        try:
-            from pip import main as pip_main
-        except ImportError:
-            from pip._internal import main as pip_main
-        return pip_main
+    try:
+        from pip import main
+    except ImportError:
+        from pip._internal import main
 
     @classmethod
-    def install(Pip, *module_names, upgrade=False):
-        pip_main = Pip.get_main()
-        if upgrade:
-            module_names = list(module_names)
-            module_names.insert(0, "--upgrade")
-        pip_main(List.flatterize([install].append(module_names)))
+    def install(Pip, *module_names, upgrade=False, uninstall=False):
+        commands = ["install"]
+        if uninstall: commands = ["uninstall", "-y"]
+        elif upgrade: commands.append("--upgrade")
+        commands.append(module_names)
+        Pip.main(List.flatterize(commands))
         time.sleep(0.5)
         Pip.update_list_of_modules()
 
     @classmethod
-    def uninstall(Pip, module_name, force=False):
-        pip_main = Pip.get_main()
-        commands = ['uninstall', module_name]
-        if force:
-            commands.insert(1, "-y")
-        pip_main(commands)
-        Pip.update_list_of_modules()
+    def uninstall(Pip, *module_names):
+        Pip.install(module_names=module_names, uninistall=True)
 
     @classmethod
     def check_pip_installation(Pip):
@@ -153,7 +145,6 @@ class Pip:
 
     @classmethod
     def update_all_packages(Pip):
-        import pip
         packages = Str.nl(Console.get_output("pip list"))
         Print.debug(packages)
         packages_names = []
