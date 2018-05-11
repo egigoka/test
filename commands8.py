@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.3.27-alpha"
+__version__ = "8.3.4.13-alpha"
 import os
 import sys
 import copy
@@ -16,9 +16,11 @@ import subprocess
 import datetime
 import re
 import ctypes
-import getpass
 
-FRACKING_Internal_mine_import_speed_tweaking = False
+FRACKING_Internal_mine_import_speed_tweaking = True
+FRACKING_classes_speed_tweaking = True
+
+bench_no_bench_import_time = datetime.datetime.now()
 
 # todo version diff
 #   todo export script as json?
@@ -43,22 +45,36 @@ def get_Bench(start=False):  # return class with those functions:
         @classmethod
         def get(cls):  # dir ignore
             cls.time_end = datetime.datetime.now()
-
-            return Time.delta(cls.time_start, cls.time_end)
+            def delta(time_a, time_b):
+                delta = time_b - time_a
+                return delta.seconds + delta.microseconds / 1E6
+            return delta(cls.time_start, cls.time_end)
 
         @classmethod
-        def end(cls):  # return delta between start and end
-            delta_combined = cls.get()
+        def end(cls, prefix_string=None, quiet_if_zero=False):  # return delta between start and end
+            if prefix_string: cls.prefix = prefix_string
+            delta = cls.get()
             if not cls.quiet:
-                try:
-                    colorama.init()
-                    cprint(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds", "grey", "on_white")
-                except TypeError:
-                    print(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds")
-                except AttributeError:
-                    print(cls.prefix + " " + str(round(delta_combined, 2)) + " seconds")
-            return delta_combined
+                #print(not quiet_if_zero, str(round(delta, 2)), (str(round(delta, 2)) != "0.0"), (not quiet_if_zero) and (str(round(delta, 2)) != "0.0"))
+                if (not quiet_if_zero) or (str(round(delta, 2)) != "0.0"):
+                    try:
+                        colorama.init()
+                        cprint(cls.prefix + " " + str(round(delta, 2)) + " seconds", "grey", "on_white")
+                    except TypeError:
+                        print(cls.prefix + " " + str(round(delta, 2)) + " seconds")
+                    except AttributeError:
+                        print(cls.prefix + " " + str(round(delta, 2)) + " seconds")
+            return delta
     return Bench
+
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark = get_Bench()
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.time_start = start_bench_no_bench
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("python libs imported in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.time_start = bench_no_bench_import_time
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("func get_Bench loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+
 
 class OS:   # TODO name of system make boolean
     is_python3 = sys.version_info >= (3, 0)  # d boolean
@@ -117,13 +133,19 @@ class OS:   # TODO name of system make boolean
         print ("Your system doesn't properly work with cyrrilic -_-")
 
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class OS loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+
 
 class Pip:
 
-    try:
-        from pip import main
-    except ImportError:
-        from pip._internal import main
+    @staticmethod
+    def main(list_of_args):
+        try:
+            from pip import main as pip_main
+        except ImportError:
+            from pip._internal import main as pip_main
+        return pip_main(list_of_args)
 
     @classmethod
     def install(Pip, *module_names, upgrade=False, uninstall=False):
@@ -148,7 +170,6 @@ class Pip:
     @classmethod
     def update_all_packages(Pip):
         packages = Str.nl(Console.get_output("pip list"))
-        Print.debug(packages)
         packages_names = []
         for package in packages[3:]:
             if ("Package" not in package) and ("---" not in package) and package != "":
@@ -167,10 +188,22 @@ class Pip:
     @classmethod
     def update_list_of_modules(Pip):
         Pip.list_of_modules = []
+        print(pkgutil.iter_modules())
         for item in pkgutil.iter_modules():
             Pip.list_of_modules.append(item[1])
+
+    #@classmethod
+    #def update_list_of_modules(Pip):
+    #    Pip.list_of_modules = sys.modules.keys() # todo experimental
+
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Pip loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+
+print("try to check needed modules only if one of them is missing")
 Pip.update_list_of_modules()
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("updated list of modules loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Internal:
     @staticmethod
@@ -255,8 +288,7 @@ class Internal:
             except ModuleNotFoundError:
                 import_error()
 
-        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.prefix = module_name + " " + str(objects)
-        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.end()
+        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.end(module_name + " " + str(objects))
 
 
     @staticmethod
@@ -305,6 +337,9 @@ class Internal:
             copypaste.copy(string)
             pass
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Internal loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+
 if OS.display:
     if OS.python_implementation != "pypy":
         if OS.name != "macos:":
@@ -320,7 +355,8 @@ if OS.display:
 
 
 if OS.name == "windows":
-    Internal.mine_import("win_unicode_console")
+    if sys.version_info < (3,6):
+        Internal.mine_import("win_unicode_console")
     Internal.mine_import("win32api")
     Internal.mine_import("win32con")
     Internal.mine_import("termcolor")
@@ -336,6 +372,8 @@ if OS.name == "windows":
 else:
     Internal.mine_import("copypaste")
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("imported all dependencies in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 newline = '\n'  # d string with newline bnl3
 ruble = u"\u20bd"  # d string with ₽ symbol
@@ -518,6 +556,7 @@ class Str:
     @staticmethod
     def input_pass(string="Password:"):  # d return string from user, securely
       # d inputed by getpass library
+        import getpass
         return getpass.getpass(string)
 
     @staticmethod
@@ -640,7 +679,8 @@ class Console():
             output = Str.nl(output)
         return output
 
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Print loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Ssh:
     @staticmethod
@@ -677,7 +717,8 @@ class Ssh:
         return output
 
 
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Ssh loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 
 class Path:
@@ -794,6 +835,9 @@ class Dir:
                 if not quiet:
                     print(filename, "renamed to", final_name)
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Path loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+
 class File:
     @staticmethod
     def create(filename):
@@ -900,6 +944,8 @@ class File:
     def exists(filename):
         return os.path.exists(filename)
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class File loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Time:
 
@@ -970,7 +1016,8 @@ class Time:
         delta_combined = delta.seconds + delta.microseconds / 1E6
         return delta_combined
 
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Time loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Json():
     @classmethod
@@ -1022,7 +1069,8 @@ class Json():
             raise IOError("error while loading JSON, try to repair script at path " +
                           Path.full(sys.argv[0]))
 
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Json loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class List:
     @staticmethod
@@ -1045,6 +1093,8 @@ class List:
         output_lists = [list_input[x:x+count] for x in range(0, len(list_input), count)]  # https://stackoverflow.com/questions/9671224/split-a-python-list-into-other-sublists-i-e-smaller-lists
         return output_lists  # todo отдебажить пограничные моменты
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class List loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Process():
     @staticmethod
@@ -1103,7 +1153,8 @@ class Process():
                 # print(commands)
                 os.system(commands)
 
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Process loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Dict:
     @staticmethod
@@ -1123,6 +1174,8 @@ class Dict:
             import collections
             return collections.OrderedDict(sorted(dict.items()))
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Dict loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Codegen:
     debug = False
@@ -1145,6 +1198,8 @@ class Codegen:
     shebang = "#! python3" + newline + \
               "# -*- coding: utf-8 -*-" + newline
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Codegen loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 def plog(logfile, logstring="some shit happened", customtime=None, quiet=False, backup=True):
     if not quiet:
@@ -1159,6 +1214,8 @@ def plog(logfile, logstring="some shit happened", customtime=None, quiet=False, 
         file.write(Time.rustime() + " " + str(logstring) + newline)
     file.close()
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("func plog loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Network:
     @staticmethod
@@ -1241,7 +1298,8 @@ class Network:
             return up, ip, ping_output
         return up
 
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Network loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Fix:
 
@@ -1252,8 +1310,8 @@ class Fix:
         os.system("set PYTHONIOENCODING = utf - 8")
 
 
-
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Fix loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Bash:
     escapable_chars = [backslash]
@@ -1263,46 +1321,52 @@ class Bash:
             argument = argument.replace(char, backslash+char)
         return Str.to_quotes(argument)
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Bash loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
-class macOS:
-    class osascript:
-        @staticmethod
-        def quotes_escape(string):
-            quote_1 = '"'
-            #quote_2 = "'"
-            # if there any already escaped symbols:
-            string = string.replace(backslash, backslash*3)  # if there any other escaped symbols except quotes
-            string = string.replace(backslash*3+quote_1, backslash*2+quote_1)  # removing one backslash, because it will added furthurer
-            #string = string.replace(backslash*3+quote_2, backslash*2+quote_2)
+if OS.name == "macos":
+    class macOS:
+        class osascript:
+            @staticmethod
+            def quotes_escape(string):
+                quote_1 = '"'
+                #quote_2 = "'"
+                # if there any already escaped symbols:
+                string = string.replace(backslash, backslash*3)  # if there any other escaped symbols except quotes
+                string = string.replace(backslash*3+quote_1, backslash*2+quote_1)  # removing one backslash, because it will added furthurer
+                #string = string.replace(backslash*3+quote_2, backslash*2+quote_2)
 
-            # usual quotes escape
-            escaped_1 = backslash + quote_1
-            #escaped_2 = backslash + quote_2
-            string = string.replace(quote_1,escaped_1)
-            #string = string.replace(quote_2, escaped_2)
-            return string
+                # usual quotes escape
+                escaped_1 = backslash + quote_1
+                #escaped_2 = backslash + quote_2
+                string = string.replace(quote_1,escaped_1)
+                #string = string.replace(quote_2, escaped_2)
+                return string
 
-    @classmethod
-    def notification(cls, message, title="python3", subtitle=None, sound=None, list_of_sounds=False):
-        # https://apple.stackexchange.com/questions/57412/how-can-i-trigger-a-notification-center-notification-from-an-applescript-or-shel# - just applescript
-        # better realizations:
-        # advanced commandline tool - https://github.com/vjeantet/alerter
-        # simpler commandline tool - https://github.com/vjeantet/alerter
-        # commands = "display notification \"message\" with title \"title\" subtitle \"subtitle\" sound name \"Sosumi\""
-        commands = "display notification " + Str.to_quotes(cls.osascript.quotes_escape(message))
-        if title or subtitle:
-            commands += " with "
-            if title:
-                commands += "title " + Str.to_quotes(cls.osascript.quotes_escape(title)) + " "
-            if subtitle:
-                commands += "subtitle " + Str.to_quotes(cls.osascript.quotes_escape(subtitle)) + " "
-        if sound:
-            commands += " sound name " + Str.to_quotes(cls.osascript.quotes_escape(sound))
-        commands = cls.osascript.quotes_escape(commands)  # escaping quotes:
-        commands = Str.to_quotes(commands)  # applescript to quotes
-        Process.start("osascript", "-e", commands)  # f start(*arguments, new_window=False, debug=False, pureshell=False):
-        if list_of_sounds:
-            Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
+        @classmethod
+        def notification(cls, message, title="python3", subtitle=None, sound=None, list_of_sounds=False):
+            # https://apple.stackexchange.com/questions/57412/how-can-i-trigger-a-notification-center-notification-from-an-applescript-or-shel# - just applescript
+            # better realizations:
+            # advanced commandline tool - https://github.com/vjeantet/alerter
+            # simpler commandline tool - https://github.com/vjeantet/alerter
+            # commands = "display notification \"message\" with title \"title\" subtitle \"subtitle\" sound name \"Sosumi\""
+            commands = "display notification " + Str.to_quotes(cls.osascript.quotes_escape(message))
+            if title or subtitle:
+                commands += " with "
+                if title:
+                    commands += "title " + Str.to_quotes(cls.osascript.quotes_escape(title)) + " "
+                if subtitle:
+                    commands += "subtitle " + Str.to_quotes(cls.osascript.quotes_escape(subtitle)) + " "
+            if sound:
+                commands += " sound name " + Str.to_quotes(cls.osascript.quotes_escape(sound))
+            commands = cls.osascript.quotes_escape(commands)  # escaping quotes:
+            commands = Str.to_quotes(commands)  # applescript to quotes
+            Process.start("osascript", "-e", commands)  # f start(*arguments, new_window=False, debug=False, pureshell=False):
+            if list_of_sounds:
+                Print.debug("global sounds", Dir.list_of_files(Path.extend("System", "Library", "Sounds")), "local sounds", Dir.list_of_files(Path.extend("~", "Library", "Sounds")))
+
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class macOS loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Gui:
     def warning(message):
@@ -1335,13 +1399,8 @@ class Gui:
             Print.debug("PyPy doesn't support pyautogui, so warning is here:", warning)
             input("Press Enter to continue")
 
-
-
-
-
-
-
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Gui loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Tkinter():
     @staticmethod
@@ -1349,17 +1408,20 @@ class Tkinter():
       # d Tkinter
         return str('#%02x%02x%02x' % (red, green, blue))
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Tkinter loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
+if OS.name == "windows":
+    class Windows:
+        @staticmethod
+        def lock():  # locking screen, work only on Windows < 10
+            if OS.windows_version and (OS.windows_version != 10):
+                ctypes.windll.LockWorkStation()  # todo fix Windows 10
+            else:
+                raise OSError("Locking work only on Windows < 10")
 
-
-class Windows:
-    @staticmethod
-    def lock():  # locking screen, work only on Windows < 10
-        if OS.windows_version and (OS.windows_version != 10):
-            ctypes.windll.LockWorkStation()  # todo fix Windows 10
-        else:
-            raise OSError("Locking work only on Windows < 10")
-
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Windows loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Random:
     @staticmethod
@@ -1375,6 +1437,8 @@ class Random:
         import string
         return ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=length))
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Random loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Wget:
     @staticmethod
@@ -1388,9 +1452,10 @@ class Wget:
         else:
             url = url.replace("&", backslash + "&")
             Process.start("wget", url, "-O", output, arguments, pureshell=True)
-
-
         # Another way to fix blocks by creating ~/.wgetrc file https://stackoverflow.com/a/34166756
+
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Wget loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Int:
     @staticmethod
@@ -1409,6 +1474,8 @@ class Int:
         else:
             return roots
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Int loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class CLI():
     @staticmethod
@@ -1455,6 +1522,8 @@ class CLI():
     def progressbar(count, of):
         Console.width()
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class CLI loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Repl:
     @staticmethod
@@ -1477,6 +1546,8 @@ class Repl:
         else:
             main()
 
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Repl loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 try:
     colorama.reinit()
@@ -1484,9 +1555,4 @@ except AttributeError:
     print("failed to init colorama, maybe problem with importing")
 LoadTimeBenchMark = get_Bench()
 LoadTimeBenchMark.time_start = start_bench_no_bench
-LoadTimeBenchMark.prefix = "commands8 v" + __version__ + " loaded in"
-LoadTimeBenchMark.end()
-
-#if __name__ == "__main__":
-#    Internal.dir_c()
-#    Repl.loop()
+LoadTimeBenchMark.end("commands8 v" + __version__ + " loaded in")
