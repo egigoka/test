@@ -2,22 +2,13 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.4.13-alpha"
-import os
-import sys
-import copy
-import platform
-import pkgutil
-import json
-import shutil
-import time
-import random
-import subprocess
-import datetime
-import re
-import ctypes
+__version__ = "8.3.6.11-alpha"
+# TODO for 9.0.0 release:
+    # OS class vars not strings, but booleans
+    # lazy load for all modules
+import os  # widely used
+import sys  # used for check version of python for init or not win_unicode_console
 
-FRACKING_Internal_mine_import_speed_tweaking = True
 FRACKING_classes_speed_tweaking = True
 
 bench_no_bench_import_time = datetime.datetime.now()
@@ -27,268 +18,37 @@ bench_no_bench_import_time = datetime.datetime.now()
 #   todo compare jsons?
 #   todo save changes as commit message?
 
-# this shit for pycharm:
-colorama = None; cprint = None; copypaste = None; pyautogui = None; Tk = None; Button = None; mainloop = None; paramiko = None
+from bench8 import get_Bench
 
-def get_Bench(start=False):  # return class with those functions:
-    class Bench(object):  # dir ignore
-        time_start = datetime.datetime.now()
-        time_end = None
-        quiet = False  # d argument for disable print to terminal               bnl1
-        prefix = "Bench runned in"  # d what have been done, will print if      bnl1
-        # d "quiet" variable of class is False
-
-        @classmethod
-        def start(cls):  # set time of begin to now
-            cls.time_start = datetime.datetime.now()
-
-        @classmethod
-        def get(cls):  # dir ignore
-            cls.time_end = datetime.datetime.now()
-            def delta(time_a, time_b):
-                delta = time_b - time_a
-                return delta.seconds + delta.microseconds / 1E6
-            return delta(cls.time_start, cls.time_end)
-
-        @classmethod
-        def end(cls, prefix_string=None, quiet_if_zero=False):  # return delta between start and end
-            if prefix_string: cls.prefix = prefix_string
-            delta = cls.get()
-            if not cls.quiet:
-                #print(not quiet_if_zero, str(round(delta, 2)), (str(round(delta, 2)) != "0.0"), (not quiet_if_zero) and (str(round(delta, 2)) != "0.0"))
-                if (not quiet_if_zero) or (str(round(delta, 2)) != "0.0"):
-                    try:
-                        colorama.init()
-                        cprint(cls.prefix + " " + str(round(delta, 2)) + " seconds", "grey", "on_white")
-                    except TypeError:
-                        print(cls.prefix + " " + str(round(delta, 2)) + " seconds")
-                    except AttributeError:
-                        print(cls.prefix + " " + str(round(delta, 2)) + " seconds")
-            return delta
-    return Bench
-
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark = get_Bench()
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.time_start = start_bench_no_bench
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("python libs imported in", quiet_if_zero=True)
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.time_start = bench_no_bench_import_time
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("func get_Bench loaded in", quiet_if_zero=True)
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+if FRACKING_classes_speed_tweaking:
+    LoadTimeBenchMark = get_Bench()
+    LoadTimeBenchMark.time_start = start_bench_no_bench
+    LoadTimeBenchMark.end("python libs imported in", quiet_if_zero=True)
+    LoadTimeBenchMark.start()
+    LoadTimeBenchMark.time_start = bench_no_bench_import_time
+    LoadTimeBenchMark.end("func get_Bench loaded in", quiet_if_zero=True)
+    LoadTimeBenchMark.start()
 
 
-class OS:   # TODO name of system make boolean
-    is_python3 = sys.version_info >= (3, 0)  # d boolean
-    python_implementation = None # d string with name of python implementation: "cpython" or "pypy"
-    python_version_major = sys.version_info.major # d int of major python version
-    python_commandline_version = ""
-    if is_python3:
-        python_commandline_version = "3" # d string of addable "3" to commandline apps if python is 3rd version
-    family = None  # d string with family of OS: "nt" or "unix"
-    name = None  # d string with name of OS: "windows", "linux", or "macos"
-    windows_version = None  # d only on Windows, integer of major version of Windows
-    display = None  # d didn't work yet
-    cyrillic_support = None  # d boolean variable of cyrrilic output support
-    if sys.platform == "linux" or sys.platform == "linux2":
-        name = "linux"
-    elif sys.platform == "win32" or sys.platform == "cygwin":
-        name = "windows"
-        windows_version = sys.getwindowsversion().major
-    elif sys.platform == "darwin":
-        name = "macos"
+from os8 import OS
 
-    if platform.python_implementation == "PyPy":
-        python_implementation = "pypy"
-    else:
-        python_implementation = "cpython"
+if FRACKING_classes_speed_tweaking:
+    LoadTimeBenchMark.end("class OS loaded in", quiet_if_zero=True)
+    LoadTimeBenchMark.start()
 
-    if name == "windows":
-        family = "nt"
-    elif name in ["macos", "linux"]:
-        family = "unix"
+from str8 import Str
 
-    try:  # todo make this work!
-        if name == "linux":
-            from Xlib.display import Display
-        display = True
-    except ImportError:
-        display = False
-        print("Your system haven't display -_-")
+if FRACKING_classes_speed_tweaking:
+    LoadTimeBenchMark.end("class Str loaded in", quiet_if_zero=True)
+    LoadTimeBenchMark.start()
 
-    try:
-        #if name == "windows":
-        cyrline = "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
-        if (sys.platform == "win32" or sys.platform == "cygwin") and sys.version_info < (3,6):
-            try:
-                import win_unicode_console
-                win_unicode_console.enable()
-            except:
-                pass
-        for cyrsybol in cyrline:
-            print(cyrsybol*2, end="\r")
-        print("  ", end="\r")
-        cyrillic_support = True
-    except UnicodeEncodeError as err:
-        cyrillic_support = False
-        # print (err)
-        print ("Your system doesn't properly work with cyrrilic -_-")
+from print8 import Print
 
-
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class OS loaded in", quiet_if_zero=True)
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
-
-
-class Pip:
-
-    @staticmethod
-    def main(list_of_args):
-        try:
-            from pip import main as pip_main
-        except ImportError:
-            from pip._internal import main as pip_main
-        return pip_main(list_of_args)
-
-    @classmethod
-    def install(Pip, *module_names, upgrade=False, uninstall=False):
-        commands = ["install"]
-        if uninstall: commands = ["uninstall", "-y"]
-        elif upgrade: commands.append("--upgrade")
-        commands.append(module_names)
-        Pip.main(List.flatterize(commands))
-        time.sleep(0.5)
-        Pip.update_list_of_modules()
-
-    @classmethod
-    def uninstall(Pip, *module_names):
-        Pip.install(module_names=module_names, uninistall=True)
-
-    @classmethod
-    def check_pip_installation(Pip):
-        if "pip" not in Pip.list_of_modules:
-            if OS.name == "linux":
-                os.system("sudo apt-get install python" + OS.python_commandline_version + "-pip")
-
-    @classmethod
-    def update_all_packages(Pip):
-        packages = Str.nl(Console.get_output("pip list"))
-        packages_names = []
-        for package in packages[3:]:
-            if ("Package" not in package) and ("---" not in package) and package != "":
-                packages_names.append(Str.get_words(package)[0])
-        Print.debug(packages_names)
-        Pip.install(*packages_names, upgrade=True)
-        Pip.reload_pip()
-
-    @classmethod
-    def reload_pip(Pip):
-        import pip, importlib
-        pip = importlib.reload(pip)
-
-    list_of_modules = []
-
-    @classmethod
-    def update_list_of_modules(Pip):
-        Pip.list_of_modules = []
-        print(pkgutil.iter_modules())
-        for item in pkgutil.iter_modules():
-            Pip.list_of_modules.append(item[1])
-
-    #@classmethod
-    #def update_list_of_modules(Pip):
-    #    Pip.list_of_modules = sys.modules.keys() # todo experimental
-
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Pip loaded in", quiet_if_zero=True)
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
-
-print("try to check needed modules only if one of them is missing")
-Pip.update_list_of_modules()
-
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("updated list of modules loaded in", quiet_if_zero=True)
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
+if FRACKING_classes_speed_tweaking:
+    LoadTimeBenchMark.end("class Print loaded in", quiet_if_zero=True)
+    LoadTimeBenchMark.start()
 
 class Internal:
-    @staticmethod
-    def mine_import(module_name, objects=None, justdownload=False, az=None):  # import
-      # d module, if module not found, trying to install it by pip
-        #return
-        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench = get_Bench()
-        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.start()
-        Pip.check_pip_installation()
-        if module_name not in Pip.list_of_modules:
-            ###########RARE###########
-            if module_name == "pyautogui":
-                if OS.name == "linux":
-                    if OS.is_python3:
-                        os.system("apt-get install python-xlib")
-                    else:
-                        os.system("apt-get install python3-Xlib")
-                if OS.name == "macos":
-                    for package in ["python" + OS.python_commandline_version + "-xlib",
-                                    "pyobjc-core", "pyobjc"]:
-                        Pip.install(package)
-                    if OS.python_implementation == "pypy":
-                        Print.debug("Yep, PyPy doesn't support pyobjc")
-            if module_name in ["win32api","win32con"]:
-                Pip.install("pypiwin32")
-            else:
-            ###########RARE###########
-                Pip.install(module_name)
-        if not justdownload:
-            def import_error():
-                import_fail_arg = "--import-fail"
-                if import_fail_arg in sys.argv:
-                    print('<<<<<<<<<<Some errors occured with importing "' + str(module_name) + '", re-run script doesnt help, sorry about that>>>>>>>>>>')
-                    print('<<<<<<<<<<Trying to work without "' + str(module_name) + '">>>>>>>>>>')
-                else:
-                    commands = ""
-                    sys.argv.append(import_fail_arg)
-                    for arg in sys.argv:
-                        commands += arg + " "
-                    commands = commands.rstrip(" ")
-                    print('<<<<<<<<<<Some errors occured with importing "' + str(module_name) + '", trying to re-run script with parameters "' + commands + '">>>>>>>>>>')
-                    os.system(commands)
-                    sys.exit()
-            try:
-                if az and objects:
-                    if len(objects.split(",")) == 1:
-                        globals()[az] = importlib.import_module(objects[0], package=module_name)
-                    print("Internal.mine_import doesn't support both attributes use 'az' and 'objects', so only 'objects' will apply.")
-                    az = None
-                if az:
-                    import importlib
-                    try:
-                        globals()[az] = importlib.import_module(module_name)
-                    except ImportError as err:  # support for py3.4
-                        print(err)
-                        print("trying to import " + module_name + " in another way")
-                        exec ("import " + module_name + " as " + az, globals())
-                    except ModuleNotFoundError as err:
-                        print(err)
-                        print("trying to import " + module_name + " in another way")
-                        exec ("import " + module_name + " as " + az, globals())
-                elif objects:
-                    # import importlib  # todo better code
-                    # for object in objects.split(",")
-                    #     globals()[object] = importlib.import_module(name, package=module_name):
-                    #### if " as " in object поделить и применить правильно, то есть имя назначить второе, а импортировать из первого
-                    exec("from " + module_name + " import " + objects, globals())
-                else:
-                    import importlib
-                    try:
-                        globals()[module_name] = importlib.import_module(module_name)
-                    except ImportError as err:  # support for py3.4
-                        print(err)
-                        print("trying to import " + module_name + " in another way")
-                        exec ("import " + module_name, globals())
-                    except ModuleNotFoundError as err:
-                        print(err)
-                        print("trying to import " + module_name + " in another way")
-                        exec ("import " + module_name, globals())
-            except ImportError as err:  # support for py3.4
-                import_error()
-            except ModuleNotFoundError:
-                import_error()
-
-        if FRACKING_Internal_mine_import_speed_tweaking: debug_Bench.end(module_name + " " + str(objects))
 
 
     @staticmethod
@@ -340,37 +100,20 @@ class Internal:
 if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Internal loaded in", quiet_if_zero=True)
 if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
-if OS.display:
-    if OS.python_implementation != "pypy":
-        if OS.name != "macos:":
-            Internal.mine_import("pyautogui", justdownload=True)
-        Internal.mine_import("paramiko", justdownload=True)
-    import tkinter
 
-
-
-
-
-
-
-
+import tkinter
 if OS.name == "windows":
     if sys.version_info < (3,6):
-        Internal.mine_import("win_unicode_console")
-    Internal.mine_import("win32api")
-    Internal.mine_import("win32con")
-    Internal.mine_import("termcolor")
-Internal.mine_import("colorama")
-try:
-    colorama.init()
-    colorama.deinit()
-except AttributeError:
-    print("failed to init colorama, maybe problem with importing")
-Internal.mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
+        import win_unicode_console
+    import termcolor
+import colorama
+colorama.init()
+from termcolor import colored, cprint
+
 if OS.name == "windows":
-    Internal.mine_import("pyperclip", az="copypaste")
+    import pyperclip as copypaste
 else:
-    Internal.mine_import("copypaste")
+    import copypaste
 
 if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("imported all dependencies in", quiet_if_zero=True)
 if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
@@ -382,226 +125,6 @@ newline2 = "\r\n"  # d string with other newline
 
 
 
-
-
-class Print():
-    @staticmethod
-    def debug(*arguments, raw=False):  # d just more notable print, only for
-      # d debugging
-        line = "-" * Console.width()
-        print("<<<Debug sheet:>>>")
-        for arg in arguments:
-            print(line, end="")
-            if raw:
-                print(repr(arg))
-            else:
-                print(arg)
-            print(line)
-        print("<<<End of debug sheet>>>")
-
-    @staticmethod
-    def rewrite(*arguments, sep=" ", raw=False):  # d string, that can be rewritable
-      # d note, that you need to rewrite string to remove characters
-
-        line = " " * Console.width()
-        if OS.name == "windows":
-            line = line[:-1]
-        print(line, end="\r")
-        print(*arguments, sep=sep, end="\r")
-
-    @staticmethod
-    def prettify(object, indent=4, quiet=False):
-        import pprint
-        pp = pprint.PrettyPrinter(indent=indent)
-        if not quiet:
-            pp.pprint(object)
-        else:
-            return pp.pformat(object=object)
-
-
-class Str:
-    @staticmethod
-    def to_quotes(some_string):  # d just place input string inside "" quotes
-        return '"' + str(some_string) + '"'
-
-    @staticmethod
-    def to_quotes_2(some_string):  # d place input string inside '' quotes
-        return "'" + str(some_string) + "'"
-
-    @staticmethod
-    def get_integers(string):  # d return list of integers from string, !!!floating not supported!!!
-      # todo add support for floating numbers, it will be cool!
-        integer_found = False
-        integers = []
-        current_integer = 0
-        negative = False
-        for symbol in str(string) + " ":  # in exception some processing, meh :(
-            try:
-                if symbol in ['-', '—']:
-                    negative = True
-                    continue
-                int(symbol)
-                current_integer = current_integer*10 + int(symbol)
-                integer_found = True
-            except ValueError:
-                if integer_found:
-                    if negative:
-                        current_integer = -current_integer
-                    integers = integers + [current_integer]
-                    current_integer = 0
-                    integer_found = False
-                negative = False
-        return integers
-
-    @staticmethod
-    def newlines_to_strings(string, quiet=False):  # split long string with line
-      # d breaks to separate strings in list
-        if string:
-            string = str(string)
-            if OS.name == "windows":
-                strings = string.split(newline2)
-                if len(strings) == 1:
-                    strings = strings[0].split(newline)
-            elif OS.name in ["macos", "linux"]:
-                strings = string.split(newline)
-            return strings
-        else:
-            raise TypeError("None can't be splitted")
-
-    @classmethod
-    def nl(cls, string):  # alias to newline
-        return cls.newlines_to_strings(string=string)
-
-    @staticmethod
-    def split_every(string, chars):  # split string every
-        chars = int(chars)
-        output_lines = []
-        char_exists = "."
-        char_can_be_exists = ".?"
-        regexp = char_exists + char_can_be_exists*(chars-1)
-        for line in re.findall(regexp, str(string)):  # todo can I just return this list?
-            output_lines += [line]
-        return output_lines
-
-    @staticmethod
-    def leftpad(string, leng, ch="0", rightpad=False):  # d return string with
-      # d added characters to left side. If string longer — return original string
-        string = str(string)
-        if len(string) >= leng:
-            return string
-        strOfCh = str(ch) * leng
-        string_output = strOfCh[len(string):leng] + string
-        if rightpad:
-            string_output = string + strOfCh[len(string):leng]
-        return string_output
-
-    @classmethod
-    def rightpad(cls, string, leng, ch="0"):  # return string with added
-      # d characters to right side. If string longer — return original string
-        return cls.leftpad(string, leng, ch=ch, rightpad=True)
-
-    @staticmethod
-    def substring(string, before, after=None, return_after_substring=False):  # return
-      # d string that between "before", and "after" strings, not including
-      # d those. If "return_after_substring", return typle with substring and
-      # d part of string after it.
-        startfrom = string.find(before)
-        if startfrom != -1:
-            startfrom = string.find(before) + len(before)
-        else:
-            startfrom = 0
-        if (after) or (after == ""):
-            end_at = string[startfrom:].find(after)
-            if end_at != -1:
-                end_at = startfrom + string[startfrom:].find(after)
-                substring = string[startfrom:end_at]
-                after_substring = string[end_at:]
-            else:
-                substring = string[startfrom:]
-                after_substring = ""
-        else:
-            substring = string[startfrom:]
-        if return_after_substring:
-            #try:
-            #    after_substring
-            #except UnboundLocalError:
-            #    Print.debug("string", string,
-            #                "before", before,
-            #                "after", after,
-            #                "return_after_substring", return_after_substring,
-            #                "substring", substring,
-            #                "after_substring", "UnboundLocalError: local variable 'after_substring' referenced before assignment")
-            return substring, after_substring
-        return substring
-
-    @staticmethod
-    def diff_simple(string_a, string_b):  # d print all symbol differents.
-      # d Not all mine code, must rewrite.
-      # todo rewrite this shit.
-        import difflib
-
-        strings = [(string_a, string_b)]  # for furthurer support for unlimited srtings
-
-        for a, b in strings:
-            print('{} => {}'.format(a, b))
-            for i, s in enumerate(difflib.ndiff(a, b)):
-                if s[0] == ' ':
-                    continue
-                elif s[0] == '-':
-                    print(u'Delete "{}" from position {}'.format(s[-1], i))
-                elif s[0] == '+':
-                    print(u'Add "{}" to position {}'.format(s[-1], i))
-            print()
-
-    @staticmethod
-    def input_pass(string="Password:"):  # d return string from user, securely
-      # d inputed by getpass library
-        import getpass
-        return getpass.getpass(string)
-
-    @staticmethod
-    def input_int(message="Input integer: ", minimum=None, maximum=None, default=None, quiet=False):
-      # d return integer from user with multible parameters.
-        output_int = "jabla fitta"
-        if default:
-            message = "(Enter = " + str(default) + ")"
-        while output_int == "jabla fitta":  # цикл, пока не получит итоговое число
-            integer = input(message)
-            if integer != "":
-                try:
-                    integer = Str.get_integers(integer)[0]
-                except IndexError:
-                    print("Это не число")
-                    continue
-            elif default and integer != "":
-                output_int = default
-            elif integer == "":
-                print("Это не число")
-                raise ValueError
-            if minimum:
-                if int < minimum:
-                    print("Число должно быть больше", minimum)
-                    raise ValueError
-            if maximum:
-                if int > maximum:
-                    print("Число должно быть меньше", maximum)
-                    raise ValueError
-            output_int = integer
-            break
-        if not quiet:
-            print("Итоговое число:", output_int)
-        return output_int
-
-
-    @classmethod
-    def remove_spaces(Str, string_):
-        return ' '.join(string_.split())  # at least, it's fast https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-
-    @classmethod
-    def get_words(Str, string_):
-        return Str.remove_spaces(string_).split(" ")
-
-
 class Console():
     @staticmethod
     def clean():  # wipe terminal output. Not tested on linux
@@ -609,6 +132,7 @@ class Console():
         if OS.name == "windows":
             os.system("cls")
         elif OS.name == "linux":
+            import shutil
             print(newline * shutil.get_terminal_size().lines)
         elif OS.name == "macos":
             os.system(r"clear && printf '\e[3J'")
@@ -616,8 +140,8 @@ class Console():
     @staticmethod
     def width():  # return width of terminal window in characters
         if OS.name == "windows":
-            io = Console.get_output("mode con")
-            width_ = Str.get_integers(io)[1]
+            import shutil
+            width_ = shutil.get_terminal_size().columns
         elif OS.name in ["linux", "macos"]:
             io = Console.get_output("stty size")
             width_ = Str.get_integers(io)[1]
@@ -626,8 +150,8 @@ class Console():
     @staticmethod
     def height():  # return height of terminal window in characters
         if OS.name == "windows":
-            modecon = Console.get_output("mode con")
-            height = Str.get_integers(modecon)[0]
+            import shutil
+            height = width_ = shutil.get_terminal_size().lines
         elif OS.name in ["linux", "macos"]:
             sttysize = Console.get_output("stty size")
             height = Str.get_integers(sttysize)[0]
@@ -637,6 +161,7 @@ class Console():
 
     @classmethod
     def blink(cls, width=None, height=None, symbol="#", sleep=0.5):
+        import random
       # d fastly print to terminal characters with random color. Completely shit.
       # d arguments width and height changing size of terminal, works only in
       # d Windows.
@@ -655,6 +180,7 @@ class Console():
             colors.pop(colors.index(color))
             highlight = random.choice(highlights)
             try: # New version with one long line. Works perfect, as I see.
+                import time
                 string = string * height
                 print(termcolor.colored(string, color, highlight))
                 time.sleep(sleep)
@@ -670,6 +196,7 @@ class Console():
       # d of executing command. Doesn't output it to terminal in realtime.
       # d can be output after done if "quiet" argument activated.
         # TODO make ouptut even if exit status != 0
+        import subprocess
         p = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         if OS.name == "windows":
             output = p.decode("cp866")
@@ -679,7 +206,7 @@ class Console():
             output = Str.nl(output)
         return output
 
-if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Print loaded in", quiet_if_zero=True)
+if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Console loaded in", quiet_if_zero=True)
 if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Ssh:
@@ -689,7 +216,7 @@ class Ssh:
       # d username:password autorisation.
       # todo autorisation by key.
         if OS.python_implementation != "pypy":
-            Internal.mine_import("paramiko")
+            import paramiko
         else:
             raise OSError("paramiko doesn't supported by PyPy")
         ssh = paramiko.SSHClient()
@@ -855,6 +382,7 @@ class File:
 
     @staticmethod
     def delete(path, quiet=False):  # ...
+        import time
         if os.path.isdir(path):
             raise IsADirectoryError(path + " is directory, use Dir.delete to delete")
         try:
@@ -870,10 +398,12 @@ class File:
 
     @staticmethod
     def move(input_file, output_file):  # ...
+        import shutil
         shutil.move(input_file, output_file)
 
     @staticmethod
     def copy(input_file, output_file):  # ...
+        import shutil
         shutil.copy2(input_file, output_file)
 
     @staticmethod
@@ -885,6 +415,7 @@ class File:
       # d FILE_ATTRIBUTE_HIDDEN to file, if running on Windows
         filename = Path.full(filename)
         if OS.name == "windows":
+            import win32api, win32con
             win32api.SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)  # hiding file like windows do
         dotted_file = Path.extend(os.path.split(filename)[0], "." + os.path.split(filename)[1])  # adding dot
         File.rename(filename, dotted_file)
@@ -896,6 +427,7 @@ class File:
     def backup(cls, filename, subfolder="bak", hide=True, quiet = False):
       # d move file to subfolder, adds sort of timestamp to filename and hide
       # d file if necessary
+        import shutil
         filename = Path.full(filename) # normalize filename
         backupfilename = str(filename) + "." + Time.dotted() + ".bak"  # add dottedtime to backup filename
         backupfilename = os.path.split(backupfilename)  # splitting filename to folder and file
@@ -951,6 +483,7 @@ class Time:
 
     @staticmethod
     def stamp():
+        import time
         return time.time()
 
 
@@ -976,6 +509,7 @@ class Time:
 
     @staticmethod
     def datetime_to_timestamp(datetime_object):
+        import time
         return time.mktime(datetime_object.timetuple())
 
 
@@ -1000,6 +534,7 @@ class Time:
         Countdown.start()
         secs_second_var = int(seconds)
         while Countdown.get() < seconds:
+            import time
             time.sleep(1/check_per_sec)
             secs_left_int = int(seconds - Countdown.get())
             if secs_left_int != secs_second_var:
@@ -1031,6 +566,7 @@ class Json():
 
     @classmethod
     def save(cls, filename, jsonstring, quiet=False, debug=False):
+        import json
         try:
             File.wipe(filename)
             settingsJsonTextIO = open(filename, "w")
@@ -1052,6 +588,7 @@ class Json():
 
     @classmethod
     def load(cls, filename, quiet = False, debug=False):
+        import json
         try:
             if not os.path.isfile(filename):
                 File.create(filename)
@@ -1075,6 +612,7 @@ if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 class List:
     @staticmethod
     def flatterize(input_list):
+        import copy
         if not ((isinstance(input_list,list)) or (isinstance(input_list,tuple))):
             raise TypeError("object of type '"+str(type(input_list))+"' can't be flatterized")
         output_list = copy.deepcopy(list(input_list))
@@ -1142,6 +680,7 @@ class Process():
             os.system(command)
         else:
             if OS.name == "windows":
+                import subprocess
                 commands = []
                 for argument_ in arguments:
                     commands.append(str(argument_))
@@ -1416,6 +955,7 @@ if OS.name == "windows":
         @staticmethod
         def lock():  # locking screen, work only on Windows < 10
             if OS.windows_version and (OS.windows_version != 10):
+                import ctypes
                 ctypes.windll.LockWorkStation()  # todo fix Windows 10
             else:
                 raise OSError("Locking work only on Windows < 10")
@@ -1426,14 +966,17 @@ if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 class Random:
     @staticmethod
     def integer(min, max):  # return random integer
+        import random
         return random.randrange(min, max+1)
 
     @staticmethod
     def float(min, max):  # return random floating number
+        import random
         return random.uniform(min, max)
 
     @staticmethod
     def string(length):
+        import random
         import string
         return ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=length))
 
@@ -1459,9 +1002,11 @@ if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
 class Int:
     @staticmethod
-    def from_to(start, end, to_str=False):  # return list of integers, if argument
+    def from_to(start, end, to_str=False, list=False):  # return list of integers, if argument
       # g "to_str" activated, return list of strings with equal length
-        roots = range(start, end + 1)
+      # g if "list" arg activated, list will be returned, otherwise, it will be iterable obj
+        if list: roots = range(start, end + 1)
+        else: roots = xrange(start, end + 1)
         if to_str:
             output = []
             max_len = max(len(str(start)), len(str(end)))
