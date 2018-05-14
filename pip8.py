@@ -3,7 +3,8 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from os8 import OS
 from str8 import Str
-__version__ = "0.0.3"
+from list8 import List
+__version__ = "0.0.5"
 class Pip:
 
     @staticmethod
@@ -26,7 +27,7 @@ class Pip:
 
     @classmethod
     def uninstall(Pip, *module_names):
-        Pip.install(module_names=module_names, uninistall=True)
+        Pip.install(*module_names, uninstall=True)
 
     @classmethod
     def check_pip_installation(Pip):

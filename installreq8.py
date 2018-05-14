@@ -3,9 +3,10 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 import pkgutil
 import sys
+from os8 import OS
 from pip8 import Pip
 from bench8 import get_Bench
-from os8 import OS
+
 
 FRACKING_Internal_mine_import_speed_tweaking = True
 

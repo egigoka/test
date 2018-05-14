@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.6.14-alpha"
+__version__ = "8.3.6.15-alpha"
 # TODO for 9.0.0 release:
     # OS class vars not strings, but booleans
     # lazy load for all modules
@@ -602,27 +602,7 @@ try:
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Json loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
-    class List:
-        @staticmethod
-        def flatterize(input_list):
-            import copy
-            if not ((isinstance(input_list,list)) or (isinstance(input_list,tuple))):
-                raise TypeError("object of type '"+str(type(input_list))+"' can't be flatterized")
-            output_list = copy.deepcopy(list(input_list))
-            cnt = 0
-            for object in output_list:
-                if not isinstance(object, (str,int)):
-                    output_list.pop(cnt)
-                    for item in reversed(object):
-                        output_list.insert(cnt, item)
-                cnt+=1
-            return output_list
-
-        @staticmethod
-        def split_every(list_input, count):
-            count = int(count)
-            output_lists = [list_input[x:x+count] for x in range(0, len(list_input), count)]  # https://stackoverflow.com/questions/9671224/split-a-python-list-into-other-sublists-i-e-smaller-lists
-            return output_lists  # todo отдебажить пограничные моменты
+    from list8 import List
 
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class List loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
