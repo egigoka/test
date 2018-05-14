@@ -8,8 +8,9 @@ __version__ = "8.3.6.15-alpha"
     # lazy load for all modules
 import os  # widely used
 import sys  # used for check version of python for init or not win_unicode_console
+sys.path.append(".")
 
-FRACKING_classes_speed_tweaking = False
+FRACKING_classes_speed_tweaking = True
 
 bench_no_bench_import_time = datetime.datetime.now()
 
@@ -31,17 +32,16 @@ try:
         LoadTimeBenchMark.end("func get_Bench loaded in", quiet_if_zero=True)
         LoadTimeBenchMark.start()
 
+    from str8 import Str
+
+    if FRACKING_classes_speed_tweaking:
+        LoadTimeBenchMark.end("class Str loaded in", quiet_if_zero=True)  # python searching for that module in PATH
+        LoadTimeBenchMark.start()
 
     from os8 import OS
 
     if FRACKING_classes_speed_tweaking:
         LoadTimeBenchMark.end("class OS loaded in", quiet_if_zero=True)
-        LoadTimeBenchMark.start()
-
-    from str8 import Str
-
-    if FRACKING_classes_speed_tweaking:
-        LoadTimeBenchMark.end("class Str loaded in", quiet_if_zero=True)
         LoadTimeBenchMark.start()
 
     from print8 import Print
