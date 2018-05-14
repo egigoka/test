@@ -4,7 +4,7 @@
 from os8 import OS
 from str8 import Str
 from list8 import List
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 class Pip:
 
     @staticmethod
@@ -17,6 +17,7 @@ class Pip:
 
     @classmethod
     def install(Pip, *module_names, upgrade=False, uninstall=False):
+        import time
         commands = ["install"]
         if uninstall: commands = ["uninstall", "-y"]
         elif upgrade: commands.append("--upgrade")

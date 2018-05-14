@@ -9,6 +9,7 @@ sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
 from commands8 import *
+from installreq8 import *
 
 print(win32con)
 print(win32api)

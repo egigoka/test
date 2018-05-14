@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from os8 import OS
+from console8 import Console
 __version__ = "0.0.2"
 class Print():
     @staticmethod
