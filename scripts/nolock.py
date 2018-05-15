@@ -13,5 +13,5 @@ from random8 import Random
 from time8 import Time
 
 while True:
-    Mouse.move(Random.integer(-100,100), Random.integer(-100,100), rel=True, quiet=True)
+    Mouse.move(Random.integer(-2,2), Random.integer(-2,2), rel=True, quiet=True)
     Time.sleep(Random.integer(60,180), quiet=True)
