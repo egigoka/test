@@ -3,10 +3,11 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 import pkgutil
 import sys
+import os
 from os8 import OS
 from pip8 import Pip
 from bench8 import get_Bench
-
+__version__ = "0.0.4"
 
 FRACKING_Internal_mine_import_speed_tweaking = True
 
@@ -38,7 +39,8 @@ def mine_import(module_name, objects=None, justdownload=False, az=None):  # impo
     if not justdownload:
         def import_error():
             import_fail_arg = "--import-fail"
-            if import_fail_arg in sys.argv:
+            import_fail_count = 3
+            if sys.argv.count(import_fail_arg) > import_fail_count:
                 print('<<<<<<<<<<Some errors occured with importing "' + str(module_name) + '", re-run script doesnt help, sorry about that>>>>>>>>>>')
                 print('<<<<<<<<<<Trying to work without "' + str(module_name) + '">>>>>>>>>>')
             else:

@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from os8 import OS
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 class Str:
     @staticmethod
-    def to_quotes(some_string):  # d just place input string inside "" quotes
+    def to_quotes(some_string):  # just place input string inside "" quotes
         return '"' + str(some_string) + '"'
 
     @staticmethod
-    def to_quotes_2(some_string):  # d place input string inside '' quotes
+    def to_quotes_2(some_string):  # place input string inside '' quotes
         return "'" + str(some_string) + "'"
 
     @staticmethod
-    def get_integers(string):  # d return list of integers from string, !!!floating not supported!!!
+    def get_integers(string):  # return list of integers from string, !!!floating not supported!!!
       # todo add support for floating numbers, it will be cool!
         integer_found = False
         integers = []
@@ -69,7 +69,7 @@ class Str:
         return output_lines
 
     @staticmethod
-    def leftpad(string, leng, ch="0", rightpad=False):  # d return string with
+    def leftpad(string, leng, ch="0", rightpad=False):  # return string with
       # d added characters to left side. If string longer — return original string
         string = str(string)
         if len(string) >= leng:
@@ -118,6 +118,7 @@ class Str:
             #                "after_substring", "UnboundLocalError: local variable 'after_substring' referenced before assignment")
             return substring, after_substring
         return substring
+
     @staticmethod
     def diff_simple(string_a, string_b):  # d print all symbol differents.
       # d Not all mine code, must rewrite.

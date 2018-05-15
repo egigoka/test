@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.6.19-alpha"
+__version__ = "8.3.6.20-alpha"
 # TODO for 9.0.0 release:
     # OS class vars not strings, but booleans
     # lazy load for all modules
@@ -912,4 +912,5 @@ try:
     LoadTimeBenchMark.end("commands8 v" + __version__ + " loaded in")
 except ModuleNotFoundError:
     import installreq8
-    Print.debug("I tried my best to install dependencies, restart script")
+    from print8 import Print
+    Print.debug("I tried my best to install dependencies, try to restart script, everything must be okay")
