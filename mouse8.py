@@ -1,13 +1,13 @@
 #! python3
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
-from time import Time
+from time8 import Time
 try:
     import pyautogui
 except:
     print("trying to install pyautogui")
     from installreq8 import pyautogui
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 class Settings_Mouse:
     mouse_move_duration = 0.5
