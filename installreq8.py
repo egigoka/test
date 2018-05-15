@@ -94,6 +94,7 @@ def mine_import(module_name, objects=None, justdownload=False, az=None):  # impo
 
 mine_import("termcolor", objects="colored, cprint")  # print_green_on_cyan = lambda x: cprint(x, 'green', 'on_cyan')
 if OS.name == "windows":
+    mine_import("copypaste")
     mine_import("pyperclip", az="copypaste")
 else:
     mine_import("copypaste")

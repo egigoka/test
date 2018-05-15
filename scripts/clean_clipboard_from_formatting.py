@@ -9,6 +9,8 @@ sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
 from commands8 import *
+import time
+import copypaste
 
 
 class Arguments:
