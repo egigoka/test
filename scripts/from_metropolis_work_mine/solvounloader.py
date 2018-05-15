@@ -169,7 +169,7 @@ def sleep(seconds):
 def message(text, title='some window', button='oh no'):
     pyautogui.alert(text=text, title=title, button=button)
 
-class Scroll:
+class Scroll:  # doesnt work good at new windows
 
     def scroll(value, up):
         value = int(value)
