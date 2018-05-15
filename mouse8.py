@@ -7,7 +7,7 @@ try:
 except:
     print("trying to install pyautogui")
     from installreq8 import pyautogui
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 class Settings_Mouse:
     mouse_move_duration = 0.5
@@ -34,7 +34,7 @@ class Mouse:
     class Click:
         @staticmethod
         def click(button, position, quiet=False):
-            Time.sleep(Settings_Mouse.sleep_before_click)
+            Time.sleep(Settings_Mouse.sleep_before_click, quiet=quiet)
             if position:
                 pyautogui.click(x=position[0],y=position[1],button=button)
             else:

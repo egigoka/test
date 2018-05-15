@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.6.16-alpha"
+__version__ = "8.3.6.17-alpha"
 # TODO for 9.0.0 release:
     # OS class vars not strings, but booleans
     # lazy load for all modules
@@ -788,22 +788,7 @@ try:
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Windows loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
-    class Random:
-        @staticmethod
-        def integer(min, max):  # return random integer
-            import random
-            return random.randrange(min, max+1)
-
-        @staticmethod
-        def float(min, max):  # return random floating number
-            import random
-            return random.uniform(min, max)
-
-        @staticmethod
-        def string(length):
-            import random
-            import string
-            return ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=length))
+    
 
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Random loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()

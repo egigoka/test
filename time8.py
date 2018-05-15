@@ -69,15 +69,16 @@ class Time:
         Print.rewrite("")
 
     @classmethod
-    def sleep(Time, time, quiet=False):
-        if time < 0:
+    def sleep(Time, seconds, quiet=False):
+        if seconds < 0:
             raise ValueError("sleep length must be non-negative")
-        elif time >= 1:
-            Time.timer(time)
+        elif seconds >= 1:
+            Time.timer(seconds)
         else:
             if not quiet:
-                print("sleeping", time)
-            time.sleep(time)
+                print("sleeping", seconds)
+            import time
+            time.sleep(seconds)
 
     @classmethod
     def delta(Time, time_a, time_b):  # return difference between two timestamps

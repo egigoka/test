@@ -8,4 +8,10 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
-from commands8 import *
+from mouse8 import Mouse
+from random8 import Random
+from time8 import Time
+
+while True:
+    Mouse.move(Random.integer(-100,100), Random.integer(-100,100), quiet=True)
+    Time.sleep(Random.integer(60,180), quiet=True)
