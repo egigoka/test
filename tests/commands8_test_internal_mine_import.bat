@@ -1,4 +1,0 @@
-commands8_internal_remove_dependecies.py
-start commands8_internal_remove_pip_uninstall_trash.bat
-commands8_internal_check_import_dependencies.py
-pause
