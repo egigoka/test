@@ -1,9 +1,11 @@
 #! python3
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
+
 from os8 import OS
 from str8 import Str
 from bench8 import get_Bench
+from print8 import Print
 __version__ = "0.0.6"
 class Time:
 
@@ -15,6 +17,7 @@ class Time:
 
     @staticmethod
     def get(size, zfill=0):
+        import datetime
         return Str.leftpad(eval("str(datetime.datetime.now()." + size + ")"), leng=zfill, ch=0)
 
 

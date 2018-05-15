@@ -1,45 +1,10 @@
 #! python3
 # -*- coding: utf-8 -*-
-__version__ = "1.0.0"
-# init (test for learning) release
-__version__ = "1.0.1"
-# fix misspelling
-__version__ = "1.1.0"
-# add file operations
-__version__ = "1.1.1"
-# add print functions from utils_dev
-__version__ = "1.2.0"
-# add path operations
-__version__ = "1.2.1"
-# print all obj with 'path', 'file'
-__version__ = "1.2.2"
-# f test_path_extend
-__version__ = "1.2.3"
-# test_file_create work
-__version__ = "1.2.4"
-# TestFileOperations bugfix
-__version__ = "1.2.5alpha1"
-# test test_file_wipe
-__version__ = "1.2.5"
-# test file_wipe workin'
-__version__ = "1.2.6"
-# test file_hide
-__version__ = "2.0.0"
-
-from commands7 import *
-# for f in dir():
-#     if f[:1].islower():
-#         print(f)
-#
-# debug_print("path shit")
-# for f in dir():
-#     if "path" in f:
-#         print(f)
-#
-# debug_print("file shit")
-# for f in dir():
-#     if "file" in f:
-#         print(f)
+import sys
+sys.path.append("..")
+sys.path.append(".")
+from commands8 import *
+__version__ = "3.0.1"
 
 
 
@@ -70,7 +35,7 @@ class TestPathOperations(unittest.TestCase):
         filename = "test.tst"
         self.assertEqual(Path.full(filename), os.path.abspath(filename))
 
-    if os() in ["macos", "linux"]:
+    if OS.name in ["macos", "linux"]:
         def test02unix_path_extend(self):
             self.assertEqual(Path.extend("usr", "bin", "local"),
                              "/usr/bin/local")

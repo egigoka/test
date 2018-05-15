@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.6.17-alpha"
+__version__ = "8.3.6.19-alpha"
 # TODO for 9.0.0 release:
     # OS class vars not strings, but booleans
     # lazy load for all modules
@@ -116,8 +116,7 @@ try:
     newline2 = "\r\n"  # d string with other newline
 
 
-
-
+    from console8 import Console
 
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Console loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
@@ -175,7 +174,7 @@ try:
             return os.getcwd()
 
         @classmethod
-        def extend(cls, *paths):  # paths input strings of path pieces, return
+        def extend(cls, *paths, debug=False):  # paths input strings of path pieces, return
           # d string with path, good for OS
             for path_part in paths:
                 try:
@@ -188,7 +187,7 @@ try:
                         path = os.path.join(path_part, os.sep)
                     elif OS.name == "windows":
                         path = path_part
-                        Print.debug("path", path, "path_part", path_part)
+                        if debug: Print.debug("path", path, "path_part", path_part)
                     elif OS.family == "unix":
                         if path_part == "..":
                             path = path_part
@@ -788,7 +787,7 @@ try:
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Windows loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
-    
+
 
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("class Random loaded in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()

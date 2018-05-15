@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from os8 import OS
+import os
 __version__ = "0.0.1"
 
 class Console():
