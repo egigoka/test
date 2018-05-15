@@ -7,11 +7,16 @@ try:
 except:
     print("trying to install pyautogui")
     from installreq8 import pyautogui
-__version__ = "0.0.9"
+__version__ = "0.1.0"
 
 class Settings_Mouse:
     mouse_move_duration = 0.5
     sleep_before_click = 0.1
+
+    @classmethod
+    def set_mouse_move_duration(cls, seconds):
+        cls.mouse_move_duration = seconds
+
 
 class Mouse:
 

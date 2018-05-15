@@ -8,9 +8,11 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
-from mouse8 import Mouse
+from mouse8 import Mouse, Settings_Mouse
 from random8 import Random
 from time8 import Time
+
+Settings_Mouse.set_mouse_move_duration(0.1)
 
 while True:
     Mouse.move(Random.integer(-2,2), Random.integer(-2,2), rel=True, quiet=True)
