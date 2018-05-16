@@ -1,8 +1,9 @@
 #! python3
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
-from os8 import OS
-__version__ = "0.0.4"
+from const8 import *
+
+__version__ = "0.1.0"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -42,12 +43,9 @@ class Str:
       # d breaks to separate strings in list
         if string:
             string = str(string)
-            if OS.name == "windows":
-                strings = string.split(newline2)
-                if len(strings) == 1:
-                    strings = strings[0].split(newline)
-            elif OS.name in ["macos", "linux"]:
-                strings = string.split(newline)
+            strings = string.split(newline2)
+            if len(strings) == 1:
+                strings = strings[0].split(newline)
             return strings
         else:
             raise TypeError("None can't be splitted")

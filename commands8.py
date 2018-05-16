@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 start_bench_no_bench = datetime.datetime.now()
-__version__ = "8.3.6.20-alpha"
+__version__ = "8.3.6.21-alpha"
 # TODO for 9.0.0 release:
     # OS class vars not strings, but booleans
     # lazy load for all modules
@@ -110,11 +110,7 @@ try:
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.end("imported all dependencies in", quiet_if_zero=True)
     if FRACKING_classes_speed_tweaking: LoadTimeBenchMark.start()
 
-    newline = '\n'  # d string with newline bnl3
-    ruble = u"\u20bd"  # d string with ₽ symbol
-    backslash = "\ "[:1]  # d string with backslash
-    newline2 = "\r\n"  # d string with other newline
-
+    from const8 import *
 
     from console8 import Console
 

@@ -5,8 +5,11 @@ import sys
 sys.path.append("..")
 sys.path.append(".")
 from commands8 import *
+import commands8
 __version__ = "3.0.1"
 
+
+print("commands8", commands8, "commands8.__version__", commands8.__version__, "test_version", __version__)
 
 class TestPathOperations(unittest.TestCase):
 
