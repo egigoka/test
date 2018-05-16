@@ -3,7 +3,7 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
 
-__version__ = "0.1.1"
+__version__ = "0.2.2"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -55,14 +55,17 @@ class Str:
         return cls.newlines_to_strings(string=string)
 
     @staticmethod
-    def split_every(string, chars):  # split string every
+    def split_every(string, chars):  # split string every N chars
+        if not (isinstance(string, str) or isinstance(string, int)):
+            raise ValueError("type", type(string), "isn't supported by Str.split_every")
+        string = str(string)
         import re
         chars = int(chars)
         output_lines = []
         char_exists = "."
         char_can_be_exists = ".?"
         regexp = char_exists + char_can_be_exists*(chars-1)
-        for line in re.findall(regexp, str(string)):  # todo can I just return this list?
+        for line in re.findall(regexp, string):  # todo can I just return this list?
             output_lines += [line]
         return output_lines
 
@@ -183,3 +186,9 @@ class Str:
     @classmethod
     def get_words(Str, string_):
         return Str.remove_spaces(string_).split(" ")
+
+    @staticmethod
+    def strip_end(text, suffix):  # return string without suffix, if string end with it.
+        if not text.endswith(suffix):
+            return text
+        return text[:-len(suffix)]

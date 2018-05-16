@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.0.20"
+__version__ = "0.0.25"
 
 
 print("str8", str8, "str8.__version__", str8.__version__, "test_version", __version__)
@@ -34,9 +34,20 @@ class TestStrClassMethods(unittest.TestCase):
         self.assertEqual(Str.newlines_to_strings("""
 """), ["",""])
         self.assertEqual(Str.newlines_to_strings(""), [""])
-    # newlines_to_strings(string, quiet=False):  # split long string with line
-      # d breaks to separate strings in list
-    # nl(cls, string):  # alias to newline
+        self.assertEqual(Str.newlines_to_strings("""word1, 
+        word2, 
+        word3
+"""), ["word1, ", "        word2, ", "        word3", ""])
+
+    def test_nl(self):
+        self.assertEqual(Str.nl("""word1, 
+        word2, 
+        word3
+"""), ["word1, ", "        word2, ", "        word3", ""])
+
+    def test_split_every(self):
+        self.assertEqual(Str.split_every("1234567890", 3), ["123", "456", "789", "0"])
+        self.assertRaises(Str.split_every([12, 34, 56, 78, 90], 2), ValueError)
     # split_every(string, chars):  # split string every
     # leftpad(string, leng, ch="0", rightpad=False):  # return string with
       # d added characters to left side. If string longer — return original string
@@ -54,6 +65,7 @@ class TestStrClassMethods(unittest.TestCase):
       # d return integer from user with multible parameters.
     # remove_spaces(Str, string_):
     # get_words(Str, string_):
+    # def strip_end(text, suffix):  # return string without suffix, if string end with it.
 
 if __name__ == '__main__':
     unittest.main()

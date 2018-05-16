@@ -25,7 +25,7 @@ class Print():
       # d note, that you need to rewrite string to remove characters
         # clean
         line = " " * Console.width()
-        if OS.name == "windows":
+        if OS.name == "windows":  # windows add symbol to end of string :(
             line = line[:-1]
         print(line, end="\r")
         # print or output
