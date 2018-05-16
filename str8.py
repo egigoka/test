@@ -3,7 +3,7 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -41,7 +41,7 @@ class Str:
     @staticmethod
     def newlines_to_strings(string, quiet=False):  # split long string with line
       # d breaks to separate strings in list
-        if string:
+        if isinstance(string, str):  # если эта строка существует или пустая
             string = str(string)
             strings = string.split(newline2)
             if len(strings) == 1:

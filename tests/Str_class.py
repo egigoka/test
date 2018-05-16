@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.0.11"
+__version__ = "0.0.20"
 
 
 print("str8", str8, "str8.__version__", str8.__version__, "test_version", __version__)
@@ -30,7 +30,10 @@ class TestStrClassMethods(unittest.TestCase):
 
     def test_newlines_to_strings(self):
         self.assertEqual(Str.newlines_to_strings("""
-        """), ["",""])
+        """), ["","        "])
+        self.assertEqual(Str.newlines_to_strings("""
+"""), ["",""])
+        self.assertEqual(Str.newlines_to_strings(""), [""])
     # newlines_to_strings(string, quiet=False):  # split long string with line
       # d breaks to separate strings in list
     # nl(cls, string):  # alias to newline

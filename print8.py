@@ -3,31 +3,34 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from os8 import OS
 from console8 import Console
-__version__ = "0.0.2"
+from const8 import *
+__version__ = "0.1.1"
 class Print():
     @staticmethod
-    def debug(*arguments, raw=False):  # d just more notable print, only for
+    def debug(*strings, raw=False):  # d just more notable print, only for
       # d debugging
         line = "-" * Console.width()
         print("<<<Debug sheet:>>>")
-        for arg in arguments:
+        for str_ in strings:
             print(line, end="")
             if raw:
-                print(repr(arg))
+                print(repr(str_))
             else:
-                print(arg)
+                print(str_)
             print(line)
         print("<<<End of debug sheet>>>")
 
     @staticmethod
-    def rewrite(*arguments, sep=" ", raw=False):  # d string, that can be rewritable
+    def rewrite(*strings, sep=" ", raw=False):  # d string, that can be rewritable
       # d note, that you need to rewrite string to remove characters
-
+        # clean
         line = " " * Console.width()
         if OS.name == "windows":
             line = line[:-1]
         print(line, end="\r")
-        print(*arguments, sep=sep, end="\r")
+        # print or output
+
+        print(*strings, sep=sep, end="\r")
 
     @staticmethod
     def prettify(object, indent=4, quiet=False):
@@ -37,3 +40,39 @@ class Print():
             pp.pprint(object)
         else:
             return pp.pformat(object=object)
+
+    colorama_inited = False
+
+    @classmethod
+    def colored(Print, *strings, attrs=None, end=newline, sep=" "):  # usage: Print.colored("text", "red") or Print.colored("text", "red", "on_white")
+      # d you can pick colors from
+        import termcolor
+        if OS.name == "windows":
+            import colorama
+            colorama.init()
+        # check for colors in input
+        highlight = None
+        color = None
+        color_args = 0
+        if len(strings) >= 3:
+            if strings[-1] in termcolor.HIGHLIGHTS:
+                highlight = strings[-1]
+                color_args += 1
+                if strings[-2] in termcolor.COLORS:
+                    color = strings[-2]
+                color_args += 1
+        elif len(strings) >= 2:
+            if strings[-1] in termcolor.COLORS:
+                color = strings[-1]
+                color_args += 1
+            elif strings[-1] in termcolor.HIGHLIGHTS:
+                highlight = strings[-1]
+                color_args += 1
+        # create single string to pass it into termcolor
+        string = ""
+        strings = strings[:-color_args]
+        for substring in strings[:-1]:
+            string += substring + sep
+        string += strings[-1]
+        # run termcolor
+        termcolor.cprrint(string, color=color, on_color=highlight, attrs=attrs, end=end)
