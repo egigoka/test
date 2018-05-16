@@ -23,6 +23,8 @@ __version__ = "0.0.1"
 #        # check that s.split fails when the separator is not a string
 #        with self.assertRaises(TypeError):
 #            s.split(2
+#    def test_exception(self):
+#         self.assertRaises(ValueError, Str.split_every, [12, 34, 56, 78, 90], 2) # yes, arguments after func
 
 print("_8", _8, "_8.__version__", _8.__version__, "test_version", __version__)
 
