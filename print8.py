@@ -4,7 +4,7 @@
 from os8 import OS
 from console8 import Console
 from const8 import *
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 class Print():
     @staticmethod
     def debug(*strings, raw=False):  # d just more notable print, only for
@@ -45,7 +45,7 @@ class Print():
 
     @classmethod
     def colored(Print, *strings, attrs=None, end=newline, sep=" "):  # usage: Print.colored("text", "red") or Print.colored("text", "red", "on_white")
-      # d you can pick colors from
+      # d you can pick colors from termcolor.COLORS, highlights from termcolor.HIGHLIGHTS
         import termcolor
         if OS.name == "windows":
             import colorama
