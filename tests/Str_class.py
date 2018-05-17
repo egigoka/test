@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.0.33"
+__version__ = "0.0.35"
 
 # todo check args typeerror
 
@@ -112,12 +112,10 @@ class TestStrClassMethods(unittest.TestCase):
         self.assertEqual(Str.remove_spaces(123), "123")
         self.assertEqual(Str.remove_spaces("        1    2            3       "), " 1 2 3 ")
         self.assertEqual(Str.remove_spaces("        1    2    \n        3       "), " 1 2 \n 3 ")
-        # todo check for null before arg
-        # todo check for null after arg
-        # todo check for null string
     # get_words(Str, string_):
     def test14_substring(self):
-        pass
+        self.assertEqual(Str.substring("", ""), "")
+        self.assertEqual(Str.substring("test testing test", before="testing "), "test")
         # todo check for null before arg
         # todo check for null after arg
         # todo check for null string
