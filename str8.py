@@ -3,7 +3,7 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
 
-__version__ = "0.2.3"
+__version__ = "0.2.5"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -185,14 +185,14 @@ class Str:
     @classmethod
     def remove_spaces(Str, string_):
         string_ = str(string_)
-        output = ' '.join(string_.split())  # at least, it's fast https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-        if string_[0] == " ": output = " " + output
-        if string_[-1] == " ": output = output + " "
-        return output
+        while '  ' in string_:
+            string_ = string_.replace('  ', ' ')
+        return string_
 
     @classmethod
     def get_words(Str, string_):
-        return Str.remove_spaces(string_).split(" ")
+        removed_spaces = ' '.join(string_.split())  # at least, it's fast https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+        return removed_spaces.split(" ")
 
     @staticmethod
     def strip_end(text, suffix):  # return string without suffix, if string end with it.
