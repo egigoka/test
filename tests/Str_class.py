@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.0.35"
+__version__ = "0.0.37"
 
 # todo check args typeerror
 
@@ -79,8 +79,9 @@ class TestStrClassMethods(unittest.TestCase):
       # d those. If "return_after_substring", return typle with substring and
       # d part of string after it.
     def test09_substring(self):
-        #self.assertEqual()
-        pass
+        self.assertEqual(Str.substring("", ""), "")
+        self.assertEqual(Str.substring("test testing test", before="testing "), "test")
+        self.assertEqual(Str.substring("test testing test", before="test ", after=" test"), "testing")
         # todo check for null before arg
         # todo check for null after arg
         # todo check for null string
@@ -113,9 +114,8 @@ class TestStrClassMethods(unittest.TestCase):
         self.assertEqual(Str.remove_spaces("        1    2            3       "), " 1 2 3 ")
         self.assertEqual(Str.remove_spaces("        1    2    \n        3       "), " 1 2 \n 3 ")
     # get_words(Str, string_):
-    def test14_substring(self):
-        self.assertEqual(Str.substring("", ""), "")
-        self.assertEqual(Str.substring("test testing test", before="testing "), "test")
+    def test14_get_words(self):
+        self.assertEqual(Str.get_words("      onee towoo, three     four  "), ["onee", "towoo,", "three", "four"])
         # todo check for null before arg
         # todo check for null after arg
         # todo check for null string
