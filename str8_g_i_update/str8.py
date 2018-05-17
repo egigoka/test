@@ -3,7 +3,7 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
 
-__version__ = "0.3.5"
+__version__ = "0.3.3"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -21,13 +21,19 @@ class Str:
         integers = []
         current_integer = 0
         negative = False
+        floatn = False
         for symbol in str(string) + " ":  # in exception some processing, meh :(
             try:
                 if symbol in ['-', '—']:
                     negative = True
                     continue
+                if symbol in [".", ","]:
+                    floatn = True
                 int(symbol)
-                current_integer = current_integer*10 + int(symbol)
+                if float:
+                    len_after_point = Str.substring(frac, ".")
+                else:
+                    current_integer = current_integer*10 + int(symbol)
                 integer_found = True
             except ValueError:
                 if integer_found:
@@ -37,6 +43,7 @@ class Str:
                     current_integer = 0
                     integer_found = False
                 negative = False
+                floatn = False
         return integers
 
     @staticmethod
@@ -95,9 +102,6 @@ class Str:
       # d string that between "before", and "after" strings, not including
       # d those. If "return_after_substring", return typle with substring and
       # d part of string after it.
-        string = str(string)
-        before = str(before)
-        after = str(after)
         startfrom = string.find(before)
         if startfrom != -1:
             startfrom = string.find(before) + len(before)

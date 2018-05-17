@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.0.37"
+__version__ = "0.1.3"
 
 # todo check args typeerror
 
@@ -80,6 +80,7 @@ class TestStrClassMethods(unittest.TestCase):
       # d part of string after it.
     def test09_substring(self):
         self.assertEqual(Str.substring("", ""), "")
+        self.assertEqual(Str.substring(123, 1), "23")
         self.assertEqual(Str.substring("test testing test", before="testing "), "test")
         self.assertEqual(Str.substring("test testing test", before="test ", after=" test"), "testing")
         # todo check for null before arg
@@ -102,11 +103,10 @@ class TestStrClassMethods(unittest.TestCase):
 
     # def input_int(message="Input integer: ", minimum=None, maximum=None, default=None, quiet=False):
       # d return integer from user with multible parameters.
-    def test12_substring(self):
-        pass
-        # todo check for null before arg
-        # todo check for null after arg
-        # todo check for null string
+    def test12_input_int(self):
+        self.assertEqual(Str.get_integers(""), [])
+        self.assertEqual(Str.get_integers("123    456,    789test"), [123, 456, 789])
+        self.assertEqual()
     # remove_spaces(Str, string_):
     def test13_remove_spaces(self):
         self.assertEqual(Str.remove_spaces(""), "")
@@ -116,15 +116,7 @@ class TestStrClassMethods(unittest.TestCase):
     # get_words(Str, string_):
     def test14_get_words(self):
         self.assertEqual(Str.get_words("      onee towoo, three     four  "), ["onee", "towoo,", "three", "four"])
-        # todo check for null before arg
-        # todo check for null after arg
-        # todo check for null string
-    # def strip_end(text, suffix):  # return string without suffix, if string end with it.
-    def test15_substring(self):
-        pass
-        # todo check for null before arg
-        # todo check for null after arg
-        # todo check for null string
+        self.assertEqual(Str.get_words(""), [])
 
 if __name__ == '__main__':
     unittest.main()
