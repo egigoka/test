@@ -4,8 +4,9 @@ import datetime
 start_bench_no_bench = datetime.datetime.now()
 __version__ = "8.3.6.21-alpha"
 # TODO for 9.0.0 release:
-    # OS class vars not strings, but booleans
-    # lazy load for all modules
+    # todo OS class vars not strings, but booleans
+    # todo lazy load for all modules
+    # todo docstrings everywhere
 import os  # widely used
 import sys  # used for check version of python for init or not win_unicode_console
 sys.path.append(".")

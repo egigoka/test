@@ -6,8 +6,9 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.0.28"
+__version__ = "0.0.33"
 
+# todo check args typeerror
 
 print("str8", str8, "str8.__version__", str8.__version__, "test_version", __version__)
 
@@ -16,6 +17,7 @@ class TestStrClassMethods(unittest.TestCase):
         self.assertEqual(Str.to_quotes(""), '""')
         self.assertEqual(Str.to_quotes(123), '"123"')
         self.assertEqual(Str.to_quotes("test test"), '"test test"')
+        # todo list value error
 
     def test02_to_quotes_2(self):  # to_quotes_2(some_string):  # place input string inside '' quotes
         self.assertEqual(Str.to_quotes_2(""), "''")
@@ -47,25 +49,84 @@ class TestStrClassMethods(unittest.TestCase):
 
     def test06_split_every(self):
         self.assertEqual(Str.split_every("1234567890", 3), ["123", "456", "789", "0"])
+        self.assertEqual(Str.split_every(123456789, 3), ["123", "456", "789"])
         self.assertRaises(ValueError, Str.split_every, [12, 34, 56, 78, 90], 2)
-    # split_every(string, chars):  # split string every
-    # leftpad(string, leng, ch="0", rightpad=False):  # return string with
-      # d added characters to left side. If string longer — return original string
-    # rightpad(cls, string, leng, ch="0"):  # return string with added
-      # d characters to right side. If string longer — return original string
+        self.assertRaises(ValueError, Str.split_every, "somestring", 0)
+
+    def test07_leftpad(self): # leftpad(string, leng, ch="0", rightpad=False):
+        pass
+        # todo check for null chars
+        # todo check for all args ints input
+        # todo check for null char
+        # todo check for string char
+        # todo check for int string char
+        # todo check for usual use
+        # todo check for usual use with alphabetic char
+
+    def test08_rightpad(self):# rightpad(string, leng, ch="0"):
+        pass
+        # todo check for null chars
+        # todo check for all args ints input
+        # todo check for null char
+        # todo check for string char
+        # todo check for int string char
+        # todo check for usual use
+        # todo check for usual use with alphabetic char
+
+
     # substring(string, before, after=None, return_after_substring=False):  # return
       # d string that between "before", and "after" strings, not including
       # d those. If "return_after_substring", return typle with substring and
       # d part of string after it.
+    def test09_substring(self):
+        #self.assertEqual()
+        pass
+        # todo check for null before arg
+        # todo check for null after arg
+        # todo check for null string
+
     # def diff_simple(string_a, string_b):  # d print all symbol differents.
       # d Not all mine code, must rewrite.
+    def test10_substring(self):
+        pass
+        # todo just rewrite this shit
+
     # def input_pass(string="Password:"):  # d return string from user, securely
       # d inputed by getpass library
+    def test11_substring(self):
+        pass
+        # todo check for null before arg
+        # todo check for null after arg
+        # todo check for null string
+
     # def input_int(message="Input integer: ", minimum=None, maximum=None, default=None, quiet=False):
       # d return integer from user with multible parameters.
+    def test12_substring(self):
+        pass
+        # todo check for null before arg
+        # todo check for null after arg
+        # todo check for null string
     # remove_spaces(Str, string_):
+    def test13_remove_spaces(self):
+        self.assertEqual(Str.remove_spaces(""), "")
+        self.assertEqual(Str.remove_spaces(123), "123")
+        self.assertEqual(Str.remove_spaces("        1    2            3       "), " 1 2 3 ")
+        self.assertEqual(Str.remove_spaces("        1    2    \n        3       "), " 1 2 \n 3 ")
+        # todo check for null before arg
+        # todo check for null after arg
+        # todo check for null string
     # get_words(Str, string_):
+    def test14_substring(self):
+        pass
+        # todo check for null before arg
+        # todo check for null after arg
+        # todo check for null string
     # def strip_end(text, suffix):  # return string without suffix, if string end with it.
+    def test15_substring(self):
+        pass
+        # todo check for null before arg
+        # todo check for null after arg
+        # todo check for null string
 
 if __name__ == '__main__':
     unittest.main()

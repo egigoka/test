@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from commands8 import *
 import commands8
-__version__ = "3.0.2"
+__version__ = "3.0.3"
 
 
 print("commands8", commands8, "commands8.__version__", commands8.__version__, "test_version", __version__)
@@ -48,6 +48,10 @@ class TestPathOperations(unittest.TestCase):
             b = r"C:\Users\Sklad_solvo\PycharmProjects\untitled\utils.py"
             self.assertEqual(a, b)
         pass
+
+    ### todo check for . and .. in windows paths
+    ### todo check for spaces in path
+
 
 if __name__ == '__main__':
     unittest.main()
