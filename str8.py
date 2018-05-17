@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
+__version__ = "0.4.7"
 
-__version__ = "0.4.6"
+
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -14,20 +15,34 @@ class Str:
         return "'" + str(some_string) + "'"
 
     @classmethod
-    def get_integers(Str, string):  # return list of integers from string, !!!floating not supported!!!
+    def get_integers(Str, string, floatsupport=True):  # return list of integers from string,
         # todo add support for floating numbers, it will be cool!
         string = Str.remove_spaces(string)
         integer_found = False
         integers = []
         current_integer = 0
         negative = False
+        floatn = False
         for symbol in str(string) + " ":  # in exception some processing, meh :(
             try:
                 if symbol in ['-', '—']:
                     negative = True
                     continue
+                if symbol in [".", ","]:
+                    if isinstance(floatn, str):
+                        floatn = False
+                    floatn = 0
+                    continue
                 int(symbol)
-                current_integer = current_integer*10 + int(symbol)
+                if isinstance(floatn, int):
+                    floatn += 1
+                    value_before = current_integer
+                    added_value = int(symbol)*pow(10, -floatn)
+                    current_integer = current_integer + added_value
+                    Print.debug("value_before", value_before, "floatn", floatn, "added_value", added_value, "current_integer", current_integer)
+                    current_integer = round(current_integer, floatn)  # to reduce problems with floating numbers
+                else:
+                    current_integer = current_integer*10 + int(symbol)
                 integer_found = True
             except ValueError:
                 if integer_found:
@@ -37,6 +52,7 @@ class Str:
                     current_integer = 0
                     integer_found = False
                 negative = False
+                floatn = False
         return integers
 
     @staticmethod
@@ -95,9 +111,6 @@ class Str:
       # d string that between "before", and "after" strings, not including
       # d those. If "return_after_substring", return typle with substring and
       # d part of string after it.
-        string = str(string)
-        before = str(before)
-        after = str(after)
         startfrom = string.find(before)
         if startfrom != -1:
             startfrom = string.find(before) + len(before)
