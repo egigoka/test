@@ -3,8 +3,9 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from os8 import OS
 from str8 import Str
+from const8 import *
 import os
-__version__ = "0.0.2"
+__version__ = "0.1.0"
 
 class Console():
     @staticmethod
@@ -52,7 +53,8 @@ class Console():
             width = cls.width()
         if height is None:
             height = cls.height()
-        colorama.reinit()
+        import colorama
+        colorama.init()
         while True:
             colors = ["grey", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
             highlights = ["on_grey", "on_red", "on_green", "on_yellow", "on_blue", "on_magenta", "on_cyan", "on_white"]
@@ -74,7 +76,7 @@ class Console():
 
 
     @staticmethod
-    def get_output(command, quiet=True, split_lines=False):  # d return output
+    def get_output(command):  # d return output
       # d of executing command. Doesn't output it to terminal in realtime.
       # d can be output after done if "quiet" argument activated.
         # TODO make ouptut even if exit status != 0
@@ -84,6 +86,4 @@ class Console():
             output = p.decode("cp866")
         elif OS.family == "unix":
             output = p.decode("utf8")
-        if split_lines:
-            output = Str.nl(output)
         return output

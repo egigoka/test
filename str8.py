@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
-__version__ = "0.4.7"
+__version__ = "0.4.9"
 
 
 class Str:
@@ -39,7 +39,7 @@ class Str:
                     value_before = current_integer
                     added_value = int(symbol)*pow(10, -floatn)
                     current_integer = current_integer + added_value
-                    Print.debug("value_before", value_before, "floatn", floatn, "added_value", added_value, "current_integer", current_integer)
+                    #print("value_before", value_before, "floatn", floatn, "added_value", added_value, "current_integer", current_integer)
                     current_integer = round(current_integer, floatn)  # to reduce problems with floating numbers
                 else:
                     current_integer = current_integer*10 + int(symbol)
@@ -111,6 +111,9 @@ class Str:
       # d string that between "before", and "after" strings, not including
       # d those. If "return_after_substring", return typle with substring and
       # d part of string after it.
+        string = str(string)
+        before = str(before)
+        after = str(after)
         startfrom = string.find(before)
         if startfrom != -1:
             startfrom = string.find(before) + len(before)
