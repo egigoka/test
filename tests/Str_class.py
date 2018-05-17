@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append(".")
 from str8 import *
 import str8
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 # todo check args typeerror
 
@@ -106,7 +106,7 @@ class TestStrClassMethods(unittest.TestCase):
     def test12_input_int(self):
         self.assertEqual(Str.get_integers(""), [])
         self.assertEqual(Str.get_integers("123    456,    789test"), [123, 456, 789])
-        self.assertEqual()
+        self.assertEqual(Str.get_integers("1.1234567890"), [1.123456789])
     # remove_spaces(Str, string_):
     def test13_remove_spaces(self):
         self.assertEqual(Str.remove_spaces(""), "")

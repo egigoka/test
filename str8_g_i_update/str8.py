@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
+import sys
+sys.path.append("..")
+from print8 import *
 
-__version__ = "0.3.3"
+__version__ = "+0.1.7"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
@@ -14,7 +17,7 @@ class Str:
         return "'" + str(some_string) + "'"
 
     @classmethod
-    def get_integers(Str, string):  # return list of integers from string, !!!floating not supported!!!
+    def get_integers(Str, string, floatsupport=True):  # return list of integers from string,
         # todo add support for floating numbers, it will be cool!
         string = Str.remove_spaces(string)
         integer_found = False
@@ -28,10 +31,18 @@ class Str:
                     negative = True
                     continue
                 if symbol in [".", ","]:
-                    floatn = True
+                    if isinstance(floatn, str):
+                        floatn = False
+                    floatn = 0
+                    continue
                 int(symbol)
-                if float:
-                    len_after_point = Str.substring(frac, ".")
+                if isinstance(floatn, int):
+                    floatn += 1
+                    value_before = current_integer
+                    added_value = int(symbol)*pow(10, -floatn)
+                    current_integer = current_integer + added_value
+                    Print.debug("value_before", value_before, "floatn", floatn, "added_value", added_value, "current_integer", current_integer)
+                    current_integer = round(current_integer, floatn)  # to reduce problems with floating numbers
                 else:
                     current_integer = current_integer*10 + int(symbol)
                 integer_found = True

@@ -3,7 +3,7 @@
 # http://python.su/forum/topic/15531/?page=1#post-93316
 from const8 import *
 
-__version__ = "0.3.5"
+__version__ = "0.4.6"
 class Str:
     @staticmethod
     def to_quotes(some_string):  # just place input string inside "" quotes
