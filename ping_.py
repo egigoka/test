@@ -1,37 +1,8 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
-__version__ = "2.0.0"
-# going to commands7
-__version__ = "2.0.1"
-# PEP 8 (not full)
-__version__ = "2.0.2"
-# checkfolder bugfix
-__version__ = "2.0.3"
-# refactor for new commands7
-# add coding in shebang
-__version__ = "2.1.0"
-# -online argument
-__version__ = "2.2.0"
-# -online-only argument
-__version__ = "2.3.0"
-# -wms-folders argument
-__version__ = "2.4.0"
-# check server avg load
-__version__ = "2.5.0"
-# -fast argument
-__version__ = "2.6.0"
-# macOS notifcation and deleted old staff
-__version__ = "2.7.0"
-# update to c8
-__version__ = "2.7.1"
-# no timeout if no internet
-__version__ = "2.8.0"
-# new list to check roskomnadzor accidentally blocked sites
-# arg -frkn for that
-__version__ = "2.8.1"
-# now IP's output is beatiful
-
 from commands8 import *
+__version__ = "2.8.2"
+
 
 class State:
     ping_timeout = 2000  # in ms
@@ -106,10 +77,10 @@ def main():
             # Print.debug(response[2])
             response = response[0]
             if response:
-                cprint(Str.rightpad(hostname + ' is up!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_green', end=print_end)
+                Print.colored(Str.rightpad(hostname + ' is up!' + " "*(longest_hostname+2-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_green', end=print_end)
                 cnt_workin += 1
             else:
-                cprint(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
+                Print.colored(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
         print(Time.rustime())
         if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
             if OS.name == "macos": macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
@@ -127,4 +98,6 @@ def main():
         State.first_iterate = False
         if State.internet_status:
             Time.timer(State.sleep)
-main()
+
+if __name__ == '__main__':
+    main()

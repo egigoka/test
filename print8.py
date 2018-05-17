@@ -4,7 +4,7 @@
 from os8 import OS
 from console8 import Console
 from const8 import *
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 class Print():
     @staticmethod
     def debug(*strings, raw=False):  # d just more notable print, only for
@@ -75,4 +75,4 @@ class Print():
             string += substring + sep
         string += strings[-1]  # последняя без сепаратора
         # run termcolor
-        termcolor.cprrint(string, color=color, on_color=highlight, attrs=attrs, end=end)
+        termcolor.cprint(string, color=color, on_color=highlight, attrs=attrs, end=end)
