@@ -1,7 +1,9 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
-from commands8 import *
-__version__ = "2.8.2"
+import sys
+sys.path.append("..")
+from commands import *
+__version__ = "3.0.3"
 
 
 class State:
@@ -59,12 +61,12 @@ if State.extended_rkn_list:
 def main():
     while True:
         if State.extended_rkn_list:
-            if OS.name == "windows": Process.start("ipconfig", "/flushdns")
-        if OS.name == "macos":
+            if OS.windows: Process.start("ipconfig", "/flushdns")
+        if OS.macos:
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
         print_end = newline
-        if OS.name == 'windows':
+        if OS.windows:
             print_end = ''
         cnt_workin = 0
         longest_hostname = 0
@@ -81,23 +83,23 @@ def main():
                 cnt_workin += 1
             else:
                 Print.colored(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
-        print(Time.rustime())
+        print(Time.dotted())
         if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
-            if OS.name == "macos": macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            if OS.macos: macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
             State.internet_status = False
         elif cnt_workin < len(domains):
-            if OS.name == "macos": macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            if OS.macos: macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
             State.internet_status = False
         else:
             if State.internet_status==False:
                 subtitle = "You are back online!"
                 if State.first_iterate:
                     subtitle = "You are online!"
-                if OS.name == "macos": macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
+                if OS.macos: macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
                 State.internet_status = True
         State.first_iterate = False
         if State.internet_status:
-            Time.timer(State.sleep)
+            Time.sleep(State.sleep)
 
 if __name__ == '__main__':
     main()
