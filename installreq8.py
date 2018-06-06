@@ -7,7 +7,7 @@ import os
 from os8 import OS
 from pip8 import Pip
 from bench8 import get_Bench
-__version__ = "0.0.4"
+__version__ = "0.1.0"
 
 FRACKING_Internal_mine_import_speed_tweaking = True
 

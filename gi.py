@@ -1,6 +1,7 @@
 #! python3
 # -*- coding: utf-8 -*-
 from commands8 import *
+__version__ = "1.0.0"
 
 def get_name_of_repo():
     if Path.working().split(os.sep)[-1] in ["t", "term"]:
