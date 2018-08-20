@@ -1,13 +1,16 @@
 #! python3
 # -*- coding: utf-8 -*-
 import sys
+import os
+import time
+import subprocess
 sys.path.append("../..")
 sys.path.append("..\..")
 sys.path.append(".")
 sys.path.append("..")
 sys.path.append("./term")
 sys.path.append(r".\term")
-from commands8 import *
+from commands import *
 import win32security
 import ntsecuritycon as con
 import pywintypes
@@ -97,9 +100,9 @@ def create_user():
             password = Random.string(14)
             err = Console.get_output("net user " + username + " " + password + " /ADD")
             if "The command completed successfully." in err:
-                userscreated = Json.load(userscreatedjsonfile, quiet=True)
-                userscreated[username] = password
-                Json.save(userscreatedjsonfile, userscreated, quiet=True)
+                userscreated = Json(userscreatedjsonfile, quiet=True)
+                userscreated.string[username] = password
+                Json.save()
                 return username
             else:
                 if print_errors_while_creating_users: print(err)
