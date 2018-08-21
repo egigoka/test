@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import string
 import sys
+from enum import Enum
 from commands import *
 try:
     import todoist
@@ -12,6 +13,10 @@ except ImportError:
 
 
 class Arguments:
+    apikey = False
+    if "apikey" in sys.argv:
+        apikey = True
+
     cleanup = False
     if "cleanup" in sys.argv:
         cleanup = True
@@ -23,6 +28,19 @@ class Arguments:
     list = False
     if "list" in sys.argv:
         list = True
+
+    name = False
+    if "name" in sys.argv:
+        name = True
+
+
+class Priority:
+    USUAL = 1
+    HIGH = 2
+    VERY_HIGH = 3
+    EXTREMELY = 4
+
+
 
 
 def encrypt(string, password):
@@ -49,17 +67,15 @@ encoded = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3,
 
 decoded = decrypt(encoded, Str.input_pass("Input password: "))
 
-print(f"API key: {decoded}")
+if Arguments.apikey:
+    print(f"API key: {decoded}")
 
 api = todoist.TodoistAPI(decoded)
 
 api.sync()
 
-print(api.state["user"]["full_name"])
-
-for project in api.state['projects']:
-    print("    " + project["name"])
-
+if Arguments.name:
+    print(api.state["user"]["full_name"])
 
 if Arguments.cleanup:
     if CLI.get_y_n(f'Do you really want to remove all data in account {api.state["user"]["full_name"]}'):
@@ -71,11 +87,10 @@ if Arguments.cleanup:
             Print.colored("Project", project["name"], "deleted", "red")
 
 if Arguments.list:
-    if CLI.get_y_n(f'Do you really want to remove all data in account {api.state["user"]["full_name"]}'):
-        for task in api.items.all():
-            Print.colored(">=>", task["content"])
-        for project in api.projects.all():
-            Print.colored("Project", project["name"])
+    for task in api.items.all():
+        Print.colored(">=>", task["content"])
+    for project in api.projects.all():
+        Print.colored("Project", project["name"])
 
 if Arguments.test:
     new_project = api.projects.add(f"Test+{Time.dotted()}")
