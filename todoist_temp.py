@@ -20,6 +20,10 @@ class Arguments:
     if "test" in sys.argv:
         test = True
 
+    list = False
+    if "list" in sys.argv:
+        list = True
+
 
 def encrypt(string, password):
     int_list = []
@@ -60,15 +64,18 @@ for project in api.state['projects']:
 if Arguments.cleanup:
     if CLI.get_y_n(f'Do you really want to remove all data in account {api.state["user"]["full_name"]}'):
         for task in api.items.all():
-            task_id = task["id"]
-            task_obj = api.items.get_by_id(task_id)
-            task_obj.delete()
-            Print.colored("    Task", task_obj["content"], "deleted", "red")
+            task.delete()
+            Print.colored("    Task", task["content"], "deleted", "red")
         for project in api.projects.all():
             project.delete()
             Print.colored("Project", project["name"], "deleted", "red")
 
-
+if Arguments.list:
+    if CLI.get_y_n(f'Do you really want to remove all data in account {api.state["user"]["full_name"]}'):
+        for task in api.items.all():
+            Print.colored(">=>", task["content"])
+        for project in api.projects.all():
+            Print.colored("Project", project["name"])
 
 if Arguments.test:
     new_project = api.projects.add(f"Test+{Time.dotted()}")
@@ -77,7 +84,6 @@ if Arguments.test:
 
 
 api.commit()
-
 """
 Xiaomi Piston наушники хорошие внутриканальные
 Антидепрессанты (Тенатен?)
