@@ -216,25 +216,37 @@ if Arguments.work:
     #          'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
     #          'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
     #          'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
-    items = [
-        "Brush teeth in morning - Hygiene - 1 day 06:00",
-        "Brush teeth in evening - Hygiene - 1 day 22:00",
-        "Shower - Hygiene - 1 day",
-        "Deodorant - Hygiene - 1 day",
-        "Shaving - Hygiene - 1 day",
-        "Cut nails on toes - Hygiene - 2 weeks",
-        "Cut nails on fingers - Hygiene - 2 weeks"
-    ]
-    cnt_order = -100
+    # items = [
+    #     "Brush teeth in morning - Hygiene - 1 day",
+    #     "Brush teeth in evening - Hygiene - 1 day",
+    #     "Shower - Hygiene - 1 day",
+    #     "Deodorant - Hygiene - 1 day",
+    #     "Shaving - Hygiene - 1 day",
+    #     "Cut nails on toes - Hygiene - 2 weeks",
+    #     "Cut nails on fingers - Hygiene - 2 weeks"
+    # ]
+    items = Str.nl("""Упражнения против синдрома кистей
+Diary
+Memrise English
+-1 subscription Twitter
+Offload one app
+Разобрать 100 фоток на айфоне
+Change something to English
+Memrise Finish
+Разобрать почту""")
+    cnt_order = 1000
     for item in items:
-        try:
-            properties = item.split(" - ")
-            name = properties[0]
-            where = properties[1]
-            repeat_time = properties[2]
-        except IndexError:
-            print(item)
-            sys.exit(1)
+        # try:
+        #     properties = item.split(" - ")
+        #     name = properties[0]
+        #     where = properties[1]
+        #     repeat_time = properties[2]
+        # except IndexError:
+        #     print(item)
+        #     sys.exit(1)
+        name = item
+        where = "Everyday"
+        repeat_time = "1 day"
 
         cnt_order += 1
         item_order = day_order = cnt_order
