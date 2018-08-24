@@ -225,16 +225,17 @@ if Arguments.work:
     #     "Cut nails on toes - Hygiene - 2 weeks",
     #     "Cut nails on fingers - Hygiene - 2 weeks"
     # ]
-    items = Str.nl("""Упражнения против синдрома кистей
-Diary
-Memrise English
--1 subscription Twitter
-Offload one app
-Разобрать 100 фоток на айфоне
-Change something to English
-Memrise Finish
-Разобрать почту""")
-    cnt_order = 1000
+    # items = Str.nl("""Упражнения против синдрома кистей
+    # Diary
+    # Memrise English
+    # -1 subscription Twitter
+    # Offload one app
+    # Разобрать 100 фоток на айфоне
+    # Change something to English
+    # Memrise Finish
+    # Разобрать почту""")
+    items = ["Development", "Lose weight", "Bible"]
+    cnt_order = 2000
     for item in items:
         # try:
         #     properties = item.split(" - ")
@@ -245,7 +246,7 @@ Memrise Finish
         #     print(item)
         #     sys.exit(1)
         name = item
-        where = "Everyday"
+        where = "Cling to myself"
         repeat_time = "1 day"
 
         cnt_order += 1
