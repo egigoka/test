@@ -150,12 +150,12 @@ class Todoist:
 encoded = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
            29, -55, -17, -59, -9, 2, 50, -13, -14, -52, -15, -56, -59, -44, 5]  # yes, that shitty
 
-decoded = decrypt(encoded, Str.input_pass("Input password: "))
+todoist_api_key = decrypt(encoded, Str.input_pass("Input password: "))
 
 if Arguments.apikey:
-    print(f"API key: {decoded}")
+    print(f"API key: {todoist_api_key}")
 
-todo = Todoist(decoded)
+todo = Todoist(todoist_api_key)
 
 if Arguments.name:
     print(todo.api.state["user"]["full_name"])
