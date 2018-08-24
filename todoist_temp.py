@@ -3,7 +3,11 @@
 import string
 import sys
 import time
-from commands import *
+try:
+    from commands import *
+except ImportError:
+    import os
+    os.system("pip install git+https://github.com/egigoka/commands")
 try:
     import todoist
 except ImportError:
