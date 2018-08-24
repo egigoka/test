@@ -202,52 +202,31 @@ if Arguments.test:
     # 	The date of the task in the format Mon 07 Aug 2006 12:34:56 +0000 (or null if not set). For all day task (i.e. task due “Today”), the time part will be set as xx:xx:59.
 
 if Arguments.work:
-    # items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
-    #          'Wash dishes - Kitchen - 1 day', 'Take out the trash - Kitchen - 1 day',
-    #          'Wash the stove - Kitchen - 1 day',
-    #          'Vacuum/sweep - Kitchen - 1 day', 'Wash the floor - Kitchen - 3 days', 'Clean out - Balcony - 3 days',
-    #          'Wash the floor - Balcony - 3 days', 'Clean up on the table - My room - 2 days',
-    #          'Clean out - My room - 2 days', 'Wipe dust - My room - 1 week','Fill the bed - My room - 1 day',
-    #          'Vacuum/sweep - My room - 1 day', 'Wash the floor - My room - 3 days',
-    #          'Wash shower - Shower room - 1 day', 'Wash the sink - Shower room - 1 day',
-    #          'Vacuum/sweep - Shower room - 1 day', 'Vacuum/sweep - Toilet - 1 day',
-    #          'Wash the floor - Shower room - 3 days', 'Wash the floor - Toilet - 3 days',
-    #          'Wash toilet - Toilet - 1 week', 'Wash and place shoes - Hallway - 2 days',
-    #          'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
-    #          'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
-    #          'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
-    # items = [
-    #     "Brush teeth in morning - Hygiene - 1 day",
-    #     "Brush teeth in evening - Hygiene - 1 day",
-    #     "Shower - Hygiene - 1 day",
-    #     "Deodorant - Hygiene - 1 day",
-    #     "Shaving - Hygiene - 1 day",
-    #     "Cut nails on toes - Hygiene - 2 weeks",
-    #     "Cut nails on fingers - Hygiene - 2 weeks"
-    # ]
-    # items = Str.nl("""Упражнения против синдрома кистей
-    # Diary
-    # Memrise English
-    # -1 subscription Twitter
-    # Offload one app
-    # Разобрать 100 фоток на айфоне
-    # Change something to English
-    # Memrise Finish
-    # Разобрать почту""")
-    items = ["Development", "Lose weight", "Bible"]
-    cnt_order = 2000
+    items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
+             'Wash dishes - Kitchen - 1 day', 'Take out the trash - Kitchen - 1 day',
+             'Wash the stove - Kitchen - 1 day',
+             'Vacuum/sweep - Kitchen - 1 day', 'Wash the floor - Kitchen - 3 days', 'Clean out - Balcony - 3 days',
+             'Wash the floor - Balcony - 3 days', 'Clean up on the table - My room - 2 days',
+             'Clean out - My room - 2 days', 'Wipe dust - My room - 1 week','Fill the bed - My room - 1 day',
+             'Vacuum/sweep - My room - 1 day', 'Wash the floor - My room - 3 days',
+             'Wash shower - Shower room - 1 day', 'Wash the sink - Shower room - 1 day',
+             'Vacuum/sweep - Shower room - 1 day', 'Vacuum/sweep - Toilet - 1 day',
+             'Wash the floor - Shower room - 3 days', 'Wash the floor - Toilet - 3 days',
+             'Wash toilet - Toilet - 1 week', 'Wash and place shoes - Hallway - 2 days',
+             'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
+             'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
+             'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
+
+    cnt_order = 0
     for item in items:
-        # try:
-        #     properties = item.split(" - ")
-        #     name = properties[0]
-        #     where = properties[1]
-        #     repeat_time = properties[2]
-        # except IndexError:
-        #     print(item)
-        #     sys.exit(1)
-        name = item
-        where = "Cling to myself"
-        repeat_time = "1 day"
+        try:
+            properties = item.split(" - ")
+            name = properties[0]
+            where = properties[1]
+            repeat_time = properties[2]
+        except IndexError:
+            print(f"Wrong item:{item}")
+            sys.exit(1)
 
         cnt_order += 1
         item_order = day_order = cnt_order
