@@ -194,12 +194,8 @@ if Arguments.test:
     due_date_utc = time.strftime("%Y-%m-%dT%H:%M", tomorrow)
     task9 = todo.api.items.add("Task9+io-10+due_date_utc", new_project["id"], item_order=-10, due_date_utc=due_date_utc)
     task10 = todo.api.items.add("Task10+io-10+due_date_utc", new_project["id"], item_order=-10, due_date_utc=due_date_utc, all_day=True)
-    atestitem = todo.api.items.add("succ", new_project["id"], item_order=-1, date_string="17 Jan 2018 every 3 days")
-
-    #
-    # due_date_utc
-    # String
-    # 	The date of the task in the format Mon 07 Aug 2006 12:34:56 +0000 (or null if not set). For all day task (i.e. task due “Today”), the time part will be set as xx:xx:59.
+    a_test_item = todo.api.items.add("succ", new_project["id"], item_order=-1, date_string="17 Jan 2018 every 3 days")
+    # you can play with items in REPL
 
 if Arguments.work:
     items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
@@ -237,15 +233,3 @@ if Arguments.work:
                       date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project={True})''')
 
     todo.api.commit()
-
-"""
-Xiaomi Piston наушники хорошие внутриканальные
-Антидепрессанты (Тенатен?)
-Olloclip (прикольные линзы для телефона)
-Snail w3d (смартфон игровая приставка с 3д экраном за дёшево)
-Download master скачивает подписки утюг
-Весы кухонные
-В smartwatch есть джипиэс и они работают с слипэсэндроид
-Lifx лампочка умная
-Настоящий фотоаппарат"""
-
