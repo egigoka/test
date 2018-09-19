@@ -69,7 +69,6 @@ def decrypt(int_list, password):
 
 class Todoist:
 
-    #api here
     def __init__(self, api_key):
         Print.rewrite("Loading cache...")
         self.api = todoist.TodoistAPI(api_key)
@@ -101,7 +100,6 @@ class Todoist:
         return new_project
 
     def project_raw_items(self, name):
-        # Print.debug(self.api.projects.get_data(self.project_exists(name)))
         if self.project_exists(name):
             return self.api.projects.get_data(self.project_exists(name))["items"]
         else:
