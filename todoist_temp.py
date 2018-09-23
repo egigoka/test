@@ -3,6 +3,7 @@
 import string
 import sys
 import time
+import datetime
 try:
     from commands import *
 except ImportError:
@@ -14,6 +15,18 @@ except ImportError:
     from commands.pip8 import Pip
     Pip.install("todoist-python")
     import todoist
+try:
+    import pytz
+except ImportError:
+    from commands.pip8 import Pip
+    Pip.install("pytz")
+    import pytz
+try:
+    import tzlocal
+except ImportError:
+    from commands.pip8 import Pip
+    Pip.install("tzlocal")
+    import tzlocal
 
 
 class Arguments:
@@ -40,6 +53,10 @@ class Arguments:
     name = False
     if "name" in sys.argv:
         name = True
+
+    random = False
+    if "random" in sys.argv:
+        random = True
 
 
 class Priority:
@@ -143,6 +160,41 @@ class Todoist:
     def date_string_today(self):
         return datetime.datetime.now().strftime("%d %b %Y")
 
+    def todoist_time_to_datetime_datetime(self, time_string):
+        try:
+            datetime_object = datetime.datetime.strptime(time_string, "%a %d %b %Y %H:%M:%S +0000")
+        except ValueError:
+            datetime_object = datetime.datetime.strptime(time_string, "%d %b %Y %H:%M:%S +0000")
+        return datetime_object
+
+    def item_status(self, item_obj):
+        if item_obj["is_archived"]:
+            return "deleted"
+        elif item_obj['is_deleted']:
+            return "deleted"
+        elif item_obj['checked']:
+            return "deleted"
+        else:
+            now = datetime.datetime.now()
+            todo_time = self.todoist_time_to_datetime_datetime(item_obj['due_date_utc'])
+            local_timezone = tzlocal.get_localzone()
+            utc_timezone = pytz.timezone("utc")
+            end_of_today = datetime.datetime(now.year,
+                                             now.month,
+                                             now.day,
+                                             23, 59, 59)
+
+            end_of_today_aware = local_timezone.localize(end_of_today)
+
+            todo_time_aware = utc_timezone.localize(todo_time)
+
+            if end_of_today_aware > todo_time_aware:  # overdue
+                return "overdue"
+            elif end_of_today_aware == todo_time_aware:
+                return "today"
+            elif end_of_today_aware < todo_time_aware:
+                return "not today"
+
     def __del__(self):
         print("try to commit changes")
         self.api.commit()
@@ -160,7 +212,7 @@ if Arguments.apikey:
 todo = Todoist(todoist_api_key)
 
 if Arguments.name:
-    print(todo.api.state["user"]["full_name"])
+    print("@"+todo.api.state["user"]["full_name"])
 
 if Arguments.cleanup:
     if CLI.get_y_n(f'Do you really want to remove all data in account {todo.api.state["user"]["full_name"]}'):
@@ -173,31 +225,15 @@ if Arguments.cleanup:
         todo.api.commit()
 
 if Arguments.list:
-    for task in todo.api.items.all():
-        Print.colored(">=>", task["content"])
-    for project_id in todo.api.projects.all():
-        Print.colored("Project", project_id["name"])
-
-if Arguments.test:
-    new_project = todo.get_temp_project("Test")
-    Print.colored(f"Project {new_project} created")
-    task1 = todo.api.items.add("Task1_io0", new_project["id"], item_order=0)
-    task2 = todo.api.items.add("Task2_io1", new_project["id"], priority=Priority.HIGH, item_order=1)
-    task3 = todo.api.items.add("Task3_io999", new_project["id"], item_order=999)
-    task4 = todo.api.items.add("Task4_io4", new_project["id"], item_order=4)
-    task5 = todo.api.items.add("Task5_io3", new_project["id"], item_order=3)
-    task6 = todo.api.items.add("Task6_io999", new_project["id"], item_order=999)
-    task7 = todo.api.items.add("Task7_io-1", new_project["id"], item_order=-1)
-    task8 = todo.api.items.add("Task8_io-2", new_project["id"], item_order=-2)
-
-    # test time
-    now = time.time()
-    tomorrow = time.gmtime(now + 24 * 3600)
-    due_date_utc = time.strftime("%Y-%m-%dT%H:%M", tomorrow)
-    task9 = todo.api.items.add("Task9+io-10+due_date_utc", new_project["id"], item_order=-10, due_date_utc=due_date_utc)
-    task10 = todo.api.items.add("Task10+io-10+due_date_utc", new_project["id"], item_order=-10, due_date_utc=due_date_utc, all_day=True)
-    a_test_item = todo.api.items.add("succ", new_project["id"], item_order=-1, date_string="17 Jan 2018 every 3 days")
-    # you can play with items in REPL
+    projects = todo.projects_all_names()
+    for project_name, project_id in Dict.iterable(projects):
+        items = todo.project_raw_items(project_name)
+        Print(project_name, len(items), "items")
+        for item in items:
+            status = todo.item_status(item)
+            status_colors = {"deleted":'magenta', "overdue":'red', "today":'yellow', "not today": 'green'}
+            status_color = status_colors[status]
+            Print.colored(" "*3, item['content'], status_color)
 
 if Arguments.work:
     items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
@@ -233,5 +269,44 @@ if Arguments.work:
                       date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project=True)
         Print.debug(f'''todo.add_item({name}, {where}, {item_order}, {day_order}, priority={Priority.USUAL},
                       date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project={True})''')
+
+    todo.api.commit()
+
+if Arguments.random:
+    projects = todo.projects_all_names()
+    good_items = {}
+    cnt_good_tasks = 0
+    cnt_all_tasks = 0
+    #project_name, project_id = Random.item(projects)
+
+    for project_name, project_id in Dict.iterable(projects):
+        items = todo.project_raw_items(project_name)
+        good_items[project_name] = []
+        for item in items:
+            cnt_all_tasks += 1
+            status = todo.item_status(item)
+            if status in ["today", "overdue"]:
+                cnt_good_tasks += 1
+                good_items[project_name].append(item)
+
+    for project_name, project_items in Dict.iterable(good_items.copy()):
+        if not project_items:
+            good_items.pop(project_name)
+
+    random_project_name, random_project_items = Random.item(good_items)
+
+    random_item = Random.item(random_project_items)
+
+    Print.colored(f"Unfinished tasks: {cnt_good_tasks} of {cnt_all_tasks} total", "blue", "on_white")
+
+    Print.colored(f"Random todo: {random_item['content']} <{random_project_name}>", "cyan")
+
+
+
+    #Print(f"Random project: {project_name}")
+
+
+
+
 
     todo.api.commit()
