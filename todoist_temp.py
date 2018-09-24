@@ -195,11 +195,6 @@ class Todoist:
             elif end_of_today_aware < todo_time_aware:
                 return "not today"
 
-    def __del__(self):
-        print("try to commit changes")
-        self.api.commit()
-        print("api commited")
-
 
 encoded = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
            29, -55, -17, -59, -9, 2, 50, -13, -14, -52, -15, -56, -59, -44, 5]  # yes, that shitty
@@ -234,6 +229,7 @@ if Arguments.list:
             status_colors = {"deleted":'magenta', "overdue":'red', "today":'yellow', "not today": 'green'}
             status_color = status_colors[status]
             Print.colored(" "*3, item['content'], status_color)
+            # Print(item['due_date_utc'])
 
 if Arguments.work:
     items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
@@ -297,9 +293,13 @@ if Arguments.random:
 
     random_item = Random.item(random_project_items)
 
-    Print.colored(f"Unfinished tasks: {cnt_good_tasks} of {cnt_all_tasks} total", "blue", "on_white")
+    Print.colored(f"Unfinished tasks: {cnt_good_tasks} of {cnt_all_tasks} total - {int(((cnt_all_tasks-cnt_good_tasks)/cnt_all_tasks)*100)}% done", "blue")
 
-    Print.colored(f"Random todo: {random_item['content']} <{random_project_name}>", "cyan")
+    time_string = ""
+    if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
+        time_string = random_item["date_string"]
+
+    Print.colored(f"Random todo: {random_item['content']} <{random_project_name}> {time_string}", "cyan")
 
 
 
