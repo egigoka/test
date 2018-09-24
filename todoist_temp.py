@@ -58,6 +58,10 @@ class Arguments:
     if "random" in sys.argv:
         random = True
 
+    loop = False
+    if "loop" in sys.argv:
+        loop = True
+
 
 class Priority:
     USUAL = 1
@@ -201,112 +205,126 @@ encoded = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3,
 
 todoist_api_key = decrypt(encoded, Str.input_pass("Input password: "))
 
-if Arguments.apikey:
-    print(f"API key: {todoist_api_key}")
-
 todo = Todoist(todoist_api_key)
 
-if Arguments.name:
-    print("@"+todo.api.state["user"]["full_name"])
+def main():
+    if Arguments.apikey:
+        print(f"API key: {todoist_api_key}")
 
-if Arguments.cleanup:
-    if CLI.get_y_n(f'Do you really want to remove all data in account {todo.api.state["user"]["full_name"]}'):
-        for task in todo.api.items.all():
-            task.delete()
-            Print.colored("    Task", task["content"], "deleted", "red")
-        for project_id in todo.api.projects.all():
-            project_id.delete()
-            Print.colored("Project", project_id["name"], "deleted", "red")
+    if Arguments.name:
+        print("@"+todo.api.state["user"]["full_name"])
+
+    if Arguments.cleanup:
+        if CLI.get_y_n(f'Do you really want to remove all data in account {todo.api.state["user"]["full_name"]}'):
+            for task in todo.api.items.all():
+                task.delete()
+                Print.colored("    Task", task["content"], "deleted", "red")
+            for project_id in todo.api.projects.all():
+                project_id.delete()
+                Print.colored("Project", project_id["name"], "deleted", "red")
+            todo.api.commit()
+
+    if Arguments.list:
+        projects = todo.projects_all_names()
+        for project_name, project_id in Dict.iterable(projects):
+            items = todo.project_raw_items(project_name)
+            Print(project_name, len(items), "items")
+            for item in items:
+                status = todo.item_status(item)
+                status_colors = {"deleted":'magenta', "overdue":'red', "today":'yellow', "not today": 'green'}
+                status_color = status_colors[status]
+                Print.colored(" "*3, item['content'], status_color)
+                # Print(item['due_date_utc'])
+
+    if Arguments.work:
+        items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
+                 'Wash dishes - Kitchen - 1 day', 'Take out the trash - Kitchen - 1 day',
+                 'Wash the stove - Kitchen - 1 day',
+                 'Vacuum/sweep - Kitchen - 1 day', 'Wash the floor - Kitchen - 3 days', 'Clean out - Balcony - 3 days',
+                 'Wash the floor - Balcony - 3 days', 'Clean up on the table - My room - 2 days',
+                 'Clean out - My room - 2 days', 'Wipe dust - My room - 1 week','Fill the bed - My room - 1 day',
+                 'Vacuum/sweep - My room - 1 day', 'Wash the floor - My room - 3 days',
+                 'Wash shower - Shower room - 1 day', 'Wash the sink - Shower room - 1 day',
+                 'Vacuum/sweep - Shower room - 1 day', 'Vacuum/sweep - Toilet - 1 day',
+                 'Wash the floor - Shower room - 3 days', 'Wash the floor - Toilet - 3 days',
+                 'Wash toilet - Toilet - 1 week', 'Wash and place shoes - Hallway - 2 days',
+                 'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
+                 'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
+                 'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
+
+        cnt_order = 0
+        for item in items:
+            try:
+                properties = item.split(" - ")
+                name = properties[0]
+                where = properties[1]
+                repeat_time = properties[2]
+            except IndexError:
+                print(f"Wrong item:{item}")
+                sys.exit(1)
+
+            cnt_order += 1
+            item_order = day_order = cnt_order
+
+            todo.add_item(name, where, item_order, day_order, priority=Priority.USUAL,
+                          date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project=True)
+            Print.debug(f'''todo.add_item({name}, {where}, {item_order}, {day_order}, priority={Priority.USUAL},
+                          date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project={True})''')
+
         todo.api.commit()
 
-if Arguments.list:
-    projects = todo.projects_all_names()
-    for project_name, project_id in Dict.iterable(projects):
-        items = todo.project_raw_items(project_name)
-        Print(project_name, len(items), "items")
-        for item in items:
-            status = todo.item_status(item)
-            status_colors = {"deleted":'magenta', "overdue":'red', "today":'yellow', "not today": 'green'}
-            status_color = status_colors[status]
-            Print.colored(" "*3, item['content'], status_color)
-            # Print(item['due_date_utc'])
+    if Arguments.random:
+        projects = todo.projects_all_names()
+        good_items = {}
+        cnt_good_tasks = 0
+        cnt_all_tasks = 0
+        #project_name, project_id = Random.item(projects)
 
-if Arguments.work:
-    items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
-             'Wash dishes - Kitchen - 1 day', 'Take out the trash - Kitchen - 1 day',
-             'Wash the stove - Kitchen - 1 day',
-             'Vacuum/sweep - Kitchen - 1 day', 'Wash the floor - Kitchen - 3 days', 'Clean out - Balcony - 3 days',
-             'Wash the floor - Balcony - 3 days', 'Clean up on the table - My room - 2 days',
-             'Clean out - My room - 2 days', 'Wipe dust - My room - 1 week','Fill the bed - My room - 1 day',
-             'Vacuum/sweep - My room - 1 day', 'Wash the floor - My room - 3 days',
-             'Wash shower - Shower room - 1 day', 'Wash the sink - Shower room - 1 day',
-             'Vacuum/sweep - Shower room - 1 day', 'Vacuum/sweep - Toilet - 1 day',
-             'Wash the floor - Shower room - 3 days', 'Wash the floor - Toilet - 3 days',
-             'Wash toilet - Toilet - 1 week', 'Wash and place shoes - Hallway - 2 days',
-             'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
-             'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
-             'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
+        for project_name, project_id in Dict.iterable(projects):
+            items = todo.project_raw_items(project_name)
+            good_items[project_name] = []
+            for item in items:
+                cnt_all_tasks += 1
+                status = todo.item_status(item)
+                if status in ["today", "overdue"]:
+                    cnt_good_tasks += 1
+                    good_items[project_name].append(item)
 
-    cnt_order = 0
-    for item in items:
-        try:
-            properties = item.split(" - ")
-            name = properties[0]
-            where = properties[1]
-            repeat_time = properties[2]
-        except IndexError:
-            print(f"Wrong item:{item}")
-            sys.exit(1)
+        for project_name, project_items in Dict.iterable(good_items.copy()):
+            if not project_items:
+                good_items.pop(project_name)
 
-        cnt_order += 1
-        item_order = day_order = cnt_order
+        random_project_name, random_project_items = Random.item(good_items)
 
-        todo.add_item(name, where, item_order, day_order, priority=Priority.USUAL,
-                      date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project=True)
-        Print.debug(f'''todo.add_item({name}, {where}, {item_order}, {day_order}, priority={Priority.USUAL},
-                      date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project={True})''')
+        random_item = Random.item(random_project_items)
 
-    todo.api.commit()
+        highlight = ""
+        if OS.windows:
+            highlight = "on_white"
 
-if Arguments.random:
-    projects = todo.projects_all_names()
-    good_items = {}
-    cnt_good_tasks = 0
-    cnt_all_tasks = 0
-    #project_name, project_id = Random.item(projects)
+        Print.colored(f"Unfinished tasks: {cnt_good_tasks} of {cnt_all_tasks} total - {int(((cnt_all_tasks-cnt_good_tasks)/cnt_all_tasks)*100)}% done", highlight, "blue")
 
-    for project_name, project_id in Dict.iterable(projects):
-        items = todo.project_raw_items(project_name)
-        good_items[project_name] = []
-        for item in items:
-            cnt_all_tasks += 1
-            status = todo.item_status(item)
-            if status in ["today", "overdue"]:
-                cnt_good_tasks += 1
-                good_items[project_name].append(item)
+        time_string = ""
+        if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
+            time_string = random_item["date_string"]
 
-    for project_name, project_items in Dict.iterable(good_items.copy()):
-        if not project_items:
-            good_items.pop(project_name)
-
-    random_project_name, random_project_items = Random.item(good_items)
-
-    random_item = Random.item(random_project_items)
-
-    Print.colored(f"Unfinished tasks: {cnt_good_tasks} of {cnt_all_tasks} total - {int(((cnt_all_tasks-cnt_good_tasks)/cnt_all_tasks)*100)}% done", "blue")
-
-    time_string = ""
-    if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
-        time_string = random_item["date_string"]
-
-    Print.colored(f"Random todo: {random_item['content']} <{random_project_name}> {time_string}", "cyan")
+        Print.colored(f"Random todo: {random_item['content']} <{random_project_name}> {time_string}", "cyan")
 
 
 
-    #Print(f"Random project: {project_name}")
+        #Print(f"Random project: {project_name}")
 
 
 
 
 
-    todo.api.commit()
+        todo.api.commit()
+
+
+if __name__ == '__main__':
+    if Arguments.loop:
+        while True:
+            main()
+            input("Press Enter to reload...\r")
+    else:
+        main()
