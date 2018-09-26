@@ -50,6 +50,10 @@ class Arguments:
     if "list" in sys.argv:
         list = True
 
+    listnogreen = False
+    if "listnogreen" in sys.argv:
+        listnogreen = True
+
     name = False
     if "name" in sys.argv:
         name = True
@@ -233,8 +237,10 @@ def main():
                 status = todo.item_status(item)
                 status_colors = {"deleted":'magenta', "overdue":'red', "today":'yellow', "not today": 'green'}
                 status_color = status_colors[status]
+                if Arguments.listnogreen:
+                    if status_color == "green":
+                        continue  # skip green items
                 Print.colored(" "*3, item['content'], status_color)
-                # Print(item['due_date_utc'])
 
     if Arguments.work:
         items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
@@ -274,27 +280,28 @@ def main():
         todo.api.commit()
 
     if Arguments.random:
+        Print.rewrite("Chosing random item")
         projects = todo.projects_all_names()
-        good_items = {}
-        cnt_good_tasks = 0
+        incomplete_items = {}
+        cnt_incomplete_tasks = 0
         cnt_all_tasks = 0
         #project_name, project_id = Random.item(projects)
 
         for project_name, project_id in Dict.iterable(projects):
             items = todo.project_raw_items(project_name)
-            good_items[project_name] = []
+            incomplete_items[project_name] = []
             for item in items:
                 cnt_all_tasks += 1
                 status = todo.item_status(item)
                 if status in ["today", "overdue"]:
-                    cnt_good_tasks += 1
-                    good_items[project_name].append(item)
+                    cnt_incomplete_tasks += 1
+                    incomplete_items[project_name].append(item)
 
-        for project_name, project_items in Dict.iterable(good_items.copy()):
+        for project_name, project_items in Dict.iterable(incomplete_items.copy()):
             if not project_items:
-                good_items.pop(project_name)
+                incomplete_items.pop(project_name)
 
-        random_project_name, random_project_items = Random.item(good_items)
+        random_project_name, random_project_items = Random.item(incomplete_items)
 
         random_item = Random.item(random_project_items)
 
@@ -302,21 +309,14 @@ def main():
         if OS.windows:
             highlight = "on_white"
 
-        Print.colored(f"Unfinished tasks: {cnt_good_tasks} of {cnt_all_tasks} total - {int(((cnt_all_tasks-cnt_good_tasks)/cnt_all_tasks)*100)}% done", highlight, "blue")
+        cnt_completed_tasks = cnt_all_tasks-cnt_incomplete_tasks
+        Print.colored(f"Unfinished tasks: {cnt_incomplete_tasks} of {cnt_all_tasks} total - {int((cnt_completed_tasks/cnt_all_tasks)*100)}% done", highlight, "blue")
 
         time_string = ""
         if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
             time_string = random_item["date_string"]
 
         Print.colored(f"Random todo: {random_item['content']} <{random_project_name}> {time_string}", "cyan")
-
-
-
-        #Print(f"Random project: {project_name}")
-
-
-
-
 
         todo.api.commit()
 
