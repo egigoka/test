@@ -307,7 +307,7 @@ def main():
             cnt_skipped_items = 0
             for item in project_items:
                 for showed_item in State.showed_random_items:
-                    Print.debug(f'{showed_item["project"]} == {project_name} {showed_item["project"] == project_name}')
+                    #Print.debug(f'{showed_item["project"]} == {project_name} {showed_item["project"] == project_name}')
                     if showed_item["project"] == project_name:
                         # print("True")
                         #Print.debug(f'showed_item["id"] {showed_item["id"]} item["id"] {item["id"]} {showed_item["name"]} {item["content"]}')
