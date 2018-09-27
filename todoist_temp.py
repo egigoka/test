@@ -67,6 +67,11 @@ class Arguments:
         loop = True
 
 
+class State:
+    showed_random_items = []
+    loop_input = ""
+
+
 class Priority:
     USUAL = 1
     HIGH = 2
@@ -293,15 +298,39 @@ def main():
             for item in items:
                 cnt_all_tasks += 1
                 status = todo.item_status(item)
-                if status in ["today", "overdue"]:
+                if status in ["today", "overdue"] and project_name not in ["Everyday", "Hygiene", "Drugs", "Cat"] and item['content'] not in [r"Vacuum/sweep", "Wash the floor"]:  # todo delete!!!!
                     cnt_incomplete_tasks += 1
                     incomplete_items[project_name].append(item)
 
         for project_name, project_items in Dict.iterable(incomplete_items.copy()):
+            # skipping showed items
+            cnt_skipped_items = 0
+            for item in project_items:
+                for showed_item in State.showed_random_items:
+                    Print.debug(f'{showed_item["project"]} == {project_name} {showed_item["project"] == project_name}')
+                    if showed_item["project"] == project_name:
+                        # print("True")
+                        #Print.debug(f'showed_item["id"] {showed_item["id"]} item["id"] {item["id"]} {showed_item["name"]} {item["content"]}')
+                        Print.debug(f'{showed_item["id"]} == {item["id"]} {showed_item["id"] == item["id"]}')
+                        if showed_item["id"] == item["id"]:
+                            # Print("TRUE")
+                            incomplete_items[project_name].pop(incomplete_items[project_name].index(item))
+                            cnt_skipped_items += 1
+                            cnt_incomplete_tasks -= 1
+                            # Print.debug(f"removed item {showed_item}")
+                            continue
+                        # print(f"--End-- {showed_item}")
+            # print(cnt_skipped_items)
+            # end skipping showed items
             if not project_items:
                 incomplete_items.pop(project_name)
 
         random_project_name, random_project_items = Random.item(incomplete_items)
+
+        # for skipped_item in State.showed_random_items:
+        #     if skipped_item["project"] == random_project_name:
+        #         for item in random_project_items  ! todo skip
+
 
         random_item = Random.item(random_project_items)
 
@@ -318,6 +347,13 @@ def main():
 
         Print.colored(f"Random todo: {random_item['content']} <{random_project_name}> {time_string}", "cyan")
 
+        Print.colored(f"State.loop_input = {State.loop_input} <{State.loop_input != 'n'}>, len(State.showed_random_items) = {len(State.showed_random_items)}", "red")
+        Print.prettify(State.showed_random_items)
+
+        State.showed_random_items.append({"project":random_project_name, "id":random_item["id"], "name":random_item["content"]})
+
+
+
         todo.api.commit()
 
 
@@ -325,6 +361,6 @@ if __name__ == '__main__':
     if Arguments.loop:
         while True:
             main()
-            input("Press Enter to reload...\r")
+            State.loop_input = input("Press Enter to reload...\r")
     else:
         main()
