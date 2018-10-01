@@ -66,20 +66,8 @@ telegram_api = telebot.TeleBot(telegram_token)
 
 @telegram_api.message_handler(content_types=["text"])
 def reply_all_messages(message): # Название функции не играет никакой роли, в принципе
-    if message.chat.id != 5328715:
-        telegram_api.send_message(message.chat.id, "ACCESS DENY!")
-        return
 
-    if State.getting_project_name:
-        State.excluded_projects.append(message.text)
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
-
-    elif State.getting_item_name:
-        State.excluded_items.append(message.text)
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
-
-    elif message.text == "MOAR!" or State.first_message:  # main button
-
+    def main_message():
         last_message = message.message_id + 3
 
         if State.first_message:
@@ -99,7 +87,25 @@ def reply_all_messages(message): # Название функции не игра
 
         telegram_api.send_message(message.chat.id, "wait")
 
-        telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message, text=get_random_todo())#, reply_markup=markup)
+        telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message,
+                                       text=get_random_todo())  # , reply_markup=markup)
+
+    if message.chat.id != 5328715:
+        telegram_api.send_message(message.chat.id, "ACCESS DENY!")
+        return
+
+    if State.getting_project_name:
+        State.excluded_projects.append(message.text)
+        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+        main_message()
+
+    elif State.getting_item_name:
+        State.excluded_items.append(message.text)
+        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+        main_message()
+
+    elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
+        main_message()
 
     elif message.text == "Settings":
         State.first_message = False
@@ -130,10 +136,12 @@ def reply_all_messages(message): # Название функции не игра
 
     elif message.text == "Clean black list":
         State.__init__()
+        main_message()
 
     else:
         telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
         State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+        main_message()
 
 
 
