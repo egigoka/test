@@ -28,6 +28,11 @@ class State:
         self.excluded_projects = excluded_projects
         self.excluded_items = excluded_items
 
+        self.counter_for_left_items = False
+        self.counter_for_left_items_int = 0
+
+        self.all_todo_str = ""
+
 
 State = State()
 
@@ -39,19 +44,25 @@ def get_random_todo():
     incomplete_items = todo.all_incomplete_items_in_account()
     bench.end()
 
+    State.counter_for_left_items_int = 0
+
+    State.all_todo_str = ""
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing excluded
         if project_name.strip() in State.excluded_projects:
             incomplete_items[project_name] = []
             continue
         if project_items:
             print(f'"{project_name}"')
+            State.all_todo_str += project_name + newline
         for item in project_items.copy():
 
             if item["content"].strip() in State.excluded_items:
                 incomplete_items[project_name].remove(item)
                 print(f'    "{item["content"]}" deleted')
             else:
+                State.counter_for_left_items_int += 1
                 print(f'    "{item["content"]}"')
+                State.all_todo_str += "    " + item["content"] + newline
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing empty projects
         if not project_items:
@@ -68,7 +79,11 @@ def get_random_todo():
         if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
             time_string = random_item["date_string"]
 
-    return f"{random_item['content']} <{random_project_name}> {time_string}"
+    counter_for_left_items_str = ""
+    if State.counter_for_left_items:
+        counter_for_left_items_str = f"({State.counter_for_left_items_int} left)"
+
+    return f"{random_item['content']} <{random_project_name}> {time_string} {counter_for_left_items_str}".replace(">  (", "> (")
 
 
 encrypted = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
@@ -91,20 +106,28 @@ def reply_all_messages(message):
             markup = telebot.types.ReplyKeyboardMarkup()
             main_button = telebot.types.KeyboardButton('MOAR!')
             settings_button = telebot.types.KeyboardButton('Settings')
+            list_button = telebot.types.KeyboardButton('List')
             markup.row(main_button)
-            markup.row(settings_button)
+            markup.row(settings_button, list_button)
 
             telegram_api.send_message(message.chat.id, "init keyboard", reply_markup=markup)
 
             last_message += 1
             State.first_message = False
 
-        execluded_str =  f"Excluded projects: {State.excluded_projects}{newline}Excluded items: {State.excluded_items}"
+        if State.excluded_projects:
+            excluded_str = f"Excluded projects: {State.excluded_projects}."
+        else:
+            excluded_str = "No excluded projects."
+        if State.excluded_items:
+            excluded_str += f"{newline}Excluded items: {State.excluded_items}."
+        else:
+            excluded_str += f"{newline}No excluded items."
 
-        telegram_api.send_message(message.chat.id, f"{execluded_str}{newline}wait")
+        telegram_api.send_message(message.chat.id, f"{excluded_str}{newline}wait")
 
         telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message,
-                                       text=f"{execluded_str}{newline}{get_random_todo()}")  # , reply_markup=markup)
+                                       text=f"{excluded_str}{newline}{get_random_todo()}")  # , reply_markup=markup)
 
     if message.chat.id != 5328715:
         telegram_api.send_message(message.chat.id, "ACCESS DENY!")
@@ -131,6 +154,10 @@ def reply_all_messages(message):
     elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
         main_message()
 
+    elif message.text == "List":
+        telegram_api.send_message(message.chat.id, State.all_todo_str)
+        main_message(1)
+
     elif message.text == "Settings":
         State.first_message = False
 
@@ -140,9 +167,11 @@ def reply_all_messages(message):
         items_exclude_button = telebot.types.KeyboardButton("Exclude items")
         items_include_button = telebot.types.KeyboardButton("Include items")
         clean_black_list_button = telebot.types.KeyboardButton("Clean black list")
+        counter_for_left_items_button = telebot.types.KeyboardButton("Toggle left items counter")
         markup.row(project_exclude_button, project_include_button)
         markup.row(items_exclude_button, items_include_button)
         markup.row(clean_black_list_button)
+        markup.row(counter_for_left_items_button)
 
         telegram_api.send_message(message.chat.id, "Settings:", reply_markup=markup)
 
@@ -201,6 +230,14 @@ def reply_all_messages(message):
 
     elif message.text == "Clean black list":
         State.__init__(excluded_projects=[], excluded_items=[])
+        main_message()
+
+    elif message.text == "Toggle left items counter":
+        if State.counter_for_left_items:
+            State.counter_for_left_items = False
+        else:
+            State.counter_for_left_items = True
+        State.first_message = True
         main_message()
 
     else:
