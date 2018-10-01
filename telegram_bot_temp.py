@@ -40,14 +40,18 @@ def get_random_todo():
     bench.end()
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing excluded
-        if project_name in State.excluded_projects:
+        if project_name.strip() in State.excluded_projects:
             incomplete_items[project_name] = []
             continue
-        for item in project_items:
-            if item["content"] in State.excluded_items:
-                incomplete_items[project_name].pop(incomplete_items[project_name].index(item))
+        if project_items:
+            print(f'"{project_name}"')
+        for item in project_items.copy():
 
-
+            if item["content"].strip() in State.excluded_items:
+                incomplete_items[project_name].remove(item)
+                print(f'    "{item["content"]}" deleted')
+            else:
+                print(f'    "{item["content"]}"')
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing empty projects
         if not project_items:
@@ -67,7 +71,6 @@ def get_random_todo():
     return f"{random_item['content']} <{random_project_name}> {time_string}"
 
 
-
 encrypted = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
                  4, 49, 44, -25, 18, 9, -18, -19, 72, -12, -26, -3, 3, -62, 3, 17, 4, 7, -3, -33, -3, -12]
 
@@ -78,11 +81,11 @@ todoist_api = Todoist(todoist_api_key)
 
 telegram_api = telebot.TeleBot(telegram_token)
 
-@telegram_api.message_handler(content_types=["text"])
-def reply_all_messages(message): # Название функции не играет никакой роли, в принципе
 
-    def main_message():
-        last_message = message.message_id + 3
+@telegram_api.message_handler(content_types=["text"])
+def reply_all_messages(message):
+    def main_message(sended_messages_before=0):
+        last_message = message.message_id + 1 + sended_messages_before
 
         if State.first_message:
             markup = telebot.types.ReplyKeyboardMarkup()
@@ -96,25 +99,32 @@ def reply_all_messages(message): # Название функции не игра
             last_message += 1
             State.first_message = False
 
-        telegram_api.send_message(message.chat.id, f"Excluded projects: {State.excluded_projects}")
-        telegram_api.send_message(message.chat.id, f"Excluded items: {State.excluded_items}")
+        execluded_str =  f"Excluded projects: {State.excluded_projects}{newline}Excluded items: {State.excluded_items}"
 
-        telegram_api.send_message(message.chat.id, "wait")
+        telegram_api.send_message(message.chat.id, f"{execluded_str}{newline}wait")
 
         telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message,
-                                       text=get_random_todo())  # , reply_markup=markup)
+                                       text=f"{execluded_str}{newline}{get_random_todo()}")  # , reply_markup=markup)
 
     if message.chat.id != 5328715:
         telegram_api.send_message(message.chat.id, "ACCESS DENY!")
         return
 
     if State.getting_project_name:
-        State.excluded_projects.append(message.text)
+        message_text = message.text.strip()
+        if message_text in State.excluded_projects:
+            State.excluded_projects.remove(message_text)
+        else:
+            State.excluded_projects.append(message_text)
         State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
         main_message()
 
     elif State.getting_item_name:
-        State.excluded_items.append(message.text)
+        message_text = message.text.strip()
+        if message_text in State.excluded_items:
+            State.excluded_items.remove(message_text)
+        else:
+            State.excluded_items.append(message_text)
         State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
         main_message()
 
@@ -126,10 +136,12 @@ def reply_all_messages(message): # Название функции не игра
 
         markup = telebot.types.ReplyKeyboardMarkup()
         project_exclude_button = telebot.types.KeyboardButton("Exclude project")
-        items_exclude_button = telebot.types.KeyboardButton("Exclude items by name")
+        project_include_button = telebot.types.KeyboardButton("Include project")
+        items_exclude_button = telebot.types.KeyboardButton("Exclude items")
+        items_include_button = telebot.types.KeyboardButton("Include items")
         clean_black_list_button = telebot.types.KeyboardButton("Clean black list")
-        markup.row(project_exclude_button)
-        markup.row(items_exclude_button)
+        markup.row(project_exclude_button, project_include_button)
+        markup.row(items_exclude_button, items_include_button)
         markup.row(clean_black_list_button)
 
         telegram_api.send_message(message.chat.id, "Settings:", reply_markup=markup)
@@ -141,16 +153,51 @@ def reply_all_messages(message): # Название функции не игра
                 project_button = telebot.types.KeyboardButton(project_name)
                 markup.row(project_button)
 
-        telegram_api.send_message(message.chat.id, "Send me project name:", reply_markup=markup)
+        telegram_api.send_message(message.chat.id, "Send me project name to exclude:", reply_markup=markup)
 
         State.getting_project_name = True
 
-    elif message.text == "Exclude items by name":
-        markup = telebot.types.ForceReply(selective=False)
+    elif message.text == "Include project":
+        if State.excluded_projects:
+            markup = telebot.types.ReplyKeyboardMarkup()
+            for project_name in State.excluded_projects:
+                project_button = telebot.types.KeyboardButton(project_name)
+                markup.row(project_button)
+
+            telegram_api.send_message(message.chat.id, "Send me project name to include:", reply_markup=markup)
+
+            State.getting_project_name = True
+        else:
+            telegram_api.send_message(message.chat.id, "No excluded projects, skip...")
+            State.first_message = True
+            main_message(1)
+
+    elif message.text == "Exclude items":
+        # markup = telebot.types.ForceReply(selective=False) it doesn't show up default keyboard :(
+
+        markup = telebot.types.ReplyKeyboardMarkup()
+        for item_name in [r"Vacuum/sweep", "Wash the floor"]:
+            project_button = telebot.types.KeyboardButton(item_name)
+            markup.row(project_button)
 
         telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
 
         State.getting_item_name = True
+
+    elif message.text == "Include items":
+        if State.excluded_items:
+            markup = telebot.types.ReplyKeyboardMarkup()
+            for item_name in State.excluded_items:
+                project_button = telebot.types.KeyboardButton(item_name)
+                markup.row(project_button)
+
+            telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
+
+            State.getting_item_name = True
+        else:
+            telegram_api.send_message(message.chat.id, "No excluded items, skip...")
+            State.first_message = True
+            main_message(1)
 
     elif message.text == "Clean black list":
         State.__init__(excluded_projects=[], excluded_items=[])
@@ -162,7 +209,6 @@ def reply_all_messages(message): # Название функции не игра
         main_message()
 
 
-
 def main():
     try:
         Print.colored("Bot started", "green")
@@ -171,7 +217,7 @@ def main():
     except KeyboardInterrupt:
         print("Ctrl+C")
     except requests.exceptions.ReadTimeout:
-        Print("Timeout...")
+        Print(f"Timeout... {Time.dotted()}")
         main()
 
 
