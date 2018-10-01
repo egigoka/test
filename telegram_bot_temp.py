@@ -20,7 +20,16 @@ class Arguments:
 
 
 class State:
-    first_message = True
+    def __init__(self):
+        self.first_message = True
+        self.getting_project_name = False
+        self.getting_item_name = False
+
+        self.excluded_projects = []
+        self.excluded_items = []
+
+
+State = State()
 
 
 def get_random_todo():
@@ -61,21 +70,71 @@ def reply_all_messages(message): # Название функции не игра
         telegram_api.send_message(message.chat.id, "ACCESS DENY!")
         return
 
-    last_message = message.message_id + 1
+    if State.getting_project_name:
+        State.excluded_projects.append(message.text)
+        State.__init__()
 
-    if State.first_message:
-        markup = telebot.types.ReplyKeyboardMarkup()
-        button = telebot.types.KeyboardButton('MOAR!')
-        markup.row(button)
+    elif State.getting_item_name:
+        State.excluded_items.append(message.text)
+        State.__init__()
 
-        telegram_api.send_message(message.chat.id, "init keyboard", reply_markup=markup)
+    elif message.text == "MOAR!" or State.first_message:  # main button
 
-        last_message += 1
+        last_message = message.message_id + 3
+
+        if State.first_message:
+            markup = telebot.types.ReplyKeyboardMarkup()
+            main_button = telebot.types.KeyboardButton('MOAR!')
+            settings_button = telebot.types.KeyboardButton('Settings')
+            markup.row(main_button)
+            markup.row(settings_button)
+
+            telegram_api.send_message(message.chat.id, "init keyboard", reply_markup=markup)
+
+            last_message += 1
+            State.first_message = False
+
+        telegram_api.send_message(message.chat.id, f"Excluded projects: {State.excluded_projects}")
+        telegram_api.send_message(message.chat.id, f"Excluded items: {State.excluded_items}")
+
+        telegram_api.send_message(message.chat.id, "wait")
+
+        telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message, text=get_random_todo())#, reply_markup=markup)
+
+    elif message.text == "Settings":
         State.first_message = False
 
-    telegram_api.send_message(message.chat.id, "wait")
+        markup = telebot.types.ReplyKeyboardMarkup()
+        project_exclude_button = telebot.types.KeyboardButton("Exclude project")
+        items_exclude_button = telebot.types.KeyboardButton("Exclude items by name")
+        clean_black_list_button = telebot.types.KeyboardButton("Clean black list")
+        markup.row(project_exclude_button)
+        markup.row(items_exclude_button)
+        markup.row(clean_black_list_button)
 
-    telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message, text=get_random_todo())#, reply_markup=markup)
+        telegram_api.send_message(message.chat.id, "Settings:", reply_markup=markup)
+
+    elif message.text == "Execlude project":
+        markup = telebot.types.ForceReply(selective=False)
+
+        telegram_api.send_message(message.chat.id, "Send me project name:", reply_markup=markup)
+
+        State.getting_project_name = True
+
+    elif message.text == "Execlude items by name":
+        markup = telebot.types.ForceReply(selective=False)
+
+        telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
+
+        State.getting_item_name = True
+
+    elif message.text == "Clean black list":
+        State.__init__()
+
+    else:
+        telegram_api.send_message(message.chat.id, "ERROR!")
+        State.__init__()
+
 
 
 def main():
