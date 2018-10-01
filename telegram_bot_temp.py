@@ -53,7 +53,10 @@ def get_random_todo():
         if not project_items:
             incomplete_items.pop(project_name)
 
-    random_project_name, random_project_items = Random.item(incomplete_items)
+    try:
+        random_project_name, random_project_items = Random.item(incomplete_items)
+    except IndexError:
+        return "All done!"
     random_item = Random.item(random_project_items)
 
     time_string = ""
@@ -62,6 +65,7 @@ def get_random_todo():
             time_string = random_item["date_string"]
 
     return f"{random_item['content']} <{random_project_name}> {time_string}"
+
 
 
 encrypted = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
