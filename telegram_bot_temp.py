@@ -20,13 +20,13 @@ class Arguments:
 
 
 class State:
-    def __init__(self):
+    def __init__(self, excluded_projects=[], excluded_items=[]):
         self.first_message = True
         self.getting_project_name = False
         self.getting_item_name = False
 
-        self.excluded_projects = []
-        self.excluded_items = []
+        self.excluded_projects = excluded_projects
+        self.excluded_items = excluded_items
 
 
 State = State()
@@ -72,11 +72,11 @@ def reply_all_messages(message): # Название функции не игра
 
     if State.getting_project_name:
         State.excluded_projects.append(message.text)
-        State.__init__()
+        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
 
     elif State.getting_item_name:
         State.excluded_items.append(message.text)
-        State.__init__()
+        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
 
     elif message.text == "MOAR!" or State.first_message:  # main button
 
@@ -133,7 +133,7 @@ def reply_all_messages(message): # Название функции не игра
 
     else:
         telegram_api.send_message(message.chat.id, "ERROR!")
-        State.__init__()
+        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
 
 
 
