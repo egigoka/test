@@ -114,7 +114,7 @@ def reply_all_messages(message): # Название функции не игра
 
         telegram_api.send_message(message.chat.id, "Settings:", reply_markup=markup)
 
-    elif message.text == "Execlude project":
+    elif message.text == "Exclude project":
         markup = telebot.types.ForceReply(selective=False)
 
         telegram_api.send_message(message.chat.id, "Send me project name:", reply_markup=markup)
