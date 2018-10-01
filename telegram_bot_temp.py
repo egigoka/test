@@ -39,7 +39,15 @@ def get_random_todo():
     incomplete_items = todo.all_incomplete_items_in_account()
     bench.end()
 
-    for project_name, project_items in Dict.iterable(incomplete_items.copy()):
+    for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing excluded
+        if project_name in State.excluded_projects:
+            project_items = []
+            continue
+        for item in project_items:
+            if item["content"] in State.excluded_items:
+                incomplete_items[project_name].pop(item)
+
+    for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing empty projects
         if not project_items:
             incomplete_items.pop(project_name)
 
@@ -121,7 +129,10 @@ def reply_all_messages(message): # Название функции не игра
         telegram_api.send_message(message.chat.id, "Settings:", reply_markup=markup)
 
     elif message.text == "Exclude project":
-        markup = telebot.types.ForceReply(selective=False)
+        markup = telebot.types.ReplyKeyboardMarkup()
+        for project_name, project_id in Dict.iterable(todoist_api.projects_all_names()):
+            project_button = telebot.types.KeyboardButton(project_name)
+            markup.row(project_button)
 
         telegram_api.send_message(message.chat.id, "Send me project name:", reply_markup=markup)
 
