@@ -41,11 +41,13 @@ def get_random_todo():
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing excluded
         if project_name in State.excluded_projects:
-            project_items = []
+            incomplete_items[project_name] = []
             continue
         for item in project_items:
             if item["content"] in State.excluded_items:
                 incomplete_items[project_name].pop(item)
+
+
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing empty projects
         if not project_items:
