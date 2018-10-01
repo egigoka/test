@@ -45,7 +45,7 @@ def get_random_todo():
             continue
         for item in project_items:
             if item["content"] in State.excluded_items:
-                incomplete_items[project_name].pop(item)
+                incomplete_items[project_name].pop(incomplete_items[project_name].index(item))
 
 
 
