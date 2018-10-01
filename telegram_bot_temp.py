@@ -131,8 +131,9 @@ def reply_all_messages(message): # Название функции не игра
     elif message.text == "Exclude project":
         markup = telebot.types.ReplyKeyboardMarkup()
         for project_name, project_id in Dict.iterable(todoist_api.projects_all_names()):
-            project_button = telebot.types.KeyboardButton(project_name)
-            markup.row(project_button)
+            if project_name not in State.excluded_projects:
+                project_button = telebot.types.KeyboardButton(project_name)
+                markup.row(project_button)
 
         telegram_api.send_message(message.chat.id, "Send me project name:", reply_markup=markup)
 
