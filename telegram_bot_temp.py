@@ -135,7 +135,7 @@ def reply_all_messages(message): # Название функции не игра
         State.getting_item_name = True
 
     elif message.text == "Clean black list":
-        State.__init__()
+        State.__init__(excluded_projects=[], excluded_items=[])
         main_message()
 
     else:
