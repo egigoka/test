@@ -155,7 +155,8 @@ def reply_all_messages(message):
         main_message()
 
     elif message.text == "List":
-        get_random_todo()
+        if State.first_message:
+            get_random_todo()
         if State.all_todo_str:
             telegram_api.send_message(message.chat.id, State.all_todo_str)
         else:
