@@ -70,6 +70,7 @@ class Arguments:
 class State:
     showed_random_items = []
     loop_input = ""
+    random_bench = Bench(prefix="<task> done in", fraction_digits=0)
 
 
 class Priority:
@@ -77,24 +78,6 @@ class Priority:
     HIGH = 2
     VERY_HIGH = 3
     EXTREMELY = 4
-
-
-def encrypt(string, password):
-    int_list = []
-    password_len = len(password)
-    for cnt, sym in enumerate(string):
-        password_sym = password[cnt % password_len]
-        int_list.append(ord(sym)-ord(password_sym))
-    return int_list
-
-
-def decrypt(int_list, password):
-    output_string = ""
-    password_len = len(password)
-    for cnt, numb in enumerate(int_list):
-        password_sym = password[cnt % password_len]
-        output_string += chr(numb+ord(password_sym))
-    return output_string
 
 
 class Todoist:
@@ -141,6 +124,48 @@ class Todoist:
         for item in raw:
             items[item["content"]] = item["id"]
         return items
+
+    def project_cnt_items(self, project_name):
+        cnt_all_tasks = 0
+        items = todo.project_raw_items(project_name)
+        for item in items:
+            cnt_all_tasks += 1
+        return cnt_all_tasks
+
+    def cnt_all_items_in_account(self):
+        cnt_all_tasks = 0
+        for project_name, project_id in Dict.iterable(todo.projects_all_names()):
+            cnt_all_tasks += self.project_cnt_items(project_name)
+        return cnt_all_tasks
+
+    def project_cnt_incomplete_items(self, project_name):
+        cnt_incomplete_tasks = 0
+        items = todo.project_raw_items(project_name)
+        for item in items:
+            if status in ["today", "overdue"]:
+                cnt_incomplete_tasks += 1
+        return cnt_incomplete_tasks
+
+    def cnt_incompleted_items_in_account(self):
+        cnt_incomplete_tasks = 0
+        for project_name, project_id in Dict.iterable(todo.projects_all_names()):
+            cnt_incomplete_tasks += self.project_cnt_incomplete_items(project_name)
+        return cnt_incomplete_tasks
+
+    def project_raw_incomplete_items(self, project_name):
+        items = todo.project_raw_items(project_name)
+        incomplete_items = []
+        for item in items:
+            status = todo.item_status(item)
+            if status in ["today", "overdue"]:
+                incomplete_items.append(item)
+        return incomplete_items
+
+    def all_incomplete_items_in_account(self):
+        incomplete_items = {}
+        for project_name, project_id in Dict.iterable(todo.projects_all_names()):
+            incomplete_items[project_name] = self.project_raw_incomplete_items(project_name)
+        return incomplete_items
 
     def create_project(self, name):
         project_id = self.project_exists(name)
@@ -189,30 +214,33 @@ class Todoist:
             return "deleted"
         else:
             now = datetime.datetime.now()
-            todo_time = self.todoist_time_to_datetime_datetime(item_obj['due_date_utc'])
-            local_timezone = tzlocal.get_localzone()
-            utc_timezone = pytz.timezone("utc")
-            end_of_today = datetime.datetime(now.year,
-                                             now.month,
-                                             now.day,
-                                             23, 59, 59)
+            if item_obj['due_date_utc']:
+                todo_time = self.todoist_time_to_datetime_datetime(item_obj['due_date_utc'])
+                local_timezone = tzlocal.get_localzone()
+                utc_timezone = pytz.timezone("utc")
+                end_of_today = datetime.datetime(now.year,
+                                                 now.month,
+                                                 now.day,
+                                                 23, 59, 59)
 
-            end_of_today_aware = local_timezone.localize(end_of_today)
+                end_of_today_aware = local_timezone.localize(end_of_today)
 
-            todo_time_aware = utc_timezone.localize(todo_time)
+                todo_time_aware = utc_timezone.localize(todo_time)
 
-            if end_of_today_aware > todo_time_aware:  # overdue
-                return "overdue"
-            elif end_of_today_aware == todo_time_aware:
+                if end_of_today_aware > todo_time_aware:  # overdue
+                    return "overdue"
+                elif end_of_today_aware == todo_time_aware:
+                    return "today"
+                elif end_of_today_aware < todo_time_aware:
+                    return "not today"
+            else:  # if no due_date_utc
                 return "today"
-            elif end_of_today_aware < todo_time_aware:
-                return "not today"
 
 
-encoded = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
-           29, -55, -17, -59, -9, 2, 50, -13, -14, -52, -15, -56, -59, -44, 5]  # yes, that shitty
+encrypted = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
+             29, -55, -17, -59, -9, 2, 50, -13, -14, -52, -15, -56, -59, -44, 5]  # yes, that shitty
 
-todoist_api_key = decrypt(encoded, Str.input_pass("Input password: "))
+todoist_api_key = Str.decrypt(encrypted, Str.input_pass("Enter password: "))
 
 todo = Todoist(todoist_api_key)
 
@@ -223,15 +251,15 @@ def main():
     if Arguments.name:
         print("@"+todo.api.state["user"]["full_name"])
 
-    if Arguments.cleanup:
-        if CLI.get_y_n(f'Do you really want to remove all data in account {todo.api.state["user"]["full_name"]}'):
-            for task in todo.api.items.all():
-                task.delete()
-                Print.colored("    Task", task["content"], "deleted", "red")
-            for project_id in todo.api.projects.all():
-                project_id.delete()
-                Print.colored("Project", project_id["name"], "deleted", "red")
-            todo.api.commit()
+    # if Arguments.cleanup:
+    #     if CLI.get_y_n(f'Do you really want to remove all data in account {todo.api.state["user"]["full_name"]}'):
+    #         for task in todo.api.items.all():
+    #             task.delete()
+    #             Print.colored("    Task", task["content"], "deleted", "red")
+    #         for project_id in todo.api.projects.all():
+    #             project_id.delete()
+    #             Print.colored("Project", project_id["name"], "deleted", "red")
+    #         todo.api.commit()
 
     if Arguments.list:
         projects = todo.projects_all_names()
@@ -247,60 +275,49 @@ def main():
                         continue  # skip green items
                 Print.colored(" "*3, item['content'], status_color)
 
-    if Arguments.work:
-        items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
-                 'Wash dishes - Kitchen - 1 day', 'Take out the trash - Kitchen - 1 day',
-                 'Wash the stove - Kitchen - 1 day',
-                 'Vacuum/sweep - Kitchen - 1 day', 'Wash the floor - Kitchen - 3 days', 'Clean out - Balcony - 3 days',
-                 'Wash the floor - Balcony - 3 days', 'Clean up on the table - My room - 2 days',
-                 'Clean out - My room - 2 days', 'Wipe dust - My room - 1 week','Fill the bed - My room - 1 day',
-                 'Vacuum/sweep - My room - 1 day', 'Wash the floor - My room - 3 days',
-                 'Wash shower - Shower room - 1 day', 'Wash the sink - Shower room - 1 day',
-                 'Vacuum/sweep - Shower room - 1 day', 'Vacuum/sweep - Toilet - 1 day',
-                 'Wash the floor - Shower room - 3 days', 'Wash the floor - Toilet - 3 days',
-                 'Wash toilet - Toilet - 1 week', 'Wash and place shoes - Hallway - 2 days',
-                 'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
-                 'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
-                 'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
-
-        cnt_order = 0
-        for item in items:
-            try:
-                properties = item.split(" - ")
-                name = properties[0]
-                where = properties[1]
-                repeat_time = properties[2]
-            except IndexError:
-                print(f"Wrong item:{item}")
-                sys.exit(1)
-
-            cnt_order += 1
-            item_order = day_order = cnt_order
-
-            todo.add_item(name, where, item_order, day_order, priority=Priority.USUAL,
-                          date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project=True)
-            Print.debug(f'''todo.add_item({name}, {where}, {item_order}, {day_order}, priority={Priority.USUAL},
-                          date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project={True})''')
-
-        todo.api.commit()
+    # if Arguments.work:
+    #     items = ['Wash the clothes - Shower room - 1 week', 'Clean out the tables - Kitchen - 2 days',
+    #              'Wash dishes - Kitchen - 1 day', 'Take out the trash - Kitchen - 1 day',
+    #              'Wash the stove - Kitchen - 1 day',
+    #              'Vacuum/sweep - Kitchen - 1 day', 'Wash the floor - Kitchen - 3 days', 'Clean out - Balcony - 3 days',
+    #              'Wash the floor - Balcony - 3 days', 'Clean up on the table - My room - 2 days',
+    #              'Clean out - My room - 2 days', 'Wipe dust - My room - 1 week','Fill the bed - My room - 1 day',
+    #              'Vacuum/sweep - My room - 1 day', 'Wash the floor - My room - 3 days',
+    #              'Wash shower - Shower room - 1 day', 'Wash the sink - Shower room - 1 day',
+    #              'Vacuum/sweep - Shower room - 1 day', 'Vacuum/sweep - Toilet - 1 day',
+    #              'Wash the floor - Shower room - 3 days', 'Wash the floor - Toilet - 3 days',
+    #              'Wash toilet - Toilet - 1 week', 'Wash and place shoes - Hallway - 2 days',
+    #              'Vacuum/sweep - Corridor - 1 day', 'Vacuum/sweep - Hallway - 1 day','Wash the floor - Corridor - 3 days',
+    #              'Wash the floor - Hallway - 3 days', 'Wash the sink - Kitchen - 3 days',
+    #              'Clothes to gather - Balcony - 1 week','Wipe in the wardrobe - Wardrobe - 3 days']
+    #
+    #     cnt_order = 0
+    #     for item in items:
+    #         try:
+    #             properties = item.split(" - ")
+    #             name = properties[0]
+    #             where = properties[1]
+    #             repeat_time = properties[2]
+    #         except IndexError:
+    #             print(f"Wrong item:{item}")
+    #             sys.exit(1)
+    #
+    #         cnt_order += 1
+    #         item_order = day_order = cnt_order
+    #
+    #         todo.add_item(name, where, item_order, day_order, priority=Priority.USUAL,
+    #                       date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project=True)
+    #         Print.debug(f'''todo.add_item({name}, {where}, {item_order}, {day_order}, priority={Priority.USUAL},
+    #                       date_string=f"{todo.date_string_today()} every {repeat_time}", auto_create_project={True})''')
+    #
+    #     todo.api.commit()
 
     if Arguments.random:
         Print.rewrite("Chosing random item")
-        projects = todo.projects_all_names()
-        incomplete_items = {}
-        cnt_incomplete_tasks = 0
-        cnt_all_tasks = 0
-        #project_name, project_id = Random.item(projects)
 
-        for project_name, project_id in Dict.iterable(projects):
-            items = todo.project_raw_items(project_name)
-            incomplete_items[project_name] = []
-            for item in items:
-                cnt_all_tasks += 1
-                status = todo.item_status(item)
-                if status in ["today", "overdue"] and project_name not in ["Everyday", "Hygiene", "Drugs", "Cat"] and item['content'] not in [r"Vacuum/sweep", "Wash the floor"]:  # todo delete!!!!
-                    cnt_incomplete_tasks += 1
-                    incomplete_items[project_name].append(item)
+        cnt_incomplete_tasks = todo.cnt_incompleted_items_in_account()
+        cnt_all_tasks = todo.cnt_all_items_in_account()
+        incomplete_items = todo.all_incomplete_items_in_account()
 
         for project_name, project_items in Dict.iterable(incomplete_items.copy()):
             # skipping showed items
@@ -311,7 +328,7 @@ def main():
                     if showed_item["project"] == project_name:
                         # print("True")
                         #Print.debug(f'showed_item["id"] {showed_item["id"]} item["id"] {item["id"]} {showed_item["name"]} {item["content"]}')
-                        Print.debug(f'{showed_item["id"]} == {item["id"]} {showed_item["id"] == item["id"]}')
+                        # Print.debug(f'{showed_item["id"]} == {item["id"]} {showed_item["id"] == item["id"]}')
                         if showed_item["id"] == item["id"]:
                             # Print("TRUE")
                             incomplete_items[project_name].pop(incomplete_items[project_name].index(item))
@@ -327,28 +344,26 @@ def main():
 
         random_project_name, random_project_items = Random.item(incomplete_items)
 
-        # for skipped_item in State.showed_random_items:
-        #     if skipped_item["project"] == random_project_name:
-        #         for item in random_project_items  ! todo skip
-
-
         random_item = Random.item(random_project_items)
 
         highlight = ""
         if OS.windows:
             highlight = "on_white"
 
+        Print.rewrite()
+        Print.prettify(State.showed_random_items)
+
         cnt_completed_tasks = cnt_all_tasks-cnt_incomplete_tasks
         Print.colored(f"Unfinished tasks: {cnt_incomplete_tasks} of {cnt_all_tasks} total - {int((cnt_completed_tasks/cnt_all_tasks)*100)}% done", highlight, "blue")
 
         time_string = ""
-        if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
-            time_string = random_item["date_string"]
+        if random_item["due_date_utc"]:
+            if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
+                time_string = random_item["date_string"]
 
         Print.colored(f"Random todo: {random_item['content']} <{random_project_name}> {time_string}", "cyan")
 
         Print.colored(f"State.loop_input = {State.loop_input} <{State.loop_input != 'n'}>, len(State.showed_random_items) = {len(State.showed_random_items)}", "red")
-        Print.prettify(State.showed_random_items)
 
         State.showed_random_items.append({"project":random_project_name, "id":random_item["id"], "name":random_item["content"]})
 
