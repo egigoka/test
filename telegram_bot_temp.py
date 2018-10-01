@@ -127,7 +127,7 @@ def reply_all_messages(message):
         telegram_api.send_message(message.chat.id, f"{excluded_str}{newline}wait")
 
         telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message,
-                                       text=f"{excluded_str}{newline}**{get_random_todo()}**")  # , reply_markup=markup)
+                                       text=f"{excluded_str}{newline}{get_random_todo()}")  # , reply_markup=markup)
 
     if message.chat.id != 5328715:
         telegram_api.send_message(message.chat.id, "ACCESS DENY!")
