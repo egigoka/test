@@ -121,7 +121,7 @@ def reply_all_messages(message): # Название функции не игра
 
         State.getting_project_name = True
 
-    elif message.text == "Execlude items by name":
+    elif message.text == "Exclude items by name":
         markup = telebot.types.ForceReply(selective=False)
 
         telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
@@ -132,7 +132,7 @@ def reply_all_messages(message): # Название функции не игра
         State.__init__()
 
     else:
-        telegram_api.send_message(message.chat.id, "ERROR!")
+        telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
         State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
 
 
