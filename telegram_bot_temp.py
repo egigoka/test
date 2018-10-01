@@ -156,7 +156,10 @@ def reply_all_messages(message):
 
     elif message.text == "List":
         get_random_todo()
-        telegram_api.send_message(message.chat.id, State.all_todo_str)
+        if State.all_todo_str:
+            telegram_api.send_message(message.chat.id, State.all_todo_str)
+        else:
+            telegram_api.send_message(message.chat.id, "Todo list for today is empty!")
         main_message(1)
 
     elif message.text == "Settings":
