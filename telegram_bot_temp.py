@@ -219,8 +219,15 @@ def reply_all_messages(message):
         # markup = telebot.types.ForceReply(selective=False) it doesn't show up default keyboard :(
 
         markup = telebot.types.ReplyKeyboardMarkup()
+        default_items = False
         for item_name in [r"Vacuum/sweep", "Wash the floor"]:
-            project_button = telebot.types.KeyboardButton(item_name)
+            if item_name not in State.excluded_items:
+                project_button = telebot.types.KeyboardButton(item_name)
+                markup.row(project_button)
+                default_items = True
+
+        if not default_items:
+            project_button = telebot.types.KeyboardButton("Enter item manually")
             markup.row(project_button)
 
         telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
