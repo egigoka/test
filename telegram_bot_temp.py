@@ -15,6 +15,7 @@ except ImportError:
 from todoist_temp import *
 import requests
 
+
 class Arguments:
     pass
 
@@ -94,7 +95,8 @@ telegram_token = Str.decrypt(encrypted, Str.input_pass("Enter password:"))
 
 todoist_api = Todoist(todoist_api_key)
 
-telegram_api = telebot.TeleBot(telegram_token)
+telegram_api = telebot.TeleBot(telegram_token, threaded=False)
+# https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
 @telegram_api.message_handler(content_types=["text"])
