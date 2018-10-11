@@ -143,6 +143,7 @@ def reply_all_messages(message):
             State.excluded_projects.append(message_text)
         State.getting_project_name = False
         State.getting_item_name = False
+        State.first_message = True
         main_message()
 
     elif State.getting_item_name:
@@ -152,6 +153,7 @@ def reply_all_messages(message):
         else:
             State.excluded_items.append(message_text)
         State.getting_item_name = False
+        State.first_message = True
         main_message()
 
     elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
@@ -243,6 +245,7 @@ def reply_all_messages(message):
     elif message.text == "Clean black list":
         State.excluded_items = []
         State.excluded_projects = []
+        State.first_message = True
         main_message()
 
     elif message.text == "Toggle left items counter":
