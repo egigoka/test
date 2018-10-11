@@ -139,7 +139,8 @@ def reply_all_messages(message):
             State.excluded_projects.remove(message_text)
         else:
             State.excluded_projects.append(message_text)
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+        State.getting_project_name = False
+        State.getting_item_name = False
         main_message()
 
     elif State.getting_item_name:
@@ -148,7 +149,7 @@ def reply_all_messages(message):
             State.excluded_items.remove(message_text)
         else:
             State.excluded_items.append(message_text)
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+        State.getting_item_name = False
         main_message()
 
     elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
@@ -169,10 +170,14 @@ def reply_all_messages(message):
         markup = telebot.types.ReplyKeyboardMarkup()
         project_exclude_button = telebot.types.KeyboardButton("Exclude project")
         project_include_button = telebot.types.KeyboardButton("Include project")
+
         items_exclude_button = telebot.types.KeyboardButton("Exclude items")
         items_include_button = telebot.types.KeyboardButton("Include items")
+
         clean_black_list_button = telebot.types.KeyboardButton("Clean black list")
+
         counter_for_left_items_button = telebot.types.KeyboardButton("Toggle left items counter")
+
         markup.row(project_exclude_button, project_include_button)
         markup.row(items_exclude_button, items_include_button)
         markup.row(clean_black_list_button)
@@ -234,7 +239,8 @@ def reply_all_messages(message):
             main_message(1)
 
     elif message.text == "Clean black list":
-        State.__init__(excluded_projects=[], excluded_items=[])
+        State.excluded_items = []
+        State.excluded_projects = []
         main_message()
 
     elif message.text == "Toggle left items counter":
@@ -247,7 +253,6 @@ def reply_all_messages(message):
 
     else:
         telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
         main_message()
 
 
