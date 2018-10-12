@@ -265,6 +265,7 @@ def reply_all_messages(message):
 
     else:
         telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
+        State.first_message = True
         main_message()
 
 
