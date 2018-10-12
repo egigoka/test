@@ -34,6 +34,8 @@ class State:
 
         self.all_todo_str = ""
 
+        self.sended_messages = 1
+
 
 State = State()
 
@@ -102,7 +104,8 @@ telegram_api = telebot.TeleBot(telegram_token, threaded=False)
 @telegram_api.message_handler(content_types=["text"])
 def reply_all_messages(message):
     def main_message(sended_messages_before=0):
-        last_message = message.message_id + 1 + sended_messages_before
+        last_message = message.message_id + State.sended_messages + sended_messages_before
+        State.sended_messages = 1
 
         if State.first_message:
             markup = telebot.types.ReplyKeyboardMarkup()
@@ -266,6 +269,7 @@ def reply_all_messages(message):
     else:
         telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
         State.first_message = True
+        State.sended_messages += 1
         main_message()
 
 
