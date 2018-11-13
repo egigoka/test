@@ -281,7 +281,10 @@ def main():
     except KeyboardInterrupt:
         print("Ctrl+C")
     except requests.exceptions.ReadTimeout:
-        Print(f"Timeout... {Time.dotted()}")
+        print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
+        main()
+    except requests.exceptions.ConnectionError:
+        print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
         main()
 
 
