@@ -15,6 +15,7 @@ except ImportError:
     import telebot
 from todoist_temp import *
 import requests
+import sys
 
 
 class Arguments:
@@ -90,11 +91,12 @@ def get_random_todo():
     return f"{random_item['content']} <{random_project_name}> {time_string} {counter_for_left_items_str}".replace(">  (", "> (")
 
 
-encrypted = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
+encrypted_telegram_token = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
                  4, 49, 44, -25, 18, 9, -18, -19, 72, -12, -26, -3, 3, -62, 3, 17, 4, 7, -3, -33, -3, -12]
 
 
-telegram_token = Str.decrypt(encrypted, Str.input_pass("Enter password:"))
+telegram_token = Str.decrypt(encrypted_telegram_token, todoist_password_for_api_key)
+# telegram_token = Str.decrypt(encrypted, Str.input_pass("Enter password:"))
 
 todoist_api = Todoist(todoist_api_key)
 
@@ -275,19 +277,20 @@ def reply_all_messages(message):
 
 
 def main():
-    try:
-        Print.colored("Bot started", "green")
-        telegram_api.polling(none_stop=True)
-        Print.colored("Bot ended", "green")
-    except KeyboardInterrupt:
-        print("Ctrl+C")
-        sys.exit(0)
-    except requests.exceptions.ReadTimeout:
-        print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
-        main()
-    except requests.exceptions.ConnectionError:
-        print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
-        main()
+    while True:
+        try:
+            Print.colored("Bot started", "green")
+            telegram_api.polling(none_stop=True)
+            Print.colored("Bot ended", "green")
+        except KeyboardInterrupt:
+            print("Ctrl+C")
+            sys.exit(0)
+        except requests.exceptions.ReadTimeout:
+            print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
+            Time.sleep(5)
+        except requests.exceptions.ConnectionError:
+            print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
+            Time.sleep(5)
 
 
 if __name__ == '__main__':

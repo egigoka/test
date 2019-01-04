@@ -8,7 +8,7 @@ Print.colored("Init...", "grey", "on_white")
 
 while True:
     for root, dirs, files in os.walk(Path.extend("Users", "mac", "Library", "Application Support", "Disk-O")):
-        time.sleep(0.001)
+        time9.sleep(0.001)
         for file in files:
                 path = Path.extend(root, file)
                 #print(path)
@@ -31,7 +31,7 @@ while True:
     create_logstring = "Created"
 
     for path, size in Dict.iterable(dct, copy_dict=True):
-        time.sleep(0.001)
+        time9.sleep(0.001)
         try:
             #Print.debug("dct[path]", dct[path],
             #            "File.get_size(path)", File.get_size(path),
@@ -48,4 +48,4 @@ while True:
             dct[path] = File.get_size(path)
 
     CLI.wait_update()
-    time.sleep(2)
+    time9.sleep(2)

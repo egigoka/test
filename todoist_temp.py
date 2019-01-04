@@ -237,10 +237,11 @@ class Todoist:
                 return "today"
 
 
-encrypted = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
-             29, -55, -17, -59, -9, 2, 50, -13, -14, -52, -15, -56, -59, -44, 5]  # yes, that shitty
+encrypted_todoist_token = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
+                           29, -55, -17, -59, -9, 2, 50, -13, -14, -52, -15, -56, -59, -44, 5]  # yes, that shitty
 
-todoist_api_key = Str.decrypt(encrypted, Str.input_pass("Enter password: "))
+todoist_password_for_api_key = Str.input_pass("Enter password: ")
+todoist_api_key = Str.decrypt(encrypted_todoist_token, todoist_password_for_api_key)
 
 todo = Todoist(todoist_api_key)
 
