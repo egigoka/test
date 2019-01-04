@@ -36,7 +36,7 @@ class State:
 
         self.all_todo_str = ""
 
-        self.sended_messages = 1
+        self.sent_messages = 1
 
 
 State = State()
@@ -107,8 +107,8 @@ telegram_api = telebot.TeleBot(telegram_token, threaded=False)
 @telegram_api.message_handler(content_types=["text"])
 def reply_all_messages(message):
     def main_message(sended_messages_before=0):
-        last_message = message.message_id + State.sended_messages + sended_messages_before
-        State.sended_messages = 1
+        last_message = message.message_id + State.sent_messages + sended_messages_before
+        State.sent_messages = 1
 
         if State.first_message:
             markup = telebot.types.ReplyKeyboardMarkup()
@@ -142,24 +142,30 @@ def reply_all_messages(message):
         return
 
     if State.getting_project_name:
-        message_text = message.text.strip()
-        if message_text in State.excluded_projects:
-            State.excluded_projects.remove(message_text)
+        if message.text == "Cancel":
+            pass
         else:
-            State.excluded_projects.append(message_text)
-        State.getting_project_name = False
-        State.getting_item_name = False
-        State.first_message = True
+            message_text = message.text.strip()
+            if message_text in State.excluded_projects:
+                State.excluded_projects.remove(message_text)
+            else:
+                State.excluded_projects.append(message_text)
+            State.getting_project_name = False
+            State.getting_item_name = False
+            State.first_message = True
         main_message()
 
     elif State.getting_item_name:
-        message_text = message.text.strip()
-        if message_text in State.excluded_items:
-            State.excluded_items.remove(message_text)
+        if message.text == "Cancel":
+            pass
         else:
-            State.excluded_items.append(message_text)
-        State.getting_item_name = False
-        State.first_message = True
+            message_text = message.text.strip()
+            if message_text in State.excluded_items:
+                State.excluded_items.remove(message_text)
+            else:
+                State.excluded_items.append(message_text)
+            State.getting_item_name = False
+            State.first_message = True
         main_message()
 
     elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
@@ -185,7 +191,6 @@ def reply_all_messages(message):
         items_include_button = telebot.types.KeyboardButton("Include items")
 
         clean_black_list_button = telebot.types.KeyboardButton("Clean black list")
-
         counter_for_left_items_button = telebot.types.KeyboardButton("Toggle left items counter")
 
         markup.row(project_exclude_button, project_include_button)
@@ -202,6 +207,9 @@ def reply_all_messages(message):
                 project_button = telebot.types.KeyboardButton(project_name)
                 markup.row(project_button)
 
+        cancel_button = telebot.types.KeyboardButton("Cancel")
+        markup.row(cancel_button)
+
         telegram_api.send_message(message.chat.id, "Send me project name to exclude:", reply_markup=markup)
 
         State.getting_project_name = True
@@ -212,6 +220,9 @@ def reply_all_messages(message):
             for project_name in State.excluded_projects:
                 project_button = telebot.types.KeyboardButton(project_name)
                 markup.row(project_button)
+
+            cancel_button = telebot.types.KeyboardButton("Cancel")
+            markup.row(cancel_button)
 
             telegram_api.send_message(message.chat.id, "Send me project name to include:", reply_markup=markup)
 
@@ -236,6 +247,9 @@ def reply_all_messages(message):
             project_button = telebot.types.KeyboardButton("Enter item manually")
             markup.row(project_button)
 
+        cancel_button = telebot.types.KeyboardButton("Cancel")
+        markup.row(cancel_button)
+
         telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
 
         State.getting_item_name = True
@@ -246,6 +260,9 @@ def reply_all_messages(message):
             for item_name in State.excluded_items:
                 project_button = telebot.types.KeyboardButton(item_name)
                 markup.row(project_button)
+
+            cancel_button = telebot.types.KeyboardButton("Cancel")
+            markup.row(cancel_button)
 
             telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
 
@@ -272,7 +289,7 @@ def reply_all_messages(message):
     else:
         telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
         State.first_message = True
-        State.sended_messages += 1
+        State.sent_messages += 1
         main_message()
 
 
