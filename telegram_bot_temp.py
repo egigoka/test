@@ -1,5 +1,6 @@
 #! python3
 # -*- coding: utf-8 -*-
+import sys
 try:
     from commands import *
 except ImportError:
@@ -280,6 +281,7 @@ def main():
         Print.colored("Bot ended", "green")
     except KeyboardInterrupt:
         print("Ctrl+C")
+        sys.exit(0)
     except requests.exceptions.ReadTimeout:
         print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
         main()
