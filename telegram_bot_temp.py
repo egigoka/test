@@ -150,9 +150,8 @@ def reply_all_messages(message):
                 State.excluded_projects.remove(message_text)
             else:
                 State.excluded_projects.append(message_text)
-            State.getting_project_name = False
-            State.getting_item_name = False
-            State.first_message = True
+        State.getting_project_name = False
+        State.first_message = True
         main_message()
 
     elif State.getting_item_name:
@@ -164,8 +163,8 @@ def reply_all_messages(message):
                 State.excluded_items.remove(message_text)
             else:
                 State.excluded_items.append(message_text)
-            State.getting_item_name = False
-            State.first_message = True
+        State.getting_item_name = False
+        State.first_message = True
         main_message()
 
     elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
