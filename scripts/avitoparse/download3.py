@@ -1,18 +1,13 @@
 #! python3
 # -*- coding: utf-8 -*-
-
 # import pymongo
+import sys
 try:  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
     from BeautifulSoup import BeautifulSoup
-except ImportError:
+except ImportError as exception:
     from bs4 import BeautifulSoup
-# mine commands
-import sys
-sys.path.append("../..")
-sys.path.append("..\..")
-sys.path.append(".")
-sys.path.append("..")
-from commands7 import *
+    #raise ImportError(exception)
+from commands import *
 
 
 def urlish(string, force_lowercase=True):
@@ -51,15 +46,6 @@ def stripify(obj):
     return output
 
 
-def dirify(object_):
-    print("-"*Console.width())
-    print(object_.__class__.__name__)
-    print("-"*Console.width())
-    for subobject in dir(object_):
-        if subobject[:1] != "_":
-            print("==>  " + subobject)
-
-
 class State:
     class Debug:
         on_parse_print_prettify = False
@@ -82,7 +68,8 @@ class State:
             elif arg in ["nodownload", "nodl"]:
                 no_download = True
 
-    product = urlish("iPhone SE")
+    product_original_name = "iPhone X"
+    product = urlish(product_original_name)
     # product = urlish("сим")
     # region = avitish("Russia")
     # region = avitish("Kurgan obl")
@@ -92,135 +79,131 @@ class State:
     usual_number_of_ads = 50  # normal amount of ads on page
 
 
+class Page:
+    def __init__(self):
+        self.number = None
+        self.html = ""
+        self.soup = None
+        self.soup_items = []
+        self.json_items = {}
+        self.filename = ""
+        self.title = ""
+        self.ads = 0
+        self.status = 204  # No Content
 
-def get_Page():
-    class Page:
-        number = None
-        html = ""
-        soup = None
-        soup_items = []
-        json_items = {}
-        filename = ""
-        title = ""
-        ads = 0
+    def get_url(self):
+        url = "https://www.avito.ru/" + State.region + "?p=" + str(self.number) + \
+              "&s=2&q=" + State.product
+        return url
+
+    def get_status(self):
         status = 204  # No Content
-
-        @classmethod
-        def get_url(cls):
-            url = "https://www.avito.ru/" + State.region + "?p=" + str(cls.number) + \
-                  "&s=2&q=" + State.product
-            return url
-
-        @classmethod
-        def get_status(cls):
+        if "Чтобы продолжить пользоваться сайтом, пожалуйста, введите символы с картинки" in self.html:
+            status = 429  # Too Many Requests
+        elif self.html == "":
             status = 204  # No Content
-            if "Чтобы продолжить пользоваться сайтом, пожалуйста, введите символы с картинки" in cls.html:
-                status = 429  # Too Many Requests
-            elif cls.title == "":
-                status = 100  # Continue
-            elif cls.json_items == {}:
-                status = 102  # Processing
-            elif cls.ads < State.usual_number_of_ads:
-                status = 206  # Partial Content
-            elif (cls.number != 1) and ("страница" not in cls.title):
-                status = 400  # Not normal page
-            elif cls.ads >= State.usual_number_of_ads:
-                status = 200  # OK
-            else:
-                raise Exception("not realised")
-            return status
+        elif self.title == "":
+            status = 100  # Continue
+        elif self.json_items == {}:
+            status = 102  # Processing
+        elif self.ads < State.usual_number_of_ads:
+            status = 206  # Partial Content
+        elif (self.number != 1) and ("страница" not in self.title):
+            status = 400  # Not normal page
+        elif self.ads >= State.usual_number_of_ads:
+            status = 200  # OK
+        else:
+            raise NotImplementedError()
+        return status
 
-        @classmethod
-        def load(cls, number):
-            cls.number = number
-            filename = State.product + '_in_' + State.region + "_" + str(cls.number) + ".html"  # define ouput file name
-            output = Path.extend(".", State.subfolder, filename)  # define path to output file
+    def load(self, number):
+        self.number = number
+        filename = State.product + '_in_' + State.region + "_" + str(self.number) + ".html"  # define ouput file name
+        output = Path.combine(Path.working(), State.subfolder, filename)  # define path to output file
 
-            if not State.Arg.no_download:
-                Wget.download(cls.get_url(), output=output, quiet=not State.Debug.print_wget_output)  # download file
+        if not State.Arg.no_download:
+            Print.debug("wget output", Wget.download(self.get_url(), output_filename=output, quiet=not State.Debug.print_wget_output, no_check_certificate=OS.windows))
 
-            cls.html = str(File.read(output))
-            cls.status = cls.get_status()
+        self.html = str(File.read(output))
+        self.status = self.get_status()
 
-        @classmethod
-        def preparse(cls):
-            cls.soup = BeautifulSoup(cls.html, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
-            cls.title = str(cls.soup.head.title.text)
-            cls.status = cls.get_status()
-
-        @classmethod
-        def parse(cls):
-            cls.preparse()
+    def preparse(self):
+        self.soup = BeautifulSoup(self.html, "html.parser")  # https://stackoverflow.com/questions/11709079/parsing-html-using-python
+        try:
+            self.title = str(self.soup.head.title.text)
+        except AttributeError:
             pass
-            cls.soup_items = (cls.soup.find_all('div', attrs={'class': ['item', 'item_table']}))
-            cls.ads = 0
-            for item in cls.soup_items:
-                cls.ads += 1
-                if State.Debug.on_parse_print_prettify:
-                    print(item.prettify())
-                    print()
-                cls.json_items[cls.ads] = {}
+        self.status = self.get_status()
+
+    def parse(self):
+        self.preparse()
+        pass
+        self.soup_items = (self.soup.find_all('div', attrs={'class': ['item', 'item_table']}))
+        self.ads = 0
+        for item in self.soup_items:
+            self.ads += 1
+            if State.Debug.on_parse_print_prettify:
+                print(item.prettify())
+                print()
+            self.json_items[self.ads] = {}
+            try:
+                self.json_items[self.ads]['mini_photo'] = urlish(item.div.a.img.get('src'))
+            except AttributeError as err:
+                if State.Debug.print_missing_elements_while_parsing and State.Debug.print_missing_img_elements_while_parsing: print(err)
+                self.json_items[self.ads]['mini_photo'] = None
+            try:
+                self.json_items[self.ads]['name'] = Str.substring(item.div.a.img.get('alt'), before="Продаю ", safe=True)
+            except AttributeError as err:
                 try:
-                    cls.json_items[cls.ads]['mini_photo'] = urlish(item.div.a.img.get('src'))
+                    self.json_items[self.ads]['name'] = stripify(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.text)
                 except AttributeError as err:
-                    if State.Debug.print_missing_elements_while_parsing and State.Debug.print_missing_img_elements_while_parsing: print(err)
-                    cls.json_items[cls.ads]['mini_photo'] = None
+                    if State.Debug.print_missing_elements_while_parsing: print(err)
+                    self.json_items[self.ads]['name'] = None
+            try:
+                self.json_items[self.ads]['url'] = urlish(item.div.a.get('href'))
+            except AttributeError as err:
                 try:
-                    cls.json_items[cls.ads]['name'] = Str.substring(item.div.a.img.get('alt'),before="Продаю ")
+                    self.json_items[self.ads]['url'] = urlish(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.get('href'))
                 except AttributeError as err:
-                    try:
-                        cls.json_items[cls.ads]['name'] = stripify(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.text)
-                    except AttributeError as err:
-                        if State.Debug.print_missing_elements_while_parsing: print(err)
-                        cls.json_items[cls.ads]['name'] = None
-                try:
-                    cls.json_items[cls.ads]['url'] = urlish(item.div.a.get('href'))
-                except AttributeError as err:
-                    try:
-                        cls.json_items[cls.ads]['url'] = urlish(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.get('href'))
-                    except AttributeError as err:
-                        if State.Debug.print_missing_elements_while_parsing: print(err)
-                        cls.json_items[cls.ads]['url'] = None
+                    if State.Debug.print_missing_elements_while_parsing: print(err)
+                    self.json_items[self.ads]['url'] = None
 
-                cls.json_items[cls.ads]['price'] = "0"+ruble
-                for price in item.find_all('div', attrs={'class':['about']}):
-                    price = stripify(price.text)
-                    if "руб." in price:
-                        cls.json_items[cls.ads]['price'] = price.replace(" руб.", ruble)
-                for dataset in item.find_all('div', attrs={'class':['data']}):
-                    cnt_p = 0
-                    for p in dataset.find_all('p'):
-                        ptexts = str(p.text).split(" | ")
-                        for ptext in ptexts:
-                            cnt_p += 1
-                            if cnt_p == 1:
-                                cls.json_items[cls.ads]["group"] = stripify(ptext)
-                            elif (len(ptexts) == 2) and (cnt_p == 2):
-                                cls.json_items[cls.ads]["store"] = stripify(ptext)
-                            elif (len(ptexts) == 1) and (cnt_p == 2):
-                                cls.json_items[cls.ads]["city"] = stripify(ptext)
-                            else:
-                                # cls.json_items[cls.ads]["store"] = "__--__"
-                                cls.json_items[cls.ads]["city"] = stripify(ptext)
-                for timeanddate in item.find_all('div', attrs={'class': ['date', 'c-2']}):
-                    cls.json_items[cls.ads]["time"] = stripify(timeanddate.text)
+            self.json_items[self.ads]['price'] = "fuck" #"0" + ruble
+            for price in item.find_all('div', attrs={'class': ['about']}):
+                price = stripify(price.text)
+                #if "руб." in price:
+                self.json_items[self.ads]['price'] = price.replace(" руб.", ruble)
+            #print(self.json_items[self.ads]['price'])
+            for dataset in item.find_all('div', attrs={'class':['data']}):
+                cnt_p = 0
+                for p in dataset.find_all('p'):
+                    ptexts = str(p.text).split(" | ")
+                    for ptext in ptexts:
+                        cnt_p += 1
+                        if cnt_p == 1:
+                            self.json_items[self.ads]["group"] = stripify(ptext)
+                        elif (len(ptexts) == 2) and (cnt_p == 2):
+                            self.json_items[self.ads]["store"] = stripify(ptext)
+                        elif (len(ptexts) == 1) and (cnt_p == 2):
+                            self.json_items[self.ads]["city"] = stripify(ptext)
+                        else:
+                            # self.json_items[self.ads]["store"] = "__--__"
+                            self.json_items[self.ads]["city"] = stripify(ptext)
+            for timeanddate in item.find_all('div', attrs={'class': ['date', 'c-2']}):
+                self.json_items[self.ads]["time"] = stripify(timeanddate.text)
 
-            cls.status = cls.get_status()
+        self.status = self.get_status()
 
-        @classmethod
-        def do_your_work(cls, cnt):
-            if cnt == 0:
-                pass
-            else:
-                Print.rewrite("Downloading " + str(cnt) + " page...")
-                cls.load(cnt)
-                Print.rewrite("")
+    def do_your_work(self, cnt):
+        if cnt == 0:
+            pass
+        else:
+            Print.rewrite("Downloading " + str(cnt) + " page...")
+            self.load(cnt)
 
-                Print.rewrite("Parsing " + str(cnt) + " page...")
-                cls.parse()
-                Print.rewrite("")
-    return Page
-
+            Print.rewrite("Parsing " + str(cnt) + " page...")
+            self.parse()
+            Print.rewrite("")
 
 
 #print(Page.get_url())
@@ -229,74 +212,107 @@ def get_Page():
 pages = {}
 ads = []
 
+
 def download_all_pages():
     for cnt in Int.from_to(1,State.number_of_pages):
-        pages[cnt] = get_Page()  # create new page in list
+        pages[cnt] = Page()  # create new page in list
         pages[cnt].do_your_work(cnt)  # download and parse page
 
         ############## SOME DEBUG PRINTS ###############
         if State.Debug.print_every_page_title:
-            cprint("pages[" + str(cnt) + "].title " + str(pages[cnt].title), "grey", "on_white")
+            Print.colored("pages[" + str(cnt) + "].title " + str(pages[cnt].title), "grey", "on_white")
         if State.Debug.print_count_of_ads_at_end_of_parsing:
-            cprint("pages[" + str(cnt) + "].ads " + str(pages[cnt].ads), "green", "on_white")
+            Print.colored("pages[" + str(cnt) + "].ads " + str(pages[cnt].ads), "green", "on_white")
         if State.Debug.print_status_of_page_after_parsing:
-            cprint("pages[" + str(cnt) + "].get_status() " + str(pages[cnt].get_status()), "red", "on_white")
+            Print.colored("pages[" + str(cnt) + "].get_status() " + str(pages[cnt].get_status()), "red", "on_white")
         # cprint(json.dumps(pages[cnt].json_items, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
         if pages[cnt].status != 200:  # check status
             if pages[cnt].status == 206:
-                cprint("Loaded!", "white", "on_green")
+                Print.colored("Loaded!", "white", "on_green")
             else:
-                cprint("Stop loading! ERROR STATUS " + str(pages[cnt].status), "white", "on_red")
+                Print.colored("Stop loading! ERROR STATUS " + str(pages[cnt].status), "white", "on_red")
             break
 
 
-
 def print_debug_single_position(page, item):
-    print(newline, item)
+    import json
     # raw soap
     # print(pages[page].soup_items[item-1].prettify(), newline)
     print(json.dumps(pages[page].json_items[item], indent=4, sort_keys=True, ensure_ascii=False))
     return pages[page].soup_items[item-1] # возвращаю соуп объект для улучшения парсера
 
+
 def get_all_positions():  # пока непонятно, чо делать с данными
     for page in pages:
         for ad_cnt in pages[page].json_items:
+            print("page", page, "item", ad_cnt)
             print_debug_single_position(page, ad_cnt)
             input()
 
 
+def print_all_prices():
+    for page_cnt, page in Dict.iterable(pages):
+        for item_cnt, item in Dict.iterable(page.json_items):
+            print(f'page {page_cnt} item {item_cnt} {item["price"]}')
 
 
+def represent_prices(step=1000, min_count_items=10, min_price=10000):
+    prices = []
+    prices_repr = {}
+    for page_cnt, page in Dict.iterable(pages):
+        for item_cnt, item in Dict.iterable(page.json_items):
+            add = True
+            for subname in State.product_original_name:
+                if not subname.lower() in item["name"].lower():
+                    add=False
+            if add:
+                prices.append(item["price"])
+            else:
+                pass  # print(item["name"])
+    for price in prices:
+        try:
+            price = int(price.strip("  ₽").replace(" ", ""))
+        except ValueError:
+            continue
+        val = price//step
+        repr_name = val*step  # f"{val*step}-{val*step+step}"
+        try:
+            prices_repr[repr_name] += 1
+        except KeyError:
+            prices_repr[repr_name] = 1
+    for repr_name, count in Dict.iterable(Dict.sorted_by_key(prices_repr)):
+        if count>=min_count_items and repr_name>=min_price:
+            print(f"{repr_name}: {count}{newline}{'*'*count}")
+    return prices_repr
+
+
+def get_all_items():
+    output_items = []
+    for page_cnt, page in Dict.iterable(pages):
+        for item_cnt, item in Dict.iterable(page.json_items):
+            output_items.append(item)
+    return output_items
 
 
 def main():
-    Bench = get_Bench()
-    Bench.start()
-    Bench.prefix = "Downloaded in"
+    bench = Bench()
+    bench.start()
+    bench.prefix = "Downloaded in"
     download_all_pages()
-    #print_debug_single_position(1, 23)
-    #print_debug_single_position(1, 24)
 
+    print_all_prices()
 
-    #print("Debug shit:")
-    #fi1_23 = print_debug_single_position(1, 23)
-    #item = fi1_23
-    #print(urlish(item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.get('href')))
+    represent_prices()
 
-    # item find
-    # name = item.find('div', attrs={'class':['description', 'item_table-description']}).div.h3.a.text
+    bench.end()
 
-    #name = item.div.a.img.get('alt')
-    #get_all_positions()
-
-    Bench.end()
 
 if __name__ == '__main__':
     main()
 
 
 # old pages loader from download2 without factory of Page's
-#for cnt in Int.from_to(1,100):  # What the fuck? Why it load only one page?
+# for cnt in Int.from_to(1,100):  # What the fuck? Why it load only one page?
 #    def main():
 #        Page.load(cnt)
 #        Page.preparse()
