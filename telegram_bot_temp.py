@@ -57,16 +57,16 @@ def get_random_todo():
             incomplete_items[project_name] = []
             continue
         if project_items:
-            print(f'"{project_name}"')
+            # print(f'"{project_name}"')
             State.all_todo_str += project_name + newline
         for item in project_items.copy():
 
             if item["content"].strip() in State.excluded_items:
                 incomplete_items[project_name].remove(item)
-                print(f'    "{item["content"]}" deleted')
+                # print(f'    "{item["content"]}" deleted')
             else:
                 State.counter_for_left_items_int += 1
-                print(f'    "{item["content"]}"')
+                # print(f'    "{item["content"]}"')
                 State.all_todo_str += "    " + item["content"] + newline
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing empty projects
@@ -104,7 +104,22 @@ telegram_api = telebot.TeleBot(telegram_token, threaded=False)
 # https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
-@telegram_api.message_handler(content_types=["text"])
+# first_chat_id = None
+# @telegram_api.message_handler(content_types=["text"])
+# def reply_all_messages_loop(message):
+#     global first_chat_id
+#     if not first_chat_id:
+#         first_chat_id = message.chat.id
+#         telegram_api.send_message(message.chat.id, f"{message.chat.id} storted!")
+#     elif message.chat.id != first_chat_id:
+#             telegram_api.send_message(message.chat.id, f"{message.chat.id} ACCESS DENY!")
+#             return
+#     while True:
+#         telegram_api.send_message(message.chat.id, "покушой")
+#         Time.sleep(5)
+
+
+#@telegram_api.message_handler(content_types=["text"])
 def reply_all_messages(message):
 
     def main_message(sended_messages_before=0):
@@ -294,14 +309,21 @@ def reply_all_messages(message):
 
 
 def main():
-    while True:
+    ended = False
+    while not ended:
         try:
             Print.colored("Bot started", "green")
-            telegram_api.polling(none_stop=True)
+            while True:
+                try:
+                    chatid = 5328715
+                    telegram_api.send_message(chatid, f"{chatid} try!")
+                    Time.sleep(5)
+                except KeyboardInterrupt:
+                    Print.rewrite()
+                    sys.exit()
+            # telegram_api.polling(none_stop=True)
             Print.colored("Bot ended", "green")
-        except KeyboardInterrupt:
-            print("Ctrl+C")
-            sys.exit(0)
+            ended = True
         except requests.exceptions.ReadTimeout:
             print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
             Time.sleep(5)
