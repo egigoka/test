@@ -188,7 +188,7 @@ class Todoist:
         if auto_create_project:
             project_id = self.create_project(project_name)
         else:
-            raise KeyError(f"Project {project_name} doesn't exists")
+            raise KeyError(f"Project {project_name} doesn't exist")
         if date_string and due_date_utc:
             raise KeyError(f"only date_string {date_string} or due_date_utc {due_date_utc}")
         elif date_string:
