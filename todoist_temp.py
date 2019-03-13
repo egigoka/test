@@ -114,7 +114,13 @@ class Todoist:
 
     def project_raw_items(self, name):
         if self.project_exists(name):
-            return self.api.projects.get_data(self.project_exists(name))["items"]
+            project_data = self.api.projects.get_data(self.project_exists(name))
+            try:
+                items = project_data["items"]
+            except KeyError:
+                if project_data['error_tag'] == 'PROJECT_NOT_FOUND':
+                    return []
+            return items
         else:
             raise KeyError(f"Project {name} doesn't exist!")
 
