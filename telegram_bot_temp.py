@@ -105,6 +105,7 @@ telegram_api = telebot.TeleBot(telegram_token, threaded=False)
 
 @telegram_api.message_handler(content_types=["text"])
 def reply_all_messages(message):
+
     def main_message(sended_messages_before=0):
         last_message = message.message_id + State.sended_messages + sended_messages_before
         State.sended_messages = 1
