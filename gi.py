@@ -8,9 +8,7 @@ sys.path.append("..")
 try:
     from commands8 import *
 except ModuleNotFoundError:
-    from commands.path8 import Path
-    from commands.process8 import Process
-    from commands.bash8 import Bash
+    from commands import *
 __version__ = "1.1.3"
 
 # for setup.py
@@ -106,4 +104,3 @@ if __name__ == "__main__":
         if INPUT_STRING:
             STRING = INPUT_STRING
     Git.update(STRING)
-

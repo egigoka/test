@@ -1,5 +1,6 @@
 #! python3
 # -*- coding: utf-8 -*-
+import sys
 try:
     from commands import *
 except ImportError:
@@ -14,6 +15,8 @@ except ImportError:
     import telebot
 from todoist_temp import *
 import requests
+import sys
+
 
 class Arguments:
     pass
@@ -32,6 +35,8 @@ class State:
         self.counter_for_left_items_int = 0
 
         self.all_todo_str = ""
+
+        self.sent_messages = 1
 
 
 State = State()
@@ -86,21 +91,25 @@ def get_random_todo():
     return f"{random_item['content']} <{random_project_name}> {time_string} {counter_for_left_items_str}".replace(">  (", "> (")
 
 
-encrypted = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
+encrypted_telegram_token = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40, -6, -39, -33, 22, 0, 1, 51, 9, -26, -41, -24, 13,
                  4, 49, 44, -25, 18, 9, -18, -19, 72, -12, -26, -3, 3, -62, 3, 17, 4, 7, -3, -33, -3, -12]
 
 
-telegram_token = Str.decrypt(encrypted, Str.input_pass("Enter password:"))
+telegram_token = Str.decrypt(encrypted_telegram_token, todoist_password_for_api_key)
+# telegram_token = Str.decrypt(encrypted, Str.input_pass("Enter password:"))
 
 todoist_api = Todoist(todoist_api_key)
 
-telegram_api = telebot.TeleBot(telegram_token)
+telegram_api = telebot.TeleBot(telegram_token, threaded=False)
+# https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
 @telegram_api.message_handler(content_types=["text"])
 def reply_all_messages(message):
+
     def main_message(sended_messages_before=0):
-        last_message = message.message_id + 1 + sended_messages_before
+        last_message = message.message_id + State.sent_messages + sended_messages_before
+        State.sent_messages = 1
 
         if State.first_message:
             markup = telebot.types.ReplyKeyboardMarkup()
@@ -134,21 +143,29 @@ def reply_all_messages(message):
         return
 
     if State.getting_project_name:
-        message_text = message.text.strip()
-        if message_text in State.excluded_projects:
-            State.excluded_projects.remove(message_text)
+        if message.text == "Cancel":
+            pass
         else:
-            State.excluded_projects.append(message_text)
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+            message_text = message.text.strip()
+            if message_text in State.excluded_projects:
+                State.excluded_projects.remove(message_text)
+            else:
+                State.excluded_projects.append(message_text)
+        State.getting_project_name = False
+        State.first_message = True
         main_message()
 
     elif State.getting_item_name:
-        message_text = message.text.strip()
-        if message_text in State.excluded_items:
-            State.excluded_items.remove(message_text)
+        if message.text == "Cancel":
+            pass
         else:
-            State.excluded_items.append(message_text)
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+            message_text = message.text.strip()
+            if message_text in State.excluded_items:
+                State.excluded_items.remove(message_text)
+            else:
+                State.excluded_items.append(message_text)
+        State.getting_item_name = False
+        State.first_message = True
         main_message()
 
     elif message.text == "MOAR!" or State.first_message:  # MAIN MESSAGE
@@ -169,10 +186,13 @@ def reply_all_messages(message):
         markup = telebot.types.ReplyKeyboardMarkup()
         project_exclude_button = telebot.types.KeyboardButton("Exclude project")
         project_include_button = telebot.types.KeyboardButton("Include project")
+
         items_exclude_button = telebot.types.KeyboardButton("Exclude items")
         items_include_button = telebot.types.KeyboardButton("Include items")
+
         clean_black_list_button = telebot.types.KeyboardButton("Clean black list")
         counter_for_left_items_button = telebot.types.KeyboardButton("Toggle left items counter")
+
         markup.row(project_exclude_button, project_include_button)
         markup.row(items_exclude_button, items_include_button)
         markup.row(clean_black_list_button)
@@ -187,6 +207,9 @@ def reply_all_messages(message):
                 project_button = telebot.types.KeyboardButton(project_name)
                 markup.row(project_button)
 
+        cancel_button = telebot.types.KeyboardButton("Cancel")
+        markup.row(cancel_button)
+
         telegram_api.send_message(message.chat.id, "Send me project name to exclude:", reply_markup=markup)
 
         State.getting_project_name = True
@@ -197,6 +220,9 @@ def reply_all_messages(message):
             for project_name in State.excluded_projects:
                 project_button = telebot.types.KeyboardButton(project_name)
                 markup.row(project_button)
+
+            cancel_button = telebot.types.KeyboardButton("Cancel")
+            markup.row(cancel_button)
 
             telegram_api.send_message(message.chat.id, "Send me project name to include:", reply_markup=markup)
 
@@ -210,9 +236,19 @@ def reply_all_messages(message):
         # markup = telebot.types.ForceReply(selective=False) it doesn't show up default keyboard :(
 
         markup = telebot.types.ReplyKeyboardMarkup()
+        default_items = False
         for item_name in [r"Vacuum/sweep", "Wash the floor"]:
-            project_button = telebot.types.KeyboardButton(item_name)
+            if item_name not in State.excluded_items:
+                project_button = telebot.types.KeyboardButton(item_name)
+                markup.row(project_button)
+                default_items = True
+
+        if not default_items:
+            project_button = telebot.types.KeyboardButton("Enter item manually")
             markup.row(project_button)
+
+        cancel_button = telebot.types.KeyboardButton("Cancel")
+        markup.row(cancel_button)
 
         telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
 
@@ -225,6 +261,9 @@ def reply_all_messages(message):
                 project_button = telebot.types.KeyboardButton(item_name)
                 markup.row(project_button)
 
+            cancel_button = telebot.types.KeyboardButton("Cancel")
+            markup.row(cancel_button)
+
             telegram_api.send_message(message.chat.id, "Send me item name:", reply_markup=markup)
 
             State.getting_item_name = True
@@ -234,7 +273,9 @@ def reply_all_messages(message):
             main_message(1)
 
     elif message.text == "Clean black list":
-        State.__init__(excluded_projects=[], excluded_items=[])
+        State.excluded_items = []
+        State.excluded_projects = []
+        State.first_message = True
         main_message()
 
     elif message.text == "Toggle left items counter":
@@ -247,20 +288,26 @@ def reply_all_messages(message):
 
     else:
         telegram_api.send_message(message.chat.id, f"ERROR! <{message.text}>")
-        State.__init__(excluded_projects=State.excluded_projects, excluded_items=State.excluded_items)
+        State.first_message = True
+        State.sent_messages += 1
         main_message()
 
 
 def main():
-    try:
-        Print.colored("Bot started", "green")
-        telegram_api.polling(none_stop=True)
-        Print.colored("Bot ended", "green")
-    except KeyboardInterrupt:
-        print("Ctrl+C")
-    except requests.exceptions.ReadTimeout:
-        Print(f"Timeout... {Time.dotted()}")
-        main()
+    while True:
+        try:
+            Print.colored("Bot started", "green")
+            telegram_api.polling(none_stop=True)
+            Print.colored("Bot ended", "green")
+        except KeyboardInterrupt:
+            print("Ctrl+C")
+            sys.exit(0)
+        except requests.exceptions.ReadTimeout:
+            print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
+            Time.sleep(5)
+        except requests.exceptions.ConnectionError:
+            print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
+            Time.sleep(5)
 
 
 if __name__ == '__main__':
