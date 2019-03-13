@@ -107,9 +107,9 @@ class Todoist:
         while not project_name:
             cnt += 1
             temp_name = f"{prefix}_{cnt}"
-            if not todo.project_exists(temp_name):
+            if not self.project_exists(temp_name):
                 project_name = temp_name
-        new_project = self.api.projects.add(project_name)
+        new_project = self.projects.add(project_name)
         return new_project
 
     def project_raw_items(self, name):
@@ -133,20 +133,20 @@ class Todoist:
 
     def project_cnt_items(self, project_name):
         cnt_all_tasks = 0
-        items = todo.project_raw_items(project_name)
+        items = self.project_raw_items(project_name)
         for item in items:
             cnt_all_tasks += 1
         return cnt_all_tasks
 
     def cnt_all_items_in_account(self):
         cnt_all_tasks = 0
-        for project_name, project_id in Dict.iterable(todo.projects_all_names()):
+        for project_name, project_id in Dict.iterable(self.projects_all_names()):
             cnt_all_tasks += self.project_cnt_items(project_name)
         return cnt_all_tasks
 
     def project_cnt_incomplete_items(self, project_name):
         cnt_incomplete_tasks = 0
-        items = todo.project_raw_items(project_name)
+        items = self.project_raw_items(project_name)
         for item in items:
             if status in ["today", "overdue"]:
                 cnt_incomplete_tasks += 1
@@ -154,22 +154,22 @@ class Todoist:
 
     def cnt_incompleted_items_in_account(self):
         cnt_incomplete_tasks = 0
-        for project_name, project_id in Dict.iterable(todo.projects_all_names()):
+        for project_name, project_id in Dict.iterable(self.projects_all_names()):
             cnt_incomplete_tasks += self.project_cnt_incomplete_items(project_name)
         return cnt_incomplete_tasks
 
     def project_raw_incomplete_items(self, project_name):
-        items = todo.project_raw_items(project_name)
+        items = self.project_raw_items(project_name)
         incomplete_items = []
         for item in items:
-            status = todo.item_status(item)
+            status = self.item_status(item)
             if status in ["today", "overdue"]:
                 incomplete_items.append(item)
         return incomplete_items
 
     def all_incomplete_items_in_account(self):
         incomplete_items = {}
-        for project_name, project_id in Dict.iterable(todo.projects_all_names()):
+        for project_name, project_id in Dict.iterable(self.projects_all_names()):
             incomplete_items[project_name] = self.project_raw_incomplete_items(project_name)
         return incomplete_items
 
@@ -177,9 +177,9 @@ class Todoist:
         project_id = self.project_exists(name)
         if not project_id:
             print(f"Creating project {name}")
-            project = todo.api.projects.add(name)
-            todo.api.commit()
-            todo.api.sync()
+            project = self.api.projects.add(name)
+            self.api.commit()
+            self.api.sync()
             project_id = self.project_exists(name)
         return project_id
 
@@ -192,13 +192,13 @@ class Todoist:
         if date_string and due_date_utc:
             raise KeyError(f"only date_string {date_string} or due_date_utc {due_date_utc}")
         elif date_string:
-            item = todo.api.items.add(name, project_id, item_order=item_order, date_string=date_string,
+            item = self.api.items.add(name, project_id, item_order=item_order, date_string=date_string,
                                       day_order=day_order, priority=priority)
         elif due_date_utc:
-            item = todo.api.items.add(name, project_id, item_order=item_order, due_date_utc=due_date_utc,
+            item = self.api.items.add(name, project_id, item_order=item_order, due_date_utc=due_date_utc,
                                       day_order=day_order, priority=priority)
         else:
-            item = todo.api.items.add(name, project_id, item_order=item_order, day_order=day_order, priority=priority)
+            item = self.api.items.add(name, project_id, item_order=item_order, day_order=day_order, priority=priority)
         return item
 
     def date_string_today(self):
@@ -249,9 +249,8 @@ encrypted_todoist_token = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21,
 todoist_password_for_api_key = Str.input_pass("Enter password: ")
 todoist_api_key = Str.decrypt(encrypted_todoist_token, todoist_password_for_api_key)
 
-todo = Todoist(todoist_api_key)
-
 def main():
+    todo = Todoist(todoist_api_key)
     if Arguments.apikey:
         print(f"API key: {todoist_api_key}")
 
