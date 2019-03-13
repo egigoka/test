@@ -9,7 +9,7 @@ except ImportError:
 try:
     import telebot
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("pytelegrambotapi")
     import telebot
 from todoist_temp import *
