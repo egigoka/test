@@ -31,7 +31,7 @@ class State:
         self.excluded_projects = excluded_projects
         self.excluded_items = excluded_items
 
-        self.counter_for_left_items = False
+        self.counter_for_left_items = True
         self.counter_for_left_items_int = 0
 
         self.all_todo_str = ""
@@ -43,6 +43,7 @@ State = State()
 
 
 def get_random_todo():
+    Print(Time.dotted())
     Print.rewrite("Getting random todo")
     bench = Bench(prefix="Get random item in")
     bench.start()
@@ -57,16 +58,16 @@ def get_random_todo():
             incomplete_items[project_name] = []
             continue
         if project_items:
-            print(f'"{project_name}"')
+            # print(f'"{project_name}"')
             State.all_todo_str += project_name + newline
         for item in project_items.copy():
 
             if item["content"].strip() in State.excluded_items:
                 incomplete_items[project_name].remove(item)
-                print(f'    "{item["content"]}" deleted')
+                # print(f'    "{item["content"]}" deleted')
             else:
                 State.counter_for_left_items_int += 1
-                print(f'    "{item["content"]}"')
+                # print(f'    "{item["content"]}"')
                 State.all_todo_str += "    " + item["content"] + newline
 
     for project_name, project_items in Dict.iterable(incomplete_items.copy()):  # removing empty projects
