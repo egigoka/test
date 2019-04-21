@@ -22,6 +22,7 @@ my_chat_id = 5328715
 ola_chat_id = 550959211
 tgx_chat_id = 619037205
 
+
 class Arguments:
     pass
 
@@ -113,10 +114,11 @@ def start_todoist_bot_():
             return "All done!"
         random_item = Random.item(random_project_items)
 
-        time_string = ""
-        if random_item["due_date_utc"]:
+        try:
             if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
                 time_string = random_item["date_string"]
+        except KeyError:
+            time_string = ""
 
         counter_for_left_items_str = ""
         if State.counter_for_left_items:

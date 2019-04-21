@@ -6,25 +6,27 @@ import time
 import datetime
 try:
     from commands import *
+    from commands.id9 import ID
+    id = ID()
 except ImportError:
     import os
     os.system("pip install git+https://github.com/egigoka/commands")
 try:
     import todoist
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("todoist-python")
     import todoist
 try:
     import pytz
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("pytz")
     import pytz
 try:
     import tzlocal
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("tzlocal")
     import tzlocal
 
@@ -68,6 +70,8 @@ class Arguments:
 
 
 class State:
+    debug = False
+    debug_not_today = False
     showed_random_items = []
     loop_input = ""
     random_bench = Bench(prefix="<task> done in", fraction_digits=0)
@@ -208,39 +212,72 @@ class Todoist:
         try:
             datetime_object = datetime.datetime.strptime(time_string, "%a %d %b %Y %H:%M:%S +0000")
         except ValueError:
-            datetime_object = datetime.datetime.strptime(time_string, "%d %b %Y %H:%M:%S +0000")
+            try:
+                datetime_object = datetime.datetime.strptime(time_string, "%d %b %Y %H:%M:%S +0000")
+            except ValueError:
+                try:
+                    datetime_object = datetime.datetime.strptime(time_string, "%Y-%m-%dT%H:%M:%S")
+                except ValueError:
+                    datetime_object = datetime.datetime.strptime(time_string, "%Y-%m-%d")
         return datetime_object
 
     def item_status(self, item_obj):
-        if item_obj["is_archived"]:
-            return "deleted"
-        elif item_obj['is_deleted']:
+        # Print.prettify(item_obj)
+        try:
+            if item_obj["is_archived"]:
+                if State.debug:
+                    print(item_obj["content"], item_obj["due"], "deleted")
+                return "deleted"
+        except KeyError:
+            pass
+        if item_obj['is_deleted']:
+            if State.debug:
+                print(item_obj["content"], item_obj["due"], "deleted")
             return "deleted"
         elif item_obj['checked']:
+            if State.debug:
+                print(item_obj["content"], item_obj["due"], "deleted")
             return "deleted"
         else:
             now = datetime.datetime.now()
-            if item_obj['due_date_utc']:
-                todo_time = self.todoist_time_to_datetime_datetime(item_obj['due_date_utc'])
-                local_timezone = tzlocal.get_localzone()
-                utc_timezone = pytz.timezone("utc")
-                end_of_today = datetime.datetime(now.year,
-                                                 now.month,
-                                                 now.day,
-                                                 23, 59, 59)
+            try:
+            #if item_obj['due_date_utc']:
+                todo_time = self.todoist_time_to_datetime_datetime(item_obj['due']['date'])
+            except TypeError:
+                #Print.prettify(item_obj)
+                #print(id.get())
+                if State.debug:
+                    print(item_obj["content"], item_obj["due"], "no date")
+                return "no date"
+            local_timezone = tzlocal.get_localzone()
+            utc_timezone = pytz.timezone("utc")
+            end_of_today = datetime.datetime(now.year,
+                                             now.month,
+                                             now.day,
+                                             23, 59, 59) # not used
+            now = datetime.datetime.now()
 
-                end_of_today_aware = local_timezone.localize(end_of_today)
+            #end_of_today_aware = local_timezone.localize(now)
 
-                todo_time_aware = utc_timezone.localize(todo_time)
+            #todo_time_aware = utc_timezone.localize(todo_time)
+            # todo: update it to new api due item_obj["date"]["timezone"]
+            # dirty hack:
+            todo_time_aware = todo_time
+            end_of_today_aware = end_of_today
 
-                if end_of_today_aware > todo_time_aware:  # overdue
-                    return "overdue"
-                elif end_of_today_aware == todo_time_aware:
-                    return "today"
-                elif end_of_today_aware < todo_time_aware:
-                    return "not today"
-            else:  # if no due_date_utc
+            if end_of_today_aware > todo_time_aware:
+                if State.debug:
+                    print(item_obj["content"], item_obj["due"], "overdue")
+                return "overdue"
+            elif end_of_today_aware == todo_time_aware:
+                if State.debug:
+                    print(item_obj["content"], item_obj["due"], "today")
                 return "today"
+            elif end_of_today_aware < todo_time_aware:
+                if State.debug or State.debug_not_today:
+                    print(item_obj["content"], item_obj["due"], "not today")
+                return "not today"
+
 
 
 encrypted_todoist_token = [-20, -20, -50, -14, -61, -54, 2, 0, 32, 27, -51, -21, -54, -53, 4, 3, 29, -14, -51, 29, -10, -6, 1, 4, 28,
