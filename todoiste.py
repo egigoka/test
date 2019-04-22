@@ -243,6 +243,10 @@ class Todoist:
             try:
             #if item_obj['due_date_utc']:
                 todo_time = self.todoist_time_to_datetime_datetime(item_obj['due']['date'])
+            except KeyError as e:
+                Print.prettify(item_obj)
+                Print.colored("try to 'pip install --upgrade todoist-python'")
+                raise KeyError(e)
             except TypeError:
                 #Print.prettify(item_obj)
                 #print(id.get())

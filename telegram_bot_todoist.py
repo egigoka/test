@@ -14,7 +14,7 @@ except ImportError:
     from commands.pip9 import Pip
     Pip.install("pytelegrambotapi")
     import telebot
-from todoist_temp import *
+from todoiste import *
 import requests
 import sys
 
@@ -319,23 +319,7 @@ def start_todoist_bot_():
             main_message()
 
     telegram_api.polling(none_stop=True)
-# https://github.com/eternnoir/pyTelegramBotAPI/issues/273
-
-
-#first_chat_id = None
-# @telegram_api.message_handler(content_types=["text"])
-# def reply_all_messages_loop(message):
-
-    # global first_chat_id
-    # if not first_chat_id:
-    #     first_chat_id = message.chat.id
-    #     telegram_api.send_message(message.chat.id, f"{message.chat.id} storted!")
-    # elif message.chat.id != first_chat_id:
-    #         telegram_api.send_message(message.chat.id, f"{message.chat.id} ACCESS DENY!")
-    #         return
-    # while True:
-    #     telegram_api.send_message(message.chat.id, "покушой")
-    #     Time.sleep(5)
+    # https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
 def start_todoist_bot():
