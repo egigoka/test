@@ -64,9 +64,9 @@ def main():
         if OS.macos:
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
-        print_end = newline
+        fix_win_cmd = 0
         if OS.windows:
-            print_end = ''
+            fix_win_cmd = 1
         cnt_workin = 0
         longest_hostname = 0
         for hostname in domains:
@@ -78,10 +78,10 @@ def main():
             # Print.debug(response[2])
             response = response[0]
             if response:
-                Print.colored(Str.rightpad(hostname + ' is up!' + " "*(longest_hostname+2-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_green', end=print_end)
+                Print.colored(Str.rightpad(hostname + ' is up!' + " "*(longest_hostname+2-len(hostname)) + ' IP ' + str(ip), Console.width()-fix_win_cmd, " "), 'white', 'on_green')
                 cnt_workin += 1
             else:
-                Print.colored(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width(), " "), 'white', 'on_red', end=print_end)
+                Print.colored(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width()-fix_win_cmd, " "), 'white', 'on_red')
         print(Time.dotted())
         if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
             if OS.macos: macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")

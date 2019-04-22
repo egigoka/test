@@ -351,6 +351,7 @@ def start_todoist_bot():
             print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
             Time.sleep(5)
 
+
 def start_ola_bot():
     ended = False
     while not ended:

@@ -12,19 +12,19 @@ except ImportError:
 try:
     import todoist
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("todoist-python")
     import todoist
 try:
     import pytz
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("pytz")
     import pytz
 try:
     import tzlocal
 except ImportError:
-    from commands.pip8 import Pip
+    from commands.pip9 import Pip
     Pip.install("tzlocal")
     import tzlocal
 
@@ -109,7 +109,7 @@ class Todoist:
             temp_name = f"{prefix}_{cnt}"
             if not self.project_exists(temp_name):
                 project_name = temp_name
-        new_project = self.projects.add(project_name)
+        new_project = self.api.projects.add(project_name)
         return new_project
 
     def project_raw_items(self, name):
