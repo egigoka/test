@@ -3,6 +3,7 @@
 import sys
 import os
 import datetime
+import threading
 try:
     from commands import *
 except ImportError:
@@ -17,7 +18,26 @@ except ImportError:
     import telebot
 import requests
 
-__version__ = "1.0.0"
+__version__ = "1.1.3"
+
+
+class myThread(threading.Thread):
+    def __init__(self, threadID, name, func, args=(), kwargs={}):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+
+    def run(self):
+        print("Starting " + self.name)
+        try:
+            self.func(*self.args, **self.kwargs)
+        except(KeyboardInterrupt, SystemExit):
+            print("Control-C, exit")
+            sys.exit(1)
+        print("Exiting " + self.name)
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -55,30 +75,50 @@ def _start_ola_bot_reciever():
 
 def _start_ola_bot_sender():
     while True:
-        now = datetime.datetime.now()
-        now = now.strftime("%H:%M")
+        nowdt = datetime.datetime.now()
+        now = nowdt.strftime("%H:%M")
         Time.sleep(20)
         if now == "08:00" and State.last_sent != now:
             State.last_sent = now
-            telegram_api_olacushatcs.send_message(ola_chat_id, "Позавтрокой, пожалуйсто")
-            telegram_api_olacushatcs.send_message(my_chat_id, "Позавтрокой, пожалуйсто")
+            message_text = "Позавтрокой, умоляю"
+            telegram_api_olacushatcs.send_message(ola_chat_id, message_text)
+            telegram_api_olacushatcs.send_message(my_chat_id, message_text)
         elif now == "14:00" and State.last_sent != now:
             State.last_sent = now
-            telegram_api_olacushatcs.send_message(ola_chat_id, "Не зобудь про обед")
-            telegram_api_olacushatcs.send_message(my_chat_id, "Не зобудь про обед")
+            message_text = "Чтобы расти, нужно обедоть"
+            telegram_api_olacushatcs.send_message(ola_chat_id, message_text)
+            telegram_api_olacushatcs.send_message(my_chat_id, message_text)
         elif now == "20:00" and State.last_sent != now:
             State.last_sent = now
-            telegram_api_olacushatcs.send_message(ola_chat_id, "Поужинать тоже немножечко надо")
-            telegram_api_olacushatcs.send_message(my_chat_id, "Поужинать тоже немножечко надо")
+            message_text = "Добрейшего вечерочка, ужин это не впадлу"
+            telegram_api_olacushatcs.send_message(ola_chat_id, message_text)
+            telegram_api_olacushatcs.send_message(my_chat_id, message_text)
+
+
+def _start_ola_bot_sender_mine():
+    while True:
+        nowdt = datetime.datetime.now()
+        now = nowdt.strftime("%H:%M")
+        weekday = nowdt.strftime("%w")
+        Time.sleep(20)
+        if now in ["10:50", "16:50"] and State.last_sent != now:
+            State.last_sent = now
+            message_text = "Печеньки! Ура!"
+            if weekday == 3:
+                message_text = "Фруктики! Возьми, а?"
+            telegram_api_olacushatcs.send_message(my_chat_id, message_text)
+        elif now == "16:00" and State.last_sent != now:
+            State.last_sent = now
+            message_text = "Сходи, покушой, зоебал сидеть!"
+            telegram_api_olacushatcs.send_message(my_chat_id, message_text)
 
 
 def safe_start_bot(bot_func):
     ended = False
     while not ended:
         try:
-            Print.colored("Bot ola started", "green")
             bot_func()
-            Print.colored("Bot ola ended", "green")
+            Print.colored("Bot ola quited", "red")
             ended = True
         except requests.exceptions.ReadTimeout:
             print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
@@ -87,66 +127,42 @@ def safe_start_bot(bot_func):
             print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
             Time.sleep(5)
 
-
 def main():
-    # https://www.tutorialspoint.com/python/python_multithreading.htm
-    import threading
-    import time
+    # https://www.tutorialspoint.com/python/python_multithreading.htm  # you can expand current implementation
 
     exitFlag = 0
 
-    class myThread(threading.Thread):
-        def __init__(self, threadID, name, counter):
-            threading.Thread.__init__(self)
-            self.threadID = threadID
-            self.name = name
-            self.counter = counter
-
-        def setup(self, func, args=(), kwargs={}):
-            self.func = func
-            self.args = args
-            self.kwargs = kwargs
-
-        def run(self):
-            print("Starting " + self.name)
-            try:
-                self.func(*self.args, **self.kwargs)
-            except(KeyboardInterrupt, SystemExit):
-                print("Control-C, exit")
-                sys.exit(1)
-            print("Exiting " + self.name)
+    print(f"Main thread v{__version__} started")
 
     threads = []
+    thread_id = ID()
 
     # Create new threads
-    thread1 = myThread(1, "Thread-1", 1)
-    thread2 = myThread(2, "Thread-2", 2)
-
-    # config new threads
-    thread1.setup(safe_start_bot, args=(_start_ola_bot_reciever,))
-    thread2.setup(safe_start_bot, args=(_start_ola_bot_sender,))
+    thread1 = myThread(thread_id.get(), "Reciever", safe_start_bot, args=(_start_ola_bot_reciever,))
+    thread2 = myThread(thread_id.get(), "Sender", safe_start_bot, args=(_start_ola_bot_sender,))
+    thread3 = myThread(thread_id.get(), "Sender mine", safe_start_bot, args=(_start_ola_bot_sender_mine,))
 
     # Start new Threads
     thread1.start()
     thread2.start()
+    thread3.start()
 
     # Add threads to thread list
     threads.append(thread1)
     threads.append(thread2)
+    threads.append(thread3)
 
-    # Wait for all threads to complete
+    import time
     try:
         while 1:
-            time.sleep(1)
+            time.sleep(1)  # wait for KeyboardInterrupt
     except (KeyboardInterrupt, SystemExit):
         Print.colored("\nKilling script", "red")
         Process.kill(os.getpid())
 
+    print("Main thread quited")
+
+
 
 if __name__ == '__main__':
     main()
-
-
-
-#if __name__ == '__main__':
-#        main()
