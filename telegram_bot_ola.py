@@ -1,9 +1,6 @@
 #! python3
 # -*- coding: utf-8 -*-
-import sys
-import os
 import datetime
-import threading
 try:
     from commands import *
 except ImportError:
@@ -18,26 +15,7 @@ except ImportError:
     import telebot
 import requests
 
-__version__ = "1.1.3"
-
-
-class myThread(threading.Thread):
-    def __init__(self, threadID, name, func, args=(), kwargs={}):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.func = func
-        self.args = args
-        self.kwargs = kwargs
-
-    def run(self):
-        print("Starting " + self.name)
-        try:
-            self.func(*self.args, **self.kwargs)
-        except(KeyboardInterrupt, SystemExit):
-            print("Control-C, exit")
-            sys.exit(1)
-        print("Exiting " + self.name)
+__version__ = "1.4.1"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -56,20 +34,30 @@ telegram_api_olacushatcs = telebot.TeleBot(telegram_token_olacushatc, threaded=F
 class State:
     last_sent = ""
 
+
 def _start_ola_bot_reciever():
     @telegram_api_olacushatcs.message_handler(content_types=["text", 'sticker'])
     def reply_all_messages_ola(message):
         if message.chat.id == my_chat_id:
-            telegram_api_olacushatcs.send_message(ola_chat_id, message.text)
-            telegram_api_olacushatcs.send_message(tgx_chat_id, message.text)
+            if message.text:
+                if message.text.startswith("help"):
+                    reply = "Commands not implemented now :("
+                else:
+                    telegram_api_olacushatcs.forward_message(ola_chat_id, message.chat.id, message.message_id,
+                                                             disable_notification=True)
+                    reply = f"Forwarded to Ola: {message.text}"
+            else:
+                telegram_api_olacushatcs.forward_message(ola_chat_id, message.chat.id, message.message_id,
+                                                         disable_notification=True)
+                reply = f"Forwarded to Ola: [sticker]"
             Print.rewrite()
-            print("to ola and tgx:", message.text)
+            print(reply)
+            telegram_api_olacushatcs.send_message(message.chat.id, reply, disable_notification=True)
         else:
             telegram_api_olacushatcs.forward_message(my_chat_id, message.chat.id, message.message_id,
                                                      disable_notification=True)
             Print.rewrite()
             print(f"from {message.chat.id}: {message.text}")
-
     telegram_api_olacushatcs.polling(none_stop=True)
 
 
@@ -80,17 +68,17 @@ def _start_ola_bot_sender():
         Time.sleep(20)
         if now == "08:00" and State.last_sent != now:
             State.last_sent = now
-            message_text = "Позавтрокой, умоляю"
+            message_text = "Позавтрокой, ну шо тебе стоит?"
             telegram_api_olacushatcs.send_message(ola_chat_id, message_text)
             telegram_api_olacushatcs.send_message(my_chat_id, message_text)
         elif now == "14:00" and State.last_sent != now:
             State.last_sent = now
-            message_text = "Чтобы расти, нужно обедоть"
+            message_text = f"Ну шо, поедим? Я пространство в твоём телефоне, а ты _{'_'.join('еды нормальной')}_ !!!"
             telegram_api_olacushatcs.send_message(ola_chat_id, message_text)
             telegram_api_olacushatcs.send_message(my_chat_id, message_text)
         elif now == "20:00" and State.last_sent != now:
             State.last_sent = now
-            message_text = "Добрейшего вечерочка, ужин это не впадлу"
+            message_text = "БОтелло: Наелась ли ты на ночь, Демолишон?"
             telegram_api_olacushatcs.send_message(ola_chat_id, message_text)
             telegram_api_olacushatcs.send_message(my_chat_id, message_text)
 
@@ -118,51 +106,35 @@ def safe_start_bot(bot_func):
     while not ended:
         try:
             bot_func()
-            Print.colored("Bot ola quited", "red")
+            Print.colored("Bot quited", "red")
             ended = True
         except requests.exceptions.ReadTimeout:
-            print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
+            print(f"{Time.dotted()} requests.exceptions.ReadTimeout...")
             Time.sleep(5)
         except requests.exceptions.ConnectionError:
-            print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
+            print(f"{Time.dotted()} requests.exceptions.ConnectionError...")
             Time.sleep(5)
 
-def main():
-    # https://www.tutorialspoint.com/python/python_multithreading.htm  # you can expand current implementation
 
-    exitFlag = 0
+def safe_threads_run():
+    # https://www.tutorialspoint.com/python/python_multithreading.htm  # you can expand current implementation
 
     print(f"Main thread v{__version__} started")
 
-    threads = []
-    thread_id = ID()
+    threads = Threading()
 
-    # Create new threads
-    thread1 = myThread(thread_id.get(), "Reciever", safe_start_bot, args=(_start_ola_bot_reciever,))
-    thread2 = myThread(thread_id.get(), "Sender", safe_start_bot, args=(_start_ola_bot_sender,))
-    thread3 = myThread(thread_id.get(), "Sender mine", safe_start_bot, args=(_start_ola_bot_sender_mine,))
+    threads.add(safe_start_bot, args=(_start_ola_bot_reciever,))
+    threads.add(safe_start_bot, args=(_start_ola_bot_sender,))
+    threads.add(safe_start_bot, args=(_start_ola_bot_sender_mine,))
 
-    # Start new Threads
-    thread1.start()
-    thread2.start()
-    thread3.start()
+    threads.start(wait_for_keyboard_interrupt=True)
 
-    # Add threads to thread list
-    threads.append(thread1)
-    threads.append(thread2)
-    threads.append(thread3)
+    threads.wait_for_keyboard_interrupt()
 
-    import time
-    try:
-        while 1:
-            time.sleep(1)  # wait for KeyboardInterrupt
-    except (KeyboardInterrupt, SystemExit):
-        Print.colored("\nKilling script", "red")
-        Process.kill(os.getpid())
-
+    Print.rewrite()
     print("Main thread quited")
 
 
 
 if __name__ == '__main__':
-    main()
+    safe_threads_run()
