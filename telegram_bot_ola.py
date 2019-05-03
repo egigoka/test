@@ -15,7 +15,7 @@ except ImportError:
     import telebot
 import requests
 
-__version__ = "1.4.1"
+__version__ = "1.4.2"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -89,7 +89,7 @@ def _start_ola_bot_sender_mine():
         now = nowdt.strftime("%H:%M")
         weekday = nowdt.strftime("%w")
         Time.sleep(20)
-        if now in ["10:50", "16:50"] and State.last_sent != now:
+        if now in ["10:50", "16:50"] and State.last_sent != now and weekday in range(1, 6):
             State.last_sent = now
             message_text = "Печеньки! Ура!"
             if weekday == 3:
@@ -128,8 +128,6 @@ def safe_threads_run():
     threads.add(safe_start_bot, args=(_start_ola_bot_sender_mine,))
 
     threads.start(wait_for_keyboard_interrupt=True)
-
-    threads.wait_for_keyboard_interrupt()
 
     Print.rewrite()
     print("Main thread quited")
