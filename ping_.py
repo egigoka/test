@@ -60,8 +60,12 @@ if State.extended_rkn_list:
     # domains += ['googleusercontent.com']  # no DNS records?, it use something unknown for me
     domains += ['gstatic.com']
     domains += ['youtube.com']
+<<<<<<< HEAD
     # domains += ['ytimg.com']  # no DNS records?, it use something unknown for me
     domains += ['mail.python.org']
+=======
+    # domains += ['ytimg.com']  # no DNS records, it use something unknown for me
+>>>>>>> a23316876ef15021b9cf8ef8a997727ed4c91326
 
 
 # Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
