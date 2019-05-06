@@ -1,7 +1,5 @@
 #! python3
 # -*- coding: utf-8 -*-
-import sys
-
 try:
     from commands import *
 except ImportError:
@@ -14,33 +12,71 @@ except ImportError:
     from commands.pip9 import Pip
     Pip.install("pytelegrambotapi")
     import telebot
-from todoist_temp import *
+from todoiste import *
 import requests
-import sys
+import os
+
+__version__ = "1.3.1"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
 tgx_chat_id = 619037205
+
 
 class Arguments:
     pass
 
 
 class State:
-    def __init__(self, excluded_projects=[], excluded_items=[]):
+    def __init__(self):
+        self.config_json = Json(Path.combine(os.path.split(__file__)[0], "configs", "telegram_bot_todoist.json"))
+
         self.first_message = True
         self.getting_project_name = False
         self.getting_item_name = False
 
-        self.excluded_projects = excluded_projects
-        self.excluded_items = excluded_items
+        class JsonList(list):
+            def __init__(self, list_input, category, property):
+                list.__init__(self, list_input)
+                self.category = category
+                self.property = property
+
+            def append(self, obj):
+                out = list.append(self, obj)
+                self.save()
+                return out
+
+            def remove(self, obj):
+                out = list.remove(self, obj)
+                self.save()
+                return out
+
+            def save(self):
+                State.config_json[self.category][self.property] = self
+                State.config_json.save()
+
+            def purge(self):
+                while self:
+                    self.pop()
+                self.save()
+
+        try:
+            self.excluded_projects = JsonList(self.config_json["excluded"]["projects"], "excluded", "projects")
+        except KeyError:
+            self.excluded_projects = JsonList([], "excluded", "projects")
+        try:
+            self.excluded_items = JsonList(self.config_json["excluded"]["items"], "excluded", "items")
+        except KeyError:
+            self.excluded_items = JsonList([], "excluded", "items")
 
         self.counter_for_left_items = True
         self.counter_for_left_items_int = 0
 
         self.all_todo_str = ""
+        self.last_todo_str = ""
 
         self.sent_messages = 1
+
 
 
 State = State()
@@ -50,28 +86,7 @@ encrypted_telegram_token = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40,
                             -41, -24, 13, 4, 49, 44, -25, 18, 9, -18, -19, 72, -12, -26, -3, 3, -62, 3, 17, 4, 7, -3,
                             -33, -3, -12]
 
-encrypted_telegram_token_olacushatc = [-14, -22, -51, -21, -57, -55, -42, 6, -20, -13, -40, -6, -42, -3, 1, 20, -3, -15,
-                                       -16, 47, -45, 0, -24, 62, 7, -17, -55, -14, -39, 2, -15, 58, 16, -17, -16, 46,
-                                       -11, -31, -47, 49, 46, 45, -60, 30, -26]
-
-
 telegram_token = Str.decrypt(encrypted_telegram_token, todoist_password_for_api_key)
-telegram_token_olacushatc = Str.decrypt(encrypted_telegram_token_olacushatc, todoist_password_for_api_key)
-# telegram_token = Str.decrypt(encrypted, Str.input_pass("Enter password:"))
-
-
-def start_ola_bot_():
-    telegram_api_olacushatcs = telebot.TeleBot(telegram_token_olacushatc, threaded=False)
-
-    @telegram_api_olacushatcs.message_handler(content_types=["text"])
-    def reply_all_messages_ola(message):
-        if message.chat.id == my_chat_id:
-            telegram_api_olacushatcs.send_message(ola_chat_id, message.text)
-        else:
-            telegram_api_olacushatcs.forward_message(my_chat_id, message.chat.id, message.message_id,
-                                                     disable_notification=True)
-
-    telegram_api_olacushatcs.polling(none_stop=True)
 
 
 def start_todoist_bot_():
@@ -113,10 +128,11 @@ def start_todoist_bot_():
             return "All done!"
         random_item = Random.item(random_project_items)
 
-        time_string = ""
-        if random_item["due_date_utc"]:
+        try:
             if not random_item["due_date_utc"].endswith("20:59:59 +0000"):
                 time_string = random_item["date_string"]
+        except KeyError:
+            time_string = ""
 
         counter_for_left_items_str = ""
         if State.counter_for_left_items:
@@ -159,8 +175,15 @@ def start_todoist_bot_():
 
             telegram_api.send_message(message.chat.id, f"{excluded_str}{newline}wait")
 
-            telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message,
-                                           text=f"{excluded_str}{newline}{get_random_todo(todoist_api)}")  # , reply_markup=markup)
+            def update_last_todo_message(message_id):
+                current_todo = get_random_todo(todoist_api)
+                telegram_api.edit_message_text(chat_id=message.chat.id, message_id=message_id,
+                                               text=f"{excluded_str}{newline}{current_todo}")  # , reply_markup=markup)
+                State.last_todo_str = Str.substring(current_todo, "", "<").strip()
+
+            a = MyThread(1, update_last_todo_message, "Getting random todo", args=(last_message,), quiet=True, daemon=True)
+            a.start()
+
 
         if message.chat.id != my_chat_id:
             telegram_api.send_message(message.chat.id, "ACCESS DENY!")
@@ -261,7 +284,10 @@ def start_todoist_bot_():
 
             markup = telebot.types.ReplyKeyboardMarkup()
             default_items = False
-            for item_name in [r"Vacuum/sweep", "Wash the floor"]:
+            default_items_list = [r"Vacuum/sweep", "Wash the floor"]
+            if State.last_todo_str:
+                default_items_list.append(State.last_todo_str)
+            for item_name in default_items_list:
                 if item_name not in State.excluded_items:
                     project_button = telebot.types.KeyboardButton(item_name)
                     markup.row(project_button)
@@ -297,8 +323,8 @@ def start_todoist_bot_():
                 main_message(1)
 
         elif message.text == "Clean black list":
-            State.excluded_items = []
-            State.excluded_projects = []
+            State.excluded_items.purge()
+            State.excluded_projects.purge()
             State.first_message = True
             main_message()
 
@@ -317,23 +343,7 @@ def start_todoist_bot_():
             main_message()
 
     telegram_api.polling(none_stop=True)
-# https://github.com/eternnoir/pyTelegramBotAPI/issues/273
-
-
-#first_chat_id = None
-# @telegram_api.message_handler(content_types=["text"])
-# def reply_all_messages_loop(message):
-
-    # global first_chat_id
-    # if not first_chat_id:
-    #     first_chat_id = message.chat.id
-    #     telegram_api.send_message(message.chat.id, f"{message.chat.id} storted!")
-    # elif message.chat.id != first_chat_id:
-    #         telegram_api.send_message(message.chat.id, f"{message.chat.id} ACCESS DENY!")
-    #         return
-    # while True:
-    #     telegram_api.send_message(message.chat.id, "покушой")
-    #     Time.sleep(5)
+    # https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
 def start_todoist_bot():
@@ -351,28 +361,9 @@ def start_todoist_bot():
             print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
             Time.sleep(5)
 
-def start_ola_bot():
-    ended = False
-    while not ended:
-        try:
-            Print.colored("Bot ola started", "green")
-            start_ola_bot_()
-            Print.colored("Bot ola ended", "green")
-            ended = True
-        except requests.exceptions.ReadTimeout:
-            print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
-            Time.sleep(5)
-        except requests.exceptions.ConnectionError:
-            print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
-            Time.sleep(5)
-
-
-
-
 
 def main():
     start_todoist_bot()
-    start_ola_bot()
 
 
 if __name__ == '__main__':
