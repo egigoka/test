@@ -27,7 +27,7 @@ class State:
     if ("-f" in sys.argv) or ("-fast" in sys.argv):
         sleep = 10
 
-domains = ['192.168.1.1']  # router by default
+domains = ['192.168.0.1']  # router by default
 
 if State.online_only:
     domains = []
