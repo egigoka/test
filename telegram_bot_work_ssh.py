@@ -3,6 +3,8 @@
 import sys
 import os
 
+__version = "0.1.0"
+
 try:
     from commands import *
 except ImportError:
@@ -93,24 +95,21 @@ def start_ssh_bot():
     telegram_api.polling()
 
 
-def safe_start_bot():
+def safe_start_bot(bot_func):
     ended = False
     while not ended:
         try:
-            Print.colored("Bot ssh started", "green")
-            start_ssh_bot()
-            Print.colored("Bot ssh ended", "green")
+            bot_func()
             ended = True
-        except requests.exceptions.ReadTimeout:
-            print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
-            Time.sleep(5)
-        except requests.exceptions.ConnectionError:
-            print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
+        except (requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.ChunkedEncodingError) as e:
+            print(f"{e}... {Time.dotted()}")
             Time.sleep(5)
 
 
 def main():
-    safe_start_bot()
+    safe_start_bot(start_ssh_bot)
 
 
 if __name__ == '__main__':

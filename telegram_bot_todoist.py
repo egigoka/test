@@ -16,7 +16,7 @@ from todoiste import *
 import requests
 import os
 
-__version__ = "1.3.1"
+__version__ = "1.4.0"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -89,7 +89,7 @@ encrypted_telegram_token = [-15, -21, -49, -16, -63, -52, -46, 6, -20, -13, -40,
 telegram_token = Str.decrypt(encrypted_telegram_token, todoist_password_for_api_key)
 
 
-def start_todoist_bot_():
+def start_todoist_bot():
     def get_random_todo(todo_api):
         print(Time.dotted())
         Print.rewrite("Getting random todo")
@@ -346,24 +346,21 @@ def start_todoist_bot_():
     # https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
-def start_todoist_bot():
+def safe_start_bot(bot_func):
     ended = False
     while not ended:
         try:
-            Print.colored("Bot todoist started", "green")
-            start_todoist_bot_()
-            Print.colored("Bot todoist ended", "green")
+            bot_func()
             ended = True
-        except requests.exceptions.ReadTimeout:
-            print(f"requests.exceptions.ReadTimeout... {Time.dotted()}")
-            Time.sleep(5)
-        except requests.exceptions.ConnectionError:
-            print(f"requests.exceptions.ConnectionError... {Time.dotted()}")
+        except (requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.ChunkedEncodingError) as e:
+            print(f"{e}... {Time.dotted()}")
             Time.sleep(5)
 
 
 def main():
-    start_todoist_bot()
+    safe_start_bot(start_todoist_bot)
 
 
 if __name__ == '__main__':
