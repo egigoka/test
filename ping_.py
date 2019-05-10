@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.0.3"
+__version__ = "3.1.0"
 
 
 class State:
@@ -11,21 +11,29 @@ class State:
     ping_count = 5
     sleep = 60  # between iterations
     count_of_ignored_timeouts = 1  # how much errors ignore
-    online = False
-    online_only = False
     first_iterate = True
     internet_status = False
-    extended_rkn_list = False
+
+    online = False
     if ("-o" in sys.argv) or ("-online" in sys.argv) or ("--online" in sys.argv):
         online = True
+
+    online_only = False
     if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
         online_only = True
         online = True
+
+    extended_rkn_list = False
     if ("-frkn" in sys.argv):
         online = True
         extended_rkn_list = True
+
     if ("-f" in sys.argv) or ("-fast" in sys.argv):
         sleep = 10
+
+    print_ip=False
+    if ("-ip" in sys.argv):
+        print_ip=True
 
 domains = ['192.168.1.1']  # router by default
 
@@ -39,7 +47,7 @@ if State.online:
     domains += ['8.8.4.4']
     domains += ['gmail.com']
     domains += ['vk.com']
-    domains += ['starbounder.org']
+#    domains += ['starbounder.org']
 
 if State.extended_rkn_list:
     # domains += ['1password.com']  # they doesn't reply to ICMP echo
@@ -49,10 +57,15 @@ if State.extended_rkn_list:
     domains += ['google.com.ua']
     domains += ['google.fr']
     domains += ['google.ru']
-    # domains += ['googleusercontent.com']  # no DNS records, it use something unknown for me
+    # domains += ['googleusercontent.com']  # no DNS records?, it use something unknown for me
     domains += ['gstatic.com']
     domains += ['youtube.com']
+<<<<<<< HEAD
+    # domains += ['ytimg.com']  # no DNS records?, it use something unknown for me
+    domains += ['mail.python.org']
+=======
     # domains += ['ytimg.com']  # no DNS records, it use something unknown for me
+>>>>>>> a23316876ef15021b9cf8ef8a997727ed4c91326
 
 
 # Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
@@ -60,7 +73,9 @@ if State.extended_rkn_list:
 def main():
     while True:
         if State.extended_rkn_list:
-            if OS.windows: Process.start("ipconfig", "/flushdns")
+            Print.rewrite("Removing DNS cache...")
+            if OS.windows:
+                Process.start("ipconfig", "/flushdns")
         if OS.macos:
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
@@ -72,6 +87,8 @@ def main():
         for hostname in domains:
             if len(hostname) > longest_hostname:
                 longest_hostname = len(hostname)
+        if State.print_ip:
+            Print(f"Your IP: {Network.get_ip()}")
         for hostname in domains:
             response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
             ip = response[1]
