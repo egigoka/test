@@ -15,7 +15,7 @@ except ImportError:
     import telebot
 import requests
 
-__version__ = "1.4.2"
+__version__ = "1.5.0"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -87,7 +87,7 @@ def _start_ola_bot_sender_mine():
     while True:
         nowdt = datetime.datetime.now()
         now = nowdt.strftime("%H:%M")
-        weekday = nowdt.strftime("%w")
+        weekday = int(nowdt.strftime("%w"))
         Time.sleep(20)
         if now in ["10:50", "16:50"] and State.last_sent != now and weekday in range(1, 6):
             State.last_sent = now
@@ -106,13 +106,11 @@ def safe_start_bot(bot_func):
     while not ended:
         try:
             bot_func()
-            Print.colored("Bot quited", "red")
             ended = True
-        except requests.exceptions.ReadTimeout:
-            print(f"{Time.dotted()} requests.exceptions.ReadTimeout...")
-            Time.sleep(5)
-        except requests.exceptions.ConnectionError:
-            print(f"{Time.dotted()} requests.exceptions.ConnectionError...")
+        except (requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.ChunkedEncodingError) as e:
+            print(f"{e}... {Time.dotted()}")
             Time.sleep(5)
 
 
