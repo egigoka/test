@@ -1,7 +1,5 @@
 #! python3
 # -*- coding: utf-8 -*-
-import sys
-
 try:
     from commands import *
 except ImportError:
@@ -16,7 +14,9 @@ except ImportError:
     import telebot
 from todoiste import *
 import requests
-import sys
+import os
+
+__version__ = "1.3.1"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -28,20 +28,55 @@ class Arguments:
 
 
 class State:
-    def __init__(self, excluded_projects=[], excluded_items=[]):
+    def __init__(self):
+        self.config_json = Json(Path.combine(os.path.split(__file__)[0], "configs", "telegram_bot_todoist.json"))
+
         self.first_message = True
         self.getting_project_name = False
         self.getting_item_name = False
 
-        self.excluded_projects = excluded_projects
-        self.excluded_items = excluded_items
+        class JsonList(list):
+            def __init__(self, list_input, category, property):
+                list.__init__(self, list_input)
+                self.category = category
+                self.property = property
+
+            def append(self, obj):
+                out = list.append(self, obj)
+                self.save()
+                return out
+
+            def remove(self, obj):
+                out = list.remove(self, obj)
+                self.save()
+                return out
+
+            def save(self):
+                State.config_json[self.category][self.property] = self
+                State.config_json.save()
+
+            def purge(self):
+                while self:
+                    self.pop()
+                self.save()
+
+        try:
+            self.excluded_projects = JsonList(self.config_json["excluded"]["projects"], "excluded", "projects")
+        except KeyError:
+            self.excluded_projects = JsonList([], "excluded", "projects")
+        try:
+            self.excluded_items = JsonList(self.config_json["excluded"]["items"], "excluded", "items")
+        except KeyError:
+            self.excluded_items = JsonList([], "excluded", "items")
 
         self.counter_for_left_items = True
         self.counter_for_left_items_int = 0
 
         self.all_todo_str = ""
+        self.last_todo_str = ""
 
         self.sent_messages = 1
+
 
 
 State = State()
@@ -140,8 +175,15 @@ def start_todoist_bot_():
 
             telegram_api.send_message(message.chat.id, f"{excluded_str}{newline}wait")
 
-            telegram_api.edit_message_text(chat_id=message.chat.id, message_id=last_message,
-                                           text=f"{excluded_str}{newline}{get_random_todo(todoist_api)}")  # , reply_markup=markup)
+            def update_last_todo_message(message_id):
+                current_todo = get_random_todo(todoist_api)
+                telegram_api.edit_message_text(chat_id=message.chat.id, message_id=message_id,
+                                               text=f"{excluded_str}{newline}{current_todo}")  # , reply_markup=markup)
+                State.last_todo_str = Str.substring(current_todo, "", "<").strip()
+
+            a = MyThread(1, update_last_todo_message, "Getting random todo", args=(last_message,), quiet=True, daemon=True)
+            a.start()
+
 
         if message.chat.id != my_chat_id:
             telegram_api.send_message(message.chat.id, "ACCESS DENY!")
@@ -242,7 +284,10 @@ def start_todoist_bot_():
 
             markup = telebot.types.ReplyKeyboardMarkup()
             default_items = False
-            for item_name in [r"Vacuum/sweep", "Wash the floor"]:
+            default_items_list = [r"Vacuum/sweep", "Wash the floor"]
+            if State.last_todo_str:
+                default_items_list.append(State.last_todo_str)
+            for item_name in default_items_list:
                 if item_name not in State.excluded_items:
                     project_button = telebot.types.KeyboardButton(item_name)
                     markup.row(project_button)
@@ -278,8 +323,8 @@ def start_todoist_bot_():
                 main_message(1)
 
         elif message.text == "Clean black list":
-            State.excluded_items = []
-            State.excluded_projects = []
+            State.excluded_items.purge()
+            State.excluded_projects.purge()
             State.first_message = True
             main_message()
 
