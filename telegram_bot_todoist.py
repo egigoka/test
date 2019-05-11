@@ -1,5 +1,6 @@
 #! python3
 # -*- coding: utf-8 -*-
+import os
 try:
     from commands import *
 except ImportError:
@@ -13,10 +14,9 @@ except ImportError:
     Pip.install("pytelegrambotapi")
     import telebot
 from todoiste import *
-import requests
-import os
+import telegrame
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -173,12 +173,14 @@ def start_todoist_bot():
             else:
                 excluded_str += f"{newline}No excluded items."
 
-            telegram_api.send_message(message.chat.id, f"{excluded_str}{newline}wait")
+            # telegram_api.send_message(message.chat.id, f"{excluded_str}{newline}wait")
+            telegram_api.send_message(message.chat.id, "wait")
 
             def update_last_todo_message(message_id):
                 current_todo = get_random_todo(todoist_api)
                 telegram_api.edit_message_text(chat_id=message.chat.id, message_id=message_id,
-                                               text=f"{excluded_str}{newline}{current_todo}")  # , reply_markup=markup)
+                #                               text=f"{excluded_str}{newline}{current_todo}")  # , reply_markup=markup)
+                                               text=current_todo)  # , reply_markup=markup)
                 State.last_todo_str = Str.substring(current_todo, "", "<").strip()
 
             a = MyThread(1, update_last_todo_message, "Getting random todo", args=(last_message,), quiet=True, daemon=True)
@@ -346,21 +348,8 @@ def start_todoist_bot():
     # https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 
 
-def safe_start_bot(bot_func):
-    ended = False
-    while not ended:
-        try:
-            bot_func()
-            ended = True
-        except (requests.exceptions.ReadTimeout,
-                requests.exceptions.ConnectionError,
-                requests.exceptions.ChunkedEncodingError) as e:
-            print(f"{e}... {Time.dotted()}")
-            Time.sleep(5)
-
-
 def main():
-    safe_start_bot(start_todoist_bot)
+    telegrame.very_safe_start_bot(start_todoist_bot)
 
 
 if __name__ == '__main__':

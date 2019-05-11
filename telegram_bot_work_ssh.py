@@ -17,7 +17,7 @@ except ImportError:
     from commands.pip9 import Pip
     Pip.install("pytelegrambotapi")
     import telebot
-import requests
+import telegrame
 
 my_chat_id = 5328715
 
@@ -95,21 +95,8 @@ def start_ssh_bot():
     telegram_api.polling()
 
 
-def safe_start_bot(bot_func):
-    ended = False
-    while not ended:
-        try:
-            bot_func()
-            ended = True
-        except (requests.exceptions.ReadTimeout,
-                requests.exceptions.ConnectionError,
-                requests.exceptions.ChunkedEncodingError) as e:
-            print(f"{e}... {Time.dotted()}")
-            Time.sleep(5)
-
-
 def main():
-    safe_start_bot(start_ssh_bot)
+    telegrame.very_safe_start_bot(start_ssh_bot)
 
 
 if __name__ == '__main__':

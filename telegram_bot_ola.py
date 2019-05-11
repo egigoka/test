@@ -13,9 +13,9 @@ except ImportError:
     from commands.pip9 import Pip
     Pip.install("pytelegrambotapi")
     import telebot
-import requests
+import telegrame
 
-__version__ = "1.5.0"
+__version__ = "1.6.0"
 
 my_chat_id = 5328715
 ola_chat_id = 550959211
@@ -101,19 +101,6 @@ def _start_ola_bot_sender_mine():
             telegram_api_olacushatcs.send_message(my_chat_id, message_text)
 
 
-def safe_start_bot(bot_func):
-    ended = False
-    while not ended:
-        try:
-            bot_func()
-            ended = True
-        except (requests.exceptions.ReadTimeout,
-                requests.exceptions.ConnectionError,
-                requests.exceptions.ChunkedEncodingError) as e:
-            print(f"{e}... {Time.dotted()}")
-            Time.sleep(5)
-
-
 def safe_threads_run():
     # https://www.tutorialspoint.com/python/python_multithreading.htm  # you can expand current implementation
 
@@ -121,9 +108,9 @@ def safe_threads_run():
 
     threads = Threading()
 
-    threads.add(safe_start_bot, args=(_start_ola_bot_reciever,))
-    threads.add(safe_start_bot, args=(_start_ola_bot_sender,))
-    threads.add(safe_start_bot, args=(_start_ola_bot_sender_mine,))
+    threads.add(telegrame.very_safe_start_bot, args=(_start_ola_bot_reciever,))
+    threads.add(telegrame.very_safe_start_bot, args=(_start_ola_bot_sender,))
+    threads.add(telegrame.very_safe_start_bot, args=(_start_ola_bot_sender_mine,))
 
     threads.start(wait_for_keyboard_interrupt=True)
 
