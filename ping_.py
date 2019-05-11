@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.1.0"
+__version__ = "3.1.1"
 
 
 class State:
@@ -31,15 +31,10 @@ class State:
     if ("-f" in sys.argv) or ("-fast" in sys.argv):
         sleep = 10
 
-<<<<<<< HEAD
-domains = ['192.168.0.1']  # router by default
-=======
-    print_ip=False
-    if ("-ip" in sys.argv):
-        print_ip=True
+    print_ip = "-ip" in sys.argv
 
-domains = ['192.168.1.1']  # router by default
->>>>>>> c05f7897ab3295e1b7ee6f1fade8419958a6e58a
+
+domains = ['192.168.0.1']  # router by default
 
 if State.online_only:
     domains = []
@@ -64,12 +59,6 @@ if State.extended_rkn_list:
     # domains += ['googleusercontent.com']  # no DNS records?, it use something unknown for me
     domains += ['gstatic.com']
     domains += ['youtube.com']
-<<<<<<< HEAD
-    # domains += ['ytimg.com']  # no DNS records?, it use something unknown for me
-    domains += ['mail.python.org']
-=======
-    # domains += ['ytimg.com']  # no DNS records, it use something unknown for me
->>>>>>> a23316876ef15021b9cf8ef8a997727ed4c91326
 
 
 # Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
