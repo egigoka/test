@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.1.1"
+__version__ = "3.2.2"
 
 
 class State:
@@ -33,6 +33,13 @@ class State:
 
     print_ip = "-ip" in sys.argv
 
+    fix_win_cmd = 0
+    if OS.windows:
+        fix_win_cmd = 1
+
+    longest_hostname = 0
+    cnt_workin = 0
+
 
 domains = ['192.168.0.1']  # router by default
 
@@ -46,24 +53,36 @@ if State.online:
     domains += ['8.8.4.4']
     domains += ['gmail.com']
     domains += ['vk.com']
+    domains += ['adguard.com']
 #    domains += ['starbounder.org']
 
 if State.extended_rkn_list:
-    # domains += ['1password.com']  # they doesn't reply to ICMP echo
-    # domains += ['dlang.org']  # something strange
-    # domains += ['ggpht.com']  # no DNS records, it use something unknown for me
     domains += ['gmail.com']
     domains += ['google.com.ua']
     domains += ['google.fr']
     domains += ['google.ru']
-    # domains += ['googleusercontent.com']  # no DNS records?, it use something unknown for me
     domains += ['gstatic.com']
     domains += ['youtube.com']
 
 
-# Json.save(Path.extend(Path.working(), "ping_configs", "ping_online_domains"), domains)
+def colorful_ping(hostname):
+    response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
+    ip = response[1]
+    response = response[0]
+    if response:
+        Print.colored(
+            Str.rightpad(hostname + ' is up!' + " " * (State.longest_hostname + 2 - len(hostname)) + ' IP ' + str(ip),
+                         Console.width() - State.fix_win_cmd, " "), 'white', 'on_green')
+        State.cnt_workin += 1
+    else:
+        Print.colored(Str.rightpad(hostname + ' is down!' + " " * (State.longest_hostname - len(hostname)) + ' IP ' + str(ip),
+                                   Console.width() - State.fix_win_cmd, " "), 'white', 'on_red')
+
 
 def main():
+    for hostname in domains:
+        if len(hostname) > State.longest_hostname:
+            State.longest_hostname = len(hostname)
     while True:
         if State.extended_rkn_list:
             Print.rewrite("Removing DNS cache...")
@@ -72,32 +91,19 @@ def main():
         if OS.macos:
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
-        fix_win_cmd = 0
-        if OS.windows:
-            fix_win_cmd = 1
-        cnt_workin = 0
-        longest_hostname = 0
-        for hostname in domains:
-            if len(hostname) > longest_hostname:
-                longest_hostname = len(hostname)
+        State.cnt_workin = 0
         if State.print_ip:
             Print(f"Your IP: {Network.get_ip()}")
+        threads = Threading(quiet=True)
         for hostname in domains:
-            response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
-            ip = response[1]
-            # Print.debug(response[2])
-            response = response[0]
-            if response:
-                Print.colored(Str.rightpad(hostname + ' is up!' + " "*(longest_hostname+2-len(hostname)) + ' IP ' + str(ip), Console.width()-fix_win_cmd, " "), 'white', 'on_green')
-                cnt_workin += 1
-            else:
-                Print.colored(Str.rightpad(hostname + ' is down!' + " "*(longest_hostname-len(hostname)) + ' IP ' + str(ip), Console.width()-fix_win_cmd, " "), 'white', 'on_red')
-        print(Time.dotted())
-        if cnt_workin < len(domains)-State.count_of_ignored_timeouts:
-            if OS.macos: macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            threads.add(colorful_ping, args=(hostname,))
+        threads.start(wait_for_keyboard_interrupt=True)
+        Print(Time.dotted())
+        if State.cnt_workin < len(domains)-State.count_of_ignored_timeouts:
+            if OS.macos: macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
             State.internet_status = False
-        elif cnt_workin < len(domains):
-            if OS.macos: macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+        elif State.cnt_workin < len(domains):
+            if OS.macos: macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
             State.internet_status = False
         else:
             if State.internet_status==False:
@@ -109,6 +115,7 @@ def main():
         State.first_iterate = False
         if State.internet_status:
             Time.sleep(State.sleep)
+
 
 if __name__ == '__main__':
     main()
