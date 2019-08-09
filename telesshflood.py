@@ -18,5 +18,5 @@ def main():
 
 if __name__ == "__main__":
     Time.sleep(5)
-    for range(3):
+    for i in range(3):
         main()
