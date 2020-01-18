@@ -6,7 +6,7 @@ logfile = r"\\192.168.99.91\shares\scripts\bartenderprint\testlog.log"
 utils.createfile(logfile)
 bakfolder = r"\\192.168.99.91\shares\scripts\bartenderprint"
 
-# print(os.path.getctime(logfile))
+# print(os.path1.getctime(logfile))
 
 # utils.plog(logfile, "воссоздание лога")
 
@@ -31,8 +31,8 @@ for file in files:
     #print(file)
     file = utils.pathInWindowsExtend(r"\\192.168.99.91\shares\scripts\BartenderPrint", file)
 # получить время создания
-# #os.path.getctime(path) - время создания файла (Windows), время последнего изменения файла (Unix).
-    #print(os.path.getctime(file))
+# #os.path1.getctime(path1) - время создания файла (Windows), время последнего изменения файла (Unix).
+    #print(os.path1.getctime(file))
     #проверка на правильную сортировку по времени
     try:
         # print(previoustime)

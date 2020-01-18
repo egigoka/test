@@ -171,14 +171,14 @@ def body(inputed):
         #    addtasktolist2()
         #if inputed == "print" or inputed == "p" or inputed == "вывести" or inputed == "в":
         #    printlist()
-        elif inputed == "done" or inputed == "d" or inputed == "сделано" or inputed == "с":
+        elif inputed == "finished" or inputed == "d" or inputed == "сделано" or inputed == "с":
             deltask()
         elif inputed == "clean zis sheet":
             if list1:
                 clnscr()
         else:
             addtasktolist2(inputed)
-            # print("Команды: add, done, print, stop")
+            # print("Команды: add, finished, print, stop")
         inputed=input()
 
 body("1")

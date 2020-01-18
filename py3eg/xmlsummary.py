@@ -98,9 +98,9 @@ def print_results(results_queue):
 
 def parse_options():
     parser = optparse.OptionParser(
-            usage=("usage: %prog [options] [path]\n"
-                   "outputs a summary of the XML files in path\n"
-                   "path defaults to ."))
+            usage=("usage: %prog [options] [path1]\n"
+                   "outputs a summary of the XML files in path1\n"
+                   "path1 defaults to ."))
     parser.add_option("-t", "--threads", dest="count", default=7,
             type="int",
             help=("the number of threads to use (1..20) "

@@ -24,7 +24,7 @@ def get_Bench(start=False):  # return class with those functions:
         time_start = datetime.datetime.now()
         time_end = None
         quiet = False  # d argument for disable print to terminal               bnl1
-        prefix = "Bench runned in"  # d what have been done, will print if      bnl1
+        prefix = "Bench runned in"  # d what have been finished, will print if      bnl1
         # d "quiet" variable of class is False
 
         @classmethod
@@ -518,7 +518,7 @@ class Console():
     @staticmethod
     def get_output(command, quiet=True, split_lines=False):  # d return output
       # d of executing command. Doesn't output it to terminal in realtime.
-      # d can be output after done if "quiet" argument activated.
+      # d can be output after finished if "quiet" argument activated.
         p = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         if OS.name == "windows":
             output = p.decode("cp866")
@@ -582,12 +582,12 @@ class Path:
         return os.getcwd()
 
     @classmethod
-    def extend(cls, *paths):  # paths input strings of path pieces, return
-      # d string with path, good for OS
+    def extend(cls, *paths):  # paths input strings of path1 pieces, return
+      # d string with path1, good for OS
         for path_ in paths:
             try:
                 path = os.path.join(str(path), str(path_))
-            except NameError:  # first path piece is very important
+            except NameError:  # first path1 piece is very important
                 if (OS.name == "windows") and path_ == backslash:  # support for smb windows paths like \\ip_or_pc\dir\
                     path = backslash * 2
                 elif (OS.name == "windows") and (len(path_) <= 3):
@@ -609,7 +609,7 @@ class Path:
         return path
 
     @staticmethod
-    def home():  # return path of home directory of current user. Not tested in
+    def home():  # return path1 of home directory of current user. Not tested in
       # d linux.
       # todo test in lunux!
         if OS.name == "windows":
@@ -747,7 +747,7 @@ class File:
             print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
         subfolder = Path.extend(backupfilename[0], subfolder)  # append subfolder name
         Dir.create(subfolder)  # create subfolder
-        backupfilename = Path.extend(subfolder, backupfilename[1])  # backup file name full path
+        backupfilename = Path.extend(subfolder, backupfilename[1])  # backup file name full path1
         shutil.copy2(filename, backupfilename)  # finally backup file
         if hide:
             backupfilename = cls.hide(backupfilename)  # hiding file
@@ -853,12 +853,12 @@ class Json():
                 print("sys.argv[0] =",sys.argv[0])
                 print(jsonstring)
         except:
-            raise IOError("error while saving JSON, try to repair script at path " +
+            raise IOError("error while saving JSON, try to repair script at path1 " +
                           Path.full(sys.argv[0]))
         json_test_string = cls.load(filename, quiet=True)
         if jsonstring != json_test_string:
             Print.debug("jsonstring_to_save", jsonstring, "json_test_string_from_file", json_test_string)
-            raise IOError("error while saving JSON, try to repair script at path " +
+            raise IOError("error while saving JSON, try to repair script at path1 " +
                           Path.full(sys.argv[0]))  # exception
 
     @classmethod
@@ -877,7 +877,7 @@ class Json():
                 print(jsonStringInMemory)
             return jsonStringInMemory
         except:
-            raise IOError("error while loading JSON, try to repair script at path " +
+            raise IOError("error while loading JSON, try to repair script at path1 " +
                           Path.full(sys.argv[0]))
 
 

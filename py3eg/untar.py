@@ -49,7 +49,7 @@ def untar(archive):
             if member.name.startswith(UNTRUSTED_PREFIXES):
                 print("untrusted prefix, ignoring", member.name)
             elif ".." in member.name:
-                print("suspect path, ignoring", member.name)
+                print("suspect path1, ignoring", member.name)
             else:
                 tar.extract(member)
                 print("unpacked", member.name)

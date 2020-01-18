@@ -41,7 +41,7 @@ Traceback (most recent call last):
 ...
 AssertionError
 
-# will be done in-place using: _replace() ?
+# will be finished in-place using: _replace() ?
 AE:
 >>> circle = circle._replace(radius=12)
 >>> edge_distance_from_origin(*circle)

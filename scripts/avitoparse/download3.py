@@ -119,7 +119,7 @@ class Page:
     def load(self, number):
         self.number = number
         filename = State.product + '_in_' + State.region + "_" + str(self.number) + ".html"  # define ouput file name
-        output = Path.combine(Path.working(), State.subfolder, filename)  # define path to output file
+        output = Path.combine(Path.working(), State.subfolder, filename)  # define path1 to output file
 
         if not State.Arg.no_download:
             Print.debug("wget output", Wget.download(self.get_url(), output_filename=output, quiet=not State.Debug.print_wget_output, no_check_certificate=OS.windows))

@@ -20,7 +20,7 @@ __version__ = "1.1.3"
 #     print("using commands8? 0_o")
 #
 # import os
-# if not os.path.isdir(Path.extend(Path.working(), "commands")):
+# if not os.path1.isdir(Path.extend(Path.working(), "commands")):
 #     Dir.create(Path.extend(Path.working(), "commands"))
 #
 # for file_or_dir in Dir.list_of_files(Path.commands8()):
@@ -65,8 +65,8 @@ class Git:
 
     @classmethod
     def push(cls, path, upstream=False):
-        """Push commits to 'path' repo
-        :param path: string, path of repo
+        """Push commits to 'path1' repo
+        :param path: string, path1 of repo
         :param upstream: boolean, if True, adding argument '-u' to git
         :return: None
         """
@@ -80,7 +80,7 @@ class Git:
     def update(cls, message, path="https://github.com/egigoka/" + get_name_of_repo() + ".git"):
         """Automatization to mine git upload
         :param message: string, commit message
-        :param path: string, path to repo
+        :param path: string, path1 to repo
         :return: None
         """
         cls.add(".")

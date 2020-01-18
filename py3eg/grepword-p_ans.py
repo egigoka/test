@@ -65,9 +65,9 @@ def parse_options():
                       action="store_true")
     opts, args = parser.parse_args()
     if len(args) == 0:
-        parser.error("a word and at least one path must be specified")
+        parser.error("a word and at least one path1 must be specified")
     elif len(args) == 1:
-        parser.error("at least one path must be specified")
+        parser.error("at least one path1 must be specified")
     if (not opts.recurse and
         not any([os.path.isfile(arg) for arg in args])):
         parser.error("at least one file must be specified; or use -r")

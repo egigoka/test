@@ -123,11 +123,11 @@ def print_results(results_queue):
 
 def parse_options():
     parser = optparse.OptionParser(
-            usage=("usage: %prog [options] [path]\n"
-                   "outputs a list of duplicate files in path "
+            usage=("usage: %prog [options] [path1]\n"
+                   "outputs a list of duplicate files in path1 "
                    "using the MD5 algorithm\n"
                    "ignores zero-length files\n"
-                   "path defaults to ."))
+                   "path1 defaults to ."))
     parser.add_option("-t", "--threads", dest="count", default=7,
             type="int",
             help=("the number of threads to use (1..20) "

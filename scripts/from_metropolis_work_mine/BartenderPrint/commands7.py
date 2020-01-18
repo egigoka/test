@@ -106,12 +106,12 @@ def how_to_import_this_useless_stuff():
     print(r"""# import module like this:
 # mine commands
 import sys
-sys.path.append("../..")
-sys.path.append("..\..")
-sys.path.append(".")
-sys.path.append("..")
-sys.path.append("./term")
-sys.path.append(r".\term")
+sys.path1.append("../..")
+sys.path1.append("..\..")
+sys.path1.append(".")
+sys.path1.append("..")
+sys.path1.append("./term")
+sys.path1.append(r".\term")
 from commands7 import *""")
 
 
@@ -586,7 +586,7 @@ class File:
         #             delete_command = "del"
         #         else:
         #             delete_command = "rm"
-        #         subprocess.call([delete_command, path])
+        #         subprocess.call([delete_command, path1])
         #     except:
         if os.path.exists(path):
             time.sleep(0.05)
@@ -609,7 +609,7 @@ class File:
         filename = Path.full(filename)  #
         if OS.name == "windows":
             win32api.SetFileAttributes(filename, win32con.FILE_ATTRIBUTE_HIDDEN)  # hiding file like windows do
-        dotted_file = os.path.split(filename)  # split path to dir and path
+        dotted_file = os.path.split(filename)  # split path1 to dir and path1
         dotted_file = Path.extend(dotted_file[0], "." + dotted_file[1])  # merging it back and add dot
         File.rename(filename, dotted_file)
         if not quiet:
@@ -630,7 +630,7 @@ class File:
             print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
         subfolder = Path.extend(backupfilename[0], subfolder)  # append subfolder name
         Dir.create(subfolder)  # create subfolder
-        backupfilename = Path.extend(subfolder, backupfilename[1])  # backup file name full path
+        backupfilename = Path.extend(subfolder, backupfilename[1])  # backup file name full path1
         shutil.copy2(filename, backupfilename)  # finally backup file
         backupfilename = File.hide(backupfilename)  # hiding file
         if not os.path.isfile(backupfilename):  # if file is not created
@@ -739,11 +739,11 @@ class Json():
                 print("sys.argv[0] =",sys.argv[0])
                 print(jsonstring)
         except:
-            raise IOError("error while saving JSON, try to repair script at path " +
+            raise IOError("error while saving JSON, try to repair script at path1 " +
                           Path.full(sys.argv[0]))
         json_test_string = cls.load(filename, quiet=True)
         if jsonstring != json_test_string:
-            raise IOError("error while saving JSON, try to repair script at path " +
+            raise IOError("error while saving JSON, try to repair script at path1 " +
                           Path.full(sys.argv[0]))
 
     @classmethod
@@ -762,7 +762,7 @@ class Json():
                 print(jsonStringInMemory)
             return jsonStringInMemory
         except:
-            raise IOError("error while loading JSON, try to repair script at path " +
+            raise IOError("error while loading JSON, try to repair script at path1 " +
                           Path.full(sys.argv[0]))
 
 

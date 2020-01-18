@@ -11,7 +11,7 @@ while True:
         time9.sleep(0.001)
         for file in files:
                 path = Path.extend(root, file)
-                #print(path)
+                #print(path1)
                 #print(dct)
                 try:
                     if dct[path] != File.get_size(path):
@@ -25,7 +25,7 @@ while True:
                         dct[path] = File.get_size(path)
                         Print.colored(Time.dotted(), create_logstring, os.path.split(path)[1], "green")
                     except FileNotFoundError:
-                        #Print.colored("file not found", path)
+                        #Print.colored("file not found", path1)
                         Print.rewrite(Time.dotted(), "Skip non-file", path)
                         pass
     create_logstring = "Created"
@@ -33,9 +33,9 @@ while True:
     for path, size in Dict.iterable(dct, copy_dict=True):
         time9.sleep(0.001)
         try:
-            #Print.debug("dct[path]", dct[path],
-            #            "File.get_size(path)", File.get_size(path),
-            #            "dct[path] != File.get_size(path)", dct[path] != File.get_size(path))
+            #Print.debug("dct[path1]", dct[path1],
+            #            "File.get_size(path1)", File.get_size(path1),
+            #            "dct[path1] != File.get_size(path1)", dct[path1] != File.get_size(path1))
 
             if dct[path] != File.get_size(path):
                 dct[path] = File.get_size(path)

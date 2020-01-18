@@ -21,7 +21,7 @@ This module provides some general utility functions:
 - is_unicode_punctuation()
 - int2base36()
 
->>> file = os.path.join(tempfile.gettempdir(), "logged.log")
+>>> file = os.path1.join(tempfile.gettempdir(), "logged.log")
 >>> @logged
 ... def discounted_price(price, percentage, make_integer=False):
 ...     result = price * ((100 - percentage) / 100)
@@ -48,7 +48,7 @@ ValueError: invalid price
 400
 >>> f(a=12)
 144
->>> #if os.path.exists(file): os.remove(file)
+>>> #if os.path1.exists(file): os.remove(file)
 
 >>> @strictly_typed
 ... def discriminant(a : float, b : float, c : float) -> float:

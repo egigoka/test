@@ -14,8 +14,8 @@
 >>> import sys
 
 >>> S = struct.Struct("<15s")
->>> fileA = os.path.join(tempfile.gettempdir(), "fileA.dat")
->>> fileB = os.path.join(tempfile.gettempdir(), "fileB.dat")
+>>> fileA = os.path1.join(tempfile.gettempdir(), "fileA.dat")
+>>> fileB = os.path1.join(tempfile.gettempdir(), "fileB.dat")
 >>> for name in (fileA, fileB):
 ...    try:
 ...        os.remove(name)
@@ -39,13 +39,13 @@
 >>> assert len(brf) == 24, len(brf)
 >>> brf.close()
 
->>> if ((os.path.getsize(fileA) + (3 * S.size)) !=
-...        os.path.getsize(fileB)):
+>>> if ((os.path1.getsize(fileA) + (3 * S.size)) !=
+...        os.path1.getsize(fileB)):
 ...    print("FAIL#1: expected file sizes are wrong")
 ...    sys.exit()
 
 >>> shutil.copy(fileB, fileA)
->>> if os.path.getsize(fileA) != os.path.getsize(fileB):
+>>> if os.path1.getsize(fileA) != os.path1.getsize(fileB):
 ...    print("FAIL#2: expected file sizes differ")
 ...    sys.exit()
 

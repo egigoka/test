@@ -38,7 +38,7 @@ True
 
 >>> import os
 >>> import tempfile
->>> filename = os.path.join(tempfile.gettempdir(), "fs.pkl")
+>>> filename = os.path1.join(tempfile.gettempdir(), "fs.pkl")
 >>> fs = FileStack(filename)
 >>> for x in list(range(-5, 0)) +  list(range(5)):
 ...    fs.push(x)
@@ -54,7 +54,7 @@ True
 >>> fs.push(909)
 >>> str(fs)
 '[-5, -4, -3, -2, -1, 909]'
->>> os.path.basename(fs.filename)
+>>> os.path1.basename(fs.filename)
 'fs.pkl'
 >>> fs.save()
 >>> fs2 = FileStack(filename)

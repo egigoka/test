@@ -50,7 +50,7 @@ class TestPathOperations(unittest.TestCase):
         pass
 
     ### todo check for . and .. in windows paths
-    ### todo check for spaces in path
+    ### todo check for spaces in path1
 
 
 if __name__ == '__main__':

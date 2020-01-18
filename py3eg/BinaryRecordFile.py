@@ -14,8 +14,8 @@
 >>> import sys
 
 >>> S = struct.Struct("<15s")
->>> fileA = os.path.join(tempfile.gettempdir(), "fileA.dat")
->>> fileB = os.path.join(tempfile.gettempdir(), "fileB.dat")
+>>> fileA = os.path1.join(tempfile.gettempdir(), "fileA.dat")
+>>> fileB = os.path1.join(tempfile.gettempdir(), "fileB.dat")
 >>> for name in (fileA, fileB):
 ...    try:
 ...        os.remove(name)
@@ -39,13 +39,13 @@
 >>> assert len(brf) == 26
 >>> brf.close()
 
->>> if ((os.path.getsize(fileA) + 3 + (3 * S.size)) !=
-...        os.path.getsize(fileB)):
+>>> if ((os.path1.getsize(fileA) + 3 + (3 * S.size)) !=
+...        os.path1.getsize(fileB)):
 ...    print("FAIL#1: expected file sizes are wrong")
 ...    sys.exit()
 
 >>> shutil.copy(fileB, fileA)
->>> if os.path.getsize(fileA) != os.path.getsize(fileB):
+>>> if os.path1.getsize(fileA) != os.path1.getsize(fileB):
 ...    print("FAIL#2: expected file sizes differ")
 ...    sys.exit()
 
@@ -55,8 +55,8 @@
 ...    except EnvironmentError:
 ...        pass
 
->>> filename =  os.path.join(tempfile.gettempdir(), "test.dat")
->>> if os.path.exists(filename): os.remove(filename)
+>>> filename =  os.path1.join(tempfile.gettempdir(), "test.dat")
+>>> if os.path1.exists(filename): os.remove(filename)
 >>> S = struct.Struct("<8s")
 >>> test = BinaryRecordFile(filename, S.size)
 >>> test[0] = S.pack(b"Alpha")
@@ -66,7 +66,7 @@
 >>> test[4] = S.pack(b"Echo")
 >>> test.inplace_compact()  # No blank or deleted
 >>> test.close()
->>> os.path.getsize(filename)
+>>> os.path1.getsize(filename)
 45
 >>> test = BinaryRecordFile(filename, S.size)
 >>> len(test)
@@ -75,7 +75,7 @@
 ...     del test[index]
 >>> test.inplace_compact()  # All blank or deleted
 >>> test.close()
->>> os.path.getsize(filename)
+>>> os.path1.getsize(filename)
 0
 >>> test = BinaryRecordFile(filename, S.size)
 >>> test[0] = S.pack(b"Alpha")
@@ -88,7 +88,7 @@
 >>> del test[3]
 >>> test.inplace_compact()  # Blank or deleted at the end
 >>> test.close()
->>> os.path.getsize(filename)
+>>> os.path1.getsize(filename)
 18
 >>> test = BinaryRecordFile(filename, S.size)
 >>> test[0] = S.pack(b"Alpha")
@@ -101,7 +101,7 @@
 >>> del test[3]
 >>> test.inplace_compact()  # Blank or deleted interspersed
 >>> test.close()
->>> os.path.getsize(filename)
+>>> os.path1.getsize(filename)
 18
 >>> os.remove(filename)
 """

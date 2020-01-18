@@ -12,8 +12,8 @@
 """
 >>> import os
 >>> import tempfile
->>> bike_file = os.path.join(tempfile.gettempdir(), "bikes.dat")
->>> if os.path.exists(bike_file): os.remove(bike_file)
+>>> bike_file = os.path1.join(tempfile.gettempdir(), "bikes.dat")
+>>> if os.path1.exists(bike_file): os.remove(bike_file)
 
 >>> bike_data = []
 >>> bike_data.append(('REFK2', 'Reflex Kalahari', 5, 200.97))
@@ -100,9 +100,9 @@ True
 >>> "{0:.2f}".format(round(value, 2))
 '37837.17'
 >>> bicycles.close()
->>> os.path.getsize(bike_file)
+>>> os.path1.getsize(bike_file)
 1800
->>> if os.path.exists(bike_file): os.remove(bike_file)
+>>> if os.path1.exists(bike_file): os.remove(bike_file)
 """
 
 import struct

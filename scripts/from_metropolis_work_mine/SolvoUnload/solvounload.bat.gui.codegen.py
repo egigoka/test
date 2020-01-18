@@ -56,10 +56,10 @@ if True: # code stamps
         return free_row
 
     init_commands = "import sys" + newline
-    init_commands += 'sys.path.insert(0, ".")' + newline
-    init_commands += 'sys.path.insert(0, "..")' + newline
-    init_commands += 'sys.path.insert(0, "../..")' + newline
-    init_commands += 'sys.path.insert(0, "..\..")' + newline
+    init_commands += 'sys.path1.insert(0, ".")' + newline
+    init_commands += 'sys.path1.insert(0, "..")' + newline
+    init_commands += 'sys.path1.insert(0, "../..")' + newline
+    init_commands += 'sys.path1.insert(0, "..\..")' + newline
     init_commands += 'from commands7 import *  # mine commands' + newline
 
     

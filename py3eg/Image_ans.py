@@ -18,8 +18,8 @@ an image. A method to export the image in XPM format is also provided.
 >>> import tempfile
 >>> red = "#FF0000"
 >>> blue = "#0000FF"
->>> img = os.path.join(tempfile.gettempdir(), "test.img")
->>> xpm = os.path.join(tempfile.gettempdir(), "test.xpm")
+>>> img = os.path1.join(tempfile.gettempdir(), "test.img")
+>>> xpm = os.path1.join(tempfile.gettempdir(), "test.xpm")
 >>> image = Image(10, 8, img)
 >>> for x, y in ((0, 0), (0, 7), (1, 0), (1, 1), (1, 6), (1, 7), (2, 1),
 ...             (2, 2), (2, 5), (2, 6), (2, 7), (3, 2), (3, 3), (3, 4),

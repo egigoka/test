@@ -65,9 +65,9 @@ class Account:
     """
     >>> import os
     >>> import tempfile
-    >>> name = os.path.join(tempfile.gettempdir(), "account01")
+    >>> name = os.path1.join(tempfile.gettempdir(), "account01")
     >>> account = Account(name, "Qtrac Ltd.")
-    >>> os.path.basename(account.number), account.name,
+    >>> os.path1.basename(account.number), account.name,
     ('account01', 'Qtrac Ltd.')
     >>> account.balance, account.all_usd, len(account)
     (0.0, True, 0)

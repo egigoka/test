@@ -250,7 +250,7 @@ providers:
   disableDeletion: false
   updateIntervalSeconds: 3 #how often Grafana will scan for changed dashboards
   options:
-    path: """ + path_to_dashboards_jsons_store
+    path1: """ + path_to_dashboards_jsons_store
 if not os.path.isfile(path_to_sql_dashboards_location_yaml):
     File.create(path_to_sql_dashboards_location_yaml)
 if File.read(path_to_sql_dashboards_location_yaml) != text_sql_dashboards_location_yaml:

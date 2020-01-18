@@ -21,7 +21,7 @@ __version__ = "1.3.0"
 __version__ = "1.4.0"
 # f screenblink
 __version__ = "1.4.1"
-# update pathInWindowsExtend - three path extend now
+# update pathInWindowsExtend - three path1 extend now
 __version__ = "1.4.2"
 # update pathInWindowsExtend - unlimited args now#
 __version__ = "1.4.3"
@@ -125,21 +125,21 @@ __version__ = "1.26.0"
 __version__ = "1.26.1"
 # loadjson, savejson print option
 __version__ = "1.27.0"
-# allias to_quotes pathInWindowsWithSpacesToQuotes(path)
+# allias to_quotes pathInWindowsWithSpacesToQuotes(path1)
 __version__ = "1.28.0"
 # f path_check
 __version__ = "2.0.0"
-# pathInWindowsExtend is crossplatfowm and now names path_extend # done
+# pathInWindowsExtend is crossplatfowm and now names path_extend # finished
 __version__ = "3.0.0"
 # wipefile mow file_wipe
-# deletefile now file_delete # done
-# filebackup now  # done
+# deletefile now file_delete # finished
+# filebackup now  # finished
 # pathInWindowsWithSpacesToQuotes now path_to_quotes
-# homePath now home_path  # done
-# createfile now file_create  # done
+# homePath now home_path  # finished
+# createfile now file_create  # finished
 __version__ = "4.0.0"
 # file_backup now creates file in subfolder
-# createdirs now dir_create # done
+# createdirs now dir_create # finished
 # wipefile now file_wipe
 __version__ = "4.1.0"
 # f close_all_gone_wrong(error_while, try_to_do)
@@ -236,7 +236,7 @@ if get_os() == "windows":
            win32api, \
            win32con
 
-#from path import path
+#from path1 import path1
 #win_unicode_console.enable()
 colorama.init()
 colorama.deinit()
@@ -272,7 +272,7 @@ def file_create(filename):
         with open(filename, 'a'):
             os.utime(filename, None)
     if not os.path.exists(filename):
-        close_all_gone_wrong("creating file " + str(filename), "script at path", path_full(sys.argv[0]))
+        close_all_gone_wrong("creating file " + str(filename), "script at path1", path_full(sys.argv[0]))
 
 
 def file_delete(path, quiet = False):
@@ -365,11 +365,11 @@ def file_backup(filename, subfolder="bak", quiet = False):
         print("len(subfolder) < 1, so subfolder = 'bak'")  # print error
     subfolder = path_extend(backupfilename[0], subfolder)  # append subfolder name
     dir_create(subfolder)  # create subfolder
-    backupfilename = path_extend(subfolder, backupfilename[1])  # backup file name full path
+    backupfilename = path_extend(subfolder, backupfilename[1])  # backup file name full path1
     shutil.copy2(filename, backupfilename)  # finally backup file
     backupfilename = file_hide(backupfilename)  # hiding file
     if not os.path.isfile(backupfilename):  # if file is not created
-        close_all_gone_wrong("backup file", "script at path " + path_full(sys.argv[0]))  # raise except
+        close_all_gone_wrong("backup file", "script at path1 " + path_full(sys.argv[0]))  # raise except
     if not quiet:  # if finction is not shutted up
         print("backup of file", filename, "created as", backupfilename) # all is ok, print that
     return backupfilename
@@ -393,10 +393,10 @@ def savejson(filename, jsonstring, quiet=False, debug=False):
             print("sys.argv[0] =",sys.argv[0])
             print(jsonstring)
     except:
-        close_all_gone_wrong("savingJSON", "script at path " + path_full(sys.argv[0]))
+        close_all_gone_wrong("savingJSON", "script at path1 " + path_full(sys.argv[0]))
     json_test_string = loadjson(filename, quiet=True)
     if jsonstring != json_test_string:
-        close_all_gone_wrong("savingJSON", "script at path " + path_full(sys.argv[0]))
+        close_all_gone_wrong("savingJSON", "script at path1 " + path_full(sys.argv[0]))
 
 
 def loadjson(filename, quiet = False, debug=False):
@@ -414,7 +414,7 @@ def loadjson(filename, quiet = False, debug=False):
             print(jsonStringInMemory)
         return jsonStringInMemory
     except:
-        close_all_gone_wrong("loadingJSON", "JSON at path" + path_full(filename))
+        close_all_gone_wrong("loadingJSON", "JSON at path1" + path_full(filename))
 
 
 def path_to_quotes(path):
@@ -429,11 +429,11 @@ def in_quotes(string):
 # def pathInWindowsExtend(*paths):
     # for path_ in paths:
     #     try:
-    #         path
-    #         path = str(path) + backslash + str(path_)
+    #         path1
+    #         path1 = str(path1) + backslash + str(path_)
     #     except:
-    #         path = path_
-    # return path
+    #         path1 = path_
+    # return path1
 
 
 def path_extend(*paths):
