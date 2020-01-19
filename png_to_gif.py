@@ -1,6 +1,3 @@
-#from PIL import Image
-#from PIL import PngImagePlugin
-import glob
 from commands import *
 import os
 import sys
@@ -14,7 +11,6 @@ Path.set_working(working_dir)
 os.system("ulimit -n 4096")
 gif_path = Path.combine(working_dir, "png_to_gif.gif")
 
-# Create the frames
 if "gif" in sys.argv:
     print("creating gif")
 
