@@ -75,7 +75,7 @@ def main():
     opts, path = parse_options()
     data = collections.defaultdict(list)
     if opts.verbose:
-        print("Creating file list...")
+        print("Creating file list_...")
     for root, dirs, files in os.walk(path):
         for filename in files:
             fullname = os.path.join(root, filename)
@@ -126,7 +126,7 @@ def print_results(results_queue):
 def parse_options():
     parser = optparse.OptionParser(
             usage=("usage: %prog [options] [path1]\n"
-                   "outputs a list of duplicate files in path1 "
+                   "outputs a list_ of duplicate files in path1 "
                    "using the MD5 algorithm\n"
                    "ignores zero-length files\n"
                    "path1 defaults to ."))

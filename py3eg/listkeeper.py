@@ -69,7 +69,7 @@ def choose_file():
 
 def print_list(items):
     if not items:
-        print("-- no items are in the list --")
+        print("-- no items are in the list_ --")
     else:
         width = 1 if len(items) < 10 else 2 if len(items) < 100 else 3
         for i, item in enumerate(items):

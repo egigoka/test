@@ -15,12 +15,12 @@
 Traceback (most recent call last):
 ...
 TypeError: use add() to insert a value and rely on the...
->>> list(L)
+>>> list_(L)
 [-1, 3, 4, 5, 8, 22]
 >>> L.add(5)
 >>> L.add(5)
 >>> L.add(6)
->>> list(L)
+>>> list_(L)
 [-1, 3, 4, 5, 5, 5, 6, 8, 22]
 >>> L.index(4)
 2
@@ -87,13 +87,13 @@ class SortedList:
 
     @property
     def key(self):
-        """Return the key function used by this list
+        """Return the key function used by this list_
         """
         return self.__key
 
 
     def clear(self):
-        """Clears the list
+        """Clears the list_
 
         >>> L = SortedList((5, 8, -1, 3, 4, 22))
         >>> print(L)
@@ -106,8 +106,8 @@ class SortedList:
 
 
     def __bisect_left(self, value):
-        """Returns value's index position in the list
-        (or where value belongs if it isn't in the list)
+        """Returns value's index position in the list_
+        (or where value belongs if it isn't in the list_)
         """
         key = self.__key(value)
         left, right = 0, len(self.__list)
@@ -121,7 +121,7 @@ class SortedList:
 
 
     def add(self, value):
-        """Adds a value to the list (duplicates are allowed)
+        """Adds a value to the list_ (duplicates are allowed)
 
         >>> L = SortedList((5, 8, -1, 3, 4, 22))
         >>> print(L)
@@ -164,7 +164,7 @@ class SortedList:
 
 
     def remove(self, value):
-        """Removes the first occurrence of value from the list
+        """Removes the first occurrence of value from the list_
 
         >>> L = SortedList([-18, -1, 3, 4, 5, 5, 7, 8, 22, 99])
         >>> print(L)
@@ -172,7 +172,7 @@ class SortedList:
         >>> L.remove(20)
         Traceback (most recent call last):
         ...
-        ValueError: SortedList.remove(x): x not in list
+        ValueError: SortedList.remove(x): x not in list_
         >>> L.remove(5)
         >>> L.remove(-18)
         >>> L.remove(99)
@@ -183,12 +183,12 @@ class SortedList:
         if index < len(self.__list) and self.__list[index] == value:
             del self.__list[index]
         else:
-            raise ValueError("{0}.remove(x): x not in list".format(
+            raise ValueError("{0}.remove(x): x not in list_".format(
                              self.__class__.__name__))
 
 
     def remove_every(self, value):
-        """Removes every occurrence of value from the list
+        """Removes every occurrence of value from the list_
 
         Returns the number of occurrences removed (which could be 0).
         >>> L = SortedList([5, 5, -18, -1, 3, 4, 5, 5, 7, 8, 22, 99])
@@ -215,7 +215,7 @@ class SortedList:
 
 
     def count(self, value):
-        """Counts every occurrence of value in the list
+        """Counts every occurrence of value in the list_
 
         >>> L = SortedList([5, 5, -18, -1, 3, 4, 5, 5, 7, 8, 22, 99])
         >>> L.count(5)
@@ -243,14 +243,14 @@ class SortedList:
         >>> L.index(0)
         Traceback (most recent call last):
         ...
-        ValueError: SortedList.index(x): x not in list
+        ValueError: SortedList.index(x): x not in list_
         >>> L.index(99)
         12
         """
         index = self.__bisect_left(value)
         if index < len(self.__list) and self.__list[index] == value:
             return index
-        raise ValueError("{0}.index(x): x not in list".format(
+        raise ValueError("{0}.index(x): x not in list_".format(
                          self.__class__.__name__))
 
 
@@ -268,7 +268,7 @@ class SortedList:
         >>> del L[25]
         Traceback (most recent call last):
         ...
-        IndexError: list assignment index out of range
+        IndexError: list_ assignment index out of range
         >>> del L[-3:]
         >>> print(L)
         [-5, 0, 3]
@@ -285,7 +285,7 @@ class SortedList:
         >>> L[15]
         Traceback (most recent call last):
         ...
-        IndexError: list index out of range
+        IndexError: list_ index out of range
         >>> L[:3]
         [-7, -5, 0]
         >>> L[4:8]
@@ -296,11 +296,11 @@ class SortedList:
 
     def __setitem__(self, index, value):
         raise TypeError("use add() to insert a value and rely on "
-                        "the list to put it in the right place")
+                        "the list_ to put it in the right place")
 
 
     def __iter__(self):
-        """Returns an iterator for the list
+        """Returns an iterator for the list_
 
         >>> L = SortedList([5, 5, -18, -1, 3, 4, 7, 8, 22, 99, 2, 1, 3])
         >>> result = []
@@ -313,7 +313,7 @@ class SortedList:
 
 
     def __reversed__(self):
-        """Returns a reverse iterator for the list
+        """Returns a reverse iterator for the list_
 
         >>> L = SortedList([5, 5, -18, -1, 3, 4, 7, 8, 22, 99, 2, 1, 3])
         >>> result = []
@@ -326,7 +326,7 @@ class SortedList:
 
 
     def __contains__(self, value):
-        """Returns True if value is in the list; otherwise returns False
+        """Returns True if value is in the list_; otherwise returns False
 
         >>> L = SortedList([5, 5, -18, -1, 3, 4, 7, 8, 22, 99, 2, 1, 3])
         >>> 5 in L
@@ -342,7 +342,7 @@ class SortedList:
 
 
     def __len__(self):
-        """Returns the length of the list
+        """Returns the length of the list_
 
         >>> L = SortedList([5, 5, -18, -1, 3, 4, 7, 8, 22, 99, 2, 1, 3])
         >>> len(L)
@@ -355,7 +355,7 @@ class SortedList:
 
 
     def __str__(self):
-        """Returns a human readable string version of the list; the
+        """Returns a human readable string version of the list_; the
         result could be very long
 
         >>> L = SortedList([-1, 3, 4, 7, 8, 22, -9, 2, 1, 3])
@@ -372,7 +372,7 @@ class SortedList:
 
 
     def copy(self):
-        """Returns a shallow copy of the list with the same key function
+        """Returns a shallow copy of the list_ with the same key function
         >>> L = SortedList([-1, 3, 4, 7, 8, 22, -9, 2, 1, 3])
         >>> m = L.copy()
         >>> str(m)

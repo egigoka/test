@@ -61,12 +61,12 @@ class SortedDict(dict):
         function if it is not specified
 
         >>> d = SortedDict(dict(s=1, a=2, n=3, i=4, t=5, y=6))
-        >>> list(d.items())
+        >>> list_(d.items())
         [('a', 2), ('i', 4), ('n', 3), ('s', 1), ('t', 5), ('y', 6)]
         >>> dict(SortedDict())
         {}
         >>> e = SortedDict(d)
-        >>> list(e.items())
+        >>> list_(e.items())
         [('a', 2), ('i', 4), ('n', 3), ('s', 1), ('t', 5), ('y', 6)]
         >>> dict(e)
         {'a': 2, 'i': 4, 's': 1, 't': 5, 'y': 6, 'n': 3}
@@ -88,23 +88,23 @@ class SortedDict(dict):
 
         >>> d = SortedDict(dict(s=1, a=2, n=3, i=4, t=5))
         >>> d.update(dict(a=4, z=-4))
-        >>> list(d.items())
+        >>> list_(d.items())
         [('a', 4), ('i', 4), ('n', 3), ('s', 1), ('t', 5), ('z', -4)]
         >>> del d["a"]
         >>> del d["i"]
         >>> d.update({'g': 9}, a=1, z=3)
-        >>> list(d.items())
+        >>> list_(d.items())
         [('a', 1), ('g', 9), ('n', 3), ('s', 1), ('t', 5), ('z', 3)]
         >>> e = SortedDict(dict(p=4, q=5))
         >>> del d["a"]
         >>> del d["n"]
         >>> e.update(d)
-        >>> list(e.items())
+        >>> list_(e.items())
         [('g', 9), ('p', 4), ('q', 5), ('s', 1), ('t', 5), ('z', 3)]
         >>> del d["s"]
         >>> del d["z"]
         >>> d.update(e)
-        >>> list(d.items())
+        >>> list_(d.items())
         [('g', 9), ('p', 4), ('q', 5), ('s', 1), ('t', 5), ('z', 3)]
         """
         if dictionary is None:
@@ -126,10 +126,10 @@ class SortedDict(dict):
 
         >>> d = SortedDict()
         >>> e = d.fromkeys("KYLIE", 21)
-        >>> list(e.items())
+        >>> list_(e.items())
         [('E', 21), ('I', 21), ('K', 21), ('L', 21), ('Y', 21)]
         >>> e = SortedDict.fromkeys("KYLIE", 21)
-        >>> list(e.items())
+        >>> list_(e.items())
         [('E', 21), ('I', 21), ('K', 21), ('L', 21), ('Y', 21)]
         """
         return cls({k: value for k in iterable}, key)
@@ -148,7 +148,7 @@ class SortedDict(dict):
         >>> d.value_at(19)
         Traceback (most recent call last):
         ...
-        IndexError: list index out of range
+        IndexError: list_ index out of range
         """
         return self[self.__keys[index]]
 
@@ -165,7 +165,7 @@ class SortedDict(dict):
         >>> d.set_value_at(19, 42)
         Traceback (most recent call last):
         ...
-        IndexError: list index out of range
+        IndexError: list_ index out of range
         """
         self[self.__keys[index]] = value
 
@@ -182,7 +182,7 @@ class SortedDict(dict):
         >>> d["a"] = 5
         >>> d["z"] = 7
         >>> d["e"] = 9
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['a', 'e', 'm', 'z']
         """
         super().clear()
@@ -197,11 +197,11 @@ class SortedDict(dict):
         >>> d = SortedDict(dict(s=1, a=2, n=3, i=4, t=5, y=6))
         >>> d.setdefault("n", 99)
         3
-        >>> list(d.values())
+        >>> list_(d.values())
         [2, 4, 3, 1, 5, 6]
         >>> d.setdefault("r", -20)
         -20
-        >>> list(d.items())[2:]
+        >>> list_(d.items())[2:]
         [('n', 3), ('r', -20), ('s', 1), ('t', 5), ('y', 6)]
         >>> d.setdefault("@", -11)
         -11
@@ -209,7 +209,7 @@ class SortedDict(dict):
         99
         >>> d.setdefault("m", 50)
         50
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['@', 'a', 'i', 'm', 'n', 'r', 's', 't', 'y', 'z']
         """
         if key not in self:
@@ -229,13 +229,13 @@ class SortedDict(dict):
         False
         >>> d.pop("q", 41)
         41
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['a', 'i', 's', 't', 'y']
         >>> d.pop("a")
         2
         >>> d.pop("t")
         5
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['i', 's', 'y']
         >>> d.pop("X")
         Traceback (most recent call last):
@@ -274,7 +274,7 @@ class SortedDict(dict):
         """Returns the dictionary's values in key order
 
         >>> d = SortedDict(dict(s=1, a=2, n=3, i=4, t=5, y=6))
-        >>> list(d.values())
+        >>> list_(d.values())
         [2, 4, 3, 1, 5, 6]
         """
         for key in self.__keys:
@@ -285,7 +285,7 @@ class SortedDict(dict):
         """Returns the dictionary's items in key order
 
         >>> d = SortedDict(dict(s=1, a=2, n=3, i=4, t=5, y=6))
-        >>> list(d.items())
+        >>> list_(d.items())
         [('a', 2), ('i', 4), ('n', 3), ('s', 1), ('t', 5), ('y', 6)]
         """
         for key in self.__keys:
@@ -296,9 +296,9 @@ class SortedDict(dict):
         """Returns an iterator over the dictionary's keys
 
         >>> d = SortedDict(dict(s=1, a=2, n=3, i=4, t=5, y=6))
-        >>> list(d)
+        >>> list_(d)
         ['a', 'i', 'n', 's', 't', 'y']
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['a', 'i', 'n', 's', 't', 'y']
         """
         return iter(self.__keys)
@@ -313,7 +313,7 @@ class SortedDict(dict):
         >>> del d["s"]
         >>> del d["y"]
         >>> del d["a"]
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['i', 'n', 't']
         >>> del d["X"]
         Traceback (most recent call last):
@@ -339,7 +339,7 @@ class SortedDict(dict):
         >>> x == 22
         True
         >>> d["r"] = 5
-        >>> list(d.keys())
+        >>> list_(d.keys())
         ['@', 'a', 'i', 'm', 'n', 'r', 's', 't', 'y', 'z']
         """
         if key not in self:

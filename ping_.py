@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.2.2"
+__version__ = "3.2.3"
 
 
 class State:
@@ -47,12 +47,10 @@ if State.online_only:
     domains = []
 
 if State.online:
-    domains += ['yandex.ru']
     domains += ['google.com']
     domains += ['8.8.8.8']
     domains += ['8.8.4.4']
     domains += ['gmail.com']
-    domains += ['vk.com']
     domains += ['adguard.com']
 #    domains += ['starbounder.org']
 

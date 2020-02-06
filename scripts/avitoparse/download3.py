@@ -215,7 +215,7 @@ ads = []
 
 def download_all_pages():
     for cnt in Int.from_to(1,State.number_of_pages):
-        pages[cnt] = Page()  # create new page in list
+        pages[cnt] = Page()  # create new page in list_
         pages[cnt].do_your_work(cnt)  # download and parse page
 
         ############## SOME DEBUG PRINTS ###############

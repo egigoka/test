@@ -49,7 +49,7 @@ def dirify(object):
         if "__" not in subobj:
             print(subobj)
 
-def add_user(username):  # deprecated, return infro about user to "users" list
+def add_user(username):  # deprecated, return infro about user to "users" list_
     try:
         win32security.LookupAccountName("", username)
     except pywintypes.error as e:

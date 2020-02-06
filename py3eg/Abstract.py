@@ -20,7 +20,7 @@ True
 ...     u.undo()
 >>> str(u)
 '[]'
->>> for x in list(range(-5, 0)) +  list(range(5)):
+>>> for x in list_(range(-5, 0)) +  list_(range(5)):
 ...    u.push(x)
 >>> str(u)
 '[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]'
@@ -40,7 +40,7 @@ True
 >>> import tempfile
 >>> filename = os.path1.join(tempfile.gettempdir(), "fs.pkl")
 >>> fs = FileStack(filename)
->>> for x in list(range(-5, 0)) +  list(range(5)):
+>>> for x in list_(range(-5, 0)) +  list_(range(5)):
 ...    fs.push(x)
 >>> str(fs)
 '[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]'

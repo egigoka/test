@@ -82,7 +82,7 @@ if True: # code stamps
     init_groups_list += '          {"number": "5", "ko": "159", "lo": "335 %334"},' + newline
     init_groups_list += '          {"number": "10", "ko": "121", "lo":"330 %331"},' + newline
     init_groups_list += '          {"number": "fp", "ko": "143 %154", "lo": "332 %333"}, ]' + newline
-    exec(init_groups_list, globals())  # import groups list from uncodegened code
+    exec(init_groups_list, globals())  # import groups list_ from uncodegened code
     entrys = ['last_lo', 'last_batch', 'last_onebyone']
 
     func_load_json = newline

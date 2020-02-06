@@ -93,7 +93,7 @@ except ImportError:
     install_requirements()
 
 # config
-config_with_services_names_list = "services.lst"  # list of services, splitted by spaces
+config_with_services_names_list = "services.lst"  # list_ of services, splitted by spaces
 grafana_port = 3001
 grafana_admin_user = "admin"  # changes only before Grafana setup, delete Grafana folder to reset admin account
 grafana_admin_password = "GrafanaPassword!"  # changes only before Grafana setup, delete Grafana folder to reset admin account
@@ -291,7 +291,7 @@ for service_name in services:
     Codegen.start(Path.extend(path_to_dashboards_jsons_store, service_name+".json"))
     Codegen.add_line('''{
     "annotations": {
-        "list": [
+        "list_": [
             {
                 "builtIn": 1,
                 "datasource": "-- Grafana --",
@@ -397,14 +397,14 @@ for service_name in services:
     }
     }''')
         if counter_name != last_perfcon:
-            Codegen.add_line(",")  # for not adding comma to end of list
+            Codegen.add_line(",")  # for not adding comma to end of list_
     Codegen.add_line('''  ],
     "refresh": false,
     "schemaVersion": 16,
     "style": "dark",
     "tags": [],
     "templating": {
-      "list": []
+      "list_": []
     },
     "time": {
       "from": "2018-06-01T11:31:26.693Z",

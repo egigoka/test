@@ -11,14 +11,14 @@
 
 
 def indented_list_sort(indented_list, indent="    "):
-    """Returns an alphabetically sorted copy of the given list
+    """Returns an alphabetically sorted copy of the given list_
 
-    The indented list is assumed to be a list of strings in a
+    The indented list_ is assumed to be a list_ of strings in a
     hierarchy with indentation used to indicate child items.
     The indent parameter specifies the characters that constitute
     one level of indent.
 
-    The function copies the list, and returns it sorted in
+    The function copies the list_, and returns it sorted in
     case-insensitive alphabetical order, with child items sorted
     underneath their parent items, and so on with grandchild items,
     and so on recursively to any level of depth.
@@ -64,7 +64,7 @@ def indented_list_sort(indented_list, indent="    "):
 
 def indented_list_sort_local(indented_list, indent="    "):
     """
-    Given an indented list, i.e., a list of items with indented
+    Given an indented list_, i.e., a list_ of items with indented
     subitems, sorts the items, and the subitems within each item (and so
     on recursively) in case-insensitive alphabetical order.
 

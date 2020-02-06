@@ -17,14 +17,14 @@ class TestStrClassMethods(unittest.TestCase):
         self.assertEqual(Str.to_quotes(""), '""')
         self.assertEqual(Str.to_quotes(123), '"123"')
         self.assertEqual(Str.to_quotes("test test"), '"test test"')
-        # todo list value error
+        # todo list_ value error
 
     def test02_to_quotes_2(self):  # to_quotes_2(some_string):  # place input string inside '' quotes
         self.assertEqual(Str.to_quotes_2(""), "''")
         self.assertEqual(Str.to_quotes_2(123), "'123'")
         self.assertEqual(Str.to_quotes_2("test test"), "'test test'")
 
-    def test03_get_integers(self): # get_integers(string):  # return list of integers from string, !!!floating not supported!!!
+    def test03_get_integers(self): # get_integers(string):  # return list_ of integers from string, !!!floating not supported!!!
         self.assertEqual(Str.get_integers(123), [123])
         self.assertEqual(Str.get_integers("123"), [123])
         self.assertEqual(Str.get_integers("123 456"), [123, 456])

@@ -17,7 +17,7 @@ Atomic ensures that either all the changes are applied or none of them are
 of the collection (a deep copy if deep_copy is set True), so could be
 expensive for large collections.
 
->>> items = list(range(10))
+>>> items = list_(range(10))
 >>> try:
 ...     with Atomic(items) as atomic:
 ...         atomic.append(1999)
@@ -28,7 +28,7 @@ expensive for large collections.
 >>> items
 [0, 1, 2, 4, 5, 6, 7, 8, -999, 1999]
 
->>> items = list(range(10))
+>>> items = list_(range(10))
 >>> try:
 ...     with Atomic(items) as atomic:
 ...         atomic.append(10)
@@ -41,7 +41,7 @@ expensive for large collections.
 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 >>> index = 19
->>> items = list(range(10))
+>>> items = list_(range(10))
 >>> try:
 ...     with Atomic(items) as atomic:
 ...         atomic.append(58289)
@@ -61,7 +61,7 @@ expensive for large collections.
 ...         atomic |= {-999}
 ... except (AttributeError, IndexError, ValueError) as err:
 ...    pass
->>> list(sorted(items)), type(items) == type(set())
+>>> list_(sorted(items)), type(items) == type(set())
 ([-999, 0, 1, 2, 4, 5, 6, 7, 8, 9, 1999], True)
 
 >>> items = set(range(10))
@@ -73,7 +73,7 @@ expensive for large collections.
 ...         atomic.poop() # force failure
 ... except (AttributeError, IndexError, ValueError) as err:
 ...    pass
->>> list(sorted(items)), type(items) == type(set())
+>>> list_(sorted(items)), type(items) == type(set())
 ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], True)
 
 >>> items = {chr(x): x for x in range(ord("A"), ord("E"))}
@@ -83,7 +83,7 @@ expensive for large collections.
 ...         del atomic["B"]
 ... except (AttributeError, IndexError, ValueError) as err:
 ...    pass
->>> list(sorted(items.items())), type(items) == type({})
+>>> list_(sorted(items.items())), type(items) == type({})
 ([('A', 65), ('C', 67), ('D', 68), ('E', 69)], True)
 
 >>> items = {chr(x): x for x in range(ord("A"), ord("E"))}
@@ -94,7 +94,7 @@ expensive for large collections.
 ...         atomic.poop() # force failure
 ... except (AttributeError, IndexError, ValueError) as err:
 ...    pass
->>> list(sorted(items.items())), type(items) == type({})
+>>> list_(sorted(items.items())), type(items) == type({})
 ([('A', 65), ('B', 66), ('C', 67), ('D', 68)], True)
 
 >>> import abc

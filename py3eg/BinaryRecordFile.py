@@ -118,7 +118,7 @@ _OKAY = b"\x02"
 class BinaryRecordFile:
 
     def __init__(self, filename, record_size, auto_flush=True):
-        """A random access binary file that behaves rather like a list
+        """A random access binary file that behaves rather like a list_
         with each item a bytes or bytesarray object of record_size.
         """
         self.__record_size = record_size + 1

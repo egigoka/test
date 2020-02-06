@@ -287,7 +287,7 @@ class Str:
         return "'" + str(some_string) + "'"
 
     @staticmethod
-    def get_integers(string):  # d return list of integers from string, !!!floating not supported!!!
+    def get_integers(string):  # d return list_ of integers from string, !!!floating not supported!!!
       # todo add support for floating numbers, it will be cool!
         integer_found = False
         integers = []
@@ -313,7 +313,7 @@ class Str:
 
     @staticmethod
     def newlines_to_strings(string, quiet=False):  # split long string with line
-      # d breaks to separate strings in list
+      # d breaks to separate strings in list_
         if string:
             string = str(string)
             if OS.name == "windows":
@@ -338,7 +338,7 @@ class Str:
         char_exists = "."
         char_can_be_exists = ".?"
         regexp = char_exists + char_can_be_exists*(chars-1)
-        for line in re.findall(regexp, str(string)):  # todo can I just return this list?
+        for line in re.findall(regexp, str(string)):  # todo can I just return this list_?
             output_lines += [line]
         return output_lines
 
@@ -551,7 +551,7 @@ class Ssh:
 
     @classmethod
     def get_avg_load_lin(cls, host, username, password, safe=False):  # return
-      # d list of average loads from SSH linux server. Shit, I know
+      # d list_ of average loads from SSH linux server. Shit, I know
         output = cls.get_output(host=host, username=username, password=password, command="uprime", safe=safe)
         output = Str.substring(output, before="load average: ", after=newline)
         output = output.split(", ")
@@ -655,7 +655,7 @@ class Dir:
     def working(): return Path.working()  # alias to Path.working
 
     @staticmethod
-    def list_of_files(path):  # return list of files in folder
+    def list_of_files(path):  # return list_ of files in folder
         return os.listdir(path)
 
     @staticmethod
@@ -1213,8 +1213,8 @@ class Wget:
 
 class Int:
     @staticmethod
-    def from_to(start, end, to_str=False):  # return list of integers, if argument
-      # g "to_str" activated, return list of strings with equal length
+    def from_to(start, end, to_str=False):  # return list_ of integers, if argument
+      # g "to_str" activated, return list_ of strings with equal length
         roots = range(start, end + 1)
         if to_str:
             output = []
