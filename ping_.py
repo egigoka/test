@@ -8,7 +8,7 @@ __version__ = "3.2.3"
 
 class State:
     ping_timeout = 10000  # in ms
-    ping_count = 5
+    ping_count = 1
     sleep = 60  # between iterations
     count_of_ignored_timeouts = 1  # how much errors ignore
     first_iterate = True
@@ -53,7 +53,6 @@ if State.online:
     domains += ['8.8.8.8']
     domains += ['8.8.4.4']
     domains += ['gmail.com']
-    domains += ['adguard.com']
 #    domains += ['starbounder.org']
 
 if State.extended_rkn_list:
@@ -79,11 +78,21 @@ def colorful_ping(hostname):
                                    Console.width() - State.fix_win_cmd, " "), 'white', 'on_red')
 
 
+def failed_notification(subtitle, message):
+    State.failed_runs += 1
+    if State.failed_runs > 1:
+        macOS.notification(title="ping_", subtitle=subtitle,
+                           message=message,
+                           sound="Basso")
+
+
 def main():
     for hostname in domains:
         if len(hostname) > State.longest_hostname:
             State.longest_hostname = len(hostname)
+
     while True:
+        Print.debug(State.failed_runs)
         if State.extended_rkn_list:
             Print.rewrite("Removing DNS cache...")
             if OS.windows:
@@ -100,10 +109,14 @@ def main():
         threads.start(wait_for_keyboard_interrupt=True)
         Print(Time.dotted())
         if State.cnt_workin < len(domains)-State.count_of_ignored_timeouts:
-            if OS.macos: macOS.notification(title="ping_", subtitle="Something is wrong!", message=str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            if OS.macos:
+                failed_notification("Something is wrong!",
+                                    str(State.cnt_workin) + " domains of " + str(len(domains)) + " is online.")
             State.internet_status = False
         elif State.cnt_workin < len(domains):
-            if OS.macos: macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
+            if OS.macos:
+                failed_notification("Just one timeout, worry?",
+                                    str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.")
             State.internet_status = False
         else:
             if not State.internet_status:
@@ -111,14 +124,13 @@ def main():
                 if State.first_iterate:
                     subtitle = "You are online!"
                 if OS.macos:
-                    State.failed_runs += 1
-                    if State.failed_runs > 1:
-                        macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
+                    macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
                 State.internet_status = True
         State.first_iterate = False
         if State.internet_status:
             State.failed_runs = 0
             Time.sleep(State.sleep)
+        Print.debug(State.failed_runs)
 
 
 if __name__ == '__main__':
