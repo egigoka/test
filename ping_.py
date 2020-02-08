@@ -7,7 +7,7 @@ __version__ = "3.2.3"
 
 
 class State:
-    ping_timeout = 2000  # in ms
+    ping_timeout = 10000  # in ms
     ping_count = 5
     sleep = 60  # between iterations
     count_of_ignored_timeouts = 1  # how much errors ignore
@@ -39,6 +39,8 @@ class State:
 
     longest_hostname = 0
     cnt_workin = 0
+
+    failed_runs = 0
 
 
 domains = ['192.168.0.1']  # router by default
@@ -104,14 +106,18 @@ def main():
             if OS.macos: macOS.notification(title="ping_", subtitle="Just one timeout, worry?", message=str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.", sound="Basso")
             State.internet_status = False
         else:
-            if State.internet_status==False:
+            if not State.internet_status:
                 subtitle = "You are back online!"
                 if State.first_iterate:
                     subtitle = "You are online!"
-                if OS.macos: macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
+                if OS.macos:
+                    State.failed_runs += 1
+                    if State.failed_runs > 1:
+                        macOS.notification(title="ping_", subtitle=subtitle, message="All "+str(len(domains))+" domains is online.", sound="Purr")
                 State.internet_status = True
         State.first_iterate = False
         if State.internet_status:
+            State.failed_runs = 0
             Time.sleep(State.sleep)
 
 
