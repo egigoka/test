@@ -7,7 +7,7 @@ __version__ = "3.2.3"
 
 
 class State:
-    ping_timeout = 10000  # in ms
+    ping_timeout = 20000  # in ms
     ping_count = 1
     sleep = 60  # between iterations
     count_of_ignored_timeouts = 1  # how much errors ignore
@@ -22,11 +22,6 @@ class State:
     if ("-oo" in sys.argv) or ("-online-only" in sys.argv) or ("--online-only" in sys.argv):
         online_only = True
         online = True
-
-    extended_rkn_list = False
-    if ("-frkn" in sys.argv):
-        online = True
-        extended_rkn_list = True
 
     if ("-f" in sys.argv) or ("-fast" in sys.argv):
         sleep = 10
@@ -43,31 +38,30 @@ class State:
     failed_runs = 0
 
 
-domains = ['192.168.0.1']  # router by default
+domains = []
 
-if State.online_only:
-    domains = []
+if not State.online_only:
+    domains += ['192.168.0.1']  # router by default
 
 if State.online:
     domains += ['google.com']
     domains += ['8.8.8.8']
     domains += ['8.8.4.4']
     domains += ['gmail.com']
-#    domains += ['starbounder.org']
-
-if State.extended_rkn_list:
-    domains += ['gmail.com']
-    domains += ['google.com.ua']
-    domains += ['google.fr']
-    domains += ['google.ru']
-    domains += ['gstatic.com']
-    domains += ['youtube.com']
+    domains += [Network.check_internet_apple]
+    domains += [Network.check_internet_microsoft]
 
 
-def colorful_ping(hostname):
-    response = Network.ping(hostname, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
-    ip = response[1]
-    response = response[0]
+def colorful_ping(hostname_or_external_function):
+    if callable(hostname_or_external_function):
+        response = hostname_or_external_function()
+        hostname = hostname_or_external_function.__name__
+        ip = hostname
+    else:
+        response = Network.ping(hostname_or_external_function, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
+        ip = response[1]
+        response = response[0]
+        hostname = hostname_or_external_function
     if response:
         Print.colored(
             Str.rightpad(hostname + ' is up!' + " " * (State.longest_hostname + 2 - len(hostname)) + ' IP ' + str(ip),
@@ -88,15 +82,14 @@ def failed_notification(subtitle, message):
 
 def main():
     for hostname in domains:
-        if len(hostname) > State.longest_hostname:
-            State.longest_hostname = len(hostname)
+        try:
+            length = len(hostname)
+        except TypeError:
+            length = len(hostname.__name__)
+        if length > State.longest_hostname:
+            State.longest_hostname = length
 
     while True:
-        Print.debug(State.failed_runs)
-        if State.extended_rkn_list:
-            Print.rewrite("Removing DNS cache...")
-            if OS.windows:
-                Process.start("ipconfig", "/flushdns")
         if OS.macos:
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
@@ -130,7 +123,6 @@ def main():
         if State.internet_status:
             State.failed_runs = 0
             Time.sleep(State.sleep)
-        Print.debug(State.failed_runs)
 
 
 if __name__ == '__main__':
