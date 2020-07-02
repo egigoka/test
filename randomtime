@@ -1,0 +1,18 @@
+mins = Int.from_to(0,60, to_str=True)
+hours_start = Int.from_to(8, 11, to_str=True)
+hours_end = Int.from_to(14,16, to_str=True)
+len_mins = Int.from_to(15,120)
+
+min_start = Random.item(mins)
+hour_start = Random.item(hours_start)
+min_end = min_start + Random.int(len_mins)
+hour_end = hour_start + int(min_end/60)
+min_end = min_end % 60
+print(hour_start, ":", min, "-", hour_end, ":" min_end)
+
+min_start = Random.item(mins)
+hour_start = Random.item(hours_end)
+min_end = min_start + Random.int(len_mins)
+hour_end = hour_start + int(min_end/60)
+min_end = min_end % 60
+print(hour_start, ":", min, "-", hour_end, ":" min_end)

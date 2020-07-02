@@ -6,17 +6,17 @@ print("searcher 0.2.4")
 whoami = Console.get_output("whoami").strip()
 username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
 
-paths = ["c:"]
-file_extensions= [".py"]
-match_strings = ["Dump"]
-case_sensitive = True
-multiple_lines = True
-skipped_paths = [fr"c:\Program Files (x86)",
-                 fr"c:\Users\{username}\AppData\Local\atom",
-                 fr"c:\Program Files",
-                 fr"c:\Users\{username}\AppData\Local\Wox",
-                 fr"c:\Users\{username}\.PyCharmCE2019.1",
-                 fr"c:\cs\venv\Lib\site-packages\pip-19.0.3-py3.7.egg"]
+searcher 0.6.2  # wtf? how is it gone?
+paths=['C:\\Users\\alebedev\\PycharmProjects\\testWeb2py']
+skipped_paths=['C:\\Users\\alebedev\\PycharmProjects\\testWeb2py\\.git', 
+               'C:\\Users\\alebedev\\PycharmProjects\\testWeb2py\\venv']
+file_extensions=[]
+skipped_file_extensions=['.w2p', '.png', '.gif', '.jpg', '.gz', '.ico', '.pdf', '.jpeg', '.icns', '.sqlite', '.pyc']
+match_strings=['ISO-8859-1']
+case_sensitive=True
+multiple_lines=True
+stop_after_every_found_line=False
+end_print_files_dict=True
 
 _printed_results = []
 
