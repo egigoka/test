@@ -92,7 +92,7 @@ def valueToGui(key, аоавл value, depth):
         print()
     else:
         print("Key '" + str(key) + "', value '" + str(value) + "' and depth '" + str(depth) + "' is not supported in GUI.")
-        print("Script is ending at cnt", cnt)
+        print("Script is ending at output", cnt)
         sys.exit()
 
 
@@ -305,7 +305,7 @@ def valuePrintCmd(key, value = None, depth = 0):
         print("Репостнуто?", value)
     else:
         print("Key '" + str(key) + "', value '" + str(value) + "' and depth '" + str(depth) + "' is not supported.")
-        print("Script is ending at cnt", cnt)
+        print("Script is ending at output", cnt)
         sys.exit()
     valueToGui(key, value, depth)
 
@@ -355,7 +355,7 @@ while True:
     print()
     print()
     print()
-    print("тест ", cnt, "cnt =", cnt, "cntend =", cntend, "cntuse =", cntuse)
+    print("тест ", cnt, "output =", cnt, "cntend =", cntend, "cntuse =", cntuse)
     print()
     time.sleep(timeSleep)
     postCurrent = api.wall.get(domain=group, count=postCount, offset=cntuse) #  домен - короткое имя группы в адрессной строке

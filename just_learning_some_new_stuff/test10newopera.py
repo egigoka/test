@@ -22,7 +22,7 @@ filesTemp = os.listdir(pathTemp)
 def pathFileNew():
     fileLast = filesTemp[-1]
 
-    #cnt = input(test = "sadf") todo проверить, что это за говно
+    #output = input(test = "sadf") todo проверить, что это за говно
     cnt = int(fileLast[-1:]) + 1
     fileNew = fileLast[0:-1] + str(cnt)
     pathFileNew = pathTemp + '\ '[:-1] + fileNew

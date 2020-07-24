@@ -45,7 +45,7 @@ def main():
 def choose_file():
     enter_filename = False
     print("\nList Keeper\n")
-    files = [x for x in os.listdir(".") if x.endswith(".lst")]
+    files = [x for x in os.listdir(".") if x.endswith(".list_")]
     if not files:
         enter_filename = True
     if not enter_filename:
@@ -60,8 +60,8 @@ def choose_file():
             items = load_list(filename)
     if enter_filename:
         filename = get_string("Choose filename", "filename")
-        if not filename.endswith(".lst"):
-            filename += ".lst"
+        if not filename.endswith(".list_"):
+            filename += ".list_"
         items = []
     return filename, items
 

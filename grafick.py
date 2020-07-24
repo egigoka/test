@@ -93,7 +93,7 @@ except ImportError:
     install_requirements()
 
 # config
-config_with_services_names_list = "services.lst"  # list_ of services, splitted by spaces
+config_with_services_names_list = "services.list_"  # list_ of services, splitted by spaces
 grafana_port = 3001
 grafana_admin_user = "admin"  # changes only before Grafana setup, delete Grafana folder to reset admin account
 grafana_admin_password = "GrafanaPassword!"  # changes only before Grafana setup, delete Grafana folder to reset admin account

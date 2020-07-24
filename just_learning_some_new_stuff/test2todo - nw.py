@@ -15,7 +15,7 @@ def printlist():
         print("Ваш список задач:")
         cnt=0
         for task in list1:
-            cnt=cnt+1  # для счёта с 1, а не с 0, ну и чтобы отличалось видом не "cnt += 1"
+            cnt=cnt+1  # для счёта с 1, а не с 0, ну и чтобы отличалось видом не "output += 1"
             if cnt<10 and len(list1)>10:
                 print("  0", cnt, " > ", task, sep='') # ещё можно использовать end=''
             else:
