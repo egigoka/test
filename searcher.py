@@ -1,18 +1,16 @@
 import os
 import sys
 from commands import *
-print("searcher 0.2.4")
+print("searcher 0.2.5")
 
 whoami = Console.get_output("whoami").strip()
 username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
 
-searcher 0.6.2  # wtf? how is it gone?
-paths=['C:\\Users\\alebedev\\PycharmProjects\\testWeb2py']
-skipped_paths=['C:\\Users\\alebedev\\PycharmProjects\\testWeb2py\\.git', 
-               'C:\\Users\\alebedev\\PycharmProjects\\testWeb2py\\venv']
-file_extensions=[]
+paths=['C:\\']
+skipped_paths=['']
+file_extensions=[".py"]
 skipped_file_extensions=['.w2p', '.png', '.gif', '.jpg', '.gz', '.ico', '.pdf', '.jpeg', '.icns', '.sqlite', '.pyc']
-match_strings=['ISO-8859-1']
+match_strings=['bitrix24.ru']
 case_sensitive=True
 multiple_lines=True
 stop_after_every_found_line=False
@@ -48,7 +46,7 @@ for path in paths:
                     if File.get_extension(file) == ext:
                         files_to_read.append(file_path)
 
-print(f"{Time.dotted()} read files")
+print(f"{Time.dotted()} read {len(files_to_read)} files")
 for file in files_to_read:
     for line_cnt, line in enumerate(Str.nl(File.read(file))):
         for string in match_strings:

@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.2.3"
+__version__ = "3.2.5"
 
 
 class State:
@@ -48,6 +48,7 @@ if State.online:
     domains += ['8.8.8.8']
     domains += ['8.8.4.4']
     domains += ['gmail.com']
+    domains += ['egigoka.me']
     domains += [Network.check_internet_apple]
     domains += [Network.check_internet_microsoft]
 
@@ -96,7 +97,7 @@ def main():
         State.cnt_workin = 0
         if State.print_ip:
             Print(f"Your IP: {Network.get_ip()}")
-        threads = Threading(quiet=True)
+        threads = Threading()
         for hostname in domains:
             threads.add(colorful_ping, args=(hostname,))
         threads.start(wait_for_keyboard_interrupt=True)
