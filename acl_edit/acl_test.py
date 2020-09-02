@@ -189,7 +189,7 @@ if file_operations:
                 dacl.AddAccessAllowedAce(level, binary_mask, SID_object)
                 save_dacl()
                 cnt += 1
-                #print(cnt)
+                #print(output)
         except pywintypes.error as err:
             Print.debug(err, "max count of ACE's is", ace_count())
     # else:

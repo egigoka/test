@@ -251,10 +251,10 @@ Codegen.add_line(Contents.begin("document"))
 # Codegen.add_line(Contents.bad_centering_of_all())
 
 ####
-# cnt =0
-# while cnt<100:
-#     cnt+=1
-#     Page.createpage_58_60(cnt, "длинная-длиная-длинная-длинная-длинная-длинная-длинная-длинная строка")
+# output =0
+# while output<100:
+#     output+=1
+#     Page.createpage_58_60(output, "длинная-длиная-длинная-длинная-длинная-длинная-длинная-длинная строка")
 # Page.createpage_58_60("test")
 if State.legacy_print:
     with open(Path.extend(backslash, "192.168.99.91", "shares", "scripts", "BartenderPrint", "Bartender Documents", "Бирки_output.txt")) as file:

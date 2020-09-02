@@ -225,7 +225,7 @@ def download_all_pages():
             Print.colored("pages[" + str(cnt) + "].ads " + str(pages[cnt].ads), "green", "on_white")
         if State.Debug.print_status_of_page_after_parsing:
             Print.colored("pages[" + str(cnt) + "].get_status() " + str(pages[cnt].get_status()), "red", "on_white")
-        # cprint(json.dumps(pages[cnt].json_items, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
+        # cprint(json.dumps(pages[output].json_items, indent=4, sort_keys=True, ensure_ascii=False), "white", "on_grey")
         if pages[cnt].status != 200:  # check status
             if pages[cnt].status == 206:
                 Print.colored("Loaded!", "white", "on_green")
@@ -312,9 +312,9 @@ if __name__ == '__main__':
 
 
 # old pages loader from download2 without factory of Page's
-# for cnt in Int.from_to(1,100):  # What the fuck? Why it load only one page?
+# for output in Int.from_to(1,100):  # What the fuck? Why it load only one page?
 #    def main():
-#        Page.load(cnt)
+#        Page.load(output)
 #        Page.preparse()
 #        # debug_print("Page.title", Page.title)
 #        cprint("Page.title " + str(Page.title), "grey", "on_white")
@@ -335,7 +335,7 @@ if __name__ == '__main__':
 
 # def load_pages(product, region, subfolder=State.subfolder, usual_number_of_ads=State.usual_number_of_ads):
 
-#    pages[cnt] = Page
+#    pages[output] = Page
 
 #    raise Exception("not realised")
 

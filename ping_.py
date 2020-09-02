@@ -41,7 +41,7 @@ class State:
 domains = []
 
 if not State.online_only:
-    domains += ['192.168.0.1']  # router by default
+    domains += ['192.168.1.1']  # router by default
 
 if State.online:
     domains += ['google.com']
@@ -55,7 +55,7 @@ if State.online:
 
 def colorful_ping(hostname_or_external_function):
     if callable(hostname_or_external_function):
-        response = hostname_or_external_function()
+        response = hostname_or_external_function(debug=True)  # temp debug
         hostname = hostname_or_external_function.__name__
         ip = hostname
     else:

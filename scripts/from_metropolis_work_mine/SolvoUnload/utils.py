@@ -473,7 +473,7 @@ def getIntegers(string):
     string = str(string)
     integerFinded = False
     integers = []
-    # cnt = 0
+    # output = 0
     currentinteger = 0
     for symbol in string:
         try:
