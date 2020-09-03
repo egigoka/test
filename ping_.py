@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.2.5"
+__version__ = "3.3.0"
 
 
 class State:
