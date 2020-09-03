@@ -38,6 +38,10 @@ class State:
     failed_runs = 0
 
 
+def egigokas_server(debug=False):
+    return Network.check_response("https://isup.egigoka.me/", "yep", debug=debug)
+
+
 domains = []
 
 if not State.online_only:
@@ -48,14 +52,17 @@ if State.online:
     domains += ['8.8.8.8']
     domains += ['8.8.4.4']
     domains += ['gmail.com']
-    domains += ['egigoka.me']
+    domains += ['router.egigoka.me']
     domains += [Network.check_internet_apple]
     domains += [Network.check_internet_microsoft]
+    domains += [egigokas_server]
 
 
 def colorful_ping(hostname_or_external_function):
     if callable(hostname_or_external_function):
-        response = hostname_or_external_function(debug=True)  # temp debug
+        response = hostname_or_external_function(debug=False)  # temp debug
+        if not isinstance(response, bool):
+            raise TypeError(f"response must be bool, get {type(response)} instead")
         hostname = hostname_or_external_function.__name__
         ip = hostname
     else:
