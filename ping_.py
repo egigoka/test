@@ -33,7 +33,7 @@ class State:
         fix_win_cmd = 1
 
     longest_hostname = 0
-    cnt_workin = 0
+    cnt_working = 0
 
     failed_runs = 0
 
@@ -74,7 +74,7 @@ def colorful_ping(hostname_or_external_function):
         Print.colored(
             Str.rightpad(hostname + ' is up!' + " " * (State.longest_hostname + 2 - len(hostname)) + ' IP ' + str(ip),
                          Console.width() - State.fix_win_cmd, " "), 'white', 'on_green')
-        State.cnt_workin += 1
+        State.cnt_working += 1
     else:
         Print.colored(Str.rightpad(hostname + ' is down!' + " " * (State.longest_hostname - len(hostname)) + ' IP ' + str(ip),
                                    Console.width() - State.fix_win_cmd, " "), 'white', 'on_red')
@@ -101,7 +101,7 @@ def main():
         if OS.macos:
             if State.first_iterate:
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
-        State.cnt_workin = 0
+        State.cnt_working = 0
         if State.print_ip:
             Print(f"Your IP: {Network.get_ip()}")
         threads = Threading()
@@ -109,15 +109,15 @@ def main():
             threads.add(colorful_ping, args=(hostname,))
         threads.start(wait_for_keyboard_interrupt=True)
         Print(Time.dotted())
-        if State.cnt_workin < len(domains)-State.count_of_ignored_timeouts:
+        if State.cnt_working < len(domains)-State.count_of_ignored_timeouts:
             if OS.macos:
                 failed_notification("Something is wrong!",
-                                    str(State.cnt_workin) + " domains of " + str(len(domains)) + " is online.")
+                                    str(State.cnt_working) + " domains of " + str(len(domains)) + " is online.")
             State.internet_status = False
-        elif State.cnt_workin < len(domains):
+        elif State.cnt_working < len(domains):
             if OS.macos:
                 failed_notification("Just one timeout, worry?",
-                                    str(State.cnt_workin)+" domains of "+str(len(domains))+" is online.")
+                                    str(State.cnt_working) + " domains of " + str(len(domains)) + " is online.")
             State.internet_status = False
         else:
             if not State.internet_status:
