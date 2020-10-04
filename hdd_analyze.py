@@ -95,7 +95,7 @@ def printer():
               f"{' '.join(Console.fit('Last file:', State.last_path))}{newline}"
               f"analyze_files threads: {len(State.running_threads)}{newline}"
               f"Time passed: {round(State.bench.get(), 2)}s{newline}")
-        Time.sleep(0.97, quiet_small=True)
+        Time.sleep(1)
 
 
 t = Threading()
@@ -106,7 +106,7 @@ t.start(wait_for_keyboard_interrupt=True)
 try:
     while not State.finished or State.extensions:
         print("no exts")
-        Time.sleep(0.5, quiet_small=True)
+        Time.sleep(0.5)
         # clean State.extensions
         for ext in bad_ext:
             try:

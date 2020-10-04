@@ -34,6 +34,9 @@ SKIPPED_EXTENSIONS = '''
 .csv
 .config
 .lang
+.strings
+.stringsdict
+.sql
 '''
 SKIPPED_EXTENSIONS = Str.nl(SKIPPED_EXTENSIONS)
 SKIPPED_EXTENSIONS = List.remove_empty_strings(SKIPPED_EXTENSIONS)
