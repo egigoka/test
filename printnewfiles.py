@@ -8,7 +8,7 @@ dir = r"C:\Users\mac\uni"
 printed_files = []
 
 while True:
-    Time.sleep(0.5, quiet_small=True)
+    Time.sleep(0.5)
     filepaths = []
     for root, dirs, files in OS.walk(dir):
         for file in files:
