@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from commands import *
-__version__ = "3.3.0"
+__version__ = "3.3.3"
 
 
 class State:
@@ -48,10 +48,6 @@ if not State.online_only:
     domains += ['192.168.1.1']  # router by default
 
 if State.online:
-    domains += ['google.com']
-    domains += ['8.8.8.8']
-    domains += ['8.8.4.4']
-    domains += ['gmail.com']
     domains += ['router.egigoka.me']
     domains += [Network.check_internet_apple]
     domains += [Network.check_internet_microsoft]
@@ -108,6 +104,7 @@ def main():
         for hostname in domains:
             threads.add(colorful_ping, args=(hostname,))
         threads.start(wait_for_keyboard_interrupt=True)
+        print()
         Print(Time.dotted())
         if State.cnt_working < len(domains)-State.count_of_ignored_timeouts:
             if OS.macos:
@@ -130,7 +127,7 @@ def main():
         State.first_iterate = False
         if State.internet_status:
             State.failed_runs = 0
-            Time.sleep(State.sleep)
+            Time.sleep(State.sleep, verbose=True)
 
 
 if __name__ == '__main__':
