@@ -1,6 +1,7 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
 from commands import *
+
 __version__ = "3.5.1"
 
 # init
@@ -122,6 +123,7 @@ def main():
         for hostname in domains:
             threads.add(colorful_ping, args=(hostname,))
         threads.start(wait_for_keyboard_interrupt=True)
+        print()
         Print(Time.dotted())
         if State.cnt_working < len(domains)-State.count_of_ignored_timeouts:
             if OS.macos:
