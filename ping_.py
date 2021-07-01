@@ -12,7 +12,7 @@ domains = []
 class State:
     ping_timeout = 20000  # in ms
     ping_count = 1
-    sleep = 60  # between iterations
+    sleep = 10  # between iterations
     count_of_ignored_timeouts = 1  # how much errors ignore
     first_iterate = True
     internet_status = False
@@ -20,7 +20,7 @@ class State:
     online = ("-o" in OS.args) or ("-online" in OS.args) or ("--online" in OS.args)
 
     if ("-f" in OS.args) or ("-fast" in OS.args) or ("--fast" in OS.args):
-        sleep = 10
+        sleep = 1
     
     clear_cache = ("-c" in OS.args) or ("-cache" in OS.args) or ("--cache" in OS.args) or ("--clear-cache" in OS.args)
 

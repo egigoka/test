@@ -58,6 +58,8 @@ script
     OS.exit(0)
 SIGN_ALL = "--sign-all" in OS.args
 WITHOUT_CONFIRMATION = "-y" in OS.args
+print("SIGN_ALL", SIGN_ALL)
+print("WITHOUT_CONFIRMATION", WITHOUT_CONFIRMATION)
 # args END
 
 
