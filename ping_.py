@@ -17,18 +17,18 @@ class State:
     first_iterate = True
     internet_status = False
 
-    online = False
-    if ("-o" in OS.args) or ("-online" in OS.args) or ("--online" in OS.args):
-        online = True
+    online = ("-o" in OS.args) or ("-online" in OS.args) or ("--online" in OS.args)
 
-    if ("-f" in OS.args) or ("-fast" in OS.args):
+    if ("-f" in OS.args) or ("-fast" in OS.args) or ("--fast" in OS.args):
         sleep = 10
+    
+    clear_cache = ("-c" in OS.args) or ("-cache" in OS.args) or ("--cache" in OS.args) or ("--clear-cache" in OS.args)
 
     router = "-r" in OS.args
 
-    verbose = "-v" in OS.args
+    verbose = ("-v" in OS.args) or ("-verbose" in OS.args) or ("--verbose" in OS.args)
 
-    print_ip = "-ip" in OS.args
+    print_ip = ("-ip" in OS.args) or ("--ip" in OS.args)
 
     for arg in OS.args[1:]:
         if not arg.startswith("-"):
@@ -69,7 +69,7 @@ def colorful_ping(hostname_or_external_function, args=()):
         ip = hostname
     else:
         response = Network.ping(hostname_or_external_function, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
-        ip = response[1]
+        ip = response[1][0]
         response = response[0]
         hostname = hostname_or_external_function
     if response:
@@ -88,6 +88,14 @@ def failed_notification(subtitle, message):
         macOS.notification(title="ping_", subtitle=subtitle,
                            message=message,
                            sound="Basso")
+
+
+def ossystem(command):
+    if State.verbose: Print.colored(command, "magenta")
+    stdout, stderr = Console.get_output(command, return_merged=False)
+    if State.verbose: Print.colored(stdout, "green")
+    if stderr: Print.colored(stderr, "red")
+    return stdout + stderr 
 
 
 if State.verbose:
@@ -115,10 +123,13 @@ def main():
                     print("sending first notification")
 
                 macOS.notification(title="ping_", subtitle="Please, wait...", message="Check is running.")
-
+        
+        if State.clear_cache:
+            ossystem("nbtstat -R")
+            ossystem("ipconfig /flushdns")
         State.cnt_working = 0
         if State.print_ip:
-            Print(f"Your IP: {Network.get_ip()}")
+            Print(f"Your public IP: {Network.get_ip()}")
         threads = Threading()
         for hostname in domains:
             threads.add(colorful_ping, args=(hostname,))
