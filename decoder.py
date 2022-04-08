@@ -1,7 +1,7 @@
 from commands import *
 # data
-bad_string = "Â/À>/ËÈıËÈÊÑ>Å"
-good_string = "b"
+bad_string = CLI.multiline_input("bad string ")
+good_string = input("good string ")
 # debug flags
 print_errors = False
 pause_after_each_success = False
@@ -22,7 +22,7 @@ def decode(bad_string, good_string):
                 if good_string in decoded_string:
 
                     if decoded_string not in possible_outputs or print_same_results:
-                        print(f"'{decoded_string}' [{enc_in} > {enc_out}]")
+                        print(f"'{decoded_string[:200]}' [{enc_in} > {enc_out}]")
 
                     # update possible_outputs
                     if decoded_string not in possible_outputs:
@@ -42,3 +42,4 @@ def decode(bad_string, good_string):
 
 if __name__ == '__main__':
     decode(bad_string, good_string)
+    input("Enter to exit")
