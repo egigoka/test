@@ -11,7 +11,7 @@ for root, dirs, files in OS.walk(path):
     for file in files:
         filepath = Path.combine(root, file)
         sha = File.sha256_checksum(filepath)
-        filepath = filepath(replace(path, "", 1))
+        filepath = filepath.replace(path, "", 1)
         print(filepath, sha)
         if output is not None:
             File.write(output, f"{filepath} {sha}{newline}", mode="a")
