@@ -4,6 +4,7 @@ path = OS.args[1]
 
 try:
     output = OS.args[2]
+    File.wipe(output)
 except:
     output = None
 
@@ -17,7 +18,7 @@ for root, dirs, files in OS.walk(path):
             File.write(output, f"{filepath} {sha}{newline}", mode="a")
 
 if output is not None:
-    content = File.read(output)
+    content = File.read(output, auto_detect_encoding=False)
     lines = Str.nl(content)
     lines.sort()
     File.write(output, newline.join(lines), mode = "w")
