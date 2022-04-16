@@ -1,8 +1,9 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
+import requests
 from commands import *
 
-__version__ = "3.5.1"
+__version__ = "3.6.11"
 
 # init
 domains = []
@@ -30,6 +31,8 @@ class State:
 
     print_ip = ("-ip" in OS.args) or ("--ip" in OS.args)
 
+    check_ip = ("-csc" in OS.args) or ("--check-safe-country" in OS.args)
+
     for arg in OS.args[1:]:
         if not arg.startswith("-"):
             domains.append(arg)
@@ -42,6 +45,8 @@ class State:
     cnt_working = 0
 
     failed_runs = 0
+
+    countries_that_create_fear = ("ru", )
 
 
 if State.router:
@@ -58,6 +63,38 @@ if State.online:
         return Network.check_response("https://isup.egigoka.me/", "yep", debug=debug)
 
     domains += [egigokas_server]
+
+
+def get_country_of_ip(ip):
+    endpoint = f'https://ipinfo.io/{ip}/json'
+    try:
+        response = requests.get(endpoint, verify=True)
+
+        if response.status_code != 200:
+            country = 'Status:', response.status_code, 'Problem with the request. Exiting.'
+            Print.prettify(response)
+            if OS.macos:
+                macOS.notification(title="ping_", subtitle="Failed to get country",
+                                   message=str(response),
+                                   sound="Basso")
+        else:
+            data = response.json()
+            if "country" in data.keys():
+                country = data['country']
+            elif "bogon" in data.keys():
+                country = "bogon" if data["bogon"] else Print.prettify(data, quiet=True)
+            else:
+                macOS.notification(title="ping_", subtitle="Failed to get country",
+                                   message=str(data),
+                                   sound="Basso")
+                Print.prettify(data)
+                country = data
+    except requests.exceptions.ConnectionError as e:
+        country = e
+    return str(country)
+
+
+get_country_of_ip = CachedFunction(get_country_of_ip, 60*60)
 
 
 def colorful_ping(hostname_or_external_function, args=()):
@@ -128,8 +165,23 @@ def main():
             ossystem("nbtstat -R")
             ossystem("ipconfig /flushdns")
         State.cnt_working = 0
+        if State.print_ip or State.check_ip:
+            Print.rewrite("Getting ip...")
+            ip = Network.get_ip()
         if State.print_ip:
-            Print(f"Your public IP: {Network.get_ip()}")
+            Print(f"Your public IP: {ip}")
+        if State.check_ip:
+            Print.rewrite("Getting country...")
+            country = get_country_of_ip(ip)
+                
+            if country.lower() in State.countries_that_create_fear:
+                if OS.macos:
+                    macOS.notification(title="ping_", subtitle='VPN is malfunctioning',
+                                                                   message=f"current country is {country}",
+                                                                   sound="Basso")
+            Print.rewrite()
+            print(f"Country: {country}")
+
         threads = Threading()
         for hostname in domains:
             threads.add(colorful_ping, args=(hostname,))
