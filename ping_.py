@@ -46,7 +46,7 @@ class State:
 
     failed_runs = 0
 
-    countries_that_create_fear = ("ru", )
+    countries_that_create_fear = ("ru", "kz", "cn")
 
 
 if State.router:

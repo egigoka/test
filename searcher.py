@@ -1,16 +1,19 @@
 import os
 import sys
 from commands import *
-print("searcher 0.2.5")
+print("searcher 0.2.6")
 
 whoami = Console.get_output("whoami").strip()
-username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
+if OS.windows:
+    username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
+else:
+    username = whoami
 
-paths=['C:\\']
+paths=['.']
 skipped_paths=['']
 file_extensions=[".py"]
 skipped_file_extensions=['.w2p', '.png', '.gif', '.jpg', '.gz', '.ico', '.pdf', '.jpeg', '.icns', '.sqlite', '.pyc']
-match_strings=['bitrix24.ru']
+match_strings=['height']
 case_sensitive=True
 multiple_lines=True
 stop_after_every_found_line=False
