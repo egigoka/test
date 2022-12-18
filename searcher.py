@@ -1,7 +1,7 @@
 import os
 import sys
 from commands import *
-print("searcher 0.4.5")
+print("searcher 0.4.6")
 
 whoami = Console.get_output("whoami").strip()
 if OS.windows:
@@ -24,8 +24,8 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\program files (x86)',
                r'c:\programdata',
                r'c:\MSOCache']
-file_extensions=[".xml"]
-match_strings=['<lol>']
+file_extensions=["info.plist"]
+match_strings=['<key>Product Type</key>']
 skipped_strings = []
 case_sensitive=False
 multiple_lines=True
@@ -71,7 +71,7 @@ if not cache_load:
         for root, dirs, files in os.walk(path):
             cnt += 1
             if cnt % 100 == 0:
-                Print.rewrite(f"{cnt}/146431", root)
+                Print.rewrite(f"{cnt}", root)
             skipped = False
             for skipped_path in skipped_paths:
                 
@@ -82,7 +82,7 @@ if not cache_load:
                 for file in files:
                     file_path = Path.combine(root, file)
                     for ext in file_extensions:
-                        if File.get_extension(file).lower() == ext.lower():
+                        if file.lower().endswith(ext.lower()):
                             files_to_read.append(file_path)
 
 if cache_create:
