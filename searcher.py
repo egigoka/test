@@ -1,7 +1,7 @@
 import os
 import sys
 from commands import *
-print("searcher 0.4.5")
+print("searcher 0.4.7")
 
 whoami = Console.get_output("whoami").strip()
 if OS.windows:
@@ -10,8 +10,13 @@ else:
     username = whoami
 
 folder = OS.args[1]
-cache_create = "--cache-create" in OS.args
-cache_load = "--cache-load" in OS.args
+cache_create = "--cache-create" in OS.args or "--create-cache" in OS.args
+cache_load = "--cache-load" in OS.args or "--load-cache" in OS.args
+
+if cache_create:
+    print("creating cache...")
+if cache_load:
+    print("loading cache...")
 
 paths=['.', folder]
 skipped_paths=['/mnt/c/Windows/',
@@ -22,10 +27,10 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\Windows',
                r'c:\program files',
                r'c:\program files (x86)',
-               r'c:\programdata',
-               r'c:\MSOCache']
+               r'c:\MSOCache',
+               r'c:\programdata']
 file_extensions=[".xml"]
-match_strings=['<lol>']
+match_strings=['DateofBirth']
 skipped_strings = []
 case_sensitive=False
 multiple_lines=True
@@ -81,6 +86,9 @@ if not cache_load:
             if not skipped:
                 for file in files:
                     file_path = Path.combine(root, file)
+                    if not file_extensions: ## if empty
+                        files_to_read.append(file_path)
+                        continue
                     for ext in file_extensions:
                         if File.get_extension(file).lower() == ext.lower():
                             files_to_read.append(file_path)
