@@ -76,7 +76,7 @@ if not cache_load:
         for root, dirs, files in os.walk(path):
             cnt += 1
             if cnt % 100 == 0:
-                Print.rewrite(f"{cnt/???}", root)
+                Print.rewrite(f"{cnt}/???", root)
             skipped = False
             for skipped_path in skipped_paths:
                 
