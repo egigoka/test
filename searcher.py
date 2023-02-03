@@ -30,7 +30,7 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\MSOCache',
                r'c:\programdata']
 file_extensions=[".xml"]
-match_strings=['DateofBirth']
+match_strings=['Agents']
 skipped_strings = []
 case_sensitive=False
 multiple_lines=True
