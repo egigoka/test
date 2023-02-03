@@ -1,4 +1,0 @@
-"RFID_TagData"
-"Lexmark & BT"
-"Hello World!"
-"ForrestSteel"
