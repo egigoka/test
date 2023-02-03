@@ -12,4 +12,4 @@ def diff(sym, symb):
 		return(f"same as first({char})")
 	return(char)
 
-d = diff
+dd = diff
