@@ -1,7 +1,15 @@
 import os
 import sys
 from commands import *
-print("searcher 0.4.7")
+print("searcher 0.4.8")
+
+file_extensions=[".xml"]
+match_strings=['sntType']
+skipped_strings = []
+case_sensitive=False
+multiple_lines=True
+stop_after_every_found_line=False
+end_print_files_dict=True
 
 whoami = Console.get_output("whoami").strip()
 if OS.windows:
@@ -29,13 +37,6 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\program files (x86)',
                r'c:\MSOCache',
                r'c:\programdata']
-file_extensions=[".xml"]
-match_strings=['Agents']
-skipped_strings = []
-case_sensitive=False
-multiple_lines=True
-stop_after_every_found_line=False
-end_print_files_dict=True
 
 _printed_results = []
 

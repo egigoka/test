@@ -18,12 +18,14 @@ skipped_folders = ["./1С Предприятие 8/1C8.2_videokurs_Krotov_Roman_
                    "./Web_1c/[УЦ-3] WEB-курс Применение агрегатов, индексов, итогов для повышения быстродействия/[УЦ-3] WEB-курс Применение агрегатов, индексов, итогов для повышения быстродействия/Лекции/files",
                    "./Web_1c/[УЦ-3] WEB-курс Применение агрегатов, индексов, итогов для повышения быстродействия/Лекции/files",
                    "./Web_1c/[УЦ-3] WEB-курс Программирование в стандартных типовых решениях системы 1СПредприятие 8.3 (2018)/files",
-                   "./Web_1c/[УЦ-3] Web-сервисы (SOAP), HTTP-сервисы, oData (автоматический REST-сервис) (2017)/files"]
+                   "./Web_1c/[УЦ-3] Web-сервисы (SOAP), HTTP-сервисы, oData (автоматический REST-сервис) (2017)/files",
+                   "./Текущие/Web_1c/[УЦ-3] Web-сервисы (SOAP), HTTP-сервисы, oData (автоматический REST-сервис) (2017)/files"]
 # debug
 # bad_extensions.append(".zip")
 # bad_extensions.append(".rar")
 # bad_extensions.append(".7z")
 
+Print.rewrite("Reading cache...")
 cache = JsonDict("cache_calculate_length.json")
 
 
@@ -80,7 +82,6 @@ for root, dirs, files in OS.walk('.'):
                 errors += 1
                 if errors > 10:
                     exit(1)
-        
 
     if file_duration_total != 0:
         # Print.colored(root, file_duration_total, "green")
@@ -88,8 +89,21 @@ for root, dirs, files in OS.walk('.'):
         # print(toot)
         key = toot[1]
 
-        if key in ["1С Предприятие 8", "Павел Чистов", "СКД", "Web_1c", "Библиотека стандартных подсистем"]:
+        key_bak = None
+        if key in ["Текущие"]:
+            key_bak = key
+            key = toot.pop(2)
+
+        if key in ["1С Предприятие 8",
+                   "Павел Чистов",
+                   "СКД",
+                   "Web_1c",
+                   "Библиотека стандартных подсистем"
+                   ]:
             key += backslash + toot[2]
+
+        if key_bak is not None:
+            key = key_bak + backslash + key
 
         # print(key)
         try:
@@ -113,7 +127,9 @@ for key in sorted(out, key=out.get, reverse=False):
     m = s / 60
     s = int((m - int(m)) * 60)
 
-    Print.colored(dir_, f"{int(h)}h {int(m)}m {int(s)}s", 
+    human_len = f"{int(h)}h {int(m)}m {int(s)}s"
+    human_len = Str.rightpad(human_len, 11, " ")
+    Print.colored(human_len, dir_,
                   "on_white" if cnt % 2 == 0 else "on_black", 
                   "black" if cnt % 2 == 0 else "white")
 
