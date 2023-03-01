@@ -1,15 +1,18 @@
 import os
 import sys
 from commands import *
-print("searcher 0.4.8")
+print("searcher 0.5.0")
 
-file_extensions=[".xml"]
-match_strings=['sntType']
-skipped_strings = []
-case_sensitive=False
-multiple_lines=True
-stop_after_every_found_line=False
-end_print_files_dict=True
+file_extensions=[".xml"]  # cached
+skipped_file_substrings = ["Cash Receipt", "goods Create"]  # cached
+
+case_sensitive=False  # cached partially
+
+match_strings=['265024.58']  # not cached
+skipped_strings = []  # not cached
+multiple_lines=True  # not cached
+end_print_files_dict=True  # not cached
+skip_over_this_size = 2 * GiB  # not cached
 
 whoami = Console.get_output("whoami").strip()
 if OS.windows:
@@ -20,6 +23,7 @@ else:
 folder = OS.args[1]
 cache_create = "--cache-create" in OS.args or "--create-cache" in OS.args
 cache_load = "--cache-load" in OS.args or "--load-cache" in OS.args
+debug = "--debug" in OS.args
 
 if cache_create:
     print("creating cache...")
@@ -36,7 +40,8 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\program files',
                r'c:\program files (x86)',
                r'c:\MSOCache',
-               r'c:\programdata']
+               r'c:\programdata',
+               r'C:\Users\Egorov\Documents\!Не моё']
 
 _printed_results = []
 
@@ -46,7 +51,7 @@ def print_result(file, line, line_cnt, found_string):
         Print.colored(file, "green")
     if file not in _printed_results or multiple_lines:
         line = line.replace(found_string, Print.colored(found_string, "red", verbose=False))
-        Print.colored(fr"{line_cnt}:{line}", "magenta")
+        Print.colored(fr"{line_cnt}:{line}"[:(Console.width() * 5) - 3] + "...")
         _printed_results.append(file)
 
 
@@ -84,8 +89,18 @@ if not cache_load:
                 if root.lower().startswith(skipped_path.lower()) and skipped_path != "":
                     skipped = True
                     break
+            
             if not skipped:
                 for file in files:
+                    skipped_file = False
+                    for skipped_substring in skipped_file_substrings:
+                        skipped_substring = skipped_substring if case_sensitive else skipped_substring.lower()
+                        file_needed_case = file if case_sensitive else file.lower()
+                        if skipped_substring in file_needed_case:
+                            skipped_file = True
+                            break
+                    if skipped_file:
+                        continue
                     file_path = Path.combine(root, file)
                     if not file_extensions: ## if empty
                         files_to_read.append(file_path)
@@ -93,6 +108,7 @@ if not cache_load:
                     for ext in file_extensions:
                         if File.get_extension(file).lower() == ext.lower():
                             files_to_read.append(file_path)
+                            break
 
 if cache_create:
     files_to_read.save()
@@ -105,6 +121,12 @@ cnt = 0
 files = []
 b = Bench()
 for file in files_to_read:
+    if File.get_size(file) > skip_over_this_size:
+        if debug:
+            print("BEEG file, skip " + file)
+        continue
+    if debug:
+        print(file)
     time = b.end(start_immediately=True)
     if time > 1:
         print(time, b.prefix)
