@@ -1,6 +1,7 @@
 from commands import *
 
-dir = '/Users/mac/Desktop/1C Junior Developer Training course'
+dir = OS.args[1]
+
 files = Dir.list_of_files(dir)
 secs = 0
 
@@ -22,11 +23,7 @@ def l(filename):
 
 
 for file in files:
-    num = Str.get_integers(file)[0]
-    if num >= 30:
-        if num <= 38:
-            secs += l(Path.combine(dir, file))
-            # print(secs, file)
+    secs += l(Path.combine(dir, file))
 
 mins = secs / 60
 mins_left = mins % 60
