@@ -24,8 +24,8 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\program files (x86)',
                r'c:\programdata',
                r'c:\MSOCache']
-file_extensions=["info.plist"]
-match_strings=['<key>Product Type</key>']
+file_extensions=[".sh", ".py"]
+match_strings=['aria2c']
 skipped_strings = []
 case_sensitive=False
 multiple_lines=True
