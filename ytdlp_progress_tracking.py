@@ -1,23 +1,34 @@
 from commands import *
 
+directory = None
+
+for arg in OS.args:
+    if Dir.exist(arg):
+        directory = arg
+
+if directory is None:
+    print("no directory specified")
+    OS.exit(1)
+
 previous_total_mib = None
 
 previous_speeds = []
 
 update_every = 20
 
-runs_per_5_mins = 5*60 / update_every
+runs_per_5_minutes = 5 * 60 / update_every
+
 
 def main():
 
-    b = Bench(quiet = False)
+    b = Bench(verbose=True)
     global previous_total_mib
     
     dt = Time.datetime()
 
     files = []
 
-    for root, dirs, files_ in OS.walk('.'):
+    for root, dirs, files_ in OS.walk(directory):
         for file in files_:
             files.append(Path.combine(root, file))    
 
@@ -79,7 +90,7 @@ def main():
     if not first_run:
         previous_speeds.append(speed)
     
-    if len(previous_speeds) > runs_per_5_mins:
+    if len(previous_speeds) > runs_per_5_minutes:
         previous_speeds.pop(0)
 
     try:
@@ -97,9 +108,9 @@ def main():
     Print.colored(
         f"{Str.leftpad(total_mib, 5, ' ')}MiB total, {plus}{change}MiB, {speed:.2f}MiB/s, {medium_speed:.2f}MiB/s", 
         "green" if is_bigger else "", 
-        end = "\t|\t")
+        end="\t|\t")
     
-    print(Str.get_words(freespace)[3] + "iB free", end = "\t|\t")
+    print(Str.get_words(freespace)[3] + "B free", end="\t|\t")
     
     b.end()
     
@@ -109,7 +120,7 @@ if __name__ == "__main__":
     if "whiletrue" in OS.args:
         while True:
             main()
-            Time.sleep(update_every - 1, verbose = True)
+            Time.sleep(update_every - 1, verbose=True)
             
     else:
         main()

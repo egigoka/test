@@ -42,6 +42,13 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\MSOCache',
                r'c:\programdata',
                r'C:\Users\Egorov\Documents\!Не моё']
+file_extensions=[".sh", ".py"]
+match_strings=['aria2c']
+skipped_strings = []
+case_sensitive=False
+multiple_lines=True
+stop_after_every_found_line=False
+end_print_files_dict=True
 
 _printed_results = []
 
