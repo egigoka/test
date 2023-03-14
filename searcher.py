@@ -1,14 +1,14 @@
 import os
 import sys
 from commands import *
-print("searcher 0.5.0")
+print("searcher 0.5.1")
 
-file_extensions=[".xml"]  # cached
-skipped_file_substrings = ["Cash Receipt", "goods Create"]  # cached
+file_extensions=[".plist"]  # cached
+skipped_file_substrings = [""]  # cached
 
 case_sensitive=False  # cached partially
 
-match_strings=['265024.58']  # not cached
+match_strings=['wake', 'Wake']  # not cached
 skipped_strings = []  # not cached
 multiple_lines=True  # not cached
 end_print_files_dict=True  # not cached
@@ -106,7 +106,7 @@ if not cache_load:
                         files_to_read.append(file_path)
                         continue
                     for ext in file_extensions:
-                        if File.get_extension(file).lower() == ext.lower():
+                        if file.lower().endswith(ext.lower()):
                             files_to_read.append(file_path)
                             break
 
