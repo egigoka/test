@@ -3,6 +3,7 @@ from commands import *
 dl = "dl" in OS.args
 ch = "ch" in OS.args
 debug = "debug" in OS.args
+wait = "wait" in OS.args
 
 count_of_threads = 2
 directory = None
@@ -52,23 +53,26 @@ def download(youtube_video_id, cnt, total):
     yt_id_with_cnt = f"{youtube_video_id} {cnt}/{total}"
     print(f"Started downloading {yt_id_with_cnt}")
     b = Bench(f"Downloaded {yt_id_with_cnt}", verbose=True)
-    Console.get_output("python3", "-m", "yt_dlp",
-                       "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
-                       "-o", directory + Path.separator() + "%(title)s [%(id)s].%(ext)s",
-                       "--retries", "infinite",
-                       "--fragment-retries", "infinite",
-                       "--file-access-retries", "infinite",
-                       "--extractor-retries", "infinite",
-                       "--limit-rate", "40M",
-                       "--retry-sleep", "exp=1:8",
-                       "--write-info-json",
-                       "--write-comments",
-                       "--write-subs",
-                       "--sub-langs", "all",
-                       "--live-from-start",
-                       "--wait-for-video",
-                       # "--download-archive", directory + Path.separator() + "archive.ytdlp",
-                       f"https://youtube.com/watch?v={youtube_video_id}", 
+    command = ["python3", "-m", "yt_dlp",
+                           "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
+                           "-o", directory + Path.separator() + "%(title)s [%(id)s].%(ext)s",
+                           "--retries", "infinite",
+                           "--fragment-retries", "infinite",
+                           "--file-access-retries", "infinite",
+                           "--extractor-retries", "infinite",
+                           "--limit-rate", "40M",
+                           "--retry-sleep", "exp=1:8",
+                           "--write-info-json",
+                           "--write-comments",
+                           "--write-subs",
+                           "--sub-langs", "all",
+                           # "--download-archive", directory + Path.separator() + "archive.ytdlp",
+                           f"https://youtube.com/watch?v={youtube_video_id}"]
+    if wait:
+        command.insert(-1, "--live-from-start")
+        command.insert(-1, "--wait-for-video")
+        command.insert(-1, "10")
+    Console.get_output(*command, 
                        print_std=debug)
     b.end()
 
@@ -116,12 +120,52 @@ def progress():
     import subprocess
     subprocess.Popen(["python3", "/home/egigoka/py/test/ytdlp_progress_tracking.py", ".", "whiletrue"])
 
+def running_threads(tt, additional_threads):
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+    Print.colored("COUNTING THREADS LOL", "red", "on_white")
+    Print.colored("COUNTING THREADS LOL", "black", "on_white")
+
+    while True:
+        running = 0
+        for runner in tt.runner_threads:
+            if runner.is_running():
+                running += 1
+                Print.colored("running", runner.thread.name, "magenta")
+        running += len(tt.input_threads)
+        for t in tt.input_threads:
+            Print.colored("running", t.thread.name, "magenta")
+        Print.colored(f"left {running - additional_threads} links to download", "magenta")
+        Time.sleep(20)
+        
+
 
 if dl:
-    tt = Threading(verbose=debug, max_threads=count_of_threads-1+2, start_from_first=True)
+    additional_threads = 3
+    tt = Threading(verbose=debug, max_threads=count_of_threads-1+additional_threads, start_from_first=True)
 
     tt.add(progress)
     tt.add(free_space_watchdog, args=(20*GiB,))
+    tt.add(running_threads, args=(tt, additional_threads))
 
     yt_ids = Str.nl(File.read(cache_file_path).strip())
 

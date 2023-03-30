@@ -49,7 +49,11 @@ def main():
     total_mib = 0
     
     for file in files:
-        if (file.find(".f") != -1 or file.find(".temp") != -1):
+        if (file.find(".f") != -1 \
+                or file.find(".temp") != -1
+                or file.find(".live_chat.json.part") != -1 \
+                or file.find(".part-Frag") != -1 \
+            ):
             try:
                 size_mib = int(File.get_size(file)/1024/1024)
             except FileNotFoundError:
@@ -84,7 +88,7 @@ def main():
                 mp4temp = ""
                 m4a = ""
 
-    freespace = Str.nl(Console.get_output("df -kh ."))[1]
+    freespace = Str.nl(Console.get_output("df", "-kh", directory))[1]
 
     first_run = False
     if previous_total_mib == None:
