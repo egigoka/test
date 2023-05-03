@@ -4,7 +4,7 @@ from pyfiglet import Figlet
 
 fterm = f = Figlet(font="term", justify="center", width=Console.width())
 
-fonts = Str.nl(File.read("pyfiglet_fonts.txt").strip())
+# fonts = Str.nl(File.read("pyfiglet_fonts.txt").strip())
 
 def now():
 	return Time.datetime()
@@ -15,9 +15,8 @@ end = Str.get_integers(OS.args[1])
 endtime = Time.datetime(hour = end[0], minute = end[1], second = 0)
 
 # cnt = Json("time_until_cnt.json")
-
-if not isinstance(cnt.string, int):
-	cnt.string = 0
+# if not isinstance(cnt.string, int):
+	# cnt.string = 0
 
 while True:
 
