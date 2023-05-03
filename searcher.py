@@ -1,18 +1,20 @@
 import os
 import sys
 from commands import *
-print("searcher 0.5.1")
+print("searcher 0.5.2")
 
-file_extensions=[".plist"]  # cached
-skipped_file_substrings = [""]  # cached
+file_extensions=[".py"]  # cached
+skipped_file_substrings = []  # cached
 
 case_sensitive=False  # cached partially
 
-match_strings=['wake', 'Wake']  # not cached
+match_strings=['Console.blink']  # not cached
 skipped_strings = []  # not cached
 multiple_lines=True  # not cached
 end_print_files_dict=True  # not cached
 skip_over_this_size = 2 * GiB  # not cached
+stop_after_every_found_line=False # not cached
+end_print_files_dict=True # not cached
 
 whoami = Console.get_output("whoami").strip()
 if OS.windows:
@@ -30,7 +32,10 @@ if cache_create:
 if cache_load:
     print("loading cache...")
 
-paths=['.', folder]
+if Dir.exist(folder):
+	paths = [folder]
+else:
+	paths=['.']
 skipped_paths=['/mnt/c/Windows/',
                '/mnt/c/program files/',
                '/mnt/c/program files (x86)/',
@@ -42,13 +47,6 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\MSOCache',
                r'c:\programdata',
                r'C:\Users\Egorov\Documents\!Не моё']
-file_extensions=[".sh", ".py"]
-match_strings=['aria2c']
-skipped_strings = []
-case_sensitive=False
-multiple_lines=True
-stop_after_every_found_line=False
-end_print_files_dict=True
 
 _printed_results = []
 
