@@ -29,9 +29,11 @@ for end in ends:
 	new_endtime = Time.datetime(hour = end[0], minute = end[1], second = 0)
 
 	if new_endtime < last_endtime:
-		new_endtime.replace(day=last_endtime.day + 1)
+		new_endtime = new_endtime.replace(day=last_endtime.day + 1)
 	
 	endtimes.append(new_endtime)
+
+	last_endtime = new_endtime
 
 endtimes.sort()
 
