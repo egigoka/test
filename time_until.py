@@ -88,7 +88,7 @@ while True:
 
 		f = Figlet(font=font, justify="center", width=Console.width())
 
-		until = f"{endtime.hour}:{endtime.minute}"
+		until = f"{endtime.hour:02}:{endtime.minute:02}"
 		
 		if endtime.day != time.day:
 			until = f"{endtime.day:02}.{endtime.month:02} {until}"
