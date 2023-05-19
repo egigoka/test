@@ -4,13 +4,13 @@ import unittest
 import sys
 sys.path.append("..")
 sys.path.append(".")
-from str8 import *
-import str8
-__version__ = "0.1.4"
+from commands import *
+import commands
+__version__ = "0.1.5"
 
 # todo check args typeerror
 
-print("str8", str8, "str8.__version__", str8.__version__, "test_version", __version__)
+print("str9", str9, "str9.__version__", str9.__version__, "test_version", __version__)
 
 class TestStrClassMethods(unittest.TestCase):
     def test01_to_quotes(self):  # to_quotes(some_string):  # just place input string inside "" quotes
