@@ -1,0 +1,1095 @@
+
+Skip to content
+Sign up
+
+moby /
+moby
+Public
+
+Code
+Issues 3.9k
+Pull requests 331
+Discussions
+Actions
+Projects 3
+Wiki
+
+More
+Docker gradually exhausts disk space on BTRFS #27653
+Open
+ghost opened this issue Oct 22, 2016 · 116 comments
+Comments
+@ghost
+ghost commented Oct 22, 2016
+
+Description
+
+Steps to reproduce the issue:
+
+    Install docker on a btrfs system
+    Use docker intensively for a while, and make sure to remove & recreate containers, rebuild with no cache, restart the system, ...
+    Check disk space
+
+Describe the results you received:
+
+    /var/lib/docker uses up more than 30GB, with all except a few megabytes located inside /var/lib/docker/btrfs
+
+    docker ps -s shows a few gigabtes, below 10GB
+
+    The following do absolutely nothing to change the /var/lib/docker disk space use
+        docker rmi $(docker images -aq)
+        docker volume rm on every line of docker volume ls -qf dangling=true
+        removing all files matching /var/lib/docker/*/*-json.log
+        docker rm on every stopped container listed in docker ps -a
+
+    If there is an obvious cleanup procedure that I missed, it's probably not a bug but my own mistake.
+    I have been known to wonder why disk space runs out so quickly with docker logs growing to gigabytes, without realizing what was going on 😄
+
+    The following solves the situation (but it shouldn't be required):
+        <shutdown all services>
+        service docker stop
+        apt-get remove --purge docker-engine
+        rm -rf /var/lib/docker/
+        apt-get install -y docker-engine
+        service docker start
+        <restart all services>
+
+    After this procedure, disk usage of /var/lib/docker goes back to a few single digit gigabytes as expected
+
+Describe the results you expected:
+/var/lib/docker is, after the failing cleanup procedures described above, not significantly larger than what is shown in docker ps -s
+
+Additional information you deem important (e.g. issue happens only occasionally):
+
+Output of docker version:
+
+root@Ubuntu-1510-wily-64-minimal ~ # docker version
+Client:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 18:29:41 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.12.2
+ API version:  1.24
+ Go version:   go1.6.3
+ Git commit:   bb80604
+ Built:        Tue Oct 11 18:29:41 2016
+ OS/Arch:      linux/amd64
+root@Ubuntu-1510-wily-64-minimal ~ #
+
+Output of docker info:
+(this is after purging and reinstalling as described above)
+
+root@Ubuntu-1510-wily-64-minimal ~ # docker info
+Containers: 14
+ Running: 14
+ Paused: 0
+ Stopped: 0
+Images: 41
+Server Version: 1.12.2
+Storage Driver: btrfs
+ Build Version: Btrfs v4.4
+ Library Version: 101
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: null host bridge overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: apparmor seccomp
+Kernel Version: 4.4.0-45-generic
+Operating System: Ubuntu 16.04.1 LTS
+OSType: linux
+Architecture: x86_64
+CPUs: 2
+Total Memory: 3.859 GiB
+Name: Ubuntu-1510-wily-64-minimal
+ID: 2ILP:SBMD:2NB7:JY7W:YC3K:CYYV:AX5E:FZLB:CON4:3JCT:3GT4:W4PB
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: No swap limit support
+Insecure Registries:
+ 127.0.0.0/8
+root@Ubuntu-1510-wily-64-minimal ~ #
+
+Additional environment details (AWS, VirtualBox, physical, etc.):
+KVM virtual server hosted by hetzner, operating system is Ubuntu 16.04 LTS (the 15.10 occurances above are simply unchanged terminal prompts, the system has been upgraded a while ago)
+jthomaschewski, mianos, bdelwood, p-se, andriy-f, ChristopherRabotin, perk11, vaab, mwaeckerlin, sangaline, and 30 more reacted with thumbs up emoji
+@GordonTheTurtle GordonTheTurtle added the version/1.12 label Oct 22, 2016
+@ghost
+Author
+ghost commented Oct 22, 2016
+
+It took a while to run full too, like 1-3 months for 20GB excess - so it's not any rapid or obvious process.
+Also 1.12 is the version after using the process above to fix it which involves a reinstall - I might have been on a slightly older version (at least 1.10) before.
+@justincormack justincormack added the status/more-info-needed label Oct 24, 2016
+@justincormack
+Contributor
+justincormack commented Oct 24, 2016
+
+Can you provide more details about which files are taking up the space, and docker info when there is a problem not when there is not please.
+@cpuguy83
+Member
+cpuguy83 commented Oct 24, 2016
+
+Generally docker images would be taking up more space than what you'd see in docker ps -s.
+Also volumes.
+@CoRfr
+Contributor
+CoRfr commented Jan 27, 2017 •
+
+I'm facing the same issue with 1.12.3.
+
+With a full clean-up:
+
+# Containers
+$ docker ps -aq | xargs docker rm --volumes
+...
+$ docker ps -aq | wc -l
+0
+# Images
+$ docker images -q | xargs docker rmi
+...
+$ docker images -aq | wc -l
+0
+# Volumes
+$ docker volume ls -q | xargs docker volume rm
+...
+Error response from daemon: Conflict: remove cae42d591f87461e454f6c1e9489fa4df3be2ea4cffc241276aa51b2029c3649: volume is in use - [41f083c055837846206e561b9dadc81383a86ec3be39ef2683dd488fa102fe63]
+...
+$ docker volume ls -q | wc -l
+397
+
+It seems there is an issue as I cannot remove any of the volume at this point
+
+$ sudo systemctl restart docker
+$ docker volume ls -q | xargs docker volume rm
+...
+# Works okay, 
+$ docker volume ls -q | wc -l
+0
+$ df -h | grep docker
+/dev/sda3                      100G   17M   99G   1% /var/lib/docker
+$ docker info
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 0
+Server Version: 1.10.3
+Storage Driver: btrfs
+ Build Version: Btrfs v4.2.2
+ Library Version: 101
+Execution Driver: native-0.2
+Logging Driver: json-file
+Plugins: 
+ Volume: local
+ Network: null host bridge
+Kernel Version: 4.7.0-coreos-r1
+Operating System: CoreOS 1122.3.0 (MoreOS)
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.38 GiB
+Name: <hostname>
+ID: KTOO:PHLQ:52NC:RAOF:S6RS:L3PP:LJPW:JD5W:PGVI:3ITE:CHFT:TDX4
+
+There seems to be a leak the usage counting that results in volumes that should be removed but are not.
+zcasey-starry reacted with thumbs up emoji
+@cpuguy83
+Member
+cpuguy83 commented Jan 27, 2017
+
+@CoRfr Have you re-balanced your btrfs partition?
+btrfs requires hand-holding.
+@ghost
+Author
+ghost commented Jan 28, 2017 •
+
+Incidentally, it seems my BTRFS is again back in a state where it's close to running full due to docker after a few months of use.
+
+If you want to suggest commands to run for interesting information (preferably a lot more concrete than "Can you provide more details about which files are taking up space") then now would be the time, since I'll need to completely wipe and reinstall docker very soon again to fix this.
+
+Edit: also yes, I'm running balance and various clean up commands (the obvious old image and container and dangling volumes and logs deletions) right now too, so I'll report back if that solves anything for me or if it stays full as it did last time.
+@ghost
+Author
+ghost commented Jan 28, 2017 •
+
+(all of the following output is collected after a completed btrfs filesystem balance)
+Again same situation as last time: /var/lib/docker takes up insane amount of space, but the folder /srv where my all of my actual volumes are (I exclusively use host-mounted volumes) barely takes up 20GB:
+
+root@Ubuntu-1604-xenial-64-minimal ~ # btrfs fi show
+Label: none  uuid: fc92f1ac-ee98-4991-8a92-93451bd36d56
+	Total devices 1 FS bytes used 46.02GiB
+	devid    1 size 90.37GiB used 49.07GiB path /dev/sda3
+
+root@Ubuntu-1604-xenial-64-minimal ~ # btrfs filesystem df /
+Data, single: total=46.01GiB, used=45.24GiB
+System, DUP: total=32.00MiB, used=16.00KiB
+Metadata, DUP: total=1.50GiB, used=802.70MiB
+GlobalReserve, single: total=126.28MiB, used=0.00B
+root@Ubuntu-1604-xenial-64-minimal ~ # docker ps -s
+CONTAINER ID        IMAGE                        COMMAND                   CREATED             STATUS              PORTS                                                                NAMES                          SIZE
+2dc2c808cd04        jwilder/docker-gen           "/bin/sh -c ' rm -rf "    7 days ago          Up 7 days                                                                                proxy_dockergen_1              0 B (virtual 17.21 MB)
+fa3ccbbb65fd        proxy_proxy                  "/tmp/launch.py"          7 days ago          Up 7 days           0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp                             proxy_proxy_1                  14.34 MB (virtual 376.2 MB)
+86d971bbec3b        gitmirror_main               "/bin/sh -c 'bash -c "    3 weeks ago         Up 3 weeks                                                                               gitmirror_main_1               74.85 MB (virtual 599.1 MB)
+b0780588506d        gitlab_gitlab                "/bin/sh -c /launch.s"    4 weeks ago         Up 4 weeks          80/tcp, 443/tcp, 0.0.0.0:22222->22/tcp                               gitlab_gitlab_1                783.5 kB (virtual 1.347 GB)
+90e7f35704a3        letsencrypt_letsencrypt      "/bin/sh -c 'service "    5 weeks ago         Up 5 weeks          8000/tcp                                                             letsencrypt_letsencrypt_1      3.667 MB (virtual 653.9 MB)
+7be334b076cb        nginx_nginx                  "/bin/sh -c 'echo \"qp"   5 weeks ago         Up 5 weeks          0.0.0.0:20-21->20-21/tcp, 0.0.0.0:1200-1205->1200-1205/tcp, 80/tcp   nginx_nginx_1                  1.574 MB (virtual 310.7 MB)
+6af6f7c82926        aptcacherng_main             "/sbin/entrypoint.sh "    5 weeks ago         Up 5 weeks          3142/tcp                                                             aptcacherng_main_1             0 B (virtual 199.4 MB)
+ea09d05615f5        mail_mail                    "/bin/sh -c 'python3 "    5 weeks ago         Up 5 weeks          0.0.0.0:25->25/tcp, 0.0.0.0:587->587/tcp, 8000/tcp                   mail_mail_1                    38.45 MB (virtual 1.153 GB)
+25769e2cdb4f        icecast2_icecast2            "/bin/sh -c 'service "    5 weeks ago         Up 5 weeks          0.0.0.0:8000-8001->8000-8001/tcp                                     icecast2_icecast2_1            63.86 kB (virtual 513.8 MB)
+bc245dc9b02b        97e7720dbaed                 "/bin/sh -c 'sh /laun"    8 weeks ago         Up 8 weeks          80/tcp, 443/tcp                                                      informationnode_nginx_1        2 B (virtual 355.2 MB)
+0e8404c5ac0e        mariadb                      "docker-entrypoint.sh"    8 weeks ago         Up 8 weeks          3306/tcp                                                             icinga2frontend_mariadb_1      2 B (virtual 389.9 MB)
+80fa98d439bb        8183a6366281                 "/bin/sh -c 'echo \"ir"   8 weeks ago         Up 8 weeks          0.0.0.0:2222->22/tcp                                                 chat_irssi_1                   4.48 MB (virtual 366.3 MB)
+4dbf65a5e8f2        wobbleninjabackend_backend   "/bin/sh -c 'cd /home"    8 weeks ago         Up 8 weeks          8001/tcp                                                             wobbleninjabackend_backend_1   0 B (virtual 515.2 MB)
+5d761c7564bf        b9d8ec10414a                 "/bin/sh -c 'chown 10"    8 weeks ago         Up 8 weeks          0.0.0.0:64738->64738/tcp                                             mumble_mumble_1                0 B (virtual 306.1 MB)
+root@Ubuntu-1604-xenial-64-minimal ~ # du -chd 1 /var/lib/docker/*
+105G	/var/lib/docker/btrfs/subvolumes
+105G	/var/lib/docker/btrfs
+32K	/var/lib/docker/containers/5d761c7564bf110bb7d7f23dfa54da575648a7f9a0893a25a21473c8d8c5c62d
+28K	/var/lib/docker/containers/4dbf65a5e8f24e7178d3d6625e71021ac5a2f752e48b64279e4c39fc110e746b
+28K	/var/lib/docker/containers/80fa98d439bb0d53fea62bd6a273b222e9c453139b3bae7c2b9805129ad6fa40
+28K	/var/lib/docker/containers/0e8404c5ac0ec768dae1527d0a3827779c46a2c0464ed31442d9cec3c22c4f69
+28K	/var/lib/docker/containers/bc245dc9b02b83721286351dd38232404004575826f0ec2a67e80f1c0d991d0a
+28K	/var/lib/docker/containers/25769e2cdb4f5d586389db901290783974d00eb65c1b1d151a436a6ba705ed58
+52K	/var/lib/docker/containers/ea09d05615f5ba031897feda09c1fe097303b855b2cb2563a1fbb89e7314604c
+28K	/var/lib/docker/containers/6af6f7c829264625f231208f4f9b253ffb7438bfbe4bc8be3f40d3c8c8e32518
+32K	/var/lib/docker/containers/7be334b076cb691e8b06a2ff9b542f6df83d40a04cf6515121156dfd31cded7b
+72K	/var/lib/docker/containers/90e7f35704a3803007b695194edf775ab0c9c27fa8c284661e29c25c2f1c9635
+16G	/var/lib/docker/containers/b0780588506d56093f8027b7acfea72068012c43ad6fef6fd12fa8064965c624
+445M	/var/lib/docker/containers/86d971bbec3bcf37d3adf091abd85253a63f2b5ae8e4d55b889dcfc12272dd53
+32K	/var/lib/docker/containers/fa3ccbbb65fd16770992c4bf0b042f04e7129c40fe246e614006a70732426626
+2.8M	/var/lib/docker/containers/2dc2c808cd04036563b05bc9ae1a5a3e109c80455120c91c5c662057c91d6d30
+16G	/var/lib/docker/containers
+27M	/var/lib/docker/image/btrfs
+27M	/var/lib/docker/image
+144K	/var/lib/docker/network/files
+144K	/var/lib/docker/network
+0	/var/lib/docker/swarm
+0	/var/lib/docker/tmp
+0	/var/lib/docker/trust
+0	/var/lib/docker/volumes/32956ae03e153e19d227521698eb311bf1bd6858c1cb7b6e3e28b16c9fcfe92a
+196K	/var/lib/docker/volumes
+121G	total
+root@Ubuntu-1604-xenial-64-minimal ~ # du -chd 1 /srv/
+12K	/srv/.rsync-helpers
+120K	/srv/apt-cacher-ng
+2.5G	/srv/chat
+116M	/srv/dux
+7.5G	/srv/gitlab
+508K	/srv/gitmirror
+88K	/srv/icecast2
+164K	/srv/icinga2-core
+115M	/srv/icinga2-frontend
+3.4M	/srv/information-node
+1.1M	/srv/letsencrypt
+12M	/srv/mail
+156K	/srv/mumble
+7.3G	/srv/nginx
+136K	/srv/proxy
+0	/srv/rancher
+1.9M	/srv/unused-services
+669M	/srv/wobbleninja-backend
+4.0K	/srv/network
+19G	/srv/
+19G	total
+root@Ubuntu-1604-xenial-64-minimal ~ #
+
+I already cleaned up dangling volumes, unused images and stopped containers.
+Obviously, something in /var/lib/btrfs isn't being properly removed though.
+@ghost
+Author
+ghost commented Jan 28, 2017 •
+
+root@Ubuntu-1604-xenial-64-minimal ~ # du -chd 1 /
+0	/proc
+0	/dev
+0	/sys
+142M	/boot
+13M	/bin
+6.3M	/etc
+0	/home
+784M	/lib
+4.0K	/lib64
+0	/lost+found
+0	/media
+0	/mnt
+0	/opt
+68M	/root
+53M	/run
+12M	/sbin
+19G	/srv
+476M	/tmp
+1.1G	/usr
+122G	/var
+143G	/
+143G	total
+root@Ubuntu-1604-xenial-64-minimal ~ #
+
+(the excess over 100GB is probably shared data between multiple volume / btrfs snapshots - the disk itself is 100GB in size)
+
+Also, here a list of all images:
+
+root@Ubuntu-1604-xenial-64-minimal ~ # docker images
+REPOSITORY                   TAG                 IMAGE ID            CREATED             SIZE
+gitmirror_main               latest              09f724c7c3e5        3 weeks ago         524.3 MB
+mail_mail                    latest              9d679356338d        5 weeks ago         1.114 GB
+gitlab_gitlab                latest              b4bf5ba6ed8d        5 weeks ago         1.346 GB
+nginx_nginx                  latest              b2b76ece6c18        5 weeks ago         309.1 MB
+letsencrypt_letsencrypt      latest              41e3fff3cb98        5 weeks ago         650.2 MB
+icecast2_icecast2            latest              99ea6bb18bac        5 weeks ago         513.7 MB
+proxy_proxy                  latest              6e5bb262c014        5 weeks ago         361.8 MB
+ubuntu                       16.04               104bec311bcd        6 weeks ago         128.9 MB
+ubuntu                       latest              104bec311bcd        6 weeks ago         128.9 MB
+gitlab/gitlab-ce             latest              119b6ca37943        6 weeks ago         1.268 GB
+debian                       jessie              19134a8202e7        6 weeks ago         123 MB
+aptcacherng_main             latest              972be92584c2        8 weeks ago         199.4 MB
+sameersbn/apt-cacher-ng      latest              972be92584c2        8 weeks ago         199.4 MB
+wobbleninjabackend_backend   latest              898192175027        9 weeks ago         515.2 MB
+<none>                       <none>              b68db382b24d        11 weeks ago        338.3 MB
+<none>                       <none>              42c3476fe205        11 weeks ago        542.9 MB
+<none>                       <none>              8183a6366281        11 weeks ago        361.8 MB
+<none>                       <none>              97e7720dbaed        11 weeks ago        355.2 MB
+<none>                       <none>              b9d8ec10414a        11 weeks ago        306.1 MB
+mariadb                      latest              66498efd6bd8        11 weeks ago        389.9 MB
+jwilder/docker-gen           latest              d24146176a5d        11 weeks ago        17.21 MB
+debian                       <none>              73e72bf822ca        11 weeks ago        123 MB
+sameersbn/apt-cacher-ng      <none>              d6cc7ed41d72        3 months ago        199.4 MB
+ubuntu                       <none>              f753707788c5        3 months ago        127.1 MB
+root@Ubuntu-1604-xenial-64-minimal ~ #
+
+Also, as you can see I have no undeleted stopped containers left:
+
+               mumble_mumble_1
+root@Ubuntu-1604-xenial-64-minimal ~ # docker ps -a | wc -l
+15
+root@Ubuntu-1604-xenial-64-minimal ~ # docker ps | wc -l
+15
+root@Ubuntu-1604-xenial-64-minimal ~ #
+
+And the only volume listed in docker volume appears to be empty on disk:
+
+root@Ubuntu-1604-xenial-64-minimal ~ # docker volume
+
+Usage:	docker volume COMMAND
+
+Manage Docker volumes
+
+Options:
+      --help   Print usage
+
+Commands:
+  create      Create a volume
+  inspect     Display detailed information on one or more volumes
+  ls          List volumes
+  rm          Remove one or more volumes
+
+Run 'docker volume COMMAND --help' for more information on a command.
+root@Ubuntu-1604-xenial-64-minimal ~ # docker volume inspect 32956ae03e153e19d227521698eb311bf1bd6858c1cb7b6e3e28b16c9fcfe92a
+[
+    {
+        "Name": "32956ae03e153e19d227521698eb311bf1bd6858c1cb7b6e3e28b16c9fcfe92a",
+        "Driver": "local",
+        "Mountpoint": "/var/lib/docker/volumes/32956ae03e153e19d227521698eb311bf1bd6858c1cb7b6e3e28b16c9fcfe92a/_data",
+        "Labels": null,
+        "Scope": "local"
+    }
+]
+root@Ubuntu-1604-xenial-64-minimal ~ # du -ch /var/lib/docker/volumes/32956ae03e153e19d227521698eb311bf1bd6858c1cb7b6e3e28b16c9fcfe92a/_data
+0	/var/lib/docker/volumes/32956ae03e153e19d227521698eb311bf1bd6858c1cb7b6e3e28b16c9fcfe92a/_data
+0	total
+root@Ubuntu-1604-xenial-64-minimal ~ #
+
+@thaJeztah
+Member
+thaJeztah commented Jan 28, 2017
+
+Would it be worth checking if there's a container that writes a lot of changes to the containers filesystem (i.e. not in a volume), (you can docker diff <container> to see files added/modified in the containers writable layer). Any particular btrfs subvolume that stands out?
+@ghost
+Author
+ghost commented Jan 28, 2017
+
+@thaJeztah but shouldn't that show up in docker ps -s? As you can see above, there is no significant storage reported for any of the containers in docker ps -s.
+@ghost
+Author
+ghost commented Jan 28, 2017
+
+I just tried docker diff <container> on most of the containers. There is nothing immediately suspicious, but e.g. one container checks out a repository (which I know is below 80MB) so it is quite lengthy and I cannot tell you for sure how much that actually changes since there is no size information in the output.
+@ghost
+Author
+ghost commented Jan 28, 2017
+
+Output of du -chd 1 /var/lib/docker/btrfs/subvolumes/*:
+all-subvolumes-duchd1.txt
+
+Output of btrfs subvolume list /:
+btrfs-subvolume-list.txt
+@ghost
+Author
+ghost commented Jan 28, 2017
+
+I also collected the docker inspect output of all containers, but I cannot upload it here publicly since I am not sufficiently certain that I managed to remove all confidential information (access tokens, ..). However, if some docker contributor wants to investigate this, I'd be happy to give them access to the file through a private message.
+@cpuguy83
+Member
+cpuguy83 commented Jan 28, 2017
+
+@Jonast Thanks, I'm going to dig into this further and hopefully have a tool give you to help analyze this without leaking confidential details.
+@thaJeztah
+Member
+thaJeztah commented Feb 20, 2017
+
+ping @cpuguy83 have you had time to look for that tool?
+@cpuguy83
+Member
+cpuguy83 commented Feb 21, 2017
+
+Not yet :(
+But I did create #31012
+@chuegel
+chuegel commented Sep 21, 2017
+
+any news? just hit this bug
+@thaJeztah thaJeztah added the area/storage/btrfs label Sep 21, 2017
+@ghost
+Author
+ghost commented Sep 21, 2017
+
+Yea this is still happening for me as well. @huegelc what I do is every 1-2 months I stop all containers, uninstall docker, rm -rf /var/lib/docker and then reinstall & rebuild everything again and then I'm fine for the next 1-2 months. It's not the prettiest solution, but if you have a fallback server or you can afford 30 minutes of downtime every 1-2 months it works.
+eMPee584 and kotofos reacted with hooray emoji
+eMPee584, kotofos, aviogit, and CharlieReitzel reacted with confused emoji
+@chuegel
+chuegel commented Sep 22, 2017
+
+Thanks. Well, using docker with btrfs isn´t usable in a production environment yet as of the uncontrolled growth of volumes. Really looking forward to have this fixed.
+jamshid reacted with thumbs up emoji
+@johnharris85
+Contributor
+johnharris85 commented Oct 26, 2017
+
+Ping @cpuguy83 @thaJeztah, as btrfs is the only supported filesystem for SLES, this is an issue for corporate EE customers. Any additional updates / information / workarounds you'd recommend?
+@cpuguy83
+Member
+cpuguy83 commented Oct 31, 2017
+
+Are these issues occurring on a recent version of docker (ie. one that includes #31012)?
+It's definitely curious that there don't appear to be any subvolumes in /var/lib/docker/btrfs/subvolumes... does btrfs subvolume list /var/lib/docker/btrfs/subvolumes show anything?
+
+@johnharris85 Docker EE customers should report issues to Docker support.
+@hopeseekr
+hopeseekr commented Feb 3, 2018
+
+I've created a comprehensive guide on how to get yourself out of this quagmire: https://gist.github.com/hopeseekr/cd2058e71d01deca5bae9f4e5a555440
+beerendlauwers, igncp, aspiers, jankatins, ayush--s, bdelwood, michaellindman, mianos, KieranRobo, mvitale1989, and 9 more reacted with thumbs up emoji
+@ghost
+Author
+ghost commented Feb 3, 2018 •
+
+For what it's worth, one of the quickest ways to solve it is still 1. shutdown docker and all containers, 2. uninstall docker, 3. rm -rf /var/lib/docker, 4. reinstall docker, 5. rebuild & restart all containers.
+
+That gives you some downtime of course (depending mostly on how much you need to rebuild), but it worked fine for me as a comprehensive "reset" without more drastic steps like reformatting the entire disk.
+yaroslav-ilin reacted with thumbs up emoji
+@cpuguy83
+Member
+cpuguy83 commented Feb 5, 2018
+
+@hopeseekr, btrfs subvolume delete is exactly what docker does to clean up subvolumes, so I'd be curious as to why it's not cleaning up correctly.
+
+#36047 might solve it?
+Not sure what happens with btrfs subvolumes when they are mounted in another namespace since they aren't really ever mounted to begin with.
+If someone wants to play around with this it would be helpful.
+@hopeseekr
+hopeseekr commented Mar 7, 2018
+
+I honestly think that Docker / Moby (The singer should totally sue you guys!) loses track of BTRFS subvolumes under certain circumstances. It appears to me that they are recursively nested at times, and that's when the full file system corruption usually occurs.
+
+This is like a memory leak, but instead, it's a disk space leak, which at a certain threshold makes the entire file system seize up and die. You end up with a frozen system that spontaneously reboots or enters into read-only mode if it's not / and then you get nasty kernel messages on the next boot.
+@beerendlauwers
+beerendlauwers commented Mar 21, 2018 •
+
+@Jonast's solution did not work for me, unfortunately. When building images, the build always failed with a No such file or directory error of a subvolume in the /var/lib/docker/btrfs/subvolumes folder, even though that directory had been cleared with the relevant btrfs subvolume delete and rm -rf commands.
+
+@hopeseekr's workaround did work for me.
+@ghost
+Author
+ghost commented Mar 21, 2018 •
+
+You need to remove the entire /var/lib/docker folder and all subvolumes inside, not just some part of the inner contents (so everything is truly gone) - that always worked for me.
+mmoya, hartimcwildfly, and yaroslav-ilin reacted with thumbs up emoji
+@hopeseekr
+hopeseekr commented Jun 18, 2022
+
+    I have the same problem. The used space was 489 GB and after btrfs filesystem defrag -r /var/lib/docker/ become 9 GB, that is the real space usage. I think that it was a defragmentation problem.
+
+WOAH!! I wish I had seen this post last month when I last had this issue... I've never tried defragging...
+@cmurf
+cmurf commented Jun 20, 2022 •
+
+@akoscomp
+
+    I have the same problem. The used space was 489 GB and after btrfs filesystem defrag -r /var/lib/docker/ become 9 GB, that is the real space usage. I think that it was a defragmentation problem.
+
+This sounds to me like a known behavior of Btrfs when a large portion of shared extents are unused. Even if most of the blocks in the extent are no longer being used by any snapshot, if even one 4KiB block is referenced by any file, the entire original extent (which could be 1GiB) is "pinned", as in, it can't be freed. The term for this is "unreachable" or "bookend" extents. (It's really the blocks that are unreachable, but it's extent based file system and the extent can't be broken up into smaller extents thereby allowing these unreachable blocks to become freed. So the phenomenon tends to be described in terms of extents.)
+
+My guess is there's a kind of write pattern on this file system that's modifying files by freeing blocks, inserting or appending blocks, rather than creating all new files. I'm not really sure how docker/moby updates files when containers are updated. So I'm not sure if that's one factor, or if there's some sort of database running on the same file system and it has this write pattern.
+
+Note: Btrfs defragment just dirties all the files in the path you point it to, resulting in those extents being read and rewritten through the normal write allocator (nothing special), resulting in a bunch of new extents being created and in the process a lot of those stale blocks were freed. Beware though, defragment is not a proper garbage collector. It's even more likely defragment results in significant increase in space consumption because it's not snapshot aware, and shared extents become unshared, i.e. de-deduplicated.
+
+How do you know if which situation you're in? Check out btdu
+https://github.com/CyberShadow/btdu
+
+You want to know if you have significant unreachable extent size. If that's huge, you might benefit from defragment but like I said, this is a quite a hammer, it's not a proper garbage collection technique. There's no easy way to know for sure if defragment will free up space or use more.
+
+Anyway we definitely need to better understand the problem. Only thoroughly explaining the problem can we come up with some kind of solution either in user space or kernel or some combination of the two. In the meantime, I admit this means some baby sitting of the file system which is suboptimal and tedious. But hopefully we can come up with a way to clearly diagnose the problem and give users the proper work around until there's a longer term fix.
+@cmurf
+cmurf commented Jun 20, 2022
+
+For example.
+
+Are folks using the overlay2 or btrfs graph driver? (disambiguate reflink copy-up vs snapshot).
+
+Earliest kernel version? (what max extent size can be, since ~2015 it should be max 128M)
+Current kernel version?
+
+File system features? (the more we're on the same page with features the easier to narrow down; note $fsuuid is the file system uuid as reported by blkid)
+$ grep -R . /sys/fs/btrfs/$fsuuid/features/
+
+What mount options? (compress-force should mean max 512KiB extent size for uncompressed extents and 128KiB max size for compressed extents, and could be a valid work around for some folks because it'll pretty much obviate the need to defragment as a work around for the problem; autodefrag detects certain write patterns, insert and append, and periodically dirties entire files exhibiting that write pattern, resulting in the whole file being read and rewritten through the normal allocator - this is file system wide so it too might be a workaround for some worklfows but might be bad for others, e.g. large or very busy databases constantly being read and written out again will result in a performance hit)
+@tomachinz
+tomachinz commented Jun 20, 2022 •
+
+I use timeshift and docker together.
+
+In my opinion this is an unfixable architecture fail with BTRFS. Unless the UI relating to sub-volumes and snapshots is somehow made more obvious to solve these locked sub-volumes.
+
+Similar to how du can and never will correctly report free space. Maybe I'm too oldschool, but I use du to find big folders to clean; for now, I ditch BTFS and am fully back on ext4 - works great.
+@akoscomp
+akoscomp commented Jun 21, 2022
+
+Some details about my system, now the used space is 94 GB, this means, that the problem still exists, but if it's help I can restore the vm state before the defragmentation.
+btrfs features:
+/sys/fs/btrfs//features/mixed_backref:0
+/sys/fs/btrfs//features/raid56:0
+/sys/fs/btrfs//features/default_subvol:0
+/sys/fs/btrfs//features/mixed_groups:0
+/sys/fs/btrfs//features/free_space_tree:0
+/sys/fs/btrfs//features/no_holes:0
+/sys/fs/btrfs//features/big_metadata:0
+/sys/fs/btrfs//features/compress_zstd:0
+/sys/fs/btrfs//features/skinny_metadata:0
+/sys/fs/btrfs//features/compress_lzo:0
+/sys/fs/btrfs//features/extended_iref:1
+/sys/fs/btrfs//features/metadata_uuid:0
+/sys/fs/btrfs//features/rmdir_subvol:0
+
+btdu:
+Screenshot from 2022-06-21 20-05-50
+
+The system is Ubuntu 20.04.4, kernel:
+Linux 5.4.0-117-generic #132-Ubuntu SMP Thu Jun 2 00:39:06 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+df -h
+Filesystem Size Used Avail Use% Mounted on
+udev 7.8G 0 7.8G 0% /dev
+tmpfs 1.6G 3.6M 1.6G 1% /run
+/dev/sda2 98G 24G 69G 26% /
+tmpfs 7.9G 0 7.9G 0% /dev/shm
+tmpfs 5.0M 0 5.0M 0% /run/lock
+tmpfs 7.9G 0 7.9G 0% /sys/fs/cgroup
+/dev/loop1 62M 62M 0 100% /snap/core20/1518
+/dev/loop2 45M 45M 0 100% /snap/snapd/15904
+/dev/loop0 62M 62M 0 100% /snap/core20/1494
+/dev/loop4 56M 56M 0 100% /snap/core18/2409
+/dev/loop6 81M 81M 0 100% /snap/lxd/23037
+/dev/loop3 56M 56M 0 100% /snap/core18/2344
+/dev/loop5 102M 102M 0 100% /snap/lxd/23155
+/dev/loop7 47M 47M 0 100% /snap/snapd/16010
+/dev/sdb1 700G 94G 604G 14% /var/lib/docker
+tmpfs 1.6G 0 1.6G 0% /run/user/1000
+
+I rerun the defrag, after:
+df -h
+Filesystem Size Used Avail Use% Mounted on
+udev 7.8G 0 7.8G 0% /dev
+tmpfs 1.6G 3.6M 1.6G 1% /run
+/dev/sda2 98G 24G 69G 26% /
+tmpfs 7.9G 0 7.9G 0% /dev/shm
+tmpfs 5.0M 0 5.0M 0% /run/lock
+tmpfs 7.9G 0 7.9G 0% /sys/fs/cgroup
+/dev/loop1 62M 62M 0 100% /snap/core20/1518
+/dev/loop2 45M 45M 0 100% /snap/snapd/15904
+/dev/loop0 62M 62M 0 100% /snap/core20/1494
+/dev/loop4 56M 56M 0 100% /snap/core18/2409
+/dev/loop6 81M 81M 0 100% /snap/lxd/23037
+/dev/loop3 56M 56M 0 100% /snap/core18/2344
+/dev/loop5 102M 102M 0 100% /snap/lxd/23155
+/dev/loop7 47M 47M 0 100% /snap/snapd/16010
+/dev/sdb1 700G 12G 685G 2% /var/lib/docker
+tmpfs 1.6G 0 1.6G 0% /run/user/1000
+
+btdu:
+Screenshot from 2022-06-21 20-12-30
+@tymonx
+tymonx commented Jun 21, 2022
+
+I have exactly the same issue. I use Fedora CoreOS with BTRFS on /var (separate partition, 250GB). Most containers are small (30-50MB, distroless) and they are running under Docker Swarm stack. Around ~70 containers in single stack. After several weeks of frequent redeploying (for development purpose) we hit 100% disk usage and most of space was occupied by the /var/lib/docker/btrfs/subvolumes location with around 2500 created directories. The oldest directory was from 3 months time ago.
+
+It seems that Docker Daemon is not handling cleanup of old sub-volumes correctly.
+
+I can also confirm that the du command line utility is not working great on BTRFS. Just like @tomachinz said.
+@cmurf
+cmurf commented Jun 23, 2022 •
+
+@tymonx Can you put together a verbose reproducer? e.g. something like
+
+    Install Fedora CoreOS 36 with 250G /var on Btrfs
+    Deploy rpm-ostree commit xxxxxx
+    Install moby using command rpm-ostree install xxxx
+    Modify moby from defaults (be verbose what defaults you're modifying)
+    Install xyz container using command: xxxx
+    Redeploy using command: xxxx
+
+Please treat me like an idiot, I don't use moby at all, and I'm only slightly familiar with podman.
+
+If the container image you're using in step 5 is something you can share, that's ideal. If you can't, what publicly available container base image is most like it?
+
+If you have an estimate how many times I'd have to repeat step 6 to get to 100% disk usage, that's great because even if I do a fraction of that, I'll still see enough unreachable extents to prove the problem, and then hopefully track down when it does and doesn't happen.
+
+Include the moby equivalent of podman system info so I can see the versions of everything and what graph driver is being used. I know podman defaults to overlay graph driver even when on Btrfs. But I think moby might use the btrfs graph driver automatically when /var/lib/docker is on btrfs.
+
+Edit: Also, can you mention whether anything else is happening in /var other than the usual rpm-ostree and moby activity? e.g. database operations happening in /var?
+@MightySlaytanic
+MightySlaytanic commented Jul 24, 2022 •
+
+I've just noticed that my Synology NAS have run out of space even without adding "useful" data to it. I'm running docker on the NAS and every week I remove unused images with docker rmi and I've found the following:
+
+sh-4.4# pwd
+/volume1/@docker/btrfs/subvolumes
+
+sh-4.4# du -sh .
+975G    
+
+sh-4.4# btrfs filesystem du -s /volume1/\@docker/btrfs/ 
+     Total   Exclusive  Set shared  Filename
+ 971.54GiB   905.08GiB    10.11GiB  /volume1/@docker/btrfs/
+
+I'm using very few images that sum up to less than 4GB and in the subvolumes folders I have hundreds of folders related to old images. I've run docker image prune -a and btrfs filesystem defrag -r /volume1/\@docker/btrfs/ -v and nothing changed.
+
+The prune command show tens of "deleted" rows each time I run it without cleaning space:
+
+sh-4.4# docker image prune -a
+WARNING! This will remove all images without at least one container associated to them.
+Are you sure you want to continue? [y/N] y
+Deleted Images:
+deleted: 
+deleted: 
+[...]
+
+deleted: 
+deleted: 
+deleted: 
+
+Total reclaimed space: 0B
+
+Any idea? What could I do to free up all those unused images?
+
+UPDATE: I've tried the following. I've moved subvolumes to subvolumes.old and then I've started each container and when it reported an error I copied the corresponding folder from subvolumes.old to subvolumes. Now all the containers are running fine, I've deleted subvolumes.old subfolders with btrfs subvolumes delete * and subvolumes still shows 900GB, even if it contains less than 5GB. Is there any command to make btrfs commit the changes?
+@dsvi
+dsvi commented Sep 28, 2022
+
+Are you guys using snapper or alike btrfs snapshoting tool?
+Coz it might not be able to delete old snapshots, since docker creates nested ones. And snapshot deletion fails with "non empty" error. And such old snapshots are not getting cleaned up
+@rjshrjndrn
+rjshrjndrn commented Dec 26, 2022 •
+
+I've found one permenant solution to avoid docker images to be included in the disk snapshots.
+It's a bit hassle to setup, but once done, you can forget its there.
+
+    Uninstall current docker, and delete the data from /var/lib/docker. You can refer this link for that.
+    Use a usb live disk to boot, preferably Ubuntu machine. You ca use ventoy for that. No need to flash images, just copy paste will do ;)
+    Mount the disk to /mnt
+
+    mount /dev/sda1 /mnt
+
+    Create a subvolume
+
+    cd /mnt
+     btrfs subvolume create @docker 
+
+    Mount it in the /mnt/@/etc/fstab
+    You should have an entry there for root volume, like
+
+    UUID=168788f5-9850-41aa-9770-0f0f76a87a71 /              btrfs   subvol=/@,defaults 0 0
+     # Change the subvolume name here
+    UUID=168788f5-9850-41aa-9770-0f0f76a87a71 /var/lib/docker       btrfs   subvol=/@docker,defaults 0 0
+
+
+6. Reboot the machine, Install docker and profit
+
+@olivatooo
+olivatooo commented Jan 2, 2023
+
+Happens for me as well :/
+@jeffpalmerpsi
+jeffpalmerpsi commented Jan 3, 2023
+
+I'm using LVM - but also see gradually increasing disk space usage in the container. docker seemed to think it was only using about 2 GB, but real disk space had grown to about 49 GB. I shut down the container, and then started it, and it freed up significant space (without deleting/rm'ing/reinstalling).
+@hopeseekr
+hopeseekr commented Jan 10, 2023
+
+Just hit the problem again. May 2022 to January 2023... 8 1/2 months.
+derpycoder and kou9 reacted with eyes emoji
+@mcrio
+mcrio commented Feb 17, 2023
+
+Just stumbled upon this problem. The btrfs docker storage drive probably should not be the default one for the btrfs file system until the issue is resolved. Any reason not to use overlay2 as default until btrfs is working as expected?
+@amigthea
+amigthea commented Feb 17, 2023
+
+    Just stumbled upon this problem. The btrfs docker storage drive probably should not be the default one for the btrfs file system until the issue is resolved. Any reason not to use overlay2 as default until btrfs is working as expected?
+
+I faced this a week ago and given up to the nuclear workaround because I could not start docker when I tried to manually forced overlay2 on btrfs system.
+@dsvi
+dsvi commented Feb 17, 2023
+
+What happens if you do
+docker image rm
+on all the [unused] images, and than
+docker image  prune --all
+???
+@amigthea
+amigthea commented Feb 17, 2023
+
+I tried every possible docker prune/rm command to no avail before nuking the docker subvolumes
+@dsvi
+dsvi commented Feb 17, 2023
+
+are you using any btrfs snapshot tool? like snapper or timeshift?
+@amigthea
+amigthea commented Feb 17, 2023
+
+I do, btrbk, but not on the docker subvolumes: it manages other custom subvolumes in other btrfs partitions and disk altogether
+@mcrio
+mcrio commented Feb 18, 2023
+
+    I faced this a week ago and given up to the nuclear workaround because I could not start docker when I tried to manually forced overlay2 on btrfs system.
+
+I did it like this:
+
+    Removed all existing docker volumes
+    Removed btrfs /var/lib/docker/* subvolumes
+    Edited /etc/docker/daemon.json to include {"storage-driver": "overlay2"} so overlay2 is used as the default storage driver
+
+@amigthea
+amigthea commented Feb 18, 2023
+
+        I faced this a week ago and given up to the nuclear workaround because I could not start docker when I tried to manually forced overlay2 on btrfs system.
+
+    I did it like this:
+
+    * Removed all existing docker volumes
+
+    * Removed btrfs `/var/lib/docker/*` subvolumes
+
+    * Edited `/etc/docker/daemon.json` to include `{"storage-driver": "overlay2"}` so overlay2 is used as the default storage driver
+
+did that worked for you? on a btrfs root partition?
+
+I did exactly that and docker refused to start, it would throw out an error on systemctl start docker.service command; if I reverted back the
+
+{
+  "storage-driver": "overlay2"
+}
+
+option, deleting it, the same command start the docker service without problem
+@mcrio
+mcrio commented Feb 18, 2023
+
+Yes it did work for me w/o any problems. As a precaution I just made sure that all volumes are removed and that all containers are stopped.
+
+What's the error?
+@amigthea
+amigthea commented Feb 18, 2023
+
+    Yes it did work for me w/o any problems. As a precaution I just made sure that all volumes are removed and that all containers are stopped.
+
+    What's the error?
+
+You give me hope. I will retry in the next maintenance window and will let you know the exact error if I'll be stuck again, thank you for your insight
+@CyberShadow
+CyberShadow commented Feb 18, 2023
+
+Hi, btdu author here. As has been mentioned above certain write patterns can cause space to end up in unreachable extents... has anyone tried using it to see which files exactly end up in the UNREACHABLE designation? Maybe knowing that it's some particular log file or file created by a containerized application will allow progress on this problem.
+geekpete and cmurf reacted with thumbs up emoji
+@geekpete
+geekpete commented Feb 18, 2023
+
+What are the best diagnostics/details/commands to collect output of for the next person that hits this?
+@amigthea
+amigthea commented Feb 19, 2023
+
+    Yes it did work for me w/o any problems. As a precaution I just made sure that all volumes are removed and that all containers are stopped.
+
+    What's the error?
+
+I'm embarassed, the problem was entirely on my fault (syntax, gosh): I successfully changed the storage driver to overlay2 on my btrfs system, thank you @mcrio
+mcrio reacted with thumbs up emoji
+@AlexCloudDev
+AlexCloudDev commented Mar 14, 2023 •
+
+Hello,
+experiencing the same problem.
+
+How could you change your storage driver to non btrfs when your host system uses btrfs?
+
+As stated at https://docs.docker.com/config/containers/logging/json-file/ , only xfs and ext4 host file systems are compatible with overlay2.
+Btrfs storage driver needs btrfs, vfs or fuse-overlayfs on host.
+
+regards
+@mark2185
+mark2185 commented Mar 14, 2023
+
+    As stated at https://docs.docker.com/config/containers/logging/json-file/ , only btrfs storage driver is compatible with btrfs host file system
+
+I read that the other way, btrfs storage driver is compatible only with btrfs host filesystem.
+
+I just have this in my /etc/docker/daemon.json on my btrfs filesystem and it seems to work:
+
+{
+    "storage-driver": "overlay2"
+}
+
+Judging by this thread, others have had success with it as well.
+@kou9
+kou9 commented Apr 8, 2023
+
+Hi all,
+
+Just in case this might help some people in the same situation: I have been experiencing the same problem on a slightly different setup: I use docker in "Linux on ChromeOS" (nickname Crostini). This Linux VM uses btrfs on its / root partition (since it is a VM, / is a virtual partition), on which /var/lib/docker resides. As many people here the /var/lib/docker directory exhausts the / partition ultimately making the linux VM crash. This typically happened in a few weeks. I tried many techniques described here including monitoring the size of different directories in /var/lib/docker/containers (using btrfs du, btrfs fi, btdu) trying to use btrfs tools such as "re-balancing", manually deleting files within /var/lib/docker/containers,.. nothing worked and the directory size just kept growing.
+
+One thing I also noticed is that even deleting /var/lib/docker did not recover the space used fully. I could see some disk space being released, but it was a very small percentage compared with /var/lib/docker's footprint after a few weeks of operation.
+
+Nothing new so far. However here is the interesting piece: I bought an SD card for my Chromebook and mounted it as a disk image in ChromeOS (there's a few tutorials on this, here is an example). In more detail:
+
+    I first formatted the SD card as an exfat FS, then I created a disk image using the vmc create-extra-disk command you could see in the tutorial
+    I mounted the disk image into the ChromeOS VM
+    I changed my docker daemon base config so it uses a directory on the SD card instead of the default /var/lib/docker
+
+, and the good news is that I don't have the disk space exhaustion issue anymore, the new folder I replaced/var/lib/docker with (/mnt/external/0/docker) does not grow in size anymore and the containers' performance is very good even with a pretty standard and cheap SD card. The surprizing thing is that the linux VM still seems to mount it as a btrfs volume:
+
+$ mount | grep docker
+/dev/vdc on /mnt/external/0/docker type btrfs (rw,relatime,space_cache,subvolid=5,subvol=/)
+/dev/vdc on /mnt/external/0/docker/btrfs type btrfs (rw,relatime,space_cache,subvolid=5,subvol=/)
+
+It's a very specific setup so I'm not sure it's useful to this discussion, however I struggled so much with this problem that I thought I'd give a summary anyway.
+@knirch
+knirch commented Apr 30, 2023
+
+Seems no one except for tarfeef102 makes any mention of build cache?
+
+Found this bug when I was scratching my head as to why my chaotic "try-to-learn-docker" session ended up with a ton of images, containers, warlocks and whatnot. After stopping, halting, deleting, pruneing anything I could find I still had a lot of disk space being used up. Found the subvolumes and started googling, ended up here. Read half way or so, before giving up and finding https://gist.github.com/hopeseekr/cd2058e71d01deca5bae9f4e5a555440 which goes into various approaches of nuking the site from orbit.
+
+Given I wasn't actually suffering from the disk leakage (non production system, local playground, non work) I started messing around. Didn't have any luck with re-balancing (more on that later), my docker info was showing 0's across the board. Sad I didn't spot #27653 (comment) before stumbling across docker build prune myself and running it before I could try and see if it was readily visible in the docker info output or somewhere where it would stand out.
+
+So, that said.. quick dumb demo of what I think happened to me;
+
+~/ $ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          2         0         1.916GB   1.916GB (100%)
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     27        0         4.051kB   4.051kB
+
+~/ $ docker image rm $(docker images -q)
+Deleted: sha256:fbf092c3e3fc95626aa1e8f90890ec14b8f62d2d2282e238b4b47afc8f3eb345
+Deleted: sha256:66378958e8c05c6070e33cc228ef799178d99e43151ebed4a37084b3c4161707
+
+~/ $ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          0         0         0B        0B
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     27        0         1.831GB   1.831GB
+
+~/ $ docker info
+Client:
+ Context:    default
+ Debug Mode: false
+
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 0
+ Server Version: 20.10.5+dfsg1
+ Storage Driver: btrfs
+  Build Version: Btrfs v5.10.1 
+  Library Version: 102
+ Logging Driver: json-file
+ Cgroup Driver: systemd
+ Cgroup Version: 2
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 io.containerd.runtime.v1.linux runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: 1.4.13~ds1-1~deb11u3
+ runc version: 1.0.0~rc93+ds1-5+deb11u2
+ init version: 
+ Security Options:
+  apparmor
+  seccomp
+   Profile: default
+  cgroupns
+ Kernel Version: 5.10.0-21-amd64
+ Operating System: Debian GNU/Linux 11 (bullseye)
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 4
+ Total Memory: 7.755GiB
+ Name: falschgeld
+ ID: OIHV:C56Q:X6QT:N2DP:5OMR:U2Z5:2DG5:O4OG:MEYI:MJFY:FYVO:LBD4
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ Username: knirch
+ Registry: https://index.docker.io/v1/
+ Labels:
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Live Restore Enabled: false
+
+WARNING: Support for cgroup v2 is experimental
+
+~/ $ df -h /var/lib/docker
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdc         31G  884M   30G   3% /var/lib/docker
+
+~/ $ docker builder prune
+WARNING! This will remove all dangling build cache. Are you sure you want to continue? [y/N] y
+Deleted build cache objects:
+womjlijt780yn8huialm0w49w
+kgiuq8l5a9ekrbmn3sc0m8w2b
+wkkzrmwxllrksehp7edg3w4ge
+z0pszhx18v8o9x7t1p0emhmha
+cjctqwegm7ev5r7tx3l3kcy14
+vf61m0kyeylvx65ol8n70ftb6
+t8af2uhkojxqba71pes542vac
+111ejn0anw9oeygbelwg2rf91
+8khvbs9em3tko5dwnjp651jx1
+bmo6zhdvnndua84zfxih59dhg
+509aje5a3ou2k0fhlv42spqie
+oet8pvgni2ico1i72uoq1tok9
+od23avw33surj3c9uivh78cwr
+fixrt48xbea98o1kednwtnirx
+82jdc4ej577hk32t1cyec3hfa
+slr8um6z6mnk6xnpx9oubcwc7
+k0s7iusgd17g64kdsdx4y7rez
+twa1243ajg7em62maxy422g4m
+5hmr1n6dqda2drgce6jycvs3i
+sdi1ecihz4gi5rk01iw4dof24
+pyninuo418kicjyhw537beo2z
+o6o44zp8ozslnnq91jt5b6h99
+os3vw5i1ivx9nfdwu1risqup5
+z76qkgef9a0yuvr7z9jffmibh
+n8myh2a86ehzuuianoaqi58k7
+t57x06fr2c8xflw7c48cu301u
+01qdfd116pcvbs4yaxdww096m
+
+Total reclaimed space: 1.831GB
+
+Let's see what that did
+
+~/ $ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          0         0         0B        0B
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B
+
+~/ $ df -h /var/lib/docker/
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdc         31G  884M   30G   3% /var/lib/docker
+
+Not the expected outcome. Did I do something differently before when I initially got my storage back? I'll throw in btrfs balance for good measure, that's the only thing of importance that I tried before;
+
+~/ $ sudo btrfs balance /var/lib/docker
+Done, had to relocate 6 out of 6 chunks
+
+~/ $ df -h /var/lib/docker/
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdc         31G   25M   31G   1% /var/lib/docker
+
+Yay. It's all gone! \o/
+
+So, at least for me, the lost storage was reclaimed by docker builder prune and btrfs balance. Order didn't seem to matter for me. Doing just one of them left a lot of data still being used. Both of them? Victory.
+
+It was non obvious to me, and with the exception of Tareef, the entire thread is curiously void of any mention of docker system df / docker builder prune.
+
+Now, I don't know if MY issue would gradually resolve itself, if docker does periodic pruning of build cache, if btrfs does automatic balancing...
+
+If this helps someone, thank @tarfeef102, if this is hogwash, blame me.
+to join this conversation on GitHub. Already have an account? Sign in to comment
+Assignees
+No one assigned
+Labels
+area/storage/btrfs
+status/more-info-needed
+version/1.12
+Projects
+None yet
+Milestone
+No milestone
+Development
+
+No branches or pull requests
+48 participants
+@CyberShadow
+@justincormack
+@CoRfr
+@johnharris85
+@cpuguy83
+@PrplHaz4
+@PetteriAimonen
+@tomachinz
+@andriy-f
+@hopeseekr
+@knirch
+@lorddoskias
+@thaJeztah
+@funkyfuture
+@geekpete
+@mcrio
+@rjshrjndrn
+@stefangweichinger
+@akoscomp
+@beerendlauwers
+and others
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+
+    Terms
+    Privacy
+    Security
+    Status
+    Docs
+    Contact GitHub
+    Pricing
+    API
+    Training
+    Blog
+    About
+
