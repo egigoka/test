@@ -2,6 +2,8 @@ import time
 import os
 import pickle
 from collections import deque
+from commands import Time
+
 
 class TaskProgress:
     def __init__(self, max_percent=100, window_size=5):
@@ -33,7 +35,11 @@ class TaskProgress:
             return None
         
         remaining_percent = self.max_percent - self.history[-1][1]
-        return self.last_time + (remaining_percent / speed)
+        try:
+            estimate = self.last_time + (remaining_percent / speed)
+        except ZeroDivisionError:
+            estimate = self.last_time + 3600*24*360*100
+        return estimate
 
     def save(self, filename="cache" + os.sep + "etawen.pkl"):
         with open(filename, "wb") as file:
@@ -45,12 +51,23 @@ class TaskProgress:
             return pickle.load(file)
 
 
+def print_progress(progress_tracker):
+    estimated_completion = progress_tracker.estimate_completion()
+    if estimated_completion:
+        estimated_time_left = estimated_completion - time.time()
+        print(f"Estimated time left: {Time.human_readable(estimated_time_left)}")
+        print(f"Estimated completion time: {time.ctime(estimated_completion)}")
+    else:
+        print("Not enough data to estimate completion time.")
+
+
 def main():
     try:
         progress_tracker = TaskProgress.load()
     except (FileNotFoundError, EOFError):
-        progress_tracker = TaskProgress(max_percent=120)  # Example: custom max percent
+        progress_tracker = TaskProgress(max_percent=100)  # Example: custom max percent
 
+    print_progress(progress_tracker)
     while True:
         try:
             percent = float(input("Enter the percentage of task completed: "))
@@ -59,13 +76,8 @@ def main():
                 break
 
             progress_tracker.add_progress(percent)
-            estimated_completion = progress_tracker.estimate_completion()
-            if estimated_completion:
-                estimated_time_left = estimated_completion - time.time()
-                print(f"Estimated time left: {estimated_time_left:.2f} seconds")
-                print(f"Estimated completion time: {time.ctime(estimated_completion)}")
-            else:
-                print("Not enough data to estimate completion time.")
+
+            print_progress(progress_tracker)
 
             progress_tracker.save()
             time.sleep(60)  # Wait for a minute
@@ -73,7 +85,8 @@ def main():
         except ValueError:
             print("Please enter a valid percentage.")
         except KeyboardInterrupt:
-            print("Exiting. Progress saved.")
+            print("Exiting.")
             break
+
 
 main()
