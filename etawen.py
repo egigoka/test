@@ -80,7 +80,7 @@ def main():
             print_progress(progress_tracker)
 
             progress_tracker.save()
-            time.sleep(60)  # Wait for a minute
+#            time.sleep(60)  # Wait for a minute
 
         except ValueError:
             print("Please enter a valid percentage.")
