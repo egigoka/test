@@ -4,9 +4,11 @@ import unittest
 import sys
 sys.path.append("..")
 sys.path.append(".")
-from _8 import *
-import _8
+from commands import module9
+import commands
 __version__ = "0.0.1"
+
+module_name = ""
 
 #class TestStringMethods(unittest.TestCase):
 #
@@ -26,7 +28,7 @@ __version__ = "0.0.1"
 #    def test_exception(self):
 #         self.assertRaises(ValueError, Str.split_every, [12, 34, 56, 78, 90], 2) # yes, arguments after func
 
-print("_8", _8, "_8.__version__", _8.__version__, "test_version", __version__)
+print("{module_name}", eval("{module_name}"), "{module_name}.__version__", eval("{module_name}.__version__"), "test_version", __version__)
 
 
 if __name__ == '__main__':

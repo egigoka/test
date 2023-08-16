@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import unittest
 import sys
+import os
 sys.path.append("..")
 sys.path.append(".")
-from commands8 import *
-__version__ = "0.0.1"
+from commands import *
+__version__ = "0.0.3"
 
 class TestFileOperations(unittest.TestCase):
     global filename  # globalization for use filename in all tests

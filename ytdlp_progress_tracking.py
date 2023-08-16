@@ -14,15 +14,21 @@ previous_total_mib = None
 
 previous_speeds = []
 
-update_every = 20
+update_every = 30
 
-runs_per_5_minutes = 5 * 60 / update_every
+runs_per_5_minutes = 10 * 60 / update_every
+
+
+previous_mibs_per_file = {}
 
 
 def main():
 
     b = Bench(verbose=True)
     global previous_total_mib
+    global previous_mibs_per_file
+
+    mibs_per_file = {}
     
     dt = Time.datetime()
 
@@ -43,10 +49,21 @@ def main():
     total_mib = 0
     
     for file in files:
-        if (file.find(".f") != -1 or file.find(".temp") != -1):
+        if (file.find(".f") != -1 \
+                or file.find(".temp") != -1
+                or file.find(".live_chat.json.part") != -1 \
+                or file.find(".part-Frag") != -1 \
+            ):
+            try:
+                size_mib = int(File.get_size(file)/1024/1024)
+            except FileNotFoundError:
+                size_mib = 0
             if "logall" in OS.args:
-                print(str(int(File.get_size(file)/1024/1024)) + "MiB", file)
-            total_mib += int(File.get_size(file)/1024/1024)
+                print(str(size_mib) + "MiB", file)
+            total_mib += size_mib
+
+            mibs_per_file[file] = size_mib
+
             if file.find(".m4a") != -1:
                 m4a = file
             elif file.find(".temp.mp4") != -1:
@@ -71,17 +88,29 @@ def main():
                 mp4temp = ""
                 m4a = ""
 
-    freespace = Str.nl(Console.get_output("df -kh ."))[1]
+    freespace = Str.nl(Console.get_output("df", "-kh", directory))[1]
 
     first_run = False
     if previous_total_mib == None:
         previous_total_mib = total_mib
+        previous_mibs_per_file = mibs_per_file
         first_run = True
 
     is_bigger = total_mib > previous_total_mib
+    change = total_mib - previous_total_mib
+
+    total_mib_per_new_files = 0
+    total_mib_per_old_files = 0
+    for file, size_mib in mibs_per_file.items():
+        if file in previous_mibs_per_file.keys():
+            total_mib_per_old_files += previous_mibs_per_file[file]
+        total_mib_per_new_files += size_mib
+
+    total_mib = total_mib_per_new_files
+    is_bigger = total_mib_per_new_files > total_mib_per_old_files
  
     plus = "+" if is_bigger else ""
-    change = total_mib - previous_total_mib
+    change = total_mib_per_new_files - total_mib_per_old_files
     speed = change / update_every
 
     if speed < 0:
@@ -99,18 +128,21 @@ def main():
         medium_speed = 0
 
     previous_total_mib = total_mib
+    previous_mibs_per_file = mibs_per_file
     
     if file_bundle_count > 1:
         Print.colored(f"{total_percent:.2f}% total of {file_bundle_count * 100}%", "magenta")
 
-    print(f"{str(dt.hour).zfill(2)}:{str(dt.minute).zfill(2)}:{str(dt.second).zfill(2)}", end = "\t|\t")
+    print(f"{str(dt.hour).zfill(2)}:{str(dt.minute).zfill(2)}:{str(dt.second).zfill(2)}", end = " | ")
     
     Print.colored(
-        f"{Str.leftpad(total_mib, 5, ' ')}MiB total, {plus}{change}MiB, {speed:.2f}MiB/s, {medium_speed:.2f}MiB/s", 
+        Str.rightpad(f"{Str.leftpad(total_mib, 5, ' ')}MiB total, {plus}{change}MiB, {speed:.2f}MiB/s, {medium_speed:.2f}MiB/s", 
+                     50,
+                     " "),
         "green" if is_bigger else "", 
-        end="\t|\t")
+        end="\t| ")
     
-    print(Str.get_words(freespace)[3] + "B free", end="\t|\t")
+    print(Str.get_words(freespace)[3] + "B free", end=" | ")
     
     b.end()
     
@@ -120,7 +152,7 @@ if __name__ == "__main__":
     if "whiletrue" in OS.args:
         while True:
             main()
-            Time.sleep(update_every - 1, verbose=True)
+            Time.sleep(update_every - 2, verbose=True)
             
     else:
         main()

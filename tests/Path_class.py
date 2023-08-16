@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 import unittest
 import sys
+import os
 sys.path.append("..")
 sys.path.append(".")
-from commands8 import *
-import commands8
-__version__ = "3.0.3"
+from commands import *
+import commands
+__version__ = "3.0.5"
 
 
-print("commands8", commands8, "commands8.__version__", commands8.__version__, "test_version", __version__)
+print("commands", commands, "commands.__version__", commands.__version__, "test_version", __version__)
 
 class TestPathOperations(unittest.TestCase):
 
@@ -19,7 +20,7 @@ class TestPathOperations(unittest.TestCase):
 
     if OS.name in ["macos", "linux"]:
         def test02_unix_path_extend(self):
-            self.assertEqual(Path.extend("usr", "bin", "local"),
+            self.assertEqual(Path.combine("usr", "bin", "local"),
                              "/usr/bin/local")
 
     elif OS.name == "windows":

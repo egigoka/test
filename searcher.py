@@ -3,6 +3,7 @@ import sys
 from commands import *
 print("searcher 0.5.2")
 
+<<<<<<< HEAD
 file_extensions=[]  # cached
 skipped_file_substrings = ["Cash Receipt", "goods Create"]  # cached
 
@@ -16,11 +17,44 @@ except IndexError:
     pass
 
 match_strings=['pip']  # not cached
+=======
+file_extensions=[".py"]  # cached
+skipped_file_substrings = []  # cached
+
+case_sensitive=False  # cached partially
+
+match_strings=['Console.blink']  # not cached
+>>>>>>> ffd7e2a6544091aa8365f7e84dc5ce23c2868f77
 skipped_strings = []  # not cached
 multiple_lines=True  # not cached
 end_print_files_dict=True  # not cached
 skip_over_this_size = 2 * GiB  # not cached
+stop_after_every_found_line=False # not cached
+end_print_files_dict=True # not cached
 
+<<<<<<< HEAD
+=======
+whoami = Console.get_output("whoami").strip()
+if OS.windows:
+    username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
+else:
+    username = whoami
+
+folder = OS.args[1]
+cache_create = "--cache-create" in OS.args or "--create-cache" in OS.args
+cache_load = "--cache-load" in OS.args or "--load-cache" in OS.args
+debug = "--debug" in OS.args
+
+if cache_create:
+    print("creating cache...")
+if cache_load:
+    print("loading cache...")
+
+if Dir.exist(folder):
+	paths = [folder]
+else:
+	paths=['.']
+>>>>>>> ffd7e2a6544091aa8365f7e84dc5ce23c2868f77
 skipped_paths=['/mnt/c/Windows/',
                '/mnt/c/program files/',
                '/mnt/c/program files (x86)/',
@@ -32,6 +66,7 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\MSOCache',
                r'c:\programdata',
                r'C:\Users\Egorov\Documents\!Не моё']
+<<<<<<< HEAD
 stop_after_every_found_line=False
 
 whoami = Console.get_output("whoami").strip()
@@ -50,6 +85,8 @@ if cache_load:
     print("loading cache...")
 
 
+=======
+>>>>>>> ffd7e2a6544091aa8365f7e84dc5ce23c2868f77
 
 _printed_results = []
 
@@ -114,7 +151,7 @@ if not cache_load:
                         files_to_read.append(file_path)
                         continue
                     for ext in file_extensions:
-                        if File.get_extension(file).lower() == ext.lower():
+                        if file.lower().endswith(ext.lower()):
                             files_to_read.append(file_path)
                             break
 
