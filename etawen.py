@@ -42,8 +42,18 @@ class TaskProgress:
         return estimate
 
     def save(self, filename="cache" + os.sep + "etawen.pkl"):
-        with open(filename, "wb") as file:
+        try:
+            file = open(filename, "wb")
+        except FileNotFoundError:
+            if not os.path.exists("cache"):
+                os.makedirs("cache")
+            file = open(filename, "wb")
+        try:
             pickle.dump(self, file)
+            file.close()
+        except Exception:
+            file.close()
+        
 
     @classmethod
     def load(cls, filename="cache" + os.sep + "etawen.pkl"):
