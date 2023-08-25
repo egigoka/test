@@ -4,12 +4,20 @@ import pickle
 import sys
 import datetime
 from collections import deque
-from commands import Time, Console
+from commands import Time, Str
 
 CACHE_FOLDER = "cache"
 CACHE_FILE = "etawen.pkl"
 CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
+CLEAR = False
+TIMER = 0
 
+for arg in sys.argv:
+    if arg == "--clear":
+        CLEAR = True
+    elif arg.startswith("--timer="):
+        TIMER = Str.get_integers(arg)[0]
+    
 class TaskProgress:
     def __init__(self, max_percent=100, window_size=5):
         self.max_percent = max_percent
@@ -80,7 +88,7 @@ def print_progress(progress_tracker):
 
 def main():
     
-    if "--clear" in sys.argv and os.path.exists(CACHE_PATH):
+    if CLEAR and os.path.exists(CACHE_PATH):
         os.remove(CACHE_PATH)
     
     try:
@@ -101,7 +109,7 @@ def main():
             print_progress(progress_tracker)
 
             progress_tracker.save()
-            Time.sleep(60*5, verbose=True)
+            Time.sleep(TIMER, verbose=True)
 
         except ValueError:
             print("Please enter a valid percentage.")
