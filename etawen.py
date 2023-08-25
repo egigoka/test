@@ -1,9 +1,14 @@
 import time
 import os
 import pickle
+import sys
+import datetime
 from collections import deque
-from commands import Time
+from commands import Time, Console
 
+CACHE_FOLDER = "cache"
+CACHE_FILE = "etawen.pkl"
+CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
 
 class TaskProgress:
     def __init__(self, max_percent=100, window_size=5):
@@ -41,12 +46,12 @@ class TaskProgress:
             estimate = self.last_time + 3600*24*360*100
         return estimate
 
-    def save(self, filename="cache" + os.sep + "etawen.pkl"):
+    def save(self, filename=CACHE_PATH):
         with open(filename, "wb") as file:
             pickle.dump(self, file)
 
     @classmethod
-    def load(cls, filename="cache" + os.sep + "etawen.pkl"):
+    def load(cls, filename=CACHE_PATH):
         with open(filename, "rb") as file:
             return pickle.load(file)
 
@@ -59,9 +64,15 @@ def print_progress(progress_tracker):
         print(f"Estimated completion time: {time.ctime(estimated_completion)}")
     else:
         print("Not enough data to estimate completion time.")
+    print(datetime.datetime.now())
+    print()
 
 
 def main():
+    
+    if "--clear" in sys.argv and os.path.exists(CACHE_PATH):
+        os.remove(CACHE_PATH)
+    
     try:
         progress_tracker = TaskProgress.load()
     except (FileNotFoundError, EOFError):
@@ -80,7 +91,7 @@ def main():
             print_progress(progress_tracker)
 
             progress_tracker.save()
-#            time.sleep(60)  # Wait for a minute
+            Time.sleep(60*5, verbose=True)
 
         except ValueError:
             print("Please enter a valid percentage.")
