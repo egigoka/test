@@ -11,15 +11,19 @@ CACHE_FILE = "etawen.pkl"
 CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
 CLEAR = False
 TIMER = 0
+MAX_PERCENT = 100
 
 for arg in sys.argv:
     if arg == "--clear":
         CLEAR = True
     elif arg.startswith("--timer="):
         TIMER = Str.get_integers(arg)[0]
+    elif arg.startswith("--max-percent="):
+        MAX_PERCENT = Str.get_integers(arg)[0]
+
     
 class TaskProgress:
-    def __init__(self, max_percent=100, window_size=5):
+    def __init__(self, max_percent=MAX_PERCENT, window_size=5):
         self.max_percent = max_percent
         self.history = deque(maxlen=window_size)
         self.start_time = time.time()
@@ -94,14 +98,14 @@ def main():
     try:
         progress_tracker = TaskProgress.load()
     except (FileNotFoundError, EOFError):
-        progress_tracker = TaskProgress(max_percent=100)  # Example: custom max percent
+        progress_tracker = TaskProgress(max_percent=MAX_PERCENT)  # Example: custom max percent
 
     print_progress(progress_tracker)
     while True:
         try:
             percent = float(input("Enter the percentage of task completed: "))
             if percent >= progress_tracker.max_percent:
-                print("Task completed!")
+                print(f"Task completed! {percent} of {progress_tracker.max_percent}")
                 break
 
             progress_tracker.add_progress(percent)
