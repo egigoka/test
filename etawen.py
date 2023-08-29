@@ -12,10 +12,13 @@ CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
 CLEAR = False
 TIMER = 0
 MAX_PERCENT = 100
+REVERSED = False
 
 for arg in sys.argv:
     if arg == "--clear":
         CLEAR = True
+    elif arg == "--reversed":
+        REVERSED = True
     elif arg.startswith("--timer="):
         TIMER = Str.get_integers(arg)[0]
     elif arg.startswith("--max-percent="):
@@ -104,6 +107,8 @@ def main():
     while True:
         try:
             percent = float(input("Enter the percentage of task completed: "))
+            if REVERSED:
+                percent = progress_tracker.max_percent - percent
             if percent >= progress_tracker.max_percent:
                 print(f"Task completed! {percent} of {progress_tracker.max_percent}")
                 break
