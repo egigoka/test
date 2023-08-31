@@ -74,7 +74,7 @@ class TaskProgress:
             estimate = self.last_time + 3600*24*360*100
         return estimate
 
-    def save(self, filename="cache" + os.sep + "etawen.pkl"):
+    def save(self, filename):
         try:
             file = open(filename, "wb")
         except FileNotFoundError:
@@ -113,6 +113,8 @@ def main():
     
     try:
         progress_tracker = TaskProgress.load(CACHE_PATH)
+        progress_tracker.max_percent = MAX_PERCENT
+        progress_tracker.save(CACHE_PATH)
     except (FileNotFoundError, EOFError):
         progress_tracker = TaskProgress(max_percent=MAX_PERCENT)  # Example: custom max percent
 
@@ -130,7 +132,7 @@ def main():
 
             print_progress(progress_tracker)
 
-            progress_tracker.save()
+            progress_tracker.save(CACHE_PATH)
             Time.sleep(TIMER, verbose=True)
 
         except ValueError:
