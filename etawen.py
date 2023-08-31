@@ -7,12 +7,13 @@ from collections import deque
 from commands import Time, Str
 
 CACHE_FOLDER = "cache"
-CACHE_FILE = "etawen.pkl"
-CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
+
+CACHE_FILE = None
 CLEAR = False
 TIMER = 0
-MAX_PERCENT = 100
+MAX_PERCENT = None
 REVERSED = False
+PRINT_USAGE = False
 
 for arg in sys.argv:
     if arg == "--clear":
@@ -23,8 +24,20 @@ for arg in sys.argv:
         TIMER = Str.get_integers(arg)[0]
     elif arg.startswith("--max-percent="):
         MAX_PERCENT = Str.get_integers(arg)[0]
+    elif arg.startswith("--file="):
+        CACHE_FILE = Str.substring(arg, "=") + ".pkl"
 
-    
+if CACHE_FILE is None:
+    print("Save file not specified. Provide with --file={filename}")
+    PRINT_USAGE = True
+if MAX_PERCENT is None:
+    print("Max percent not specified. Privide with --max-percent={max percent}")
+    PRINT_USAGE = True
+
+if PRINT_USAGE:
+    print(f"usage: python3 {__file__} --file={{filename}} --max-percent={{max percent}} [--clear] [--reversed] [--timer={{timer}}]")
+    sys.exit(1)
+
 class TaskProgress:
     def __init__(self, max_percent=MAX_PERCENT, window_size=5):
         self.max_percent = max_percent
@@ -76,7 +89,7 @@ class TaskProgress:
         
 
     @classmethod
-    def load(cls, filename=CACHE_PATH):
+    def load(cls, filename):
         with open(filename, "rb") as file:
             return pickle.load(file)
 
@@ -99,7 +112,7 @@ def main():
         os.remove(CACHE_PATH)
     
     try:
-        progress_tracker = TaskProgress.load()
+        progress_tracker = TaskProgress.load(CACHE_PATH)
     except (FileNotFoundError, EOFError):
         progress_tracker = TaskProgress(max_percent=MAX_PERCENT)  # Example: custom max percent
 
@@ -126,5 +139,6 @@ def main():
             print("Exiting.")
             break
 
+CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
 
 main()
