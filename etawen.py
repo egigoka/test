@@ -121,7 +121,8 @@ def main():
     print_progress(progress_tracker)
     while True:
         try:
-            percent = float(input("Enter the percentage of task completed: "))
+            percent_input = input("Enter the percentage of task completed: ")
+            percent = float(percent_input)
             if REVERSED:
                 percent = progress_tracker.max_percent - percent
             if percent >= progress_tracker.max_percent:
@@ -136,6 +137,10 @@ def main():
             Time.sleep(TIMER, verbose=True)
 
         except ValueError:
+            if percent_input.strip() == "q":
+                print("Exiting.")
+                sys.exit(0)
+                
             print("Please enter a valid percentage.")
         except KeyboardInterrupt:
             print("Exiting.")
