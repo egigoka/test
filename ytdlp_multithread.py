@@ -43,8 +43,8 @@ def regen_cache():
     command = ["python3", "-m", "yt_dlp", "--flat-playlist", "--print", "id", channel]
 
     if cookies_exist:
-        command.insert(2, cookies_path)
-        command.insert(2, "--cookies")
+        command.insert(3, cookies_path)
+        command.insert(3, "--cookies")
     
     links = Console.get_output(*command, print_std=debug).strip()
     File.wipe(cache_file_path)
@@ -99,13 +99,15 @@ def download(youtube_video_id, cnt, total):
                            "--write-url-link",
                            "--download-archive", directory + Path.separator() + "archive.ytdlp",
                            f"https://youtube.com/watch?v={youtube_video_id}"]
+    if cookies_exist:
+        command.insert(3, cookies_path)
+        command.insert(3, "--cookies")
+
     if wait:
         command.insert(-1, "--live-from-start")
         command.insert(-1, "--wait-for-video")
         command.insert(-1, "10")
-    if cookies_exist:
-        command.insert(2, cookies_path)
-        command.insert(2, "--cookies")
+    
     if debug:
         Print.colored(*command, "green")
     Console.get_output(*command, 
