@@ -33,18 +33,31 @@ if debug:
     print(f"{channel_file_path=}")
 channel = File.read(channel_file_path).strip()
 cache_file_path = directory + Path.separator() + "channel_videos_cache.txt"
+cookies_path = directory + Path.separator() + "cookies.txt"
+cookies_exist = File.exist(cookies_path)
+if not cookies_exist:
+    Print.colored("Cookies file not found, download without them")
 
 def regen_cache():
     Print.colored("Getting links, please, be patient...")
-    links = Console.get_output("python3", "-m", "yt_dlp", "--flat-playlist", "--print", "id", channel, print_std=debug).strip()
+    command = ["python3", "-m", "yt_dlp", "--flat-playlist", "--print", "id", channel]
+
+    if cookies_exist:
+        command.insert(2, cookies_path)
+        command.insert(2, "--cookies")
+    
+    links = Console.get_output(*command, print_std=debug).strip()
     File.wipe(cache_file_path)
     File.write(cache_file_path, links)
 
 if ch:
     regen = True
-    if File.get_size(cache_file_path):
-        if not CLI.get_y_n("Cache file already written. Do you wish to recreate it?"):
-            regen = False
+    try:
+        if File.get_size(cache_file_path):
+            if not CLI.get_y_n("Cache file already written. Do you wish to recreate it?"):
+                regen = False
+    except OSError:
+        pass
     if regen:
         regen_cache()
 
@@ -55,25 +68,49 @@ def download(youtube_video_id, cnt, total):
     b = Bench(f"Downloaded {yt_id_with_cnt}", verbose=True)
     command = ["python3", "-m", "yt_dlp",
                            "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
-                           "-o", directory + Path.separator() + "%(title)s [%(id)s].%(ext)s",
-                           "--retries", "infinite",
-                           "--fragment-retries", "infinite",
-                           "--file-access-retries", "infinite",
-                           "--extractor-retries", "infinite",
+                           "--prefer-ffmpeg",
+                           "--merge-output-format", "mkv",
+                           
+                           "-o", directory \
+                                 + Path.separator() + "Videos" \
+                                 + Path.separator() + "%(upload_date>%Y-%m-%d)s - %(title)s [%(id)s].%(ext)s",
+                           # "--retries", "infinite",
+                           "--retries", "100000",
+                           "--fragment-retries", "100000",
+                           "--file-access-retries", "100000",
+                           "--extractor-retries", "100000",
                            "--limit-rate", "40M",
-                           "--retry-sleep", "exp=1:8",
+                           "--retry-sleep", "fragment:exp=1:8",
+                           "--sponsorblock-mark", "default",
                            "--write-info-json",
                            "--write-comments",
                            "--write-subs",
                            "--sub-langs", "all",
-                           # "--download-archive", directory + Path.separator() + "archive.ytdlp",
+                           "--embed-subs",
+                           "--add-metadata",
+                           "--parse-metadata", "%(title)s:%(meta_title)s",
+                           "--parse-metadata", "%(uploader)s:%(meta_artist)s",
+                           "--write-description",
+                           "--write-thumbnail",
+                           "--embed-thumbnail",
+                           "--write-annotations",
+                           "--write-playlist-metafiles",
+                           "--write-all-thumbnails",
+                           "--write-url-link",
+                           "--download-archive", directory + Path.separator() + "archive.ytdlp",
                            f"https://youtube.com/watch?v={youtube_video_id}"]
     if wait:
         command.insert(-1, "--live-from-start")
         command.insert(-1, "--wait-for-video")
         command.insert(-1, "10")
+    if cookies_exist:
+        command.insert(2, cookies_path)
+        command.insert(2, "--cookies")
+    if debug:
+        Print.colored(*command, "green")
     Console.get_output(*command, 
                        print_std=debug)
+    
     b.end()
 
 def free_space_watchdog(minimum_space):
@@ -118,9 +155,10 @@ def free_space_watchdog(minimum_space):
 
 def progress():
     import subprocess
-    subprocess.Popen(["python3", "/home/egigoka/py/test/ytdlp_progress_tracking.py", ".", "whiletrue"])
+    subprocess.Popen(["python3", "/home/egigoka/py/test/ytdlp_progress_tracking.py", directory + Path.separator() + "Videos", "whiletrue"])
 
 def running_threads(tt, additional_threads):
+    return
     Print.colored("COUNTING THREADS LOL", "black", "on_white")
     Print.colored("COUNTING THREADS LOL", "red", "on_white")
     Print.colored("COUNTING THREADS LOL", "black", "on_white")
