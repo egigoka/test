@@ -1,0 +1,30 @@
+The issue is related to Docker gradually exhausting disk space on BTRFS. The user has tried various cleanup procedures, but the disk space usage remains high. The temporary solution involves stopping Docker, purging and reinstalling, which brings disk usage back to normal. The user is seeking more information on how to resolve this issue.
+The main issue discussed is the uncontrolled growth of volumes when using Docker with btrfs. This can lead to disk space leaks and file system corruption. Some suggested workarounds include:
+
+1. Uninstall Docker, remove the entire /var/lib/docker folder (including all subvolumes), reinstall Docker, and rebuild & restart all containers. This solution can cause some downtime but has worked for several users.
+2. Using btrfs defragmentation by running `btrfs filesystem defrag -r /var/lib/docker/`, but beware that this solution might not be a proper garbage collector and could result in significant increase in space consumption.
+
+Remember that Docker EE customers should report issues to Docker support.
+Summary:
+
+The user is facing an issue with the Docker Daemon not handling cleanup of old sub-volumes correctly on a system running Ubuntu 20.04.4 with kernel Linux 5.4.0-117-generic. The filesystem is BTRFS, and the issue seems to occur on other systems, such as Fedora CoreOS, as well. The problem leads to increased disk space usage and hitting 100% disk usage after several weeks of frequent redeploying.
+
+Possible solutions and related commands:
+
+1. Uninstall current Docker and delete data from `/var/lib/docker`.
+2. Use a USB live disk to boot and mount the disk to `/mnt`.
+3. Create a subvolume with `btrfs subvolume create @docker`.
+4. Mount the subvolume in `/mnt/@/etc/fstab` with UUID and appropriate subvolume name.
+5. Reboot the machine, install Docker, and use the new configuration.
+6. Consider using the `overlay2` storage driver instead of the BTRFS driver, by editing `/etc/docker/daemon.json` to include `{"storage-driver": "overlay2"}`.
+
+It's important to note that the above solutions may require further testing and adjustments based on the specific system and setup.
+This chunk focuses on reclaiming storage used by Docker with the Btrfs storage driver. The user demonstrates a process to identify and reclaim storage by using `docker system df`, `docker builder prune`, and `btrfs balance` commands.
+
+Key commands and practices:
+1. `docker system df`: Shows the disk usage for Docker objects like images, containers, and build cache.
+2. `docker image rm $(docker images -q)`: Removes all images.
+3. `docker builder prune`: Removes all dangling build cache.
+4. `btrfs balance`: Balances the Btrfs file system, relocating chunks to free up space.
+
+The user's issue with lost storage was resolved by running both `docker builder prune` and `btrfs balance`.

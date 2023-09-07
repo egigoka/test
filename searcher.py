@@ -3,12 +3,12 @@ import sys
 from commands import *
 print("searcher 0.5.2")
 
-file_extensions=[".py"]  # cached
+file_extensions=[]  # cached
 skipped_file_substrings = []  # cached
 
 case_sensitive=False  # cached partially
 
-match_strings=['Console.blink']  # not cached
+match_strings=['navigation']  # not cached
 skipped_strings = []  # not cached
 multiple_lines=True  # not cached
 end_print_files_dict=True  # not cached
@@ -16,26 +16,13 @@ skip_over_this_size = 2 * GiB  # not cached
 stop_after_every_found_line=False # not cached
 end_print_files_dict=True # not cached
 
-whoami = Console.get_output("whoami").strip()
-if OS.windows:
-    username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
-else:
-    username = whoami
-
 folder = OS.args[1]
-cache_create = "--cache-create" in OS.args or "--create-cache" in OS.args
-cache_load = "--cache-load" in OS.args or "--load-cache" in OS.args
-debug = "--debug" in OS.args
-
-if cache_create:
-    print("creating cache...")
-if cache_load:
-    print("loading cache...")
 
 if Dir.exist(folder):
 	paths = [folder]
 else:
 	paths=['.']
+
 skipped_paths=['/mnt/c/Windows/',
                '/mnt/c/program files/',
                '/mnt/c/program files (x86)/',
@@ -47,6 +34,22 @@ skipped_paths=['/mnt/c/Windows/',
                r'c:\MSOCache',
                r'c:\programdata',
                r'C:\Users\Egorov\Documents\!Не моё']
+
+whoami = Console.get_output("whoami").strip()
+if OS.windows:
+    username = whoami.split(backslash)[1] + "." + whoami.split(backslash)[0]
+else:
+    username = whoami
+
+cache_create = "--cache-create" in OS.args or "--create-cache" in OS.args
+cache_load = "--cache-load" in OS.args or "--load-cache" in OS.args
+debug = "--debug" in OS.args
+
+if cache_create:
+    print("creating cache...")
+if cache_load:
+    print("loading cache...")
+
 
 _printed_results = []
 
