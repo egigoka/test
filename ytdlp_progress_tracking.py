@@ -72,10 +72,19 @@ def main():
                 mp4 = file
 
             if m4a != "" and mp4 != "" and mp4temp != "":
-     
-                audioKiB = int(File.get_size(m4a)/1024)
-                videoKiB = int(File.get_size(mp4)/1024)
-                outputKiB = int(File.get_size(mp4temp)/1024)
+                try:
+                    audioKiB = int(File.get_size(m4a)/1024)
+                except FileNotFoundError:
+                    audioKiB = 0
+                try:
+                    videoKiB = int(File.get_size(mp4)/1024)
+                except FileNotFoundError:
+                    videoKiB = 0
+                try:
+                    outputKiB = int(File.get_size(mp4temp)/1024)
+                except FileNotFoundError:
+                    outputKiB = 0
+                
                 sumKiB = audioKiB + videoKiB
                 leftKiB = sumKiB - outputKiB
                 percent = int(outputKiB/sumKiB * 10000) / 100
