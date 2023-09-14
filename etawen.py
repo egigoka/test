@@ -98,15 +98,17 @@ def print_progress(progress_tracker):
     estimated_completion = progress_tracker.estimate_completion()
     if estimated_completion:
         estimated_time_left = estimated_completion - time.time()
-
-        percent_left = ""
+        estimated_time_left = int(estimated_time_left)
+        
         if progress_tracker.max_percent != 100:
             percent_left = progress_tracker.max_percent - progress_tracker.history[-1][1]
             percent_left = percent_left / (progress_tracker.max_percent / 100)
 
-            percent_left = f" ({percent_left:.0f}% left)"
+            percent_left = f"{percent_left:.0f}%"
 
-        print(f"Estimated time left: {Time.human_readable(estimated_time_left)}" + percent_left)
+            print(f"Percent left: {percent_left}")
+
+        print(f"Estimated time left: {Time.human_readable(estimated_time_left)}")
         print(f"Estimated completion time: {time.ctime(estimated_completion)}")
     else:
         print("Not enough data to estimate completion time.")
