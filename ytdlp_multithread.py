@@ -4,8 +4,12 @@ dl = "dl" in OS.args
 ch = "ch" in OS.args
 debug = "debug" in OS.args
 wait = "wait" in OS.args
+no_meta = "no-meta" in OS.args
 
 count_of_threads = 2
+
+ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
+
 directory = None
 for arg in OS.args:
     if debug:
@@ -73,7 +77,7 @@ def download(youtube_video_id, cnt, total):
                            
                            "-o", directory \
                                  + Path.separator() + "Videos" \
-                                 + Path.separator() + "%(upload_date>%Y-%m-%d)s - %(title)s [%(id)s].%(ext)s",
+                                 + Path.separator() + ytdlp_format,
                            # "--retries", "infinite",
                            "--retries", "100000",
                            "--fragment-retries", "100000",
@@ -82,23 +86,26 @@ def download(youtube_video_id, cnt, total):
                            "--limit-rate", "40M",
                            "--retry-sleep", "fragment:exp=1:8",
                            "--sponsorblock-mark", "default",
-                           "--write-info-json",
-                           "--write-comments",
-                           "--write-subs",
-                           "--sub-langs", "all",
-                           "--embed-subs",
-                           "--add-metadata",
-                           "--parse-metadata", "%(title)s:%(meta_title)s",
-                           "--parse-metadata", "%(uploader)s:%(meta_artist)s",
-                           "--write-description",
-                           "--write-thumbnail",
-                           "--embed-thumbnail",
-                           "--write-annotations",
-                           "--write-playlist-metafiles",
-                           "--write-all-thumbnails",
-                           "--write-url-link",
                            "--download-archive", directory + Path.separator() + "archive.ytdlp",
                            f"https://youtube.com/watch?v={youtube_video_id}"]
+    if not no_meta:
+        meta_args = ["--write-info-json",
+                     "--write-comments",
+                     "--write-subs",
+                     "--sub-langs", "all",
+                     "--embed-subs",
+                     "--add-metadata",
+                     "--parse-metadata", "%(title)s:%(meta_title)s",
+                     "--parse-metadata", "%(uploader)s:%(meta_artist)s",
+                     "--write-description",
+                     "--write-thumbnail",
+                     "--embed-thumbnail",
+                     "--write-annotations",
+                     "--write-playlist-metafiles",
+                     "--write-all-thumbnails",
+                     "--write-url-link"]
+        for arg in meta_args.reversed():
+            command.insert(3, arg)
     if cookies_exist:
         command.insert(3, cookies_path)
         command.insert(3, "--cookies")
