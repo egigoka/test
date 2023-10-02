@@ -99,7 +99,7 @@ def print_progress(progress_tracker):
     if estimated_completion:
         estimated_time_left = estimated_completion - time.time()
         estimated_time_left = int(estimated_time_left)
-        
+
         if progress_tracker.max_percent != 100:
             percent_left = progress_tracker.max_percent - progress_tracker.history[-1][1]
             percent_left = percent_left / (progress_tracker.max_percent / 100)
