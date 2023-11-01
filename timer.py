@@ -3,7 +3,7 @@ from commands import *
 try:
 	end = int(OS.args[1])
 except ValueError:
-	end = None
+    end = eval(OS.args[1])
 
 start = Time.stamp()
 
