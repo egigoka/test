@@ -104,7 +104,8 @@ def download(youtube_video_id, cnt, total):
                      "--write-playlist-metafiles",
                      "--write-all-thumbnails",
                      "--write-url-link"]
-        for arg in meta_args.reversed():
+        
+        for arg in reversed(meta_args):
             command.insert(3, arg)
     if cookies_exist:
         command.insert(3, cookies_path)
