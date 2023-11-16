@@ -16,7 +16,7 @@ REVERSED = False
 PRINT_USAGE = False
 
 for arg in sys.argv:
-    if arg == "--clear":
+    if arg == "--clear" or arg == "--reset":
         CLEAR = True
     elif arg == "--reversed":
         REVERSED = True
