@@ -1,5 +1,7 @@
 from commands import *
 
+ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
+
 
 def regen_cache(channel, cookies_exist, cookies_path, debug):
     Print.colored("Getting links, please, be patient...")
@@ -194,8 +196,6 @@ def parse_arguments(args):
 if __name__ == "__main__":
 
     dl, ch, debug, wait, no_meta, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
-
-    ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
 
     if debug:
         print(f"Working dir is {directory}")
