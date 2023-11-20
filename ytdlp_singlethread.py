@@ -46,6 +46,7 @@ for cnt, line in enumerate(yt_ids):
                                cookies_exist=cookies_exist,
                                cookies_path=cookies_path,
                                no_meta=no_meta,
+                               no_subs=no_subs,
                                debug=debug,
                                directory=directory,
                                wait=False,
