@@ -1,7 +1,7 @@
 from commands import *
 import ytdlp_multithread
 
-(dl, ch, debug, wait, no_meta, directory,
+(dl, ch, debug, wait, no_meta, no_subs, directory,
  count_of_threads, channel_file_path) = ytdlp_multithread.parse_arguments(OS.args)
 
 if debug:
