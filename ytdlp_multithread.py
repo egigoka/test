@@ -8,7 +8,7 @@ def regen_cache(channel, cookies_exist, cookies_path, debug):
     if cookies_exist:
         command.insert(3, cookies_path)
         command.insert(3, "--cookies")
-    
+
     links = Console.get_output(*command, print_std=debug).strip()
     return links
 
@@ -23,8 +23,8 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, coo
                "--merge-output-format", "mkv",
 
                "-o", directory
-                     + Path.separator() + "Videos"
-                     + Path.separator() + ytdlp_format,
+               + Path.separator() + "Videos"
+               + Path.separator() + ytdlp_format,
                # "--retries", "infinite",
                "--retries", "100000",
                "--fragment-retries", "100000",
@@ -51,7 +51,7 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, coo
                      "--write-playlist-metafiles",
                      "--write-all-thumbnails",
                      "--write-url-link"]
-        
+
         for arg in reversed(meta_args):
             command.insert(3, arg)
     if cookies_exist:
@@ -62,12 +62,12 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, coo
         command.insert(-1, "--live-from-start")
         command.insert(-1, "--wait-for-video")
         command.insert(-1, "10")
-    
+
     if debug:
         Print.colored(*command, "green")
-    Console.get_output(*command, 
+    Console.get_output(*command,
                        print_std=debug)
-    
+
     b.end()
 
 
@@ -75,7 +75,7 @@ def free_space_watchdog(minimum_space, directory):
     e = None
 
     free = 0
-    
+
     while True:
         output = Console.get_output("df", "-k", directory)
 
@@ -85,7 +85,7 @@ def free_space_watchdog(minimum_space, directory):
             break
 
         try:
-            free = int(Str.get_words(usage)[3])*KiB
+            free = int(Str.get_words(usage)[3]) * KiB
         except Exception as e:
             break
 
@@ -95,15 +95,16 @@ def free_space_watchdog(minimum_space, directory):
         except Exception as e:
             break
 
-        Print.colored(f"Free space: {free/GiB:.2f}GiB, limit: {minimum_space/GiB:.2f}GiB", "blue")
+        Print.colored(f"Free space: {free / GiB:.2f}GiB, limit: {minimum_space / GiB:.2f}GiB", "blue")
 
-        Time.sleep(60*5)
+        Time.sleep(60 * 5)
 
     if e is not None:
         Print.colroed(f"Exception: {e}", "red")
     try:
-        Print.colored(f"free space ({free/GiB:.2f}GiB) is lower, that defined ({minimum_space/GiB:.2f}GiB), closing",
-                      "red")
+        Print.colored(
+            f"free space ({free / GiB:.2f}GiB) is lower, that defined ({minimum_space / GiB:.2f}GiB), closing",
+            "red")
     except Exception:
         pass
 
@@ -164,6 +165,8 @@ def parse_arguments(args):
     wait = "wait" in OS.args
     no_meta = "no-meta" in OS.args
 
+    count_of_threads = 2
+
     directory = None
     for arg in OS.args:
         if debug:
@@ -185,12 +188,10 @@ def parse_arguments(args):
 
     channel_file_path = directory + Path.separator() + "channel_link.txt"
 
-    return dl, ch, debug, wait, no_meta, directory, count_of_threads,channel_file_path
+    return dl, ch, debug, wait, no_meta, directory, count_of_threads, channel_file_path
 
 
 if __name__ == "__main__":
-
-    count_of_threads = 2
 
     dl, ch, debug, wait, no_meta, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
 
@@ -225,8 +226,8 @@ if __name__ == "__main__":
         tt = Threading(verbose=debug, max_threads=count_of_threads - 1 + additional_threads, start_from_first=True)
 
         tt.add(progress, kwargs=ImDict({"directory": directory}))
-        tt.add(free_space_watchdog, kargs=ImDict({"minimum_space": 20 * GiB,
-                                           "directory": directory}))
+        tt.add(free_space_watchdog, kwargs=ImDict({"minimum_space": 20 * GiB,
+                                                   "directory": directory}))
         tt.add(running_threads, args=(tt, additional_threads))
 
         yt_ids = Str.nl(File.read(cache_file_path).strip())
