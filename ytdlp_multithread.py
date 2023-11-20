@@ -155,18 +155,14 @@ def running_threads(tt, additional_threads):
             Print.colored("running", t.thread.name, "magenta")
         Print.colored(f"left {running - additional_threads} links to download", "magenta")
         Time.sleep(20)
-        
 
-if __name__ == "__main__":
+
+def parse_arguments(args):
     dl = "dl" in OS.args
     ch = "ch" in OS.args
     debug = "debug" in OS.args
     wait = "wait" in OS.args
     no_meta = "no-meta" in OS.args
-
-    count_of_threads = 2
-
-    ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
 
     directory = None
     for arg in OS.args:
@@ -180,19 +176,30 @@ if __name__ == "__main__":
             pass
 
     if (not dl and not ch) or directory is None:
-        print("usage: py ytdlp_multithread.py [dl] [ch] dir_with_config_and_files")
+        print(f"usage: py {args[0]} [dl] [ch] dir_with_config_and_files")
         if not dl and not ch:
             print("please, use at least argument 'dl' and/or 'ch'")
         if directory is None:
             print("please, specify working directory")
         OS.exit(1)
 
+    channel_file_path = directory + Path.separator() + "channel_link.txt"
+
+    return dl, ch, debug, wait, no_meta, directory, count_of_threads,channel_file_path
+
+
+if __name__ == "__main__":
+
+    count_of_threads = 2
+
+    dl, ch, debug, wait, no_meta, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
+
+    ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
+
     if debug:
         print(f"Working dir is {directory}")
-
-    channel_file_path = directory + Path.separator() + "channel_link.txt"
-    if debug:
         print(f"{channel_file_path=}")
+
     channel = File.read(channel_file_path).strip()
     cache_file_path = directory + Path.separator() + "channel_videos_cache.txt"
     cookies_path = directory + Path.separator() + "cookies.txt"

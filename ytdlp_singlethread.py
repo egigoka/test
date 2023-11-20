@@ -1,24 +1,9 @@
 from commands import *
 import ytdlp_multithread
 
-dl = "dl" in OS.args
-ch = "ch" in OS.args
-debug = "debug" in OS.args
-wait = "wait" in OS.args
-no_meta = "no-meta" in OS.args
+(dl, ch, debug, wait, no_meta, directory,
+ count_of_threads, channel_file_path) = ytdlp_multithread.parse_arguments(OS.args)
 
-directory = None
-for arg in OS.args:
-    if debug:
-        print(f"{arg=} {Dir.exists(arg)=}")
-    if Dir.exists(arg):
-        directory = arg
-    try:
-        count_of_threads = int(arg)
-    except ValueError:
-        pass
-
-channel_file_path = directory + Path.separator() + "channel_link.txt"
 if debug:
     print(f"{channel_file_path=}")
 channel = File.read(channel_file_path).strip()
