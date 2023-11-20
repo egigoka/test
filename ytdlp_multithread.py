@@ -15,7 +15,7 @@ def regen_cache(channel, cookies_exist, cookies_path, debug):
     return links
 
 
-def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, cookies_exist, cookies_path, wait, debug):
+def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_subs, cookies_exist, cookies_path, wait, debug):
     yt_id_with_cnt = f"{youtube_video_id} {cnt}/{total}"
     print(f"Started downloading {yt_id_with_cnt}")
     b = Bench(f"Downloaded {yt_id_with_cnt}", verbose=True)
@@ -37,12 +37,16 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, coo
                "--sponsorblock-mark", "default",
                "--download-archive", directory + Path.separator() + "archive.ytdlp",
                f"https://youtube.com/watch?v={youtube_video_id}"]
+    if not no_subs:
+        subs_args = ["--embed-subs",
+                     "--sub-langs", "all",
+                     "--convert-subs", "srt",
+                     "--ppa", "EmbedSubtitle:-disposition:s:0 0"]
+        for arg in reversed(subs_args):
+            command.insert(3, arg)
     if not no_meta:
         meta_args = ["--write-info-json",
                      "--write-comments",
-                     "--write-subs",
-                     "--sub-langs", "all",
-                     "--embed-subs",
                      "--add-metadata",
                      "--parse-metadata", "%(title)s:%(meta_title)s",
                      "--parse-metadata", "%(uploader)s:%(meta_artist)s",
@@ -166,6 +170,7 @@ def parse_arguments(args):
     debug = "debug" in OS.args
     wait = "wait" in OS.args
     no_meta = "no-meta" in OS.args
+    no_subs = "no-subs" in OS.args
 
     count_of_threads = 2
 
@@ -181,7 +186,9 @@ def parse_arguments(args):
             pass
 
     if (not dl and not ch) or directory is None:
-        print(f"usage: py {args[0]} [dl] [ch] dir_with_config_and_files")
+        print(f"usage: py {args[0]} [dl] [ch] [no-meta] [no-subs] "
+              f"[debug] [wait]"
+              f"[count of threads] dir_with_config_and_files")
         if not dl and not ch:
             print("please, use at least argument 'dl' and/or 'ch'")
         if directory is None:
@@ -190,12 +197,12 @@ def parse_arguments(args):
 
     channel_file_path = directory + Path.separator() + "channel_link.txt"
 
-    return dl, ch, debug, wait, no_meta, directory, count_of_threads, channel_file_path
+    return dl, ch, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path
 
 
 if __name__ == "__main__":
 
-    dl, ch, debug, wait, no_meta, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
+    dl, ch, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
 
     if debug:
         print(f"Working dir is {directory}")
@@ -239,6 +246,7 @@ if __name__ == "__main__":
                                             "directory": directory,
                                             "ytdlp_format": ytdlp_format,
                                             "no_meta": no_meta,
+                                            "no_subs": no_subs,
                                             "cookies_exist": cookies_exist,
                                             "cookies_path": cookies_path,
                                             "wait": wait,
