@@ -16,7 +16,7 @@ def regen_cache(channel, cookies_exist, cookies_path, debug):
 
 
 def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_subs, cookies_exist, cookies_path, wait, debug):
-    yt_id_with_cnt = f"{youtube_video_id} {cnt}/{total}"
+    yt_id_with_cnt = f"{youtube_video_id} {cnt+1}/{total}"
     print(f"Started downloading {yt_id_with_cnt}")
     b = Bench(f"Downloaded {yt_id_with_cnt}", verbose=True)
     command = ["python3", "-m", "yt_dlp",
