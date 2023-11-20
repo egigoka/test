@@ -1,48 +1,7 @@
 from commands import *
 
-dl = "dl" in OS.args
-ch = "ch" in OS.args
-debug = "debug" in OS.args
-wait = "wait" in OS.args
-no_meta = "no-meta" in OS.args
 
-count_of_threads = 2
-
-ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
-
-directory = None
-for arg in OS.args:
-    if debug:
-        print(f"{arg=} {Dir.exists(arg)=}")
-    if Dir.exists(arg):
-        directory = arg
-    try:
-        count_of_threads = int(arg)
-    except ValueError:
-        pass
-
-if (not dl and not ch) or directory is None:
-    print("usage: py ytdlp_multithread.py [dl] [ch] dir_with_config_and_files")
-    if not dl and not ch:
-        print("please, use at least argument 'dl' and/or 'ch'")
-    if directory is None:
-        print("please, specify working directory")
-    OS.exit(1)
-
-if debug:
-    print(f"Working dir is {directory}")
-
-channel_file_path = directory + Path.separator() + "channel_link.txt"
-if debug:
-    print(f"{channel_file_path=}")
-channel = File.read(channel_file_path).strip()
-cache_file_path = directory + Path.separator() + "channel_videos_cache.txt"
-cookies_path = directory + Path.separator() + "cookies.txt"
-cookies_exist = File.exist(cookies_path)
-if not cookies_exist:
-    Print.colored("Cookies file not found, download without them")
-
-def regen_cache():
+def regen_cache(channel, cookies_exist, cookies_path, debug):
     Print.colored("Getting links, please, be patient...")
     command = ["python3", "-m", "yt_dlp", "--flat-playlist", "--print", "id", channel]
 
@@ -51,43 +10,31 @@ def regen_cache():
         command.insert(3, "--cookies")
     
     links = Console.get_output(*command, print_std=debug).strip()
-    File.wipe(cache_file_path)
-    File.write(cache_file_path, links)
-
-if ch:
-    regen = True
-    try:
-        if File.get_size(cache_file_path):
-            if not CLI.get_y_n("Cache file already written. Do you wish to recreate it?"):
-                regen = False
-    except OSError:
-        pass
-    if regen:
-        regen_cache()
+    return links
 
 
-def download(youtube_video_id, cnt, total):
+def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, cookies_exist, cookies_path, wait, debug):
     yt_id_with_cnt = f"{youtube_video_id} {cnt}/{total}"
     print(f"Started downloading {yt_id_with_cnt}")
     b = Bench(f"Downloaded {yt_id_with_cnt}", verbose=True)
     command = ["python3", "-m", "yt_dlp",
-                           "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
-                           "--prefer-ffmpeg",
-                           "--merge-output-format", "mkv",
-                           
-                           "-o", directory \
-                                 + Path.separator() + "Videos" \
-                                 + Path.separator() + ytdlp_format,
-                           # "--retries", "infinite",
-                           "--retries", "100000",
-                           "--fragment-retries", "100000",
-                           "--file-access-retries", "100000",
-                           "--extractor-retries", "100000",
-                           "--limit-rate", "40M",
-                           "--retry-sleep", "fragment:exp=1:8",
-                           "--sponsorblock-mark", "default",
-                           "--download-archive", directory + Path.separator() + "archive.ytdlp",
-                           f"https://youtube.com/watch?v={youtube_video_id}"]
+               "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
+               "--prefer-ffmpeg",
+               "--merge-output-format", "mkv",
+
+               "-o", directory
+                     + Path.separator() + "Videos"
+                     + Path.separator() + ytdlp_format,
+               # "--retries", "infinite",
+               "--retries", "100000",
+               "--fragment-retries", "100000",
+               "--file-access-retries", "100000",
+               "--extractor-retries", "100000",
+               "--limit-rate", "40M",
+               "--retry-sleep", "fragment:exp=1:8",
+               "--sponsorblock-mark", "default",
+               "--download-archive", directory + Path.separator() + "archive.ytdlp",
+               f"https://youtube.com/watch?v={youtube_video_id}"]
     if not no_meta:
         meta_args = ["--write-info-json",
                      "--write-comments",
@@ -123,7 +70,8 @@ def download(youtube_video_id, cnt, total):
     
     b.end()
 
-def free_space_watchdog(minimum_space):
+
+def free_space_watchdog(minimum_space, directory):
     e = None
 
     free = 0
@@ -163,9 +111,12 @@ def free_space_watchdog(minimum_space):
     OS.exit(1)
     print("OS exit ended")
 
-def progress():
+
+def progress(directory):
     import subprocess
-    subprocess.Popen(["python3", "/home/egigoka/py/test/ytdlp_progress_tracking.py", directory + Path.separator() + "Videos", "whiletrue"])
+    subprocess.Popen(["python3", "/home/egigoka/py/test/ytdlp_progress_tracking.py",
+                      directory + Path.separator() + "Videos", "whiletrue"])
+
 
 def running_threads(tt, additional_threads):
     return
@@ -206,20 +157,83 @@ def running_threads(tt, additional_threads):
         Time.sleep(20)
         
 
+if __name__ == "__main__":
+    dl = "dl" in OS.args
+    ch = "ch" in OS.args
+    debug = "debug" in OS.args
+    wait = "wait" in OS.args
+    no_meta = "no-meta" in OS.args
 
-if dl:
-    additional_threads = 3
-    tt = Threading(verbose=debug, max_threads=count_of_threads-1+additional_threads, start_from_first=True)
+    count_of_threads = 2
 
-    tt.add(progress)
-    tt.add(free_space_watchdog, args=(20*GiB,))
-    tt.add(running_threads, args=(tt, additional_threads))
+    ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
 
-    yt_ids = Str.nl(File.read(cache_file_path).strip())
+    directory = None
+    for arg in OS.args:
+        if debug:
+            print(f"{arg=} {Dir.exists(arg)=}")
+        if Dir.exists(arg):
+            directory = arg
+        try:
+            count_of_threads = int(arg)
+        except ValueError:
+            pass
 
-    for cnt, line in enumerate(yt_ids):
-        tt.add(download, kwargs=ImDict({"youtube_video_id": line, 
-                                        "cnt": cnt,
-                                        "total": len(yt_ids)}))
-    
-    tt.start(wait_for_keyboard_interrupt=True)
+    if (not dl and not ch) or directory is None:
+        print("usage: py ytdlp_multithread.py [dl] [ch] dir_with_config_and_files")
+        if not dl and not ch:
+            print("please, use at least argument 'dl' and/or 'ch'")
+        if directory is None:
+            print("please, specify working directory")
+        OS.exit(1)
+
+    if debug:
+        print(f"Working dir is {directory}")
+
+    channel_file_path = directory + Path.separator() + "channel_link.txt"
+    if debug:
+        print(f"{channel_file_path=}")
+    channel = File.read(channel_file_path).strip()
+    cache_file_path = directory + Path.separator() + "channel_videos_cache.txt"
+    cookies_path = directory + Path.separator() + "cookies.txt"
+    cookies_exist = File.exist(cookies_path)
+    if not cookies_exist:
+        Print.colored("Cookies file not found, download without them")
+
+    if ch:
+        regen = True
+        try:
+            if File.get_size(cache_file_path):
+                if not CLI.get_y_n("Cache file already written. Do you wish to recreate it?"):
+                    regen = False
+        except OSError:
+            pass
+        if regen:
+            links = regen_cache(channel=channel, cookies_path=cookies_path, debug=debug, cookies_exist=cookies_exist)
+            File.wipe(cache_file_path)
+            File.write(cache_file_path, links)
+
+    if dl:
+        additional_threads = 3
+        tt = Threading(verbose=debug, max_threads=count_of_threads - 1 + additional_threads, start_from_first=True)
+
+        tt.add(progress, kwargs=ImDict({"directory": directory}))
+        tt.add(free_space_watchdog, kargs=ImDict({"minimum_space": 20 * GiB,
+                                           "directory": directory}))
+        tt.add(running_threads, args=(tt, additional_threads))
+
+        yt_ids = Str.nl(File.read(cache_file_path).strip())
+
+        for cnt, line in enumerate(yt_ids):
+            tt.add(download, kwargs=ImDict({"youtube_video_id": line,
+                                            "cnt": cnt,
+                                            "total": len(yt_ids),
+                                            "directory": directory,
+                                            "ytdlp_format": ytdlp_format,
+                                            "no_meta": no_meta,
+                                            "cookies_exist": cookies_exist,
+                                            "cookies_path": cookies_path,
+                                            "wait": wait,
+                                            "debug": debug}))
+
+        tt.start(wait_for_keyboard_interrupt=True)
