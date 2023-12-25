@@ -58,6 +58,7 @@ endtimes.sort()
 while True:
     Console.clean()
     rebuild = True
+    result = ""
     for endtime in endtimes:
         time = now()
 
@@ -95,12 +96,14 @@ while True:
         
         if endtime.day != time.day:
             until = f"{endtime.day:02}.{endtime.month:02} {until}"
+
         
-        print(f.renderText(f"{human_readable} until {until}").rstrip())
+        result += f.renderText(f"{human_readable} until {until}").rstrip() + newline
 
         # if seconds <= 0:
             # Console.blink()
             # break
+    print(result.rstrip(), end = "", flush=True)
     if rebuild:
         for cnt, endtime in enumerate(endtimes):
             endtimes[cnt] = endtime + Time.delta(24*3600)

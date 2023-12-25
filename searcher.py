@@ -3,12 +3,12 @@ import sys
 from commands import *
 print("searcher 0.5.2")
 
-file_extensions=[]  # cached
+file_extensions=[".py"]  # cached
 skipped_file_substrings = []  # cached
 
 case_sensitive=False  # cached partially
 
-match_strings=['navigation']  # not cached
+match_strings=['evt']  # not cached
 skipped_strings = []  # not cached
 multiple_lines=True  # not cached
 end_print_files_dict=True  # not cached
