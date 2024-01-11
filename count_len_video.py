@@ -18,7 +18,10 @@ def l(filename):
         filename
       ]
     dur = Console.get_output(command)
-    out = Str.get_integers(dur, float_support=True)[0]
+    try:
+        out = Str.get_integers(dur, float_support=True)[0]
+    except IndexError:
+        out = 0
     return out
 
 

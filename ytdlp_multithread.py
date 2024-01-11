@@ -1,6 +1,6 @@
 from commands import *
 
-ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).205B [%(id)s].%(ext)s"
+ytdlp_format = "%(upload_date>%Y-%m-%d)s - %(title).197B [%(id)s].%(ext)s"
 
 
 def regen_cache(channel, cookies_exist, cookies_path, debug):
@@ -40,7 +40,6 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_
     if not no_subs:
         subs_args = ["--embed-subs",
                      "--sub-langs", "all",
-                     "--convert-subs", "srt",
                      "--ppa", "EmbedSubtitle:-disposition:s:0 0"]
         for arg in reversed(subs_args):
             command.insert(3, arg)
@@ -167,6 +166,7 @@ def running_threads(tt, additional_threads):
 def parse_arguments(args):
     dl = "dl" in OS.args
     ch = "ch" in OS.args
+    chy = "chy" in OS.args
     debug = "debug" in OS.args
     wait = "wait" in OS.args
     no_meta = "no-meta" in OS.args
@@ -186,7 +186,7 @@ def parse_arguments(args):
             pass
 
     if (not dl and not ch) or directory is None:
-        print(f"usage: py {args[0]} [dl] [ch] [no-meta] [no-subs] "
+        print(f"usage: py {args[0]} [dl] [ch] [chy] [no-meta] [no-subs] "
               f"[debug] [wait]"
               f"[count of threads] dir_with_config_and_files")
         if not dl and not ch:
@@ -197,12 +197,12 @@ def parse_arguments(args):
 
     channel_file_path = directory + Path.separator() + "channel_link.txt"
 
-    return dl, ch, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path
+    return dl, ch, chy, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path
 
 
 if __name__ == "__main__":
 
-    dl, ch, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
+    dl, ch, chy, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
 
     if debug:
         print(f"Working dir is {directory}")
@@ -219,7 +219,9 @@ if __name__ == "__main__":
         regen = True
         try:
             if File.get_size(cache_file_path):
-                if not CLI.get_y_n("Cache file already written. Do you wish to recreate it?"):
+                if chy:
+                    pass
+                elif not CLI.get_y_n("Cache file already written. Do you wish to recreate it?"):
                     regen = False
         except OSError:
             pass

@@ -8,7 +8,7 @@ bad_extensions = [".dbf", ".py", ".pdf", ".ini", ".mst", ".msi", ".cab", ".exe",
                   ".db", ".jpg", ".sql", "", ".csv", ".cer", ".sav", ".bat", ".1c_rep",
                   ".au3", ".chm", ".gw", ".htm", ".onetoc2", ".vrp", ".log", ".rtf", ".one",
                   ".1cd", ".sh", ".mht", "", ".grs", ".xd", ".ttf", ".woff", ".woff2", ".eot", ".iml", 
-                  ".pyc", ".md", ".json"]
+                  ".pyc", ".md", ".json", ".ytdlp", ".ytdl", ".m4a", ".part"]
 skipped_folders = ["./1С Предприятие 8/1C8.2_videokurs_Krotov_Roman_Report_1C_2013/AutoPlay/Videos/",
                    "./1С Предприятие 8/Применение агрегатов, индексов, итогов для повышения быстродействия/Лекции/Лекции/files/",
                    "./1С Предприятие 8/Программирование в системе 1С Предприятие 8.3/7-1С-Предприятие 8.3. Средства интеграции и обмена данными/Файлы",
