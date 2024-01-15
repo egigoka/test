@@ -24,9 +24,10 @@ try:
 
         endtime = ""
         if end is not None:
-            endtime = " / " + seconds_human_readable(end)
-    
-        Print.rewrite(f"{passed}{endtime}")
+            endtime = seconds_human_readable(end)
+
+        Print.rewrite(CLI.progressbar(delta, end, passed, endtime))
+        # Print.rewrite(f"{passed}{endtime}")
 
         if delta >= end:
             Console.blink()
