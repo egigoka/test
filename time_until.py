@@ -111,7 +111,7 @@ while True:
     human_readable_total = Time.human_readable(diff_total)
     human_readable_now = Time.human_readable(diff_now)
     # print(f"{diff_total=} {diff_now=} {human_readable_total=} {human_readable_now=}")
-    diff_percent = 100 - int(diff_now / diff_total * 100)
+    diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
     progressbar = CLI.progressbar(diff_now, diff_total, f"{diff_percent}%", reverse=True)
 
     # print(result.rstrip(), end="", flush=True)
