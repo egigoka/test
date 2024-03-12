@@ -1,7 +1,5 @@
 from creds import server, share, user, password
-import time
 import uuid
-import os
 import sys
 import csv
 import math
@@ -15,6 +13,10 @@ from smbprotocol.exceptions import SMBResponseException, SharingViolation
 
 csv.field_size_limit(sys.maxsize)
 line_cnt = ID()
+
+def clear_cache():
+    global cache
+    cache = {max(cache.keys()): cache[max(cache.keys())]}
 
 def decode_utf8(bytearray):
     try:
@@ -30,7 +32,7 @@ def smb_read_with_retry(file, position, length):
         try:
             return file.read(position, length)
         except SMBResponseException:
-            time.sleep(1)
+            Time.sleep(1, verbose = True)
 
 
 def get_byte_from_cache(bytes, position, file, cached_position, length):
@@ -92,8 +94,8 @@ def open_file_safely(tree, file_path):
                 CreateOptions.FILE_NON_DIRECTORY_FILE
             )
             break
-        except SharingViolation as e:
-            time.sleep(1)
+        except (SharingViolation, SMBConnectionClosed) as e:
+            Time.sleep(1, verbose = True)
             continue
     return open_file
 
@@ -155,7 +157,7 @@ while True:
         color = None
         cnt_line = line_cnt.get()
         if line.strip().endswith('"Егоров Егор"'):
-            color = "black"
+            color = "magenta"
             if cnt_line % 2 == 0:
                 back = "on_white"
             else:
@@ -219,6 +221,7 @@ while True:
                 Print.colored(line_current, color)
     Print.colored(datetime.now().strftime("%d.%m.%Y %H:%M:%S"), "green", end = "\r")
 
+    clear_cache()
     first_run = False
     
     Time.sleep(1, verbose = False)
