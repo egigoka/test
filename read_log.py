@@ -14,18 +14,22 @@ from smbprotocol.exceptions import SMBResponseException, SharingViolation
 csv.field_size_limit(sys.maxsize)
 line_cnt = ID()
 
+
 def clear_cache():
     global cache
     cache = {max(cache.keys()): cache[max(cache.keys())]}
 
+
 def decode_utf8(bytearray):
     try:
-        return buffer[::-1].decode('utf-8', errors='replace')
+        return bytearray[::-1].decode('utf-8', errors='replace')
     except UnicodeError:
-        print(buffer[::-1])
+        print(bytearray[::-1])
         raise
 
+
 cache = {}
+
 
 def smb_read_with_retry(file, position, length):
     while True:
@@ -57,11 +61,11 @@ def read_cached(file, position, cache_length = 4096):
 
 file_path = "Public\\Logs\\МуравьинаяЛогистика.csv"
 
-# Setup the SMB connection
+# Set up the SMB connection
 connection = Connection(uuid.uuid4(), server, 445)
 connection.connect(Dialects.SMB_3_0_2)
 
-# Start a SMB session
+# Start an SMB session
 session = Session(connection, user, password)
 session.connect()
 
@@ -120,6 +124,8 @@ while True:
     cnt_lines = 0
     cnt_chars = 0
     while (len(lines) < num_lines and first_run) or position > last_position:
+        if position < 0:
+            break
         if cnt_chars % 100 == 0 or len(lines) != previous_line:
             of = f"/{num_lines}" if first_run else ""
             Print.rewrite(f"{cnt_lines}{of} lines, {cnt_chars} chars")
