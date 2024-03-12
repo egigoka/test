@@ -5,6 +5,7 @@ scripts/cells/output.txt
 scripts/avitoparse/test/*.html
 *.icloud
 Thumbs.db
+creds.py
 
 # IntelliJ sheet
 .idea/
