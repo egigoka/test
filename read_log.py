@@ -164,16 +164,16 @@ while True:
         cnt_line = line_cnt.get()
         if line.strip().endswith('"Егоров Егор"'):
             color = "magenta"
-            if cnt_line % 2 == 0:
-                back = "on_white"
-            else:
-                back = ""
+            back = "on_white"
+        elif line.strip().endswith('"Мулинов Ерик"'):
+            color = "blue"
+            back = "on_white"
         else:
             color = "black"
-            if cnt_line % 2 == 0:
-                back = "on_white"
-            else:
-                back = ""
+            back = "on_white"
+
+        if cnt_line % 2 == 1:
+            back = ""
         reader = csv.reader([line], delimiter=';', quotechar='"')
         row = reader.__next__()
         line = "| "
@@ -184,7 +184,7 @@ while True:
             widths[4] -= math.ceil((sum_widths - console_width) / 2)
             widths[5] -= math.ceil((sum_widths - console_width) / 2)
         lines_current = []
-        for cnt in range(10):
+        for cnt in reversed(range(10)):
             sublines = []
             is_any = False
             for i in range(len(row)):
@@ -194,7 +194,6 @@ while True:
                     break
                 subline = f"{row[i]}".replace("\t", "\\t")
 
-                
                 start = width * (9-cnt)
                 end = start + width
 
@@ -218,9 +217,12 @@ while True:
                 if cnt == 0 and len(subline.strip()) != 1:
                     subline = subline[:-4] + ">>>|"
                 sublines.append(subline)
+            # print(f"{cnt} {sublines} {is_any=}")
             if is_any:
                 lines_current.append(" ".join(sublines))
-        for line_current in lines_current[::-1]:
+            else:
+                break
+        for line_current in lines_current:
             if back:
                 Print.colored(line_current, back, color)
             else:
