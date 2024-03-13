@@ -9,7 +9,7 @@ from smbprotocol.connection import Connection, Dialects
 from smbprotocol.open import Open, CreateDisposition, FilePipePrinterAccessMask, FileAttributes, ImpersonationLevel, ShareAccess, CreateOptions
 from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
-from smbprotocol.exceptions import SMBResponseException, SharingViolation
+from smbprotocol.exceptions import SMBResponseException, SharingViolation, SMBConnectionClosed
 
 csv.field_size_limit(sys.maxsize)
 line_cnt = ID()
