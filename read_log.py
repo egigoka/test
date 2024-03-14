@@ -9,7 +9,7 @@ from smbprotocol.connection import Connection, Dialects
 from smbprotocol.open import Open, CreateDisposition, FilePipePrinterAccessMask, FileAttributes, ImpersonationLevel, ShareAccess, CreateOptions
 from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
-from smbprotocol.exceptions import SMBResponseException, SharingViolation, SMBConnectionClosed
+from smbprotocol.exceptions import SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException
 
 csv.field_size_limit(sys.maxsize)
 line_cnt = ID()
@@ -98,7 +98,7 @@ def open_file_safely(tree, file_path):
                 CreateOptions.FILE_NON_DIRECTORY_FILE
             )
             break
-        except (SharingViolation, SMBConnectionClosed) as e:
+        except (SharingViolation, SMBConnectionClosed, SMBException) as e:
             Time.sleep(1, verbose = True)
             continue
     return open_file
