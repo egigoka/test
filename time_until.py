@@ -5,6 +5,7 @@ from datetime import timedelta
 figlet = f = Figlet(font="term", justify="center", width=Console.width())
 
 
+figlet_mode = "figlet" in OS.args
 # fonts = Str.nl(File.read("pyfiglet_fonts.txt").strip())
 
 
@@ -58,14 +59,12 @@ end_times.sort()
 # cnt.string = 0
 
 while True:
-    Console.clean()
+    if figlet_mode:
+        Console.clean()
     rebuild = True
     result = ""
     for end_time in end_times:
         time = now()
-
-        # Print.debug(f"{end_time=}")
-        # Print.debug(f"{time=}")
 
         if end_time < time:
             continue
@@ -73,53 +72,48 @@ while True:
         rebuild = False
 
         seconds = int((end_time - time).total_seconds())
-        # Print.debug(f"{seconds=}")
         human_readable = Time.human_readable(seconds)
-        # Print.debug(f"{human_readable=}")
-
-        # font = Random.item(fonts)
-        # try:
-        # font = fonts[cnt.string]
-        # except IndexError:
-        # cnt.string = 0
-        # font = fonts[cnt.string]
-        # font = "minecraft"
-        font = "minecraft_condensed"
-
-        # cnt.string += 1
-        # cnt.save()
-
-        # print(figlet.renderText(f"{font} {cnt.string}/{len(fonts)}"))
-        # print(figlet.renderText(f"{font}"))
-
-        f = Figlet(font=font, justify="center", width=Console.width())
 
         until = f"{end_time.hour:02}:{end_time.minute:02}"
 
         if end_time.day != time.day:
             until = f"{end_time.day:02}.{end_time.month:02} {until}"
 
-        result += f.renderText(f"{human_readable} until {until}").rstrip() + newline
+        if figlet_mode:
+            # font = "minecraft"
+            font = "minecraft_condensed"
 
-        # if seconds <= 0:
-        #   Console.blink()
-        #   break
+            f = Figlet(font=font, justify="center", width=Console.width())
+
+            result += f.renderText(f"{human_readable} until {until}").rstrip() + newline
+        else:
+            human_readable = human_readable.replace("m", "")
+            human_readable = human_readable.replace("h", "")
+            human_readable = human_readable.replace("s", "")
+            human_readable = human_readable.replace(" ", "")
+            result += f"{human_readable} {end_time.minute:02}|"
 
     # progressbar
     diff_total = int(Time.delta(end_times[0], end_times[-1]))
     diff_now = int(Time.delta(Time.datetime(), end_times[-1]))
-    human_readable_total = Time.human_readable(diff_total)
-    human_readable_now = Time.human_readable(diff_now)
-    # print(f"{diff_total=} {diff_now=} {human_readable_total=} {human_readable_now=}")
-    diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
-    progressbar = CLI.progressbar(diff_now, diff_total, f"{diff_percent}%", reverse=True)
 
-    # print(result.rstrip(), end="", flush=True)
+    diff_percent = result
+    if figlet_mode:
+        diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
+        diff_percent = f"{diff_percent}%"
+    progressbar = CLI.progressbar(diff_now, diff_total, diff_percent, reverse=True)
 
-    print(result.rstrip() + newline + progressbar, end="", flush=True)
+    if figlet_mode:
+        output = result.rstrip() + newline + progressbar
+    else:
+        output = progressbar
+    print(output, end="", flush=True)
 
     if rebuild:
         for cnt, end_time in enumerate(end_times):
             end_times[cnt] = end_time + Time.delta(24 * 3600)
-    # OS.exit(1)
-    Time.sleep(1)
+
+    if figlet_mode:
+        Time.sleep(1)
+    else:
+        Time.sleep(Random.integer(0, 10), verbose=False)
