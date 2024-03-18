@@ -177,7 +177,7 @@ def csv_line_to_list(string):
 
 
 def get_widths():
-    widths = [19, 46, 79, 5, 999, 999, 42]
+    widths = [19, 45, 55, 5, 999, 999, 41]
     sum_widths = sum(widths) + 20
     console_width = Console.width()
     if sum_widths > console_width:
