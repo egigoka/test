@@ -147,7 +147,7 @@ def get_colors(row, line_print_number):
         color = "magenta"
         back = "on_white"
     elif username.strip() == "Мулинов Ерик":
-        color = "blue"
+        color = "green"
         back = "on_white"
     else:
         color = "black"
@@ -164,8 +164,7 @@ def get_colors(row, line_print_number):
         color = "white"
         back = "on_red"
     elif level in ["Debug", "Info"]:
-        color = "white"
-        back = "on_blue"
+        color = "blue"
 
     return color, back
 
@@ -177,7 +176,7 @@ def csv_line_to_list(string):
 
 
 def get_widths():
-    widths = [19, 45, 55, 5, 999, 999, 41]
+    widths = [19, 45, 52, 5, 999, 999, 41]
     sum_widths = sum(widths) + 20
     console_width = Console.width()
     if sum_widths > console_width:
@@ -230,9 +229,31 @@ def get_substrings(row, row_cnt, widths):
             width = widths[i]
         except IndexError:
             break
+        if i == 2:
+            subline = subline.replace("МуравьинаяЛогистика.", "")
         substring, is_any = format_substring(subline, row_cnt, width, is_any)
         substrings.append(substring)
     return substrings, is_any
+
+
+def get_time_color(diff):
+    time_color = ["on_green"]
+    if diff.seconds / 60 > 120:
+        time_color = ["white", "on_red"]
+    elif diff.seconds / 60 > 60:
+        time_color = ["on_red"]
+    elif diff.seconds / 60 > 30:
+        time_color = ["on_yellow"]
+    return time_color
+
+
+def get_diff_and_formatted(last_time):
+    now = datetime.now()
+    diff = now - last_time
+    if now < last_time:
+        diff = timedelta(0, 0, 0, 0, 0, 0, 0)
+    diff_formatted = f"{diff.seconds // 3600:02}:{(diff.seconds // 60) % 60:02}:{diff.seconds % 60:02}"
+    return now, diff, diff_formatted
 
 
 def main():
@@ -291,12 +312,9 @@ def main():
                     Print.colored(line_current, color)
 
         # print current time and time since last log
-        now = datetime.now()
-        diff = now - last_time
-        if now < last_time:
-            diff = timedelta(0, 0, 0, 0, 0, 0, 0)
-        diff_formatted = f"{diff.seconds // 3600:02}:{(diff.seconds // 60) % 60:02}:{diff.seconds % 60:02}"
-        Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} ({diff_formatted} since last log)', "green", end="\r")
+        now, diff, diff_formatted = get_diff_and_formatted(last_time)
+        time_color = get_time_color(diff)
+        Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} | {diff_formatted} since last log', *time_color, end="\r")
 
         clear_cache()
         first_run = False
