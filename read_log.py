@@ -4,6 +4,7 @@ import sys
 import csv
 import math
 from datetime import datetime
+from datetime import timedelta
 from commands import Time, Console, Print, ID
 from smbprotocol.connection import Connection, Dialects
 from smbprotocol.open import (Open, CreateDisposition, FilePipePrinterAccessMask, FileAttributes, ImpersonationLevel,
@@ -92,11 +93,12 @@ def open_file_safely(file_path):
         TREE = restart_connection()
 
     # open the file
-    try:
-        open_file = open_file_smb(TREE, file_path)
-    except (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException):
-        TREE = restart_connection()
-        open_file = open_file_smb(TREE, file_path)
+    while True:
+        try:
+            open_file = open_file_smb(TREE, file_path)
+            break
+        except (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException):
+            TREE = restart_connection()
 
     return open_file
 
@@ -196,8 +198,7 @@ def get_time(row):
     return time
 
 
-def format_substring(substring, row_cnt, width):
-    is_any = False
+def format_substring(substring, row_cnt, width, is_any):
     substring = f"{substring}".replace("\t", "\\t")
 
     start = width * (9 - row_cnt)
@@ -229,7 +230,7 @@ def get_substrings(row, row_cnt, widths):
             width = widths[i]
         except IndexError:
             break
-        substring, is_any = format_substring(subline, row_cnt, width)
+        substring, is_any = format_substring(subline, row_cnt, width, is_any)
         substrings.append(substring)
     return substrings, is_any
 
@@ -292,6 +293,8 @@ def main():
         # print current time and time since last log
         now = datetime.now()
         diff = now - last_time
+        if now < last_time:
+            diff = timedelta(0, 0, 0, 0, 0, 0, 0)
         diff_formatted = f"{diff.seconds // 3600:02}:{(diff.seconds // 60) % 60:02}:{diff.seconds % 60:02}"
         Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} ({diff_formatted} since last log)', "green", end="\r")
 
