@@ -58,6 +58,9 @@ end_times.sort()
 # if not isinstance(cnt.string, int):
 # cnt.string = 0
 
+if not figlet_mode:
+    Console.clean()
+
 while True:
     if figlet_mode:
         Console.clean()
@@ -97,17 +100,18 @@ while True:
     diff_total = int(Time.delta(end_times[0], end_times[-1]))
     diff_now = int(Time.delta(Time.datetime(), end_times[-1]))
 
-    diff_percent = result
-    if figlet_mode:
-        diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
-        diff_percent = f"{diff_percent}%"
-    progressbar = CLI.progressbar(diff_now, diff_total, diff_percent, reverse=True)
+    diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
+    if not figlet_mode:
+        diff_percent = f"{result}{diff_percent.replace('.', '')}"
+
+    progressbar = CLI.progressbar(diff_now, diff_total, diff_percent + ("%" if figlet_mode else ""), reverse=True)
 
     if figlet_mode:
         output = result.rstrip() + newline + progressbar
+        print(output, end="", flush=True)
     else:
         output = progressbar
-    print(output, end="", flush=True)
+        print(f"\r{output}", end="", flush=True)  # have cursor at the end of the line to show the end of progressbar
 
     if rebuild:
         for cnt, end_time in enumerate(end_times):
