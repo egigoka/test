@@ -5,7 +5,7 @@ import csv
 import math
 from datetime import datetime
 from datetime import timedelta
-from commands import Time, Console, Print, ID
+from commands import Time, Console, Print, ID, Int
 from smbprotocol.connection import Connection, Dialects
 from smbprotocol.open import (Open, CreateDisposition, FilePipePrinterAccessMask, FileAttributes, ImpersonationLevel,
                               ShareAccess, CreateOptions)
@@ -113,7 +113,7 @@ def read_file(open_file, position, last_position, first_run, num_lines, previous
     while (len(lines) < num_lines and first_run) or position > last_position:
         if position < 0:
             break
-        if cnt_chars % 100 == 0 or len(lines) != previous_line:
+        if cnt_chars % 1000 == 0 or len(lines) != previous_line:
             of = f"/{num_lines}" if first_run else ""
             Print.rewrite(f"{cnt_lines}{of} lines, {cnt_chars} chars")
             previous_line = len(lines)
@@ -237,13 +237,25 @@ def get_substrings(row, row_cnt, widths):
 
 
 def get_time_color(diff):
-    time_color = ["on_green"]
-    if diff.seconds / 60 > 120:
-        time_color = ["white", "on_red"]
-    elif diff.seconds / 60 > 60:
-        time_color = ["on_red"]
-    elif diff.seconds / 60 > 30:
+    time_color = ["white", "on_green"]
+
+    minutes = int(diff.seconds / 60)
+
+    if minutes in Int.from_to(5, 14):
+        time_color = ["on_green"]
+    elif minutes in Int.from_to(15, 29):
+        time_color = ["white", "on_yellow"]
+    elif minutes in Int.from_to(30, 59):
         time_color = ["on_yellow"]
+    elif minutes in Int.from_to(60, 119):
+        time_color = ["white", "on_blue"]
+    elif minutes in Int.from_to(120, 179):
+        time_color = ["on_cyan"]
+    elif minutes in Int.from_to(180, 239):
+        time_color = ["white", "on_red"]
+    elif minutes >= 240:
+        time_color = ["on_red"]
+
     return time_color
 
 
