@@ -11,7 +11,8 @@ from smbprotocol.open import (Open, CreateDisposition, FilePipePrinterAccessMask
                               ShareAccess, CreateOptions)
 from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
-from smbprotocol.exceptions import SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException
+from smbprotocol.exceptions import (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException,
+                                    RequestNotAccepted)
 
 
 def clear_cache():
@@ -97,7 +98,8 @@ def open_file_safely(file_path):
         try:
             open_file = open_file_smb(TREE, file_path)
             break
-        except (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException):
+        except (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException, RequestNotAccepted):
+            Time.sleep(1, verbose=True)
             TREE = restart_connection()
 
     return open_file
@@ -238,25 +240,35 @@ def get_substrings(row, row_cnt, widths):
 
 def get_time_color(diff):
     time_color = ["white", "on_green"]
+    time_suffix = 8
 
     minutes = int(diff.seconds / 60)
 
     if minutes in Int.from_to(5, 14):
         time_color = ["on_green"]
+        time_suffix = 7
     elif minutes in Int.from_to(15, 29):
         time_color = ["white", "on_yellow"]
+        time_suffix = 6
     elif minutes in Int.from_to(30, 59):
         time_color = ["on_yellow"]
+        time_suffix = 5
     elif minutes in Int.from_to(60, 119):
         time_color = ["white", "on_blue"]
+        time_suffix = 4
     elif minutes in Int.from_to(120, 179):
         time_color = ["on_cyan"]
+        time_suffix = 3
     elif minutes in Int.from_to(180, 239):
         time_color = ["white", "on_red"]
+        time_suffix = 2
     elif minutes >= 240:
         time_color = ["on_red"]
+        time_suffix = 1
 
-    return time_color
+    time_suffix = " " * time_suffix
+
+    return time_suffix, time_color
 
 
 def get_diff_and_formatted(last_time):
@@ -325,8 +337,9 @@ def main():
 
         # print current time and time since last log
         now, diff, diff_formatted = get_diff_and_formatted(last_time)
-        time_color = get_time_color(diff)
-        Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} | {diff_formatted} since last log', *time_color, end="\r")
+        time_suffix, time_color = get_time_color(diff)
+        Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} | {diff_formatted} since last log{time_suffix}',
+                      *time_color, end="\r")
 
         clear_cache()
         first_run = False
