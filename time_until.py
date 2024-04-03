@@ -66,11 +66,20 @@ while True:
         Console.clean()
     rebuild = True
     result = ""
-    for end_time in end_times:
+    previous_end_time = None
+    current_end_time = None
+    for cnt_end_time, end_time in enumerate(end_times):
         time = now()
 
         if end_time < time:
             continue
+
+        if current_end_time is None:
+            current_end_time = end_time
+            i = cnt_end_time - 1
+            previous_end_time = end_times[cnt_end_time - 1]
+            if i < 0:
+                previous_end_time = end_times[-1] - Time.delta(24 * 3600)
 
         rebuild = False
 
@@ -97,9 +106,17 @@ while True:
             result += f"{human_readable} {end_time.minute:02}|"
 
     # progressbar
-    diff_total = int(Time.delta(end_times[0], end_times[-1]))
-    diff_now = int(Time.delta(Time.datetime(), end_times[-1]))
+    # diff_total = int(Time.delta(end_times[0], end_times[-1]))
+    # diff_now = int(Time.delta(Time.datetime(), end_times[-1]))
 
+    if rebuild:
+        for cnt, end_time in enumerate(end_times):
+            end_times[cnt] = end_time + Time.delta(24 * 3600)
+        continue
+
+    diff_total = int(Time.delta(previous_end_time, current_end_time))
+    diff_now = int(Time.delta(Time.datetime(), current_end_time))
+    
     diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
     if not figlet_mode:
         diff_percent = f"{result}{diff_percent.replace('.', '')}"
@@ -113,11 +130,7 @@ while True:
         output = progressbar
         print(f"\r{output}", end="", flush=True)  # have cursor at the end of the line to show the end of progressbar
 
-    if rebuild:
-        for cnt, end_time in enumerate(end_times):
-            end_times[cnt] = end_time + Time.delta(24 * 3600)
-
     if figlet_mode:
         Time.sleep(1)
     else:
-        Time.sleep(Random.integer(0, 10), verbose=False)
+        Time.sleep(Random.integer(1, 10), verbose=False)
