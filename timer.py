@@ -1,9 +1,25 @@
 from commands import *
 
+end = None
 try:
     end = int(OS.args[1])
 except ValueError:
-    end = eval(OS.args[1])
+    pass
+
+if end is None:
+    try:
+        end = eval(OS.args[1])
+    except SyntaxError:
+        pass
+
+if end is None:
+    end = OS.args[1]
+    if end.endswith("h"):
+        end = end.replace("h", "")
+        end = int(end) * 3600
+    elif end.endswith("m"):
+        end = end.replace("m", "")
+        end = int(end) * 60
 
 start = Time.stamp()
 
