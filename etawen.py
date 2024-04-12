@@ -4,7 +4,7 @@ import pickle
 import sys
 import datetime
 from collections import deque
-from commands import Time, Str
+from commands import Time, Str, Print
 
 CACHE_FOLDER = "cache"
 
@@ -31,12 +31,14 @@ if CACHE_FILE is None:
     print("Save file not specified. Provide with --file={filename}")
     PRINT_USAGE = True
 if MAX_PERCENT is None:
-    print("Max percent not specified. Privide with --max-percent={max percent}")
+    print("Max percent not specified. Provide with --max-percent={max percent}")
     PRINT_USAGE = True
 
 if PRINT_USAGE:
-    print(f"usage: python3 {__file__} --file={{filename}} --max-percent={{max percent}} [--clear] [--reversed] [--timer={{timer}}]")
+    print(f"usage: python3 {__file__} --file={{filename}} "
+          f"--max-percent={{max percent}} [--clear] [--reversed] [--timer={{timer}}]")
     sys.exit(1)
+
 
 class TaskProgress:
     def __init__(self, max_percent=MAX_PERCENT, window_size=5):
@@ -85,10 +87,9 @@ class TaskProgress:
         try:
             pickle.dump(self, file)
             file.close()
-        except Exception:
+        finally:
             file.close()
         
-
     @classmethod
     def load(cls, filename):
         with open(filename, "rb") as file:
@@ -100,21 +101,18 @@ def print_progress(progress_tracker):
     if estimated_completion:
         estimated_time_left = estimated_completion - time.time()
         estimated_time_left = int(estimated_time_left)
-
+        percent_left = ""
         if progress_tracker.max_percent != 100:
             percent_left = progress_tracker.max_percent - progress_tracker.history[-1][1]
             percent_left = percent_left / (progress_tracker.max_percent / 100)
 
-            percent_left = f"{percent_left:.0f}%"
+            percent_left = f"({percent_left:.0f}%) "
 
-            print(f"Percent left: {percent_left}")
-
-        print(f"Estimated time left: {Time.human_readable(estimated_time_left)}")
-        print(f"Estimated completion time: {time.ctime(estimated_completion)}")
+        output = (f"| Left {percent_left}: {Time.human_readable(estimated_time_left)}"
+                  f" | Completion: {time.ctime(estimated_completion)}")
     else:
-        print("Not enough data to estimate completion time.")
-    print(datetime.datetime.now())
-    print()
+        output = "Not enough data to estimate completion time."
+    print(str(datetime.datetime.now())[:19], output)
 
 
 def main():
@@ -131,8 +129,10 @@ def main():
 
     print_progress(progress_tracker)
     while True:
+        percent_input = None
         try:
-            percent_input = input("Enter the percentage of task completed: ")
+            Print.colored("Enter the percentage of task completed: ", "green", end="", flush=True)
+            percent_input = input()
             percent = float(percent_input)
             if REVERSED:
                 percent = progress_tracker.max_percent - percent
@@ -156,6 +156,7 @@ def main():
         except KeyboardInterrupt:
             print("Exiting.")
             break
+
 
 CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
 
