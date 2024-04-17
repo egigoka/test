@@ -17,7 +17,14 @@ from smbprotocol.exceptions import (SMBResponseException, SharingViolation, SMBC
 
 def clear_cache():
     global CACHE
-    CACHE = {max(CACHE.keys()): CACHE[max(CACHE.keys())]}
+
+    try:
+        max_cache = max(CACHE.keys())
+    except ValueError:
+        return
+
+    CACHE = {max_cache: CACHE[max_cache]}
+
 
 
 def decode_utf8(byte_array):
@@ -47,7 +54,7 @@ def get_byte_from_cache(byte_array, position, file, cached_position, length):
         return new_cache[position:position+1]
 
 
-def read_cached(file, position, cache_length=4096):
+def read_cached(file, position, cache_length=16834):
     global CACHE
     if cache_length == 1:
         return file.read(position, 1)
@@ -310,8 +317,13 @@ def main():
         last_position = position_end
 
         # print the lines
+        len_lines = len(lines_from_file)
         for cnt_line, line in enumerate(lines_from_file[::-1]):
             if line.strip() == "":
+                continue
+
+            # skip last SKIP_LINES lines
+            if (len_lines - cnt_line) <= SKIP_LAST:
                 continue
 
             line_print_number = line_cnt.get()
@@ -346,9 +358,19 @@ def main():
 
         Time.sleep(1, verbose=False)
 
+        if FAST_EXIT:
+            break
+
 
 CACHE = {}
 TREE = None
+
+SKIP_LAST = 0
+for arg in sys.argv:
+    if arg.startswith("--skip="):
+        SKIP_LAST = int(arg.split("=")[1])
+
+FAST_EXIT = "--fast-exit" in sys.argv
 
 if __name__ == "__main__":
     main()
