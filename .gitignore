@@ -6,6 +6,9 @@ scripts/avitoparse/test/*.html
 *.icloud
 Thumbs.db
 creds.py
+secrets.py
+client_secret_*
+token.pickle
 
 # IntelliJ sheet
 .idea/
