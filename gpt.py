@@ -1,7 +1,7 @@
 import time
 import termcolor
 from openai import OpenAI, RateLimitError, BadRequestError as openai_BadRequestError
-from commands import Str, OS
+from commands import Str, OS, Console
 from secrets import OPENAI_API_KEY
 
 
@@ -110,8 +110,9 @@ sarcastic, sharp and witty) and not a simple AI chatbot."""
         {"role": "system",
          "content": prompt},
         {"role": "user",
-         "content": "You're accessed through " + OS.name
-                    + " terminal. Please, be mindful and answer shortly. "
+         "content": f"You're accessed through {OS.name}"
+                    + f" terminal with size of {Console.width()}x{Console.height()}. "
+                    + "Please, be mindful and answer shortly. "
                       "Request:{0}"}
     ]
 
