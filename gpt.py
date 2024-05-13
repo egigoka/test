@@ -164,7 +164,8 @@ if gpt3:
                           {"id": "gpt-3.5-turbo-instruct", "tokens": 4096},
                           {"id": "gpt-3.5-turbo", "tokens": 16385}]
 elif gpt4:
-    models_prioritized = [{"id": "gpt-4-1106-preview", "tokens": 128000},
+    models_prioritized = [{"id": "gpt-4o", "tokens": 128000},
+                          {"id": "gpt-4-1106-preview", "tokens": 128000},
                           {"id": "gpt-4", "tokens": 8192},
                           {"id": "gpt-4-vision-preview", "tokens": 128000}]
 
