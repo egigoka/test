@@ -3,12 +3,12 @@ import sys
 from commands import *
 print("searcher 0.5.2")
 
-file_extensions=[".py"]  # cached
+file_extensions=[".service"]  # cached
 skipped_file_substrings = []  # cached
 
 case_sensitive=False  # cached partially
 
-match_strings=['evt']  # not cached
+match_strings=['zypper']  # not cached
 skipped_strings = []  # not cached
 multiple_lines=True  # not cached
 end_print_files_dict=True  # not cached
@@ -129,7 +129,11 @@ cnt = 0
 files = []
 b = Bench()
 for file in files_to_read:
-    if File.get_size(file) > skip_over_this_size:
+    try:
+        filesize = File.get_size(file)
+    except FileNotFoundError:
+        filesize = 0
+    if filesize > skip_over_this_size:
         if debug:
             print("BEEG file, skip " + file)
         continue
