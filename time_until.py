@@ -29,7 +29,10 @@ for end in ends:
 
     end = Str.get_integers(end)
 
-    new_end_time = Time.datetime(hour=end[0], minute=end[1], second=0)
+    try:
+        new_end_time = Time.datetime(hour=end[0], minute=end[1], second=0)
+    except IndexError:
+        continue
 
     while True:
         if new_end_time < last_end_time:
