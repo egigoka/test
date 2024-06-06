@@ -34,7 +34,7 @@ def seconds_human_readable(seconds):
 
 try:
     sleep = end / Console.width() / 8 / 3
-    print(sleep)
+    sleep = max(sleep, 0.001)
     while True:
         Time.sleep(sleep)
         delta = Time.stamp() - start
@@ -48,7 +48,7 @@ try:
         # Print.rewrite(f"{passed}{endtime}")
 
         if delta >= end:
-            Console.blink()
+            # Console.blink()
             OS.exit(0) 
 except KeyboardInterrupt:
     pass
