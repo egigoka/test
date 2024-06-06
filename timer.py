@@ -44,11 +44,10 @@ try:
         if end is not None:
             endtime = seconds_human_readable(end)
 
-        Print.rewrite(CLI.progressbar(delta, end, passed, endtime))
-        # Print.rewrite(f"{passed}{endtime}")
+        print(CLI.progressbar(delta, end, passed, endtime), end="\r")
 
         if delta >= end:
-            # Console.blink()
+            Console.blink()
             OS.exit(0) 
 except KeyboardInterrupt:
     pass
