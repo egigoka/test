@@ -33,8 +33,10 @@ def seconds_human_readable(seconds):
     return f"{mins}m {secs}s"
 
 try:
+    sleep = end / Console.width() / 8 / 3
+    print(sleep)
     while True:
-        Time.sleep(0.5)
+        Time.sleep(sleep)
         delta = Time.stamp() - start
         passed = seconds_human_readable(delta)
 
