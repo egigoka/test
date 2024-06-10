@@ -15,29 +15,30 @@ MAX_PERCENT = None
 REVERSED = False
 PRINT_USAGE = False
 
-for arg in sys.argv:
-    if arg == "--clear" or arg == "--reset" or arg == "--clean":
-        CLEAR = True
-    elif arg == "--reversed":
-        REVERSED = True
-    elif arg.startswith("--timer="):
-        TIMER = Str.get_integers(arg)[0]
-    elif arg.startswith("--max-percent="):
-        MAX_PERCENT = Str.get_integers(arg)[0]
-    elif arg.startswith("--file="):
-        CACHE_FILE = Str.substring(arg, "=") + ".pkl"
+if __name__ == "__main__":
+    for arg in sys.argv:
+        if arg == "--clear" or arg == "--reset" or arg == "--clean":
+            CLEAR = True
+        elif arg == "--reversed":
+            REVERSED = True
+        elif arg.startswith("--timer="):
+            TIMER = Str.get_integers(arg)[0]
+        elif arg.startswith("--max-percent="):
+            MAX_PERCENT = Str.get_integers(arg)[0]
+        elif arg.startswith("--file="):
+            CACHE_FILE = Str.substring(arg, "=") + ".pkl"
 
-if CACHE_FILE is None:
-    print("Save file not specified. Provide with --file={filename}")
-    PRINT_USAGE = True
-if MAX_PERCENT is None:
-    print("Max percent not specified. Provide with --max-percent={max percent}")
-    PRINT_USAGE = True
+    if CACHE_FILE is None:
+        print("Save file not specified. Provide with --file={filename}")
+        PRINT_USAGE = True
+    if MAX_PERCENT is None:
+        print("Max percent not specified. Provide with --max-percent={max percent}")
+        PRINT_USAGE = True
 
-if PRINT_USAGE:
-    print(f"usage: python3 {__file__} --file={{filename}} "
-          f"--max-percent={{max percent}} [--clear] [--reversed] [--timer={{timer}}]")
-    sys.exit(1)
+    if PRINT_USAGE:
+        print(f"usage: python3 {__file__} --file={{filename}} "
+              f"--max-percent={{max percent}} [--clear] [--reversed] [--timer={{timer}}]")
+        sys.exit(1)
 
 
 class TaskProgress:
@@ -158,6 +159,6 @@ def main():
             break
 
 
-CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
-
-main()
+if __name__ == "__main__":
+    CACHE_PATH = CACHE_FOLDER + os.sep + CACHE_FILE
+    main()
