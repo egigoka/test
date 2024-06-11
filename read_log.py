@@ -1,11 +1,10 @@
-from creds import server, share, user, password
 import uuid
 import sys
 import csv
 import math
 from datetime import datetime
 from datetime import timedelta
-from commands import Time, Console, Print, ID, Int
+from commands import Time, Console, Print, ID, Int, OS
 from smbprotocol.connection import Connection, Dialects
 from smbprotocol.open import (Open, CreateDisposition, FilePipePrinterAccessMask, FileAttributes, ImpersonationLevel,
                               ShareAccess, CreateOptions)
@@ -13,6 +12,13 @@ from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
 from smbprotocol.exceptions import (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException,
                                     RequestNotAccepted)
+
+if "test" in OS.args:
+    from creds_test import server, share, user, password
+elif "prod" in OS.args:
+    from creds_prod import server, share, user, password
+else:
+    print("Use \"test\" or \"prod\" argument to select server")
 
 
 def clear_cache():
