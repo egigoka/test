@@ -15,8 +15,10 @@ from smbprotocol.exceptions import (SMBResponseException, SharingViolation, SMBC
 
 if "test" in OS.args:
     from creds_test import server, share, user, password
+    server_name = "test"
 elif "prod" in OS.args:
     from creds_prod import server, share, user, password
+    server_name = "prod"
 else:
     print("Use \"test\" or \"prod\" argument to select server")
 
@@ -356,7 +358,7 @@ def main():
         # print current time and time since last log
         now, diff, diff_formatted = get_diff_and_formatted(last_time)
         time_suffix, time_color = get_time_color(diff)
-        Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} | {diff_formatted} since last log{time_suffix}',
+        Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} | {diff_formatted} since last log in {server_name}{time_suffix}',
                       *time_color, end="\r")
 
         clear_cache()
