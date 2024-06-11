@@ -5,7 +5,7 @@ scripts/cells/output.txt
 scripts/avitoparse/test/*.html
 *.icloud
 Thumbs.db
-creds.py
+creds*.py
 secrets.py
 client_secret_*
 token.pickle
