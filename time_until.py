@@ -127,10 +127,10 @@ while True:
     progressbar = CLI.progressbar(diff_now, diff_total, diff_percent + ("%" if figlet_mode else ""), reverse=True)
 
     if figlet_mode:
-        output = result.rstrip() + newline + progressbar
+        output = result.rstrip() + newline + Console.fit(progressbar)[0]
         print(output, end="", flush=True)
     else:
-        output = progressbar
+        output = Console.fit(progressbar, reverse=True)[0]
         print(f"\r{output}", end="", flush=True)  # have cursor at the end of the line to show the end of progressbar
 
     if figlet_mode:
