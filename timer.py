@@ -44,7 +44,7 @@ try:
         if end is not None:
             endtime = seconds_human_readable(end)
 
-        print(CLI.progressbar(delta, end, passed, endtime), end="\r")
+        print("\r" + CLI.progressbar(delta, end, passed, endtime), end="")
 
         if delta >= end:
             Console.blink()
