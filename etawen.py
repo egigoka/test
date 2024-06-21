@@ -97,6 +97,10 @@ class TaskProgress:
             return pickle.load(file)
 
 
+def str_datetime():
+    return str(datetime.datetime.now())[:19]
+
+
 def print_progress(progress_tracker):
     estimated_completion = progress_tracker.estimate_completion()
     if estimated_completion:
@@ -113,7 +117,7 @@ def print_progress(progress_tracker):
                   f" | Completion: {time.ctime(estimated_completion)}")
     else:
         output = "Not enough data to estimate completion time."
-    print(str(datetime.datetime.now())[:19], output)
+    print(str_datetime(), output)
 
 
 def main():
@@ -138,7 +142,7 @@ def main():
             if REVERSED:
                 percent = progress_tracker.max_percent - percent
             if percent >= progress_tracker.max_percent:
-                print(f"Task completed! {percent} of {progress_tracker.max_percent}")
+                print(f"{str_datetime()} | Task completed! {percent} of {progress_tracker.max_percent}")
                 break
 
             progress_tracker.add_progress(percent)
