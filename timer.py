@@ -35,6 +35,7 @@ def seconds_human_readable(seconds):
 try:
     sleep = end / Console.width() / 8 / 3
     sleep = max(sleep, 0.001)
+    sleep = min(sleep, 1)
     while True:
         Time.sleep(sleep)
         delta = Time.stamp() - start
