@@ -19,6 +19,7 @@ if __name__ == "__main__":
     for arg in sys.argv:
         if arg == "--clear" or arg == "--reset" or arg == "--clean":
             CLEAR = True
+            print("--clear and --reset are deprecated, type \"r\" instead of percent to reset progress")
         elif arg == "--reversed":
             REVERSED = True
         elif arg.startswith("--timer="):
