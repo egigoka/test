@@ -137,7 +137,7 @@ def print_progress(progress_tracker):
     
     output = (f"| Left {percent_left}: {Time.human_readable(estimated_time_left)}"
               f" | Completion: {time.ctime(estimated_completion)}"
-              f" | Speed: {speed_formatted},"
+              f" | Speed: {speed_formatted}"
               f" | Diff: {Time.human_readable(int(diff))}")
 
     print(str_datetime(), output, end="")
