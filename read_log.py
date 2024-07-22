@@ -292,6 +292,10 @@ def get_diff_and_formatted(last_time):
     if now < last_time:
         diff = timedelta(0, 0, 0, 0, 0, 0, 0)
     diff_formatted = f"{diff.seconds // 3600:02}:{(diff.seconds // 60) % 60:02}:{diff.seconds % 60:02}"
+    if diff.days > 0:
+        days = diff.days
+        days_suffix = "" if days == 1 else "s"
+        diff_formatted = f"{days} day{days_suffix} {diff_formatted}"
     return now, diff, diff_formatted
 
 
