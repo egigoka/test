@@ -257,29 +257,33 @@ def get_time_color(diff):
     time_color = ["white", "on_green"]
     time_suffix = 8
 
-    minutes = int(diff.seconds / 60)
-
+    minutes = diff.seconds // 60
+    minutes += diff.days * 1440
+    
     if minutes in Int.from_to(5, 14):
         time_color = ["on_light_green"]
-        time_suffix = 7
+        time_suffix -= 1
     elif minutes in Int.from_to(15, 29):
         time_color = ["white", "on_yellow"]
-        time_suffix = 6
+        time_suffix -= 2
     elif minutes in Int.from_to(30, 59):
         time_color = ["on_light_yellow"]
-        time_suffix = 5
+        time_suffix -= 3
     elif minutes in Int.from_to(60, 119):
         time_color = ["white", "on_blue"]
-        time_suffix = 4
+        time_suffix -= 4
     elif minutes in Int.from_to(120, 179):
         time_color = ["on_light_blue"]
-        time_suffix = 3
+        time_suffix -= 5
     elif minutes in Int.from_to(180, 239):
         time_color = ["white", "on_red"]
-        time_suffix = 2
-    elif minutes >= 240:
+        time_suffix -= 6
+    elif minutes in Int.from_to(240, 1439):
         time_color = ["on_light_red"]
-        time_suffix = 1
+        time_suffix -= 7
+    elif minutes >= 1440:
+        time_color = ["white", "on_black"]
+        time_suffix -= 8
 
     time_suffix = " " * time_suffix
 
