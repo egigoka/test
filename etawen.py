@@ -125,10 +125,19 @@ def print_progress(progress_tracker):
         percent_left = f"({percent_left:.0f}%) "
 
     diff = progress_tracker.get_diff()
-
+    
+    speed = progress_tracker.get_avg_speed() * 60
+    speed_suffix = "%/m"
+    
+    if speed < 1:
+        speed = 1 / speed
+        speed_suffix = "m/%"
+    
+    speed_formatted = f"{speed:.2f} {speed_suffix}"
+    
     output = (f"| Left {percent_left}: {Time.human_readable(estimated_time_left)}"
               f" | Completion: {time.ctime(estimated_completion)}"
-              f" | Speed: {progress_tracker.get_avg_speed()*60:.2f} %/m,"
+              f" | Speed: {speed_formatted},"
               f" | Diff: {Time.human_readable(int(diff))}")
 
     print(str_datetime(), output, end="")
