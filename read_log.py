@@ -305,7 +305,10 @@ def get_diff_and_formatted(last_time):
 
 def main():
     # init logic
-    csv.field_size_limit(sys.maxsize)
+    try:
+        csv.field_size_limit(sys.maxsize)
+    except OverflowError:
+        csv.field_size_limit(pow(2,31)-1)  # windows
     line_cnt = ID()
     last_time = datetime.now()
     first_run = True
