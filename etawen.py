@@ -129,7 +129,7 @@ def print_progress(progress_tracker):
     speed = progress_tracker.get_avg_speed() * 60
     speed_suffix = "%/m"
     
-    if speed < 1:
+    if speed < 1 and not speed == 0:
         speed = 1 / speed
         speed_suffix = "m/%"
     
