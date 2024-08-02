@@ -23,7 +23,7 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_
                "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
                "--prefer-ffmpeg",
                "--merge-output-format", "mkv",
-
+               "--newline",  # Output progress bar as new lines
                "-o", directory
                + Path.separator() + "Videos"
                + Path.separator() + ytdlp_format,
