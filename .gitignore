@@ -119,3 +119,4 @@ ENV/
 # cache
 cache/
 searcher_cache.json
+.aider*
