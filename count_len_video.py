@@ -24,12 +24,13 @@ def l(filename):
         out = 0
     return out
 
-
-for file in files:
+for cnt, file in enumerate(files):
+    Print.rewrite(f"{cnt+1} / {len(files)}", file)
     secs += l(Path.combine(dir, file))
 
 mins = secs / 60
 mins_left = mins % 60
 hours = mins // 60
 
-print(f"{int(hours)}:{int(mins_left)}")
+Print.rewrite()
+print(f"{int(hours)}h {int(mins_left)}m")
