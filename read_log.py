@@ -370,15 +370,15 @@ def main():
         now, diff, diff_formatted = get_diff_and_formatted(last_time)
         time_suffix, time_color = get_time_color(diff)
         Print.colored(f'{now.strftime("%d.%m.%Y %H:%M:%S")} | {diff_formatted} since last log in {server_name}{time_suffix}',
-                      *time_color, end="\r")
+                      *time_color, end="\n" if FAST_EXIT else "\r")
+
+        if FAST_EXIT:
+            break
 
         clear_cache()
         first_run = False
 
         Time.sleep(1, verbose=False)
-
-        if FAST_EXIT:
-            break
 
 
 CACHE = {}
