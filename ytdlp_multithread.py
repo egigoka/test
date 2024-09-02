@@ -15,15 +15,14 @@ def regen_cache(channel, cookies_exist, cookies_path, debug):
     return links
 
 
-def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_subs, cookies_exist, cookies_path, wait, debug):
+def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_subs, cookies_exist, cookies_path, wait, debug, quality, newline):
     yt_id_with_cnt = f"{youtube_video_id} {cnt+1}/{total}"
     print(f"Started downloading {yt_id_with_cnt}")
     b = Bench(f"Downloaded {yt_id_with_cnt}", verbose=True)
     command = ["python3", "-m", "yt_dlp",
-               "-f", "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best",
+               "-f", quality,
                "--prefer-ffmpeg",
                "--merge-output-format", "mkv",
-               "--newline",  # Output progress bar as new lines
                "-o", directory
                + Path.separator() + "Videos"
                + Path.separator() + ytdlp_format,
@@ -37,6 +36,8 @@ def download(youtube_video_id, cnt, total, directory, ytdlp_format, no_meta, no_
                "--sponsorblock-mark", "default",
                "--download-archive", directory + Path.separator() + "archive.ytdlp",
                f"https://youtube.com/watch?v={youtube_video_id}"]
+    if newline:
+        command.insert(8, "--newline")  # Output progress bar as new lines
     if not no_subs:
         subs_args = ["--embed-subs",
                      "--sub-langs", "all",
@@ -124,45 +125,6 @@ def progress(directory):
                       directory + Path.separator() + "Videos", "whiletrue"])
 
 
-def running_threads(tt, additional_threads):
-    return
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-    Print.colored("COUNTING THREADS LOL", "red", "on_white")
-    Print.colored("COUNTING THREADS LOL", "black", "on_white")
-
-    while True:
-        running = 0
-        for runner in tt.runner_threads:
-            if runner.is_running():
-                running += 1
-                Print.colored("running", runner.thread.name, "magenta")
-        running += len(tt.input_threads)
-        for t in tt.input_threads:
-            Print.colored("running", t.thread.name, "magenta")
-        Print.colored(f"left {running - additional_threads} links to download", "magenta")
-        Time.sleep(20)
-
-
 def parse_arguments(args):
     dl = "dl" in OS.args
     ch = "ch" in OS.args
@@ -174,10 +136,14 @@ def parse_arguments(args):
 
     count_of_threads = 2
 
+    quality = "bv[ext=mp4] +ba[ext=m4a]/best[ext=mp4]/best"
+
     directory = None
     for arg in OS.args:
         if debug:
             print(f"{arg=} {Dir.exists(arg)=}")
+        if arg.startswith("quality="):
+            quality = arg[8:]
         if Dir.exists(arg):
             directory = arg
         try:
@@ -197,12 +163,12 @@ def parse_arguments(args):
 
     channel_file_path = directory + Path.separator() + "channel_link.txt"
 
-    return dl, ch, chy, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path
+    return dl, ch, chy, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path, quality
 
 
 if __name__ == "__main__":
 
-    dl, ch, chy, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path = parse_arguments(OS.args)
+    dl, ch, chy, debug, wait, no_meta, no_subs, directory, count_of_threads, channel_file_path, quality = parse_arguments(OS.args)
 
     if debug:
         print(f"Working dir is {directory}")
@@ -232,12 +198,13 @@ if __name__ == "__main__":
 
     if dl:
         additional_threads = 3
-        tt = Threading(verbose=debug, max_threads=count_of_threads - 1 + additional_threads, start_from_first=True)
+        tt = Threading(verbose=debug, max_threads=count_of_threads, start_from_first=True)
+        ttd = Threading(verbose=debug)
 
-        tt.add(progress, kwargs=ImDict({"directory": directory}))
-        tt.add(free_space_watchdog, kwargs=ImDict({"minimum_space": 20 * GiB,
+        ttd.add(progress, kwargs=ImDict({"directory": directory}))
+        ttd.add(free_space_watchdog, kwargs=ImDict({"minimum_space": 20 * GiB,
                                                    "directory": directory}))
-        tt.add(running_threads, args=(tt, additional_threads))
+        
 
         yt_ids = Str.nl(File.read(cache_file_path).strip())
 
@@ -252,6 +219,9 @@ if __name__ == "__main__":
                                             "cookies_exist": cookies_exist,
                                             "cookies_path": cookies_path,
                                             "wait": wait,
-                                            "debug": debug}))
-
+                                            "debug": debug,
+                                            "quality": quality,
+                                            "newline": False}))
+        ttd.start()
         tt.start(wait_for_keyboard_interrupt=True)
+        ttd.kill()

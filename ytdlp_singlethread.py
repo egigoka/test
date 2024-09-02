@@ -2,7 +2,7 @@ from commands import *
 import ytdlp_multithread
 
 (dl, ch, chy, debug, wait, no_meta, no_subs, directory,
- count_of_threads, channel_file_path) = ytdlp_multithread.parse_arguments(OS.args)
+ count_of_threads, channel_file_path, quality) = ytdlp_multithread.parse_arguments(OS.args)
 
 if debug:
     print(f"{channel_file_path=}")
@@ -53,4 +53,6 @@ for cnt, line in enumerate(yt_ids):
                                debug=debug,
                                directory=directory,
                                wait=False,
-                               ytdlp_format=ytdlp_multithread.ytdlp_format)
+                               ytdlp_format=ytdlp_multithread.ytdlp_format,
+                               quality=quality,
+                               newline=True)
