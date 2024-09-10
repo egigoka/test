@@ -74,24 +74,34 @@ def read_cached(file, position, cache_length=16834):
     return out
 
 
+def disconnect(obj):
+    try:
+        obj.disconnect()
+    except Exception:
+        pass
+
+
 def restart_connection():
-    # Set up the SMB connection
-    connection = Connection(uuid.uuid4(), server, 445)
-    connection.connect(Dialects.SMB_3_0_2)
+    global CONNECTION
+    global SESSION
+    global TREE
+    
+    disconnect(CONNECTION)
+    disconnect(SESSION)
+    disconnect(TREE)
+    
+    CONNECTION = Connection(uuid.uuid4(), server, 445)
+    CONNECTION.connect(Dialects.SMB_3_0_2)
 
-    # Start an SMB session
-    session = Session(connection, user, password)
-    session.connect()
+    SESSION = Session(CONNECTION, user, password)
+    SESSION.connect()
 
-    # Connect to the SMB share
-    tree = TreeConnect(session, "\\\\{}\\{}".format(server, share))
-    tree.connect()
-
-    return tree
+    TREE = TreeConnect(SESSION, "\\\\{}\\{}".format(server, share))
+    TREE.connect()
 
 
-def open_file_smb(tree, file_path):
-    open_file = Open(tree, file_path)
+def open_file_smb(file_path):
+    open_file = Open(TREE, file_path)
     open_file.create(
         ImpersonationLevel.Impersonation,
         FilePipePrinterAccessMask.FILE_READ_DATA | FilePipePrinterAccessMask.FILE_READ_ATTRIBUTES,
@@ -106,16 +116,16 @@ def open_file_smb(tree, file_path):
 def open_file_safely(file_path):
     global TREE
     if not TREE:
-        TREE = restart_connection()
-
+        restart_connection()
+    
     # open the file
     while True:
         try:
-            open_file = open_file_smb(TREE, file_path)
+            open_file = open_file_smb(file_path)
             break
         except (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException, RequestNotAccepted):
             Time.sleep(1, verbose=True)
-            TREE = restart_connection()
+            restart_connection()
 
     return open_file
 
@@ -304,6 +314,7 @@ def get_diff_and_formatted(last_time):
 
 
 def main():
+    
     # init logic
     try:
         csv.field_size_limit(sys.maxsize)
@@ -383,6 +394,8 @@ def main():
 
 CACHE = {}
 TREE = None
+CONNECTION = None
+SESSION = None
 
 SKIP_LAST = 0
 for arg in sys.argv:
