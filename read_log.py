@@ -22,6 +22,16 @@ elif "prod" in OS.args:
 else:
     print("Use \"test\" or \"prod\" argument to select server")
 
+LOG_LEVELS = ["Trace", "Debug", "Info", "Warning", "Error", "Fatal", "Unknown"]
+MIN_LOG_LEVEL_STRING = "Trace"
+for arg in OS.args:
+    prefix = "--min-log-level="
+    if arg.startswith(prefix):
+        MIN_LOG_LEVEL_STRING = arg[len(prefix):].title()
+    if MIN_LOG_LEVEL_STRING not in LOG_LEVELS:
+        raise ValueError(f"Log level \"{MIN_LOG_LEVEL_STRING}\" isn't supported. Supported are " + ", ".join(LOG_LEVELS))
+MIN_LOG_LEVEL = LOG_LEVELS.index(MIN_LOG_LEVEL_STRING)
+
 
 def clear_cache():
     global CACHE
@@ -313,6 +323,12 @@ def get_diff_and_formatted(last_time):
     return now, diff, diff_formatted
 
 
+def is_printable(row):
+    level_string = row[3]
+    level = LOG_LEVELS.index(level_string)
+    return level >= MIN_LOG_LEVEL
+
+
 def main():
     
     # init logic
@@ -358,6 +374,10 @@ def main():
 
             line_print_number = line_cnt.get()
             row = csv_line_to_list(line)
+
+            if not is_printable(row):
+                continue
+
             color, back = get_colors(row, line_print_number)
             widths = get_widths()
             last_time = get_time(row)
