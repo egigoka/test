@@ -372,11 +372,12 @@ def main():
             if (len_lines - cnt_line) <= SKIP_LAST:
                 continue
 
-            line_print_number = line_cnt.get()
             row = csv_line_to_list(line)
 
             if not is_printable(row):
                 continue
+                
+            line_print_number = line_cnt.get()
 
             color, back = get_colors(row, line_print_number)
             widths = get_widths()
