@@ -2,7 +2,7 @@ from commands import *
 
 print("reading_config")
 # config
-CODESIGN_SERT_NUMBER = "57B47CMXRR"
+CODESIGN_SERT_NUMBER = "95YHWSQ8CX"
 SKIPPED_EXTENSIONS = '''
 .plist
 .icns
@@ -66,8 +66,8 @@ print("WITHOUT_CONFIRMATION", WITHOUT_CONFIRMATION)
 def sign_file(path):
     if File.get_extension(path) not in SKIPPED_EXTENSIONS:
         escaped_path = Bash.argument_escape(path)
-        OS.system(f"sudo xattr -lr {escaped_path}", verbose=True)
-        OS.system(f"sudo xattr -cr {escaped_path}", verbose=True)
+        OS.system(f"sudo xattr -l {escaped_path}", verbose=True)
+        OS.system(f"sudo xattr -c {escaped_path}", verbose=True)
         OS.system(f"sudo chmod +x {escaped_path}", verbose=True)
         OS.system(f"sudo codesign -f -s {CODESIGN_SERT_NUMBER} {escaped_path}", verbose=True)
 
