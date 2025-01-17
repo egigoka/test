@@ -117,10 +117,14 @@ while True:
             end_times[cnt] = end_time + Time.delta(24 * 3600)
         continue
 
+    if previous_end_time == current_end_time:
+        previous_end_time -= timedelta(days=1)
+
     diff_total = int(Time.delta(previous_end_time, current_end_time))
     diff_now = int(Time.delta(Time.datetime(), current_end_time))
     
     diff_percent = f"{100 - diff_now / diff_total * 100:.2f}"
+
     if not figlet_mode:
         diff_percent = f"{result}{diff_percent.replace('.', '')}"
 
