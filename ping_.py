@@ -55,14 +55,14 @@ if State.router:
         print(f"adding router, now {domains=}")
 
 if State.online:
-    domains += ['router.egigoka.me']
+#    domains += ['router.egigoka.me']
     domains += [Network.check_internet_apple]
     domains += [Network.check_internet_microsoft]
 
-    def egigokas_server(debug=False):
-        return Network.check_response("https://isup.egigoka.me/", "yep", debug=debug)
-
-    domains += [egigokas_server]
+#    def egigokas_server(debug=False):
+#        return Network.check_response("https://isup.egigoka.me/", "yep", debug=debug)
+#
+#    domains += [egigokas_server]
 
 
 def get_country_of_ip(ip):

@@ -9,6 +9,7 @@ creds*.py
 secrets.py
 client_secret_*
 token.pickle
+prices.json
 
 # IntelliJ sheet
 .idea/
