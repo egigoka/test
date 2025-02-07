@@ -10,6 +10,7 @@ secrets.py
 client_secret_*
 token.pickle
 prices.json
+ping_data.json
 
 # IntelliJ sheet
 .idea/
