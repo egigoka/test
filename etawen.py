@@ -109,14 +109,35 @@ def print_progress(progress_tracker):
     diff = progress_tracker.get_diff()
     
     speed = progress_tracker.get_avg_speed() * 60
-    speed_suffix = "%/m" if speed >= 1 else "m/%"
-    if speed != 0:
-        speed = speed if speed >= 1 else 1 / speed
-    speed_formatted = f"{speed:.2f} {speed_suffix}"
+
+    
+    
+    if speed >= 1:
+        speed_suffix = " %/m"
+        speed_value = f"{speed:.2f}"
+    if speed == 0:
+        speed_suffix = ""
+        speed_value = 0
+    else:
+        speed_suffix = "/%"
+        speed = 1/speed
+        speed_value = f"{int(speed)}m {str(int(speed*60%60)).zfill(2)}s"
+
+
+    completed = datetime.datetime.fromtimestamp(estimated_completion)
+    now = Time.timestamp_to_datetime(progress_tracker.last_time)
+    if completed.day != now.day:
+        completed_formatted = completed.strftime('%d %H:%M:%S')
+    elif completed.hour != now.hour:
+        completed_formatted = completed.strftime('%H:%M:%S')
+    else:
+        completed_formatted = completed.strftime('%M:%S')
+    
+    speed_formatted = f"{speed_value}{speed_suffix}"
     
     output = (f"{str_datetime()} "
               f"| Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}"
-              f" | Cmp: {datetime.datetime.fromtimestamp(estimated_completion).strftime('%d %H:%M:%S')}"
+              f" | Cmp: {completed_formatted}"
               f" | Spd: {speed_formatted}"
               f" | Dif: {Time.human_readable(int(diff))}")
 
