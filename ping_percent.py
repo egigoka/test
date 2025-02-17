@@ -5,9 +5,12 @@ import os
 from datetime import datetime
 
 DATA_FILE = 'ping_data.json'
-PING_ADDRESS = '193.111.175.220'  #  '1.1.1.1'
+PING_ADDRESSES = [
+    '8.8.8.8',
+    '1.1.1.1'
+]
 PING_INTERVAL_SECONDS = 1
-PROCESS_TIMEOUT = 10
+PROCESS_TIMEOUT = 1
 
 def load_data():
     """Load existing ping data from the JSON file if it exists."""
@@ -47,12 +50,12 @@ def ping_once(address):
         # print(output.stdout)
         if b'0 packets received' in output.stdout \
             or b'Received = 0' in output.stdout:
-            return True  # Timeout
+            return False  # Timeout
         else:
-            return False  # Success
+            return True  # Success
     except subprocess.TimeoutExpired:
         # If the ping command itself times out, treat that as a timeout
-        return True
+        return False
 
 def calculate_timeout_percentage(data, minutes):
     """
@@ -66,20 +69,21 @@ def calculate_timeout_percentage(data, minutes):
         return 0.0
     
     timeouts = sum(1 for r in recent_records if r['timeout'])
-    return (timeouts / len(recent_records)) * 100.0
+    return (timeouts / len(recent_records)) * 100
 
 def main():
     ping_data = load_data()
 
     while True:
         time.sleep(PING_INTERVAL_SECONDS)
-        timeout_occurred = ping_once(PING_ADDRESS)
-        record = {
-            "timestamp": time.time(),
-            "timeout": timeout_occurred
-        }
-        ping_data.append(record)
-        save_data(ping_data)
+        for address in PING_ADDRESSES:
+            timeout_occurred = not ping_once(address)
+            record = {
+                "timestamp": time.time(),
+                "timeout": timeout_occurred
+            }
+            ping_data.append(record)
+            save_data(ping_data)
 
         # Calculate rolling stats
         last_minute = calculate_timeout_percentage(ping_data, 1)
