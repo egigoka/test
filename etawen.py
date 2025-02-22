@@ -110,8 +110,6 @@ def print_progress(progress_tracker):
     
     speed = progress_tracker.get_avg_speed() * 60
 
-    
-    print(speed)
     if speed >= 1:
         speed_suffix = " %/m"
         speed_value = f"{speed:.2f}"
