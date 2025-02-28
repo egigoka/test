@@ -33,9 +33,11 @@ def ping_once(address):
     Perform a single ping to the provided address.
     Return True if timeout occurred, False if success.
     """
-    # For Linux/Mac use: ['ping', '-c', '1', address]
-    # For Windows use:  ['ping', '-n', '1', address]
-    command = ['ping', '-n', '1', address, ]
+    if os.name == "nt":
+        count = "-n"
+    else:
+        count = "-c"
+    command = ['ping', count, '1', address, ]
 
     try:
         output = subprocess.run(
