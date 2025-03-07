@@ -135,7 +135,8 @@ while True:
         print(output, end="", flush=True)
     else:
         output = Console.fit(progressbar, reverse=True)[0]
-        print(f"\r{output}", end="", flush=True)  # have cursor at the end of the line to show the end of progressbar
+        # print(f"\r{output}", end="", flush=True)  # have cursor at the end of the line to show the end of progressbar
+        print(f"{output}")
 
     if figlet_mode:
         Time.sleep(1)
