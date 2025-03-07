@@ -14,14 +14,11 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Task Progress Tracker")
     parser.add_argument("--file", required=True, help="Filename for saving progress")
     parser.add_argument("--max-percent", type=int, required=True, help="Maximum percentage for the task")
-    parser.add_argument("--clear", action="store_true", help="Clear existing progress (deprecated)")
     parser.add_argument("--reversed", action="store_true", help="Reverse progress calculation")
     parser.add_argument("--timer", type=int, default=DEFAULT_TIMER, help="Timer duration between inputs")
+    parser.add_argument("--no-powerline", action="store_true", help="Don't use powerline fonts")
     
     args = parser.parse_args()
-    
-    if args.clear:
-        print("--clear is deprecated, type \"r\" instead of percent to reset progress")
     
     args.cache_file = args.file + ".pkl"
     args.cache_path = os.path.join(CACHE_FOLDER, args.cache_file)
@@ -132,19 +129,33 @@ def print_progress(progress_tracker):
         completed_formatted = completed.strftime('%M:%S')
     
     speed_formatted = f"{speed_value}{speed_suffix}"
-    
-    output = (f"{str_datetime()} "
-              f"| Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}"
-              f" | Cmp: {completed_formatted}"
-              f" | Spd: {speed_formatted}"
-              f" | Dif: {Time.human_readable(int(diff))}")
+
+    if args.no_powerline:
+        output = (f"{str_datetime()} "
+                  f"| Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}"
+                  f" | Cmp: {completed_formatted}"
+                  f" | Spd: {speed_formatted}"
+                  f" | Dif: {Time.human_readable(int(diff))}")
+    else:
+        start = chr(57522)
+        end = chr(57520)
+        
+        output = start
+        output += Print.colored(str_datetime(), "white", "on_black", verbose=False)
+        output += end
+        output += f"Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}".rstrip()
+        output += start
+        output += Print.colored(f"Cmp: {completed_formatted}", "white", "on_black", verbose=False)
+        output += end
+        output += f"Spd: {speed_formatted}"
+        output += start
+        output += Print.colored(f"Dif: {Time.human_readable(int(diff))}", "white", "on_black", verbose=False)
+        output += end
 
     print(output, end="")
 
 
 def main(args):
-    if args.clear and os.path.exists(args.cache_path):
-        os.remove(args.cache_path)
     
     progress_tracker = TaskProgress.load(args.cache_path)
     if progress_tracker is None:
