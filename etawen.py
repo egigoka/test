@@ -145,11 +145,11 @@ def print_progress(progress_tracker):
         output += end
         output += f"Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}".rstrip()
         output += start
-        output += Print.colored(f"Cmp: {completed_formatted}", "white", "on_black", verbose=False)
+        output += Print.colored(f"Cmp {completed_formatted}", "white", "on_black", verbose=False)
         output += end
-        output += f"Spd: {speed_formatted}"
+        output += f"Spd {speed_formatted}"
         output += start
-        output += Print.colored(f"Dif: {Time.human_readable(int(diff))}", "white", "on_black", verbose=False)
+        output += Print.colored(f"Dif {Time.human_readable(int(diff))}", "white", "on_black", verbose=False)
         output += end
 
     print(output, end="")
