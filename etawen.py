@@ -139,18 +139,15 @@ def print_progress(progress_tracker):
     else:
         start = chr(57522)
         end = chr(57520)
-        
-        output = start
+
+        output = Print.colored(start, "black", "on_white", verbose=False)
         output += Print.colored(str_datetime(), "white", "on_black", verbose=False)
-        output += end
-        output += f"Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}".rstrip()
-        output += start
+        output += Print.colored(end + f"Lft {percent_left_formatted}{Time.human_readable(estimated_time_left)}".rstrip() + start,
+                                "black", "on_white", verbose=False)
         output += Print.colored(f"Cmp {completed_formatted}", "white", "on_black", verbose=False)
-        output += end
-        output += f"Spd {speed_formatted}"
-        output += start
+        output += Print.colored(end + f"Spd {speed_formatted}" + start, "black", "on_white", verbose=False)
         output += Print.colored(f"Dif {Time.human_readable(int(diff))}", "white", "on_black", verbose=False)
-        output += end
+        output += Print.colored(end, "black", "on_white", verbose=False)
 
     print(output, end="")
 
