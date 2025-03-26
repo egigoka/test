@@ -3,7 +3,7 @@
 import requests
 from commands import *
 
-__version__ = "3.6.11"
+__version__ = "3.7.0"
 
 # init
 domains = []
@@ -11,7 +11,7 @@ domains = []
 
 # dynamic config
 class State:
-    ping_timeout = 20000  # in ms
+    ping_timeout = 4000  # in ms
     ping_count = 1
     sleep = 10  # between iterations
     count_of_ignored_timeouts = 1  # how much errors ignore
@@ -98,6 +98,7 @@ get_country_of_ip = CachedFunction(get_country_of_ip, 60*60)
 
 
 def colorful_ping(hostname_or_external_function, args=()):
+    b = Bench()
     if callable(hostname_or_external_function):
         response = hostname_or_external_function(*args, debug=False)
         if not isinstance(response, bool):
@@ -105,18 +106,27 @@ def colorful_ping(hostname_or_external_function, args=()):
         hostname = hostname_or_external_function.__name__
         ip = hostname
     else:
-        response = Network.ping(hostname_or_external_function, timeout=State.ping_timeout, quiet=True, count=State.ping_count, return_ip=True)
-        ip = response[1][0]
-        response = response[0]
+        response = Network.ping(hostname_or_external_function, timeout=State.ping_timeout, quiet=True, count=State.ping_count)
+        ip = Network.get_ip(hostname_or_external_function)
+        response = response
         hostname = hostname_or_external_function
+    time = b.end() * 1000
+    timeout = State.ping_timeout
+    time_f = f"{time:.2f}"
+    time_prefix = " " * (len(f"{timeout:.2f}") - len(time_f))
+    hostname_prefix = " " * (State.longest_hostname + 2 - len(hostname))
+
     if response:
-        Print.colored(
-            Str.rightpad(hostname + ' is up!' + " " * (State.longest_hostname + 2 - len(hostname)) + ' IP ' + str(ip),
-                         Console.width() - State.fix_win_cmd, " "), 'white', 'on_green')
+        status = "up"
+        color_bg = "on_green"
         State.cnt_working += 1
     else:
-        Print.colored(Str.rightpad(hostname + ' is down!' + " " * (State.longest_hostname - len(hostname)) + ' IP ' + str(ip),
-                                   Console.width() - State.fix_win_cmd, " "), 'white', 'on_red')
+        status = "down"
+        color_bg = "on_red"
+    
+    Print.colored(
+        Str.rightpad(f"{hostname} + is {status}! {time_prefix}{time_f}ms{hostname_prefix}IP {ip}",
+                     Console.width() - State.fix_win_cmd, " "), 'white', color_bg)
 
 
 def failed_notification(subtitle, message):
@@ -167,7 +177,7 @@ def main():
         State.cnt_working = 0
         if State.print_ip or State.check_ip:
             Print.rewrite("Getting ip...")
-            ip = Network.get_ip()
+            ip = Network.get_public_ip()
         if State.print_ip:
             Print(f"Your public IP: {ip}")
         if State.check_ip:
