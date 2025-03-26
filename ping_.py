@@ -108,7 +108,6 @@ def colorful_ping(hostname_or_external_function, args=()):
     else:
         response = Network.ping(hostname_or_external_function, timeout=State.ping_timeout, quiet=True, count=State.ping_count)
         ip = Network.get_ip(hostname_or_external_function)
-        response = response
         hostname = hostname_or_external_function
     time = b.end() * 1000
     timeout = State.ping_timeout
@@ -117,16 +116,21 @@ def colorful_ping(hostname_or_external_function, args=()):
     hostname_prefix = " " * (State.longest_hostname + 2 - len(hostname))
 
     if response:
-        status = "up"
+        status = "up!  "
         color_bg = "on_green"
         State.cnt_working += 1
     else:
-        status = "down"
+        status = "down!"
         color_bg = "on_red"
-    
-    Print.colored(
-        Str.rightpad(f"{hostname} + is {status}! {time_prefix}{time_f}ms{hostname_prefix}IP {ip}",
-                     Console.width() - State.fix_win_cmd, " "), 'white', color_bg)
+
+    formatted_text = Str.rightpad(f"{hostname} is {status} {time_prefix}{time_f}ms{hostname_prefix}IP {ip}",
+                     Console.width() - State.fix_win_cmd, " ")
+
+
+
+    colored_text = Print.colored(formatted_text, 'white', color_bg, verbose=False)
+
+    Print(f"{colored_text}")
 
 
 def failed_notification(subtitle, message):
