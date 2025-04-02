@@ -2,12 +2,13 @@ import uuid
 import sys
 import csv
 import math
+import binascii
 from datetime import datetime
 from datetime import timedelta
-from commands import Time, Console, Print, ID, Int, OS
+from commands import Time, Console, Print, ID, Int, OS, dirify
 from smbprotocol.connection import Connection, Dialects
 from smbprotocol.open import (Open, CreateDisposition, FilePipePrinterAccessMask, FileAttributes, ImpersonationLevel,
-                              ShareAccess, CreateOptions)
+                              ShareAccess, CreateOptions, RequestedOplockLevel)
 from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
 from smbprotocol.exceptions import (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException,
@@ -112,13 +113,39 @@ def restart_connection():
 
 def open_file_smb(file_path):
     open_file = Open(TREE, file_path)
+    
+    impersonation_level = ImpersonationLevel.Impersonation
+    desired_access = FilePipePrinterAccessMask.FILE_READ_DATA | FilePipePrinterAccessMask.FILE_READ_EA | FilePipePrinterAccessMask.FILE_READ_ATTRIBUTES | FilePipePrinterAccessMask.READ_CONTROL | FilePipePrinterAccessMask.SYNCHRONIZE
+    file_attributes = FileAttributes.FILE_ATTRIBUTE_NORMAL
+    share_access = ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE
+    create_disposition = CreateDisposition.FILE_OPEN
+    create_options = CreateOptions.FILE_NON_DIRECTORY_FILE | CreateOptions.FILE_NON_DIRECTORY_FILE
+    # create_contexts = None
+    oplock_level = RequestedOplockLevel.SMB2_OPLOCK_LEVEL_NONE
+    send = True
+    
+    create_context_data = binascii.unhexlify(b"""
+28 00 00 00 10 00 04 00 00 00 18 00 10 00 00 00
+44 48 6e 51 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 18 00 00 00 10 00 04 00
+00 00 18 00 00 00 00 00 4d 78 41 63 00 00 00 00
+00 00 00 00 10 00 04 00 00 00 18 00 00 00 00 00
+51 46 69 64 00 00 00 00
+""".replace(b' ', b'').replace(b'\n', b''))
+    
+    print(f"{impersonation_level=}, {desired_access=}, {file_attributes=}, {share_access=}, {create_disposition=}, {create_options=}, {create_context_data=}, {oplock_level=},{send=}")
+    
     open_file.create(
-        ImpersonationLevel.Impersonation,
-        FilePipePrinterAccessMask.FILE_READ_DATA | FilePipePrinterAccessMask.FILE_READ_ATTRIBUTES,
-        FileAttributes.FILE_ATTRIBUTE_NORMAL,
-        ShareAccess.FILE_SHARE_READ,
-        CreateDisposition.FILE_OPEN,
-        CreateOptions.FILE_NON_DIRECTORY_FILE)
+        impersonation_level = impersonation_level,
+        desired_access = desired_access,
+        file_attributes = file_attributes,
+        share_access = share_access,
+        create_disposition = create_disposition,
+        create_options = create_options,
+        create_contexts = create_context_data,
+        oplock_level = oplock_level,
+        send = send
+    )
 
     return open_file
 
@@ -329,6 +356,31 @@ def is_printable(row):
     return level >= MIN_LOG_LEVEL
 
 
+def close_file(file):
+    if file is None:
+        return
+    #if not file.connected:
+    #    return
+    
+    Print.rewrite()
+    cnt = 0
+    while True:
+        
+        cnt += 1
+        if cnt != 1:
+            Print(f"Trying to release file, try {cnt}")
+        try:
+            file.close()
+        except Exception:
+            Time.sleep(1, verbose=True)
+            continue
+        Print.rewrite()
+        if cnt != 1:
+            Print(f"file released try {cnt}")
+        # Print(f"file released try {cnt}")
+        return
+
+
 def main():
     
     # init logic
@@ -342,22 +394,31 @@ def main():
     num_lines = int(sys.argv[1])
     last_position = 0
     file_path = "Public\\Logs\\МуравьинаяЛогистика.csv"
+    open_file = None
 
     while True:
-        open_file = open_file_safely(file_path)
+        close_file(open_file)
+        
+        try:
+            print(f"opened {file_path=}")
+            open_file = open_file_safely(file_path)
 
-        # get the file size
-        position = open_file.end_of_file - 1
+            # get the file size
+            position = open_file.end_of_file - 1
 
-        # save the position
-        position_end = position
-        previous_line = 0
-        if first_run:
-            last_position = position
+            # save the position
+            position_end = position
+            previous_line = 0
+            if first_run:
+                last_position = position
 
-        # read the file
-        lines_from_file = read_file(open_file, position, last_position, first_run, num_lines, previous_line)
-        open_file.close()
+            # read the file
+            lines_from_file = read_file(open_file, position, last_position, first_run, num_lines, previous_line)
+        except Exception:
+            raise
+        finally:
+            input("debug, file not closed, press Enter to run further")
+            close_file(open_file)
 
         # update the position
         last_position = position_end
