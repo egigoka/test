@@ -11,6 +11,7 @@ PING_ADDRESSES = [
 ]
 PING_INTERVAL_SECONDS = 1
 PROCESS_TIMEOUT = 1
+MAX_LEN_PING_DATA = 86400*len(PING_ADDRESSES)
 
 def load_data():
     """Load existing ping data from the JSON file if it exists."""
@@ -85,6 +86,11 @@ def main():
                 "timeout": timeout_occurred
             }
             ping_data.append(record)
+            len_ping_data = len(ping_data)
+
+            #print(len_ping_data, "/", MAX_LEN_PING_DATA)
+            if len_ping_data > MAX_LEN_PING_DATA:
+                ping_data.pop(0)
             save_data(ping_data)
 
         # Calculate rolling stats
@@ -96,13 +102,12 @@ def main():
         # Calculate total lifetime stats
         total_timeouts = sum(1 for entry in ping_data if entry['timeout'])
         total_pings = len(ping_data)
-        overall_percent = (total_timeouts / total_pings) * 100.0 if total_pings else 0
 
         # Print single-line summary
         formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(
             f"{formatted_date} "
-            f"TOut: {total_timeouts}/{total_pings} ({overall_percent:.2f}%) "
+            f"TOut: {total_timeouts}/{total_pings} "
             f"1m: {last_minute:.2f}% "
             f"5m: {last_5_minutes:.2f}% "
             f"1h: {last_hour:.2f}% "
