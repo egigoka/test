@@ -3,6 +3,7 @@ import time
 import json
 import os
 from datetime import datetime
+from secrets import PING_HOURS as HOURS
 
 DATA_FILE = 'ping_data.json'
 PING_ADDRESSES = [
@@ -11,7 +12,7 @@ PING_ADDRESSES = [
 ]
 PING_INTERVAL_SECONDS = 1
 PROCESS_TIMEOUT = 1
-MAX_LEN_PING_DATA = 86400*len(PING_ADDRESSES)
+MAX_LEN_PING_DATA = HOURS*3600*len(PING_ADDRESSES)
 
 def load_data():
     """Load existing ping data from the JSON file if it exists."""
@@ -86,10 +87,8 @@ def main():
                 "timeout": timeout_occurred
             }
             ping_data.append(record)
-            len_ping_data = len(ping_data)
-
-            #print(len_ping_data, "/", MAX_LEN_PING_DATA)
-            if len_ping_data > MAX_LEN_PING_DATA:
+            
+            while len(ping_data) > MAX_LEN_PING_DATA:
                 ping_data.pop(0)
             save_data(ping_data)
 
@@ -97,7 +96,7 @@ def main():
         last_minute = calculate_timeout_percentage(ping_data, 1)
         last_5_minutes = calculate_timeout_percentage(ping_data, 5)
         last_hour = calculate_timeout_percentage(ping_data, 60)
-        last_24_hours = calculate_timeout_percentage(ping_data, 60 * 24)
+        last_hours = calculate_timeout_percentage(ping_data, 60 * HOURS)
 
         # Calculate total lifetime stats
         total_timeouts = sum(1 for entry in ping_data if entry['timeout'])
@@ -111,7 +110,7 @@ def main():
             f"1m: {last_minute:.2f}% "
             f"5m: {last_5_minutes:.2f}% "
             f"1h: {last_hour:.2f}% "
-            f"24h: {last_24_hours:.2f}%"
+            f"{HOURS}h: {last_hours:.2f}%"
         )
 
 if __name__ == "__main__":
