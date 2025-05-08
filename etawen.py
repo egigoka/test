@@ -69,7 +69,7 @@ class TaskProgress:
         try:
             estimate = self.last_time + (remaining_percent / speed)
         except ZeroDivisionError:
-            estimate = self.last_time + self.SECONDS_PER_DAY * self.DAYS_IN_YEAR * 100
+            estimate = self.last_time + self.SECONDS_PER_DAY * self.DAYS_IN_YEAR * 100 + 1
         return estimate
 
     def save(self, filename):
