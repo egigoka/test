@@ -100,6 +100,7 @@ get_country_of_ip = CachedFunction(get_country_of_ip, 60*60)
 def colorful_ping(hostname_or_external_function, args=()):
     b = Bench()
     if callable(hostname_or_external_function):
+        kwargs = {"timeout", State.ping_timeout / 1000}
         response = hostname_or_external_function(*args, debug=False)
         if not isinstance(response, bool):
             raise TypeError(f"response must be bool, got {type(response)} instead")
