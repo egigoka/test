@@ -4,6 +4,7 @@ import json
 import os
 from datetime import datetime
 from secrets import PING_HOURS as HOURS
+from commands import Print
 
 DATA_FILE = 'ping_data.json'
 PING_ADDRESSES = [
@@ -78,6 +79,7 @@ def calculate_timeout_percentage(data, minutes):
 def main():
     ping_data = load_data()
 
+    previous_timeouts = None
     while True:
         time.sleep(PING_INTERVAL_SECONDS)
         for address in PING_ADDRESSES:
@@ -100,17 +102,23 @@ def main():
 
         # Calculate total lifetime stats
         total_timeouts = sum(1 for entry in ping_data if entry['timeout'])
+        if previous_timeouts is None:
+            previous_timeouts = total_timeouts
         total_pings = len(ping_data)
+
+        color = "black" if total_timeouts == previous_timeouts else "red"
+        previous_timeouts = total_timeouts
 
         # Print single-line summary
         formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(
+        Print.colored(
             f"{formatted_date} "
             f"TOut: {total_timeouts}/{total_pings} "
             f"1m: {last_minute:.2f}% "
             f"5m: {last_5_minutes:.2f}% "
             f"1h: {last_hour:.2f}% "
-            f"{HOURS}h: {last_hours:.2f}%"
+            f"{HOURS}h: {last_hours:.2f}%",
+            color
         )
 
 if __name__ == "__main__":
