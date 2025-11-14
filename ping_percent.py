@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from secrets import PING_HOURS as HOURS
 
-DATA_FILE = 'ping_data.json'
+# DATA_FILE = 'ping_data.json'
 PING_ADDRESSES = [
     '8.8.8.8',
     '1.1.1.1'
@@ -15,6 +15,7 @@ PROCESS_TIMEOUT = 1
 MAX_LEN_PING_DATA = HOURS*3600*len(PING_ADDRESSES)
 
 def load_data():
+    return []
     """Load existing ping data from the JSON file if it exists."""
     if os.path.exists(DATA_FILE):
         try:
@@ -26,6 +27,7 @@ def load_data():
     return []
 
 def save_data(data):
+    return
     """Save current ping data to a JSON file."""
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f)
