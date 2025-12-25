@@ -1,7 +1,7 @@
 import os
 import sys
 from commands import *
-print("searcher 0.5.2")
+print("searcher 0.5.3")
 
 file_extensions=[".service"]  # cached
 skipped_file_substrings = []  # cached
@@ -176,6 +176,7 @@ time = b.end(start_immediately=True)
 if time > 1:
     print(time, b.prefix)
 
+Print.rewrite()
 print(f"{Time.dotted()} end")
 
 print()
