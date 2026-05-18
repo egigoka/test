@@ -151,6 +151,8 @@ def print_progress(progress_tracker):
 
     print(output, end="")
 
+    return estimated_time_left
+
 
 def main(args):
     
@@ -184,7 +186,7 @@ def main(args):
                 percent = args.max_percent - percent
 
             progress_tracker.add_progress(percent)
-            print_progress(progress_tracker)
+            estimated_time_left = print_progress(progress_tracker)
 
             if percent >= args.max_percent:
                 print(" | Task completed!")
@@ -193,7 +195,11 @@ def main(args):
                 print()
 
             progress_tracker.save(args.cache_path)
-            Time.sleep(args.timer, verbose=True)
+
+            timer = args.timer
+            if estimated_time_left is not None and estimated_time_left < timer * 2:
+                timer = max(0, int(estimated_time_left / 2))
+            Time.sleep(timer, verbose=True)
 
         except ValueError:
             print("Please enter a valid percentage.")
