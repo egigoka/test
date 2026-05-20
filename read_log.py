@@ -2,7 +2,6 @@ import uuid
 import sys
 import csv
 import math
-import binascii
 from datetime import datetime
 from datetime import timedelta
 from commands import Time, Console, Print, ID, Int, OS, dirify
@@ -11,6 +10,8 @@ from smbprotocol.open import (Open, CreateDisposition, FilePipePrinterAccessMask
                               ShareAccess, CreateOptions, RequestedOplockLevel)
 from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
+from smbprotocol.create_contexts import (SMB2CreateDurableHandleRequest, SMB2CreateQueryMaximalAccessRequest,
+                                         SMB2CreateQueryOnDiskIDResponse)
 from smbprotocol.exceptions import (SMBResponseException, SharingViolation, SMBConnectionClosed, SMBException,
                                     RequestNotAccepted)
 
@@ -120,21 +121,15 @@ def open_file_smb(file_path):
     share_access = ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE
     create_disposition = CreateDisposition.FILE_OPEN
     create_options = CreateOptions.FILE_NON_DIRECTORY_FILE | CreateOptions.FILE_NON_DIRECTORY_FILE
-    # create_contexts = None
     oplock_level = RequestedOplockLevel.SMB2_OPLOCK_LEVEL_NONE
     send = True
-    
-    create_context_data = binascii.unhexlify(b"""
-28 00 00 00 10 00 04 00 00 00 18 00 10 00 00 00
-44 48 6e 51 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 18 00 00 00 10 00 04 00
-00 00 18 00 00 00 00 00 4d 78 41 63 00 00 00 00
-00 00 00 00 10 00 04 00 00 00 18 00 00 00 00 00
-51 46 69 64 00 00 00 00
-""".replace(b' ', b'').replace(b'\n', b''))
-    
-    print(f"{impersonation_level=}, {desired_access=}, {file_attributes=}, {share_access=}, {create_disposition=}, {create_options=}, {create_context_data=}, {oplock_level=},{send=}")
-    
+
+    create_contexts = [
+        SMB2CreateDurableHandleRequest(),
+        SMB2CreateQueryMaximalAccessRequest(),
+        SMB2CreateQueryOnDiskIDResponse(),
+    ]
+
     open_file.create(
         impersonation_level = impersonation_level,
         desired_access = desired_access,
@@ -142,7 +137,7 @@ def open_file_smb(file_path):
         share_access = share_access,
         create_disposition = create_disposition,
         create_options = create_options,
-        create_contexts = create_context_data,
+        create_contexts = create_contexts,
         oplock_level = oplock_level,
         send = send
     )
@@ -400,7 +395,7 @@ def main():
         close_file(open_file)
         
         try:
-            print(f"opened {file_path=}")
+            # print(f"opened {file_path=}")
             open_file = open_file_safely(file_path)
 
             # get the file size
@@ -417,7 +412,7 @@ def main():
         except Exception:
             raise
         finally:
-            input("debug, file not closed, press Enter to run further")
+            # input("debug, file not closed, press Enter to run further")
             close_file(open_file)
 
         # update the position
