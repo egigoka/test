@@ -1,8 +1,9 @@
 from commands import *
+from secrets import CODESIGN_CERT
 
 print("reading_config")
 # config
-CODESIGN_SERT_NUMBER = "95YHWSQ8CX"
+CODESIGN_SERT_NUMBER = CODESIGN_CERT
 SKIPPED_EXTENSIONS = '''
 .plist
 .icns
