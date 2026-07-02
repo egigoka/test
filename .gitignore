@@ -18,6 +18,9 @@ ping_data.json
 # macOS sheet
 .DS_Store
 
+# ai sheet
+.claude/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
