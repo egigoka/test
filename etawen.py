@@ -18,8 +18,11 @@ def parse_arguments():
     parser.add_argument("--timer", type=int, default=DEFAULT_TIMER, help="Timer duration between inputs")
     parser.add_argument("--no-powerline", action="store_true", help="Don't use powerline fonts")
     
-    args = parser.parse_args()
-    
+    args, unknown = parser.parse_known_args()
+
+    if unknown:
+        Print.colored(f"Warning: unknown argument(s) ignored: {' '.join(unknown)}", "yellow")
+
     args.cache_file = args.file + ".pkl"
     args.cache_path = os.path.join(CACHE_FOLDER, args.cache_file)
     
